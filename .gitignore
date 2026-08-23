@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Secrets — never commit
+.env
+.env.local
+.env.*.local
+
+# Build output
+dist/
+build/
+.next/
+out/
+coverage/
+
+# Tooling caches
+.turbo/
+.eslintcache
+*.tsbuildinfo
+
+# OS / editor
+Thumbs.db
+.DS_Store
+.vscode/
+.idea/

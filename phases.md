@@ -18,7 +18,7 @@ This document is the **master phase tracking roadmap** for the development of AR
 
 | Phase | Description | Status | Lead Agent |
 | :--- | :--- | :--- | :--- |
-| **Phase 0** | Local Environment & Project Tooling | `NOT STARTED` | ARTHAX Director |
+| **Phase 0** | Local Environment & Project Tooling | `COMPLETED` | ARTHAX Director |
 | **Phase 1** | Monorepo Foundation & Shared Core Architecture | `NOT STARTED` | ARTHAX Backend Engineer |
 | **Phase 2** | Identity, GOV ID & Unified Authentication | `NOT STARTED` | ARTHAX Security Engineer |
 | **Phase 3** | Core Financial Ledger & CLS Settlement Layer | `NOT STARTED` | ARTHAX Financial Engineer |
@@ -43,15 +43,15 @@ This document is the **master phase tracking roadmap** for the development of AR
 - **Required Skills**: `build-modern-web-projects`
 
 ### Tasks
-- [ ] Verify Node.js, package manager (pnpm / npm / yarn), and TypeScript workspace toolchain.
-- [ ] Establish environment variable templates (`.env.example`) and secrets management guidelines.
-- [ ] Configure linting, code formatting (Prettier/ESLint), and Git hooks.
-- [ ] Configure asset path resolution and static resource access verification for [`assets/`](file:///c:/Users/hp/OneDrive/Desktop/ArthaX-Fin/assets).
+- [x] Verify Node.js, package manager (pnpm / npm / yarn), and TypeScript workspace toolchain.
+- [x] Establish environment variable templates (`.env.example`) and secrets management guidelines.
+- [x] Configure linting, code formatting (Prettier/ESLint), and Git hooks.
+- [x] Configure asset path resolution and static resource access verification for [`assets/`](file:///c:/Users/hp/OneDrive/Desktop/ArthaX-Fin/assets).
 
 ### Phase 0 Completion Gate
-- [ ] Node / TypeScript environment runs cleanly without errors.
-- [ ] Linting and formatting rules validated.
-- [ ] Git commit checkpoint created.
+- [x] Node / TypeScript environment runs cleanly without errors.
+- [x] Linting and formatting rules validated.
+- [x] Git commit checkpoint created.
 
 ---
 
