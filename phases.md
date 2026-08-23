@@ -21,7 +21,7 @@ This document is the **master phase tracking roadmap** for the development of AR
 | **Phase 0** | Local Environment & Project Tooling | `COMPLETED` | ARTHAX Director |
 | **Phase 1** | Monorepo Foundation & Shared Core Architecture | `COMPLETED` | ARTHAX Backend Engineer |
 | **Phase 2** | Identity, GOV ID & Unified Authentication | `COMPLETED` | ARTHAX Security Engineer |
-| **Phase 3** | Core Financial Ledger & CLS Settlement Layer | `NOT STARTED` | ARTHAX Financial Engineer |
+| **Phase 3** | Core Financial Ledger & CLS Settlement Layer | `COMPLETED` | ARTHAX Financial Engineer |
 | **Phase 4** | Design System, Token Infrastructure & UI Shells | `NOT STARTED` | ARTHAX Visual Director / Frontend Builder |
 | **Phase 5** | Banking Domain, Commercial Banks & Accounts | `NOT STARTED` | ARTHAX Backend / Financial Engineer |
 | **Phase 6** | User Portal & Personal Finance Dashboard | `NOT STARTED` | ARTHAX Frontend Builder |
@@ -107,18 +107,18 @@ This document is the **master phase tracking roadmap** for the development of AR
 - **Required Skills**: `arthax-transaction-states`
 
 ### Tasks
-- [ ] Schema design for Ledger: Accounts, Journal Entries, Ledger Postings, Balance Snapshots.
-- [ ] Double-entry transaction engine: atomic execution where $\sum \text{Debits} = \sum \text{Credits}$.
-- [ ] Transaction state machine: `PENDING` → `VALIDATING` → `AUTHORIZED` → `PROCESSING` → `SETTLING` → `COMPLETED` (plus `FAILED`, `REVERSED`, `CANCELLED`).
-- [ ] Implement CLS (Central Settlement Layer) for multi-bank clearing, routing, and inter-bank settlement.
-- [ ] Implement idempotent transaction processing and distributed transaction locks.
-- [ ] Implement audit trail logging and balance reconciliation jobs.
+- [x] Schema design for Ledger: Accounts, Journal Entries, Ledger Postings, Balance Snapshots.
+- [x] Double-entry transaction engine: atomic execution where $\sum \text{Debits} = \sum \text{Credits}$.
+- [x] Transaction state machine: `PENDING` → `VALIDATING` → `AUTHORIZED` → `PROCESSING` → `SETTLING` → `COMPLETED` (plus `FAILED`, `REVERSED`, `CANCELLED`).
+- [x] Implement CLS (Central Settlement Layer) for multi-bank clearing, routing, and inter-bank settlement.
+- [x] Implement idempotent transaction processing and distributed transaction locks.
+- [x] Implement audit trail logging and balance reconciliation jobs.
 
 ### Phase 3 Completion Gate
-- [ ] Double-entry balance invariant mathematically proven across 10,000 simulated concurrent transactions.
-- [ ] Zero money creation / zero money destruction verified.
-- [ ] Reversal and failure recovery mechanics verified with rollback tests.
-- [ ] Git commit checkpoint created.
+- [x] Double-entry balance invariant mathematically proven across 10,000 simulated concurrent transactions.
+- [x] Zero money creation / zero money destruction verified.
+- [x] Reversal and failure recovery mechanics verified with rollback tests.
+- [x] Git commit checkpoint created.
 
 ---
 

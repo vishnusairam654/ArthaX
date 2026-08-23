@@ -71,3 +71,151 @@ enum OtpPurpose {
   REGISTRATION
   LOGIN
 }
+
+// ---------------------------------------------------------------------------
+// Core Financial Ledger (Phase 3)
+// One ledger. Every ARTH movement is a balanced journal entry.
+// ---------------------------------------------------------------------------
+
+enum LedgerAccountKind {
+  /// A customer's money account (backed by a BankAccount in Phase 5).
+  USER
+  /// A commercial bank's own treasury (backs customer deposits).
+  BANK_TREASURY
+  /// CLS settlement account tracking a bank's net flow through the hub.
+  CLS_SETTLEMENT
+  /// Central Bank reserve / issuance account.
+  CENTRAL_RESERVE
+  /// Fee / tax income collected by the system.
+  SYSTEM_INCOME
+}
+
+enum PostingSide {
+  DEBIT
+  CREDIT
+}
+
+/// Immutable. Balances are always derived from postings, never stored.
+model LedgerAccount {
+  id          String            @id @default(cuid())
+  kind        LedgerAccountKind
+  /// Owning user (USER accounts only).
+  ownerUserId String?
+  /// Owning commercial bank identifier (treasury/settlement/user accounts).
+  bankId      String?
+  currency    String            @default("ARTH")
+  createdAt   DateTime          @default(now())
+
+  postings LedgerPosting[]
+
+  @@index([ownerUserId])
+  @@index([bankId, kind])
+}
+
+/// A group of postings that must balance to zero. Immutable once written.
+model JournalEntry {
+  id            String   @id @default(cuid())
+  transactionId String
+  description   String
+  createdAt     DateTime @default(now())
+
+  transaction CoreTransaction @relation(fields: [transactionId], references: [id])
+  postings    LedgerPosting[]
+
+  @@index([transactionId])
+}
+
+model LedgerPosting {
+  id            String      @id @default(cuid())
+  journalEntryId String
+  accountId     String
+  side          PostingSide
+  /// ARTH minor units. Always positive; the side carries direction.
+  amountMinor   BigInt
+
+  journalEntry JournalEntry @relation(fields: [journalEntryId], references: [id], onDelete: Restrict)
+  account      LedgerAccount @relation(fields: [accountId], references: [id], onDelete: Restrict)
+
+  @@index([accountId])
+  @@index([journalEntryId])
+}
+
+enum TransactionState {
+  PENDING
+  VALIDATING
+  AUTHORIZED
+  PROCESSING
+  SETTLING
+  COMPLETED
+  FAILED
+  REVERSED
+  CANCELLED
+}
+
+enum TransactionType {
+  TRANSFER
+  DEPOSIT
+  WITHDRAWAL
+  FD_OPEN
+  FD_CLOSE
+  FD_INTEREST
+  TRADE_BUY
+  TRADE_SELL
+  SHOP_PURCHASE
+  TAX
+  FEE
+  REVERSAL
+}
+
+enum TerminalReason {
+  INSUFFICIENT_FUNDS
+  VALIDATION_FAILED
+  CANCELLED_BY_USER
+  SYSTEM_ERROR
+  NONE
+}
+
+/// The unit of financial intent. Walks the state machine exactly once.
+model CoreTransaction {
+  id             String           @id @default(cuid())
+  /// Client-supplied unique key. Duplicate submissions return the original result.
+  idempotencyKey String           @unique
+  type           TransactionType
+  state          TransactionState @default(PENDING)
+  /// ARTH minor units.
+  amountMinor    BigInt
+  fromAccountId  String?
+  toAccountId    String?
+  feeMinor       BigInt           @default(0)
+  terminalReason TerminalReason   @default(NONE)
+
+  /// For REVERSAL transactions: the transaction being undone.
+  reversalOfId String?  @unique
+  reference    String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  journalEntries JournalEntry[]
+  events         TransactionEvent[]
+
+  reversalOf CoreTransaction? @relation("Reversals", fields: [reversalOfId], references: [id])
+  reversals  CoreTransaction[] @relation("Reversals")
+
+  @@index([state])
+  @@index([fromAccountId])
+  @@index([toAccountId])
+}
+
+/// Append-only audit trail of every state transition.
+model TransactionEvent {
+  id            String           @id @default(cuid())
+  transactionId String
+  fromState     TransactionState?
+  toState       TransactionState
+  detail        String?
+  createdAt     DateTime         @default(now())
+
+  transaction CoreTransaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+
+  @@index([transactionId])
+}

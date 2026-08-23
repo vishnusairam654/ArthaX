@@ -16,7 +16,7 @@ const DIRS = {
     "favicon.png",
     "nav_logo.png",
     "primary_watermark.png",
-    "watermark_2.png",
+    "watermark_transparent.png",
     "watermark_3.png",
     "social_preview_image.png",
   ],

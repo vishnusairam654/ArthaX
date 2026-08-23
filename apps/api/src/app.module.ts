@@ -2,13 +2,16 @@ import { Module } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { JwtModule } from "@nestjs/jwt";
 import { AuthController } from "./auth/auth.controller";
-import { AuthService } from "./auth/auth.service";
+import { AuthModule } from "./auth/auth.module";
 import { CentralBankController } from "./central-bank/central-bank.controller";
 import { PrismaModule } from "./prisma/prisma.module";
+import { LedgerModule } from "./ledger/ledger.module";
 
 @Module({
   imports: [
     PrismaModule,
+    AuthModule,
+    LedgerModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: [".env.test", ".env"],
@@ -22,6 +25,5 @@ import { PrismaModule } from "./prisma/prisma.module";
     }),
   ],
   controllers: [AuthController, CentralBankController],
-  providers: [AuthService],
 })
 export class AppModule {}
