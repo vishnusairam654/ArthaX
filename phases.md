@@ -22,7 +22,7 @@ This document is the **master phase tracking roadmap** for the development of AR
 | **Phase 1** | Monorepo Foundation & Shared Core Architecture | `COMPLETED` | ARTHAX Backend Engineer |
 | **Phase 2** | Identity, GOV ID & Unified Authentication | `COMPLETED` | ARTHAX Security Engineer |
 | **Phase 3** | Core Financial Ledger & CLS Settlement Layer | `COMPLETED` | ARTHAX Financial Engineer |
-| **Phase 4** | Design System, Token Infrastructure & UI Shells | `NOT STARTED` | ARTHAX Visual Director / Frontend Builder |
+| **Phase 4** | Design System, Token Infrastructure & UI Shells | `COMPLETED` | ARTHAX Visual Director / Frontend Builder |
 | **Phase 5** | Banking Domain, Commercial Banks & Accounts | `NOT STARTED` | ARTHAX Backend / Financial Engineer |
 | **Phase 6** | User Portal & Personal Finance Dashboard | `NOT STARTED` | ARTHAX Frontend Builder |
 | **Phase 7** | Stock Market & Investment Taxation Rules | `NOT STARTED` | ARTHAX Financial / Backend Engineer |
@@ -130,18 +130,21 @@ This document is the **master phase tracking roadmap** for the development of AR
 - **Required Skills**: `arthax-design-tokens`, `material-rounded-smooth`, `anti-ai-design`, `arthax-layout-and-motion`, `arthax-brand-identity`, `gsap-animation-design`
 
 ### Tasks
-- [ ] Configure design tokens (colors, typography, spacing, elevations, corner radii) matching official palette.
-- [ ] Integrate custom typography (Cinzel, Outfit, Geist / Space Grotesk) and brand watermarks.
-- [ ] Build reusable UI atom library (buttons, inputs, modal dialogs, status badges, currency displays).
-- [ ] Build portal navigation shells for all 6 portals with distinctive visual personalities.
-- [ ] Asset verification: Connect bank logos, portal hero images, stock banners, pet illustrations, and transaction icons from [`assets/`](file:///c:/Users/hp/OneDrive/Desktop/ArthaX-Fin/assets).
-- [ ] Set up GSAP / motion baseline respecting `prefers-reduced-motion`.
+- [x] Configure design tokens (colors, typography, spacing, elevations, corner radii) matching official palette.
+- [x] Integrate custom typography (Fraunces / Cantarell / Amarante loaded locally from `assets/fonts`) and brand watermarks.
+- [x] Build reusable UI atom library (buttons, inputs, modal dialogs, status badges, currency displays).
+- [x] Build portal navigation shells for all 6 portals with distinctive visual personalities.
+- [x] Asset verification: Connect bank logos, portal hero images, stock banners, pet illustrations, and transaction icons from [`assets/`](file:///c:/Users/hp/OneDrive/Desktop/ArthaX-Fin/assets).
+- [x] Set up GSAP / motion baseline respecting `prefers-reduced-motion`.
 
 ### Phase 4 Completion Gate
-- [ ] Design token coverage complete without hardcoded color/spacing overrides.
-- [ ] Anti-AI audit passes: zero generic SaaS bento cards, authentic visual hierarchy.
-- [ ] All 6 portal shells responsive on mobile, tablet, and desktop.
-- [ ] Git commit checkpoint created.
+- [x] Design token coverage complete without hardcoded color/spacing overrides.
+- [x] Anti-AI audit passes: zero generic SaaS bento cards, authentic visual hierarchy.
+- [x] All 6 portal shells responsive on mobile, tablet, and desktop.
+- [x] Git commit checkpoint created.
+
+> Design direction: see [`DESIGN_PLAN.md`](./DESIGN_PLAN.md) ("The Ledger Gazette").
+> Outstanding asset requests tracked in [`NEEDS.md`](./NEEDS.md).
 
 ---
 
