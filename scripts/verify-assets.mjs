@@ -34,6 +34,7 @@ const DIRS = {
     "completed.png",
     "failed.png",
     "finalyzing.png",
+    "lock_icon.png",
     "pending.png",
     "processing.png",
     "reversed.png",

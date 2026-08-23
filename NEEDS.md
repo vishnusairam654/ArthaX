@@ -7,7 +7,7 @@ Items here are NOT fabricated in code — screens ship with visible placeholders
 
 | # | What | Where used | Spec | Status |
 |---|---|---|---|---|
-| 1 | Security shield/lock icon | Step-up Financial Password modals, security-failure states | ~64×64px PNG, illustrated style matching existing icon set (flat, warm palette) | ⬜ Needed before User Portal transfer flow (Phase 6) |
+| 1 | ~~Security shield/lock icon~~ | Step-up Financial Password modals, security-failure states | — | ✅ **Delivered** (`assets/icons/lock_icon.png`) |
 | 2 | Grain/noise texture tile (optional) | Hero backgrounds, subtle paper feel | Seamless 256×256 PNG, very low contrast | ⬜ Optional — CSS-only fallback will be used until provided |
 | 3 | Favicon check | Browser tab | Confirm `favicon.png` is the final mark | ⬜ Low priority |
 
