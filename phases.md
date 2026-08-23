@@ -19,7 +19,7 @@ This document is the **master phase tracking roadmap** for the development of AR
 | Phase | Description | Status | Lead Agent |
 | :--- | :--- | :--- | :--- |
 | **Phase 0** | Local Environment & Project Tooling | `COMPLETED` | ARTHAX Director |
-| **Phase 1** | Monorepo Foundation & Shared Core Architecture | `NOT STARTED` | ARTHAX Backend Engineer |
+| **Phase 1** | Monorepo Foundation & Shared Core Architecture | `COMPLETED` | ARTHAX Backend Engineer |
 | **Phase 2** | Identity, GOV ID & Unified Authentication | `NOT STARTED` | ARTHAX Security Engineer |
 | **Phase 3** | Core Financial Ledger & CLS Settlement Layer | `NOT STARTED` | ARTHAX Financial Engineer |
 | **Phase 4** | Design System, Token Infrastructure & UI Shells | `NOT STARTED` | ARTHAX Visual Director / Frontend Builder |
@@ -63,15 +63,15 @@ This document is the **master phase tracking roadmap** for the development of AR
 - **Required Skills**: `build-modern-web-projects`
 
 ### Tasks
-- [ ] Initialize monorepo workspace (e.g. Next.js web application + backend services/packages).
-- [ ] Create shared core packages: `@arthax/types`, `@arthax/tokens`, `@arthax/config`.
-- [ ] Define canonical TypeScript interfaces for Users, Accounts, Ledger, Portals, and ARTH currency.
-- [ ] Configure local dev server scripts and build verification.
+- [x] Initialize monorepo workspace (e.g. Next.js web application + backend services/packages).
+- [x] Create shared core packages: `@arthax/types`, `@arthax/tokens`, `@arthax/config`.
+- [x] Define canonical TypeScript interfaces for Users, Accounts, Ledger, Portals, and ARTH currency.
+- [x] Configure local dev server scripts and build verification.
 
 ### Phase 1 Completion Gate
-- [ ] Monorepo builds cleanly across all packages.
-- [ ] Shared type definitions importable in frontend and backend targets.
-- [ ] Git commit checkpoint created.
+- [x] Monorepo builds cleanly across all packages.
+- [x] Shared type definitions importable in frontend and backend targets.
+- [x] Git commit checkpoint created.
 
 ---
 

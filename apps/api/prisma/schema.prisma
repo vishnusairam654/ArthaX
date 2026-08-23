@@ -1,0 +1,10 @@
+// ARTHAX Prisma schema — models arrive in Phase 2 (Identity) and Phase 3 (Ledger).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}

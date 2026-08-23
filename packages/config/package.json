@@ -1,0 +1,14 @@
+{
+  "name": "@arthax/config",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./index.mjs",
+  "types": "./index.d.ts",
+  "files": [
+    "base.json",
+    "nextjs.json",
+    "nestjs.json",
+    "index.mjs",
+    "index.d.ts"
+  ]
+}
