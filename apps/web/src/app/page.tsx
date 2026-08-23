@@ -3,51 +3,61 @@ import { PortalShell } from "@/components/portal-shell";
 import { LedgerCurrent } from "@/components/ledger-current";
 
 /**
- * Central Guide Board — "the front page" (narrative content, NOT a card grid).
- * Full-bleed hero on central_guide.png + gradient mesh + grain.
- * Portal selector: huge asymmetric Fraunces type; hover crossfades the backdrop.
+ * Central Guide Board — "the front page".
+ * Material-elevated composition over the warm gazette palette.
  */
+
 const PORTALS = [
-  {
-    key: "central_bank",
-    name: "Central Bank",
-    line: "The registry hall. Oversight of every bank.",
-    bg: "/portals/central_bank.png",
-  },
-  {
-    key: "bank",
-    name: "Banks",
-    line: "Five branches. Open an account where it fits.",
-    bg: "/portals/banks.png",
-  },
   {
     key: "user",
     name: "My Desk",
-    line: "Your balances, your transfers, your terms.",
+    line: "Balances across every bank, transfers that settle for real.",
     bg: "/portals/user.png",
+    span: "md:col-span-2 md:row-span-2",
+    tint: "rgba(51,104,160,0.72)",
   },
   {
     key: "stocks",
     name: "Exchange",
-    line: "Ten listed houses. Prices move live.",
+    line: "Ten listed houses, live prices.",
     bg: "/portals/stocks.png",
+    span: "",
+    tint: "rgba(102,163,191,0.78)",
   },
   {
     key: "shop",
     name: "Bazaar",
-    line: "Pets, personas and banners — bought in ARTH.",
+    line: "Pets & personas, bought in ARTH.",
     bg: "/portals/shop.png",
+    span: "",
+    tint: "rgba(168,116,42,0.80)",
+  },
+  {
+    key: "bank",
+    name: "Banks",
+    line: "Five branches, five temperaments.",
+    bg: "/portals/banks.png",
+    span: "",
+    tint: "rgba(37,38,36,0.66)",
+  },
+  {
+    key: "central_bank",
+    name: "Central Bank",
+    line: "The registry hall.",
+    bg: "/portals/central_bank.png",
+    span: "",
+    tint: "rgba(51,104,160,0.85)",
   },
 ] as const;
 
 export default function GuideBoardPage() {
   return (
     <PortalShell portal="central_guide">
-      {/* Full-bleed editorial hero with ambient Three.js "currency current" */}
-      <section className="grain relative isolate min-h-[88vh] overflow-hidden bg-[var(--color-deep-blue)]">
+      {/* ── HERO ─────────────────────────────────────────────── */}
+      <section className="grain relative isolate flex min-h-[92vh] items-center overflow-hidden bg-[#1e3f63]">
         <div
           aria-hidden
-          className="absolute inset-0 -z-20 bg-cover bg-center opacity-40"
+          className="absolute inset-0 -z-20 bg-cover bg-center opacity-35"
           style={{ backgroundImage: "url(/portals/central_guide.png)" }}
         />
         <LedgerCurrent />
@@ -56,107 +66,211 @@ export default function GuideBoardPage() {
           className="absolute inset-0 -z-10"
           style={{
             background:
-              "linear-gradient(105deg, rgba(37,38,36,0.55) 0%, rgba(51,104,160,0.35) 45%, rgba(242,239,231,0.9) 100%)",
+              "linear-gradient(100deg, rgba(30,63,99,0.92) 0%, rgba(51,104,160,0.55) 48%, rgba(242,239,231,0.95) 100%)",
           }}
         />
-        <div className="mx-auto flex min-h-[88vh] max-w-7xl flex-col justify-center px-6 py-28">
-          <p className="text-xs uppercase tracking-[0.3em] text-white/80">
+        <div className="mx-auto w-full max-w-7xl px-6 py-28">
+          <span className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-1.5 text-xs uppercase tracking-[0.25em] text-white backdrop-blur-sm">
+            <img src="/brand/currency_symbol.png" alt="" className="size-4" />
             One currency · Five banks · Six rooms
-          </p>
-          <h1 className="mt-4 max-w-3xl font-[family-name:var(--font-display)] text-5xl font-semibold leading-[1.02] tracking-tight text-white drop-shadow-[0_2px_24px_rgba(37,38,36,0.35)] md:text-8xl">
-            The money press for a small, honest economy.
+          </span>
+          <h1 className="mt-6 max-w-4xl font-[family-name:var(--font-display)] text-5xl font-bold leading-[1.02] tracking-tight text-white [text-shadow:0_2px_32px_rgba(15,35,58,0.45)] md:text-8xl">
+            The money press for a small,{" "}
+            <em className="not-italic text-[var(--color-arth-gold-soft)]">honest</em> economy.
           </h1>
+          <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/85">
+            Every ARTH is printed once by the Central Bank and moves through a double-entry ledger
+            that cannot lose a cent. Pick a room below and step in.
+          </p>
           <div className="mt-10 flex flex-wrap items-center gap-4">
             <Link
               href="/user"
-              className="inline-flex h-12 items-center rounded-full bg-[var(--color-arth-gold)] px-8 text-base font-semibold text-white shadow-[var(--elevation-2)] transition-transform duration-[var(--duration-short)] ease-[var(--ease-standard)] hover:-translate-y-0.5 hover:brightness-110 active:scale-[0.98]"
+              className="inline-flex h-13 items-center rounded-full bg-[var(--color-arth-gold)] px-9 py-3.5 text-base font-semibold text-white shadow-[var(--elevation-3)] transition-all duration-[var(--duration-short)] ease-[var(--ease-standard)] hover:-translate-y-0.5 hover:bg-[#b98433] hover:shadow-[var(--elevation-4)] active:scale-[0.98]"
             >
               Open your desk
+              <svg
+                viewBox="0 0 16 16"
+                className="ml-2 size-4 fill-none stroke-current stroke-2"
+                aria-hidden
+              >
+                <path
+                  d="M2 8h11M9 3.5 13.5 8 9 12.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
             </Link>
             <Link
               href="/banks"
-              className="inline-flex h-12 items-center rounded-full border border-white/50 px-8 text-base text-white transition-colors duration-[var(--duration-short)] hover:bg-white/10"
+              className="inline-flex items-center rounded-full border-2 border-white/60 px-8 py-3 text-base font-medium text-white transition-colors duration-[var(--duration-short)] hover:border-white hover:bg-white/10"
             >
               Meet the five banks
             </Link>
           </div>
+
+          {/* Stat chips */}
+          <dl className="mt-16 grid max-w-2xl grid-cols-3 gap-px overflow-hidden rounded-[var(--radius-lg)] bg-white/15 backdrop-blur-sm">
+            {[
+              ["1", "currency — ARTH"],
+              ["5", "licensed banks"],
+              ["10", "listed companies"],
+            ].map(([n, l]) => (
+              <div key={l} className="bg-[rgba(30,63,99,0.55)] px-6 py-4">
+                <dt className="font-[family-name:var(--font-display)] text-3xl font-bold text-white">
+                  {n}
+                </dt>
+                <dd className="mt-0.5 text-xs uppercase tracking-widest text-white/70">{l}</dd>
+              </div>
+            ))}
+          </dl>
         </div>
       </section>
 
-      {/* Asymmetric portal selector — type IS the graphic */}
-      <section className="rule-t mx-auto max-w-7xl px-6 py-16" aria-label="Portals">
-        <ul className="grid grid-cols-1 gap-x-12 gap-y-2 md:grid-cols-2">
-          {PORTALS.map((p, i) => (
-            <li key={p.key} className={i % 2 === 1 ? "md:translate-y-10" : undefined}>
+      {/* ── PORTAL SELECTOR — elevated Material cards, asymmetric ── */}
+      <section className="bg-[var(--surface-base)] py-20">
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="flex items-baseline justify-between">
+            <h2 className="font-[family-name:var(--font-display)] text-3xl tracking-tight text-[var(--text-primary)]">
+              Choose your room
+            </h2>
+            <span className="text-xs uppercase tracking-[0.2em] text-[var(--text-muted)]">
+              one session · all six
+            </span>
+          </div>
+
+          <div className="mt-8 grid auto-rows-[220px] grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3">
+            {PORTALS.map((p) => (
               <Link
+                key={p.key}
                 href={routeFor(p.key)}
-                className="group flex flex-col border-b border-[var(--hairline)] py-6 transition-colors duration-[var(--duration-medium)] hover:bg-[rgba(51,104,160,0.04)] md:flex-row md:items-baseline md:justify-between"
+                className={`group relative isolate overflow-hidden rounded-[var(--radius-lg)] shadow-[var(--elevation-2)] transition-all duration-[var(--duration-medium)] ease-[var(--ease-standard)] hover:-translate-y-1.5 hover:shadow-[var(--elevation-4)] focus-visible:-translate-y-1.5 ${p.span}`}
               >
-                <span className="font-[family-name:var(--font-display)] text-4xl tracking-tight text-[var(--text-primary)] transition-colors duration-[var(--duration-medium)] group-hover:text-[var(--color-deep-blue)] md:text-5xl">
-                  {p.name}
-                  <span
-                    aria-hidden
-                    className="ml-3 inline-block h-2 w-2 rounded-full bg-[var(--color-arth-gold)] align-middle opacity-0 transition-opacity duration-[var(--duration-medium)] group-hover:opacity-100"
-                  />
-                </span>
-                <span className="mt-2 max-w-xs text-sm leading-relaxed text-[var(--text-muted)] transition-transform duration-[var(--duration-medium)] ease-[var(--ease-decelerate)] md:mt-0 md:translate-x-2 md:group-hover:translate-x-0">
-                  {p.line}
-                </span>
+                <div
+                  aria-hidden
+                  className="absolute inset-0 -z-10 bg-cover bg-center transition-transform duration-[var(--duration-xlong)] ease-[var(--ease-decelerate)] group-hover:scale-105"
+                  style={{ backgroundImage: `url(${p.bg})` }}
+                />
+                <div
+                  aria-hidden
+                  className="absolute inset-0 -z-10 transition-opacity duration-[var(--duration-medium)] group-hover:opacity-80"
+                  style={{ background: `linear-gradient(180deg, transparent 20%, ${p.tint} 100%)` }}
+                />
+                <div className="flex h-full flex-col justify-between p-6">
+                  <span className="w-fit rounded-full bg-white/90 px-3 py-1 text-[11px] font-semibold uppercase tracking-widest text-[var(--color-charcoal)]">
+                    Enter
+                  </span>
+                  <div>
+                    <h3 className="font-[family-name:var(--font-display)] text-3xl font-bold tracking-tight text-white">
+                      {p.name}
+                    </h3>
+                    <p className="mt-1 max-w-xs text-sm leading-snug text-white/85">{p.line}</p>
+                  </div>
+                </div>
               </Link>
-            </li>
-          ))}
-        </ul>
+            ))}
+          </div>
+        </div>
       </section>
 
-      {/* Announcement ticker strip */}
+      {/* ── HOW ARTH MOVES — sage band, numbered steps ───────── */}
+      <section className="grain relative bg-[var(--color-sage-mint)] py-20">
+        <div className="mx-auto max-w-7xl px-6">
+          <p className="text-xs uppercase tracking-[0.25em] text-[#4a6a67]">How it works</p>
+          <h2 className="mt-2 max-w-2xl font-[family-name:var(--font-display)] text-4xl tracking-tight text-[var(--text-primary)]">
+            What happens when you press “send”
+          </h2>
+          <ol className="mt-12 grid gap-6 md:grid-cols-3">
+            {[
+              {
+                n: "01",
+                t: "You sign the intent",
+                b: "One identity everywhere. Money actions re-confirm with your Financial Password — your login password can never move a cent.",
+                icon: "/icons/lock_icon.png",
+              },
+              {
+                n: "02",
+                t: "The ledger balances both sides",
+                b: "Debits equal credits, always. Cross-bank transfers clear through the settlement hub while both legs are written at once.",
+                icon: "/icons/processing.png",
+              },
+              {
+                n: "03",
+                t: "It lands, receipt attached",
+                b: "Status you can watch: pending → settling → completed. A document-style confirmation is yours to keep.",
+                icon: "/icons/completed.png",
+              },
+            ].map((s) => (
+              <li
+                key={s.n}
+                className="relative rounded-[var(--radius-lg)] bg-[var(--surface-raised)] p-7 shadow-[var(--elevation-1)] transition-shadow duration-[var(--duration-medium)] hover:shadow-[var(--elevation-3)]"
+              >
+                <span className="absolute right-6 top-5 font-[family-name:var(--font-accent)] text-4xl text-[var(--color-sage-mint)]">
+                  {s.n}
+                </span>
+                <img src={s.icon} alt="" className="size-10" />
+                <h3 className="mt-4 font-[family-name:var(--font-display)] text-xl font-semibold text-[var(--text-primary)]">
+                  {s.t}
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-[var(--text-muted)]">{s.b}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      {/* ── ANNOUNCEMENT TICKER ──────────────────────────────── */}
       <section
-        className="rule-t overflow-hidden bg-[var(--color-deep-blue)] py-3"
+        className="overflow-hidden bg-[var(--color-charcoal)] py-4"
         aria-label="Announcements"
       >
-        <div className="animate-none px-6 text-sm tracking-wide text-white/90 [animation:none]">
-          Central Bank announcement — ARTH supply stands at exactly what the ledger says it does.
+        <div className="ticker-track flex whitespace-nowrap text-sm tracking-wide text-[var(--color-warm-ivory)]">
+          {[0, 1].map((copy) => (
+            <span key={copy} className="flex shrink-0 items-center" aria-hidden={copy === 1}>
+              {[
+                "Central Bank: ARTH supply matches the ledger, entry by entry",
+                "Five banks licensed — Nava · Samaya · Setu · Sthira · Vayu",
+                "Ten houses listed on the Exchange",
+                "Settlement hub open around the clock",
+              ].map((t) => (
+                <span key={t} className="mx-8 inline-flex items-center gap-3">
+                  <img src="/brand/currency_symbol.png" alt="" className="size-4 opacity-80" />
+                  {t}
+                </span>
+              ))}
+            </span>
+          ))}
         </div>
       </section>
 
-      {/* Explainer: split-screen sticky */}
-      <section className="mx-auto grid max-w-7xl gap-10 px-6 py-20 md:grid-cols-2">
-        <div className="md:sticky md:top-24 md:self-start">
+      {/* ── BANKS STRIP ──────────────────────────────────────── */}
+      <section className="py-16">
+        <div className="mx-auto max-w-7xl px-6">
           <h2 className="font-[family-name:var(--font-display)] text-3xl tracking-tight text-[var(--text-primary)]">
-            How ARTH moves
+            Five banks, five temperaments
           </h2>
-          <p className="mt-4 max-w-sm text-base leading-relaxed text-[var(--text-muted)]">
-            Nothing here is a points system. When you send ARTH to a friend at another bank, the
-            exchange clears it through the Central Settlement Layer while the ledger records both
-            sides of the entry at once. What arrives was never created twice.
-          </p>
+          <ul className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+            {[
+              { logo: "/banks/nava_bank.png", n: "Nava", m: "New money energy" },
+              { logo: "/banks/samaya_bank.png", n: "Samaya", m: "Patience pays" },
+              { logo: "/banks/setu_bank.png", n: "Setu", m: "The connector" },
+              { logo: "/banks/sthira_bank.png", n: "Sthira", m: "Holds steady" },
+              { logo: "/banks/vayu_bank.png", n: "Vayu", m: "Moves fast" },
+            ].map((b) => (
+              <li key={b.n}>
+                <Link
+                  href="/banks"
+                  className="group block rounded-[var(--radius-md)] border border-[var(--hairline)] bg-[var(--surface-raised)] p-5 shadow-[var(--elevation-1)] transition-all duration-[var(--duration-medium)] hover:-translate-y-1 hover:shadow-[var(--elevation-2)]"
+                >
+                  <img src={b.logo} alt={`${b.n} Bank`} className="h-12 object-contain" />
+                  <p className="mt-3 font-[family-name:var(--font-display)] text-lg text-[var(--text-primary)]">
+                    {b.n}
+                  </p>
+                  <p className="text-xs text-[var(--text-muted)]">{b.m}</p>
+                </Link>
+              </li>
+            ))}
+          </ul>
         </div>
-        <ol className="space-y-8">
-          {[
-            ["Signed in", "One identity across all six rooms — one email, one GOV ID, one you."],
-            [
-              "Money authorized",
-              "Transfers above everyday size ask for your Financial Password. Your login password can never move money.",
-            ],
-            [
-              "Settled",
-              "Cross-bank movement passes the settlement hub with both legs recorded, then lands.",
-            ],
-          ].map(([title, body], i) => (
-            <li key={title} className="rule-t flex gap-5 pt-6">
-              <span className="font-[family-name:var(--font-accent)] text-3xl leading-none text-[var(--color-arth-gold)]">
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <div>
-                <h3 className="font-[family-name:var(--font-display)] text-xl text-[var(--text-primary)]">
-                  {title}
-                </h3>
-                <p className="mt-1.5 max-w-md text-sm leading-relaxed text-[var(--text-muted)]">
-                  {body}
-                </p>
-              </div>
-            </li>
-          ))}
-        </ol>
       </section>
     </PortalShell>
   );
