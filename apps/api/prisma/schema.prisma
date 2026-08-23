@@ -1,4 +1,5 @@
-// ARTHAX Prisma schema — models arrive in Phase 2 (Identity) and Phase 3 (Ledger).
+// ARTHAX Prisma schema.
+// Phase 2: Identity, GOV ID & Unified Authentication.
 
 generator client {
   provider = "prisma-client-js"
@@ -7,4 +8,66 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  BANK_ADMIN
+  CENTRAL_BANK_ADMIN
+}
+
+/// Invariant: 1 Email -> 1 GOV ID -> 1 ARTHAX User.
+model User {
+  id         String     @id @default(cuid())
+  /// Lowercase, globally unique. Enforced by unique index below.
+  email      String     @unique
+  role       Role       @default(USER)
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  govId      GovId?
+  credential Credential?
+
+  @@index([role])
+}
+
+/// Exactly one GOV ID per verified user. Human-readable public identifier.
+model GovId {
+  id        String   @id
+  /// Format: AX<year>-<8 chars base32>. Unique across the system.
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  issuedAt  DateTime @default(now())
+}
+
+/// Dual-password architecture. The two hashes are never interchangeable:
+/// - govPasswordHash authorizes login sessions only.
+/// - financialPasswordHash authorizes transfers/trades/purchases only.
+model Credential {
+  userId                String   @id
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  govPasswordHash       String
+  financialPasswordHash String?
+  updatedAt             DateTime @updatedAt
+}
+
+/// One-time email verification codes. Hashed at rest, short-lived,
+/// attempt-limited, single-consumption.
+model EmailOtp {
+  id          String    @id @default(cuid())
+  email       String
+  codeHash    String
+  purpose     OtpPurpose
+  expiresAt   DateTime
+  consumedAt  DateTime?
+  attempts    Int       @default(0)
+  createdAt   DateTime  @default(now())
+
+  @@index([email, purpose])
+  @@index([expiresAt])
+}
+
+enum OtpPurpose {
+  REGISTRATION
+  LOGIN
 }

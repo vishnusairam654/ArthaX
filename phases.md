@@ -20,7 +20,7 @@ This document is the **master phase tracking roadmap** for the development of AR
 | :--- | :--- | :--- | :--- |
 | **Phase 0** | Local Environment & Project Tooling | `COMPLETED` | ARTHAX Director |
 | **Phase 1** | Monorepo Foundation & Shared Core Architecture | `COMPLETED` | ARTHAX Backend Engineer |
-| **Phase 2** | Identity, GOV ID & Unified Authentication | `NOT STARTED` | ARTHAX Security Engineer |
+| **Phase 2** | Identity, GOV ID & Unified Authentication | `COMPLETED` | ARTHAX Security Engineer |
 | **Phase 3** | Core Financial Ledger & CLS Settlement Layer | `NOT STARTED` | ARTHAX Financial Engineer |
 | **Phase 4** | Design System, Token Infrastructure & UI Shells | `NOT STARTED` | ARTHAX Visual Director / Frontend Builder |
 | **Phase 5** | Banking Domain, Commercial Banks & Accounts | `NOT STARTED` | ARTHAX Backend / Financial Engineer |
@@ -83,19 +83,19 @@ This document is the **master phase tracking roadmap** for the development of AR
 - **Required Skills**: `build-modern-web-projects`
 
 ### Tasks
-- [ ] Database schema for Identity: Users, GOV IDs, Email verification tokens, Credentials.
-- [ ] Implement Email OTP registration & verification flow.
-- [ ] Implement unique GOV ID generation and GOV account password hashing (Argon2 / bcrypt).
-- [ ] Implement Financial Password creation and secure storage (separate from GOV password).
-- [ ] Implement unified session management (JWT / secure cookies) supporting all 6 portals.
-- [ ] Implement Role-Based Access Control (RBAC): `USER`, `BANK_ADMIN`, `CENTRAL_BANK_ADMIN`.
-- [ ] Pre-provision private credentials for Central Bank & Commercial Bank administrators.
+- [x] Database schema for Identity: Users, GOV IDs, Email verification tokens, Credentials.
+- [x] Implement Email OTP registration & verification flow.
+- [x] Implement unique GOV ID generation and GOV account password hashing (Argon2 / bcrypt).
+- [x] Implement Financial Password creation and secure storage (separate from GOV password).
+- [x] Implement unified session management (JWT / secure cookies) supporting all 6 portals.
+- [x] Implement Role-Based Access Control (RBAC): `USER`, `BANK_ADMIN`, `CENTRAL_BANK_ADMIN`.
+- [x] Pre-provision private credentials for Central Bank & Commercial Bank administrators.
 
 ### Phase 2 Completion Gate
-- [ ] `1 Email` → `1 GOV ID` → `1 ARTHAX User` invariant fully enforced with zero duplicates.
-- [ ] Dual password isolation verified (Financial Password cannot be used as login; Login password cannot execute trades/transfers).
-- [ ] Unit & integration tests for Auth / RBAC passing 100%.
-- [ ] Git commit checkpoint created.
+- [x] `1 Email` → `1 GOV ID` → `1 ARTHAX User` invariant fully enforced with zero duplicates.
+- [x] Dual password isolation verified (Financial Password cannot be used as login; Login password cannot execute trades/transfers).
+- [x] Unit & integration tests for Auth / RBAC passing 100%.
+- [x] Git commit checkpoint created.
 
 ---
 

@@ -16,9 +16,17 @@ export default tseslint.config(
   eslint.configs.recommended,
   ...tseslint.configs.recommended,
   {
-    files: ["scripts/**/*.mjs"],
+    files: ["scripts/**/*.mjs", "**/*.mjs"],
     languageOptions: {
       globals: { console: "readonly", process: "readonly" },
+    },
+  },
+  {
+    files: ["**/*.ts"],
+    rules: {
+      // Disabled: type-only imports erase the runtime binding that NestJS
+      // constructor DI needs for design:paramtypes metadata.
+      "@typescript-eslint/consistent-type-imports": "off",
     },
   },
   {
@@ -27,7 +35,6 @@ export default tseslint.config(
         "error",
         { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
       ],
-      "@typescript-eslint/consistent-type-imports": "error",
       "no-console": "off",
     },
   },
