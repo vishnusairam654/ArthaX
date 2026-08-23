@@ -8,18 +8,13 @@ import type { PortalKey } from "@arthax/tokens";
 export function TopBar({ portal }: { portal: PortalKey }) {
   return (
     <header className="rule-b relative z-10 bg-[var(--surface-base)]">
-      <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-6">
-        <Link href="/" className="flex items-baseline gap-2">
-          <span
-            className="font-[family-name:var(--font-accent)] text-lg tracking-wide text-[var(--text-primary)]"
-            aria-label="ARTHAX home"
-          >
-            ARTHAX
-          </span>
-          <span className="text-xs uppercase tracking-[0.18em] text-[var(--text-muted)]">
-            {labelFor(portal)}
-          </span>
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
+        <Link href="/" className="flex items-center" aria-label="ARTHAX home">
+          <img src="/brand/watermark_transparent.png" alt="ARTHAX" className="h-11 w-auto" />
         </Link>
+        <span className="-ml-4 hidden text-xs uppercase tracking-[0.22em] text-[var(--text-muted)] sm:inline">
+          {labelFor(portal)}
+        </span>
         <nav className="flex items-center gap-5" aria-label="Portal navigation">
           <SessionChip />
         </nav>

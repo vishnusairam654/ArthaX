@@ -4,49 +4,37 @@ import { LedgerCurrent } from "@/components/ledger-current";
 
 /**
  * Central Guide Board — "the front page".
- * Material-elevated composition over the warm gazette palette.
+ * Customer-facing rooms only: Banks (primary), Exchange, Bazaar.
+ * Text over imagery always sits on a glass panel.
  */
 
 const PORTALS = [
   {
-    key: "user",
-    name: "My Desk",
-    line: "Balances across every bank, transfers that settle for real.",
-    bg: "/portals/user.png",
+    key: "bank",
+    name: "Banks",
+    line: "Five banks, five temperaments. Open accounts, park fixed deposits, take a loan — this is where your money lives.",
+    bg: "/portals/banks.png",
     span: "md:col-span-2 md:row-span-2",
-    tint: "rgba(51,104,160,0.72)",
+    tint: "rgba(37,38,36,0.55)",
+    primary: true,
   },
   {
     key: "stocks",
     name: "Exchange",
-    line: "Ten listed houses, live prices.",
+    line: "Ten listed houses, prices that breathe.",
     bg: "/portals/stocks.png",
     span: "",
-    tint: "rgba(102,163,191,0.78)",
+    tint: "rgba(102,163,191,0.72)",
+    primary: false,
   },
   {
     key: "shop",
     name: "Bazaar",
-    line: "Pets & personas, bought in ARTH.",
+    line: "Pets, personas & banners — bought in ARTH.",
     bg: "/portals/shop.png",
     span: "",
-    tint: "rgba(168,116,42,0.80)",
-  },
-  {
-    key: "bank",
-    name: "Banks",
-    line: "Five branches, five temperaments.",
-    bg: "/portals/banks.png",
-    span: "",
-    tint: "rgba(37,38,36,0.66)",
-  },
-  {
-    key: "central_bank",
-    name: "Central Bank",
-    line: "The registry hall.",
-    bg: "/portals/central_bank.png",
-    span: "",
-    tint: "rgba(51,104,160,0.85)",
+    tint: "rgba(168,116,42,0.74)",
+    primary: false,
   },
 ] as const;
 
@@ -70,9 +58,9 @@ export default function GuideBoardPage() {
           }}
         />
         <div className="mx-auto w-full max-w-7xl px-6 py-28">
-          <span className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-1.5 text-xs uppercase tracking-[0.25em] text-white backdrop-blur-sm">
+          <span className="glass inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs uppercase tracking-[0.25em] text-white">
             <img src="/brand/currency_symbol.png" alt="" className="size-4" />
-            One currency · Five banks · Six rooms
+            One currency · Five banks · One exchange
           </span>
           <h1 className="mt-6 max-w-4xl font-[family-name:var(--font-display)] text-5xl font-bold leading-[1.02] tracking-tight text-white [text-shadow:0_2px_32px_rgba(15,35,58,0.45)] md:text-8xl">
             The money press for a small,{" "}
@@ -80,17 +68,17 @@ export default function GuideBoardPage() {
           </h1>
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/85">
             Every ARTH is printed once by the Central Bank and moves through a double-entry ledger
-            that cannot lose a cent. Pick a room below and step in.
+            that cannot lose a cent. Start with a bank account — the rest follows.
           </p>
           <div className="mt-10 flex flex-wrap items-center gap-4">
             <Link
-              href="/user"
-              className="inline-flex h-13 items-center rounded-full bg-[var(--color-arth-gold)] px-9 py-3.5 text-base font-semibold text-white shadow-[var(--elevation-3)] transition-all duration-[var(--duration-short)] ease-[var(--ease-standard)] hover:-translate-y-0.5 hover:bg-[#b98433] hover:shadow-[var(--elevation-4)] active:scale-[0.98]"
+              href="/banks"
+              className="inline-flex items-center gap-2 rounded-full bg-[var(--color-arth-gold)] px-9 py-3.5 text-base font-semibold text-white shadow-[var(--elevation-3)] transition-all duration-[var(--duration-short)] ease-[var(--ease-standard)] hover:-translate-y-0.5 hover:bg-[#b98433] hover:shadow-[var(--elevation-4)] active:scale-[0.98]"
             >
-              Open your desk
+              Open a bank account
               <svg
                 viewBox="0 0 16 16"
-                className="ml-2 size-4 fill-none stroke-current stroke-2"
+                className="size-4 fill-none stroke-current stroke-2"
                 aria-hidden
               >
                 <path
@@ -101,21 +89,21 @@ export default function GuideBoardPage() {
               </svg>
             </Link>
             <Link
-              href="/banks"
+              href="/stocks"
               className="inline-flex items-center rounded-full border-2 border-white/60 px-8 py-3 text-base font-medium text-white transition-colors duration-[var(--duration-short)] hover:border-white hover:bg-white/10"
             >
-              Meet the five banks
+              Visit the exchange
             </Link>
           </div>
 
-          {/* Stat chips */}
+          {/* Stat chips — glass over imagery */}
           <dl className="mt-16 grid max-w-2xl grid-cols-3 gap-px overflow-hidden rounded-[var(--radius-lg)] bg-white/15 backdrop-blur-sm">
             {[
               ["1", "currency — ARTH"],
               ["5", "licensed banks"],
               ["10", "listed companies"],
             ].map(([n, l]) => (
-              <div key={l} className="bg-[rgba(30,63,99,0.55)] px-6 py-4">
+              <div key={l} className="bg-[rgba(30,63,99,0.45)] px-6 py-4 backdrop-blur-md">
                 <dt className="font-[family-name:var(--font-display)] text-3xl font-bold text-white">
                   {n}
                 </dt>
@@ -126,19 +114,19 @@ export default function GuideBoardPage() {
         </div>
       </section>
 
-      {/* ── PORTAL SELECTOR — elevated Material cards, asymmetric ── */}
+      {/* ── PORTAL SELECTOR — Banks first and largest ────────── */}
       <section className="bg-[var(--surface-base)] py-20">
         <div className="mx-auto max-w-7xl px-6">
           <div className="flex items-baseline justify-between">
             <h2 className="font-[family-name:var(--font-display)] text-3xl tracking-tight text-[var(--text-primary)]">
-              Choose your room
+              Where to today?
             </h2>
             <span className="text-xs uppercase tracking-[0.2em] text-[var(--text-muted)]">
-              one session · all six
+              one session · every room
             </span>
           </div>
 
-          <div className="mt-8 grid auto-rows-[220px] grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3">
+          <div className="mt-8 grid auto-rows-[230px] grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3">
             {PORTALS.map((p) => (
               <Link
                 key={p.key}
@@ -152,18 +140,23 @@ export default function GuideBoardPage() {
                 />
                 <div
                   aria-hidden
-                  className="absolute inset-0 -z-10 transition-opacity duration-[var(--duration-medium)] group-hover:opacity-80"
-                  style={{ background: `linear-gradient(180deg, transparent 20%, ${p.tint} 100%)` }}
+                  className="absolute inset-0 -z-10"
+                  style={{ background: `linear-gradient(180deg, transparent 25%, ${p.tint} 100%)` }}
                 />
-                <div className="flex h-full flex-col justify-between p-6">
-                  <span className="w-fit rounded-full bg-white/90 px-3 py-1 text-[11px] font-semibold uppercase tracking-widest text-[var(--color-charcoal)]">
-                    Enter
-                  </span>
-                  <div>
-                    <h3 className="font-[family-name:var(--font-display)] text-3xl font-bold tracking-tight text-white">
-                      {p.name}
-                    </h3>
-                    <p className="mt-1 max-w-xs text-sm leading-snug text-white/85">{p.line}</p>
+                <div className="flex h-full flex-col justify-end p-6">
+                  {/* Glass panel under the text */}
+                  <div className="glass rounded-[var(--radius-md)] p-4">
+                    <div className="flex items-baseline justify-between gap-3">
+                      <h3 className="font-[family-name:var(--font-display)] text-2xl font-bold tracking-tight text-white md:text-3xl">
+                        {p.name}
+                      </h3>
+                      {p.primary ? (
+                        <span className="shrink-0 rounded-full bg-[var(--color-arth-gold)] px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-white">
+                          Start here
+                        </span>
+                      ) : null}
+                    </div>
+                    <p className="mt-1.5 text-sm leading-snug text-white/90">{p.line}</p>
                   </div>
                 </div>
               </Link>
@@ -278,9 +271,7 @@ export default function GuideBoardPage() {
 
 function routeFor(key: string): string {
   const routes: Record<string, string> = {
-    central_bank: "/central-bank",
     bank: "/banks",
-    user: "/user",
     stocks: "/stocks",
     shop: "/shop",
   };
