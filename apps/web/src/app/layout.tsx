@@ -5,6 +5,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "ARTHAX — The Ledger Gazette",
   description: "Unified financial ecosystem — banks, stocks, and shop in ARTH.",
+  icons: { icon: "/favicon.png" },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

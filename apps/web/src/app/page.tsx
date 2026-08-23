@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { PortalShell } from "@/components/portal-shell";
+import { LedgerCurrent } from "@/components/ledger-current";
 
 /**
  * Central Guide Board — "the front page" (narrative content, NOT a card grid).
@@ -42,32 +43,43 @@ const PORTALS = [
 export default function GuideBoardPage() {
   return (
     <PortalShell portal="central_guide">
-      {/* Full-bleed editorial hero */}
-      <section className="grain relative isolate overflow-hidden">
+      {/* Full-bleed editorial hero with ambient Three.js "currency current" */}
+      <section className="grain relative isolate min-h-[88vh] overflow-hidden bg-[var(--color-deep-blue)]">
         <div
           aria-hidden
-          className="absolute inset-0 -z-10 bg-cover bg-center"
+          className="absolute inset-0 -z-20 bg-cover bg-center opacity-40"
           style={{ backgroundImage: "url(/portals/central_guide.png)" }}
         />
+        <LedgerCurrent />
         <div
           aria-hidden
           className="absolute inset-0 -z-10"
           style={{
             background:
-              "linear-gradient(105deg, rgba(51,104,160,0.88) 0%, rgba(102,163,191,0.55) 45%, rgba(242,239,231,0.92) 100%)",
+              "linear-gradient(105deg, rgba(37,38,36,0.55) 0%, rgba(51,104,160,0.35) 45%, rgba(242,239,231,0.9) 100%)",
           }}
         />
-        <div className="mx-auto max-w-7xl px-6 py-28 md:py-40">
-          <p className="text-xs uppercase tracking-[0.3em] text-[rgba(255,255,255,0.85)]">
+        <div className="mx-auto flex min-h-[88vh] max-w-7xl flex-col justify-center px-6 py-28">
+          <p className="text-xs uppercase tracking-[0.3em] text-white/80">
             One currency · Five banks · Six rooms
           </p>
-          <h1 className="mt-4 max-w-3xl font-[family-name:var(--font-display)] text-5xl leading-[1.05] tracking-tight text-white md:text-7xl">
+          <h1 className="mt-4 max-w-3xl font-[family-name:var(--font-display)] text-5xl font-semibold leading-[1.02] tracking-tight text-white drop-shadow-[0_2px_24px_rgba(37,38,36,0.35)] md:text-8xl">
             The money press for a small, honest economy.
           </h1>
-          <p className="mt-5 max-w-xl text-lg leading-relaxed text-[rgba(255,255,255,0.9)]">
-            Every ARTH that exists is printed once by the Central Bank and moves through a
-            double-entry ledger that cannot lose a cent. Pick a room below and step in.
-          </p>
+          <div className="mt-10 flex flex-wrap items-center gap-4">
+            <Link
+              href="/user"
+              className="inline-flex h-12 items-center rounded-full bg-[var(--color-arth-gold)] px-8 text-base font-semibold text-white shadow-[var(--elevation-2)] transition-transform duration-[var(--duration-short)] ease-[var(--ease-standard)] hover:-translate-y-0.5 hover:brightness-110 active:scale-[0.98]"
+            >
+              Open your desk
+            </Link>
+            <Link
+              href="/banks"
+              className="inline-flex h-12 items-center rounded-full border border-white/50 px-8 text-base text-white transition-colors duration-[var(--duration-short)] hover:bg-white/10"
+            >
+              Meet the five banks
+            </Link>
+          </div>
         </div>
       </section>
 

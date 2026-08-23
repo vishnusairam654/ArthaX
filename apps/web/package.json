@@ -11,18 +11,21 @@
   "dependencies": {
     "@arthax/tokens": "workspace:*",
     "@arthax/types": "workspace:*",
+    "@react-three/fiber": "^9.7.0",
     "@tailwindcss/postcss": "^4.3.3",
     "gsap": "^3.15.0",
     "next": "^15.5.0",
     "postcss": "^8.5.26",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "tailwindcss": "^4.3.3"
+    "tailwindcss": "^4.3.3",
+    "three": "^0.185.1"
   },
   "devDependencies": {
     "@types/node": "^26.2.0",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.0",
+    "@types/three": "^0.185.4",
     "typescript": "^5.9.2"
   }
 }
