@@ -1,0 +1,1039 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "./client"
+}
+
+// =============================================================================
+// ENUMS
+// =============================================================================
+
+enum GovIdStatus {
+  ACTIVE
+  SUSPENDED
+  LOCKED
+}
+
+enum UserRole {
+  USER
+  BANK_ADMIN
+  CENTRAL_BANK_ADMIN
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+  LOCKED
+  CLOSED
+}
+
+enum MfaPurpose {
+  EMAIL_VERIFY
+  PASSWORD_RESET
+  STEP_UP
+}
+
+enum LedgerAccountType {
+  BANK_ACCOUNT
+  BANK_RESERVE
+  CENTRAL_TREASURY
+  TAX_AUTHORITY
+  FEE_POOL
+  STOCK_EXCHANGE
+  SHOP_REVENUE
+  REWARD_POOL
+  LOAN_POOL
+  FD_POOL
+  CLS_CLEARING
+}
+
+enum TransactionType {
+  TRANSFER
+  DEPOSIT
+  WITHDRAWAL
+  INTEREST
+  FEE
+  TAX
+  LOAN_DISBURSEMENT
+  LOAN_REPAYMENT
+  FD_BOOKING
+  FD_MATURITY
+  STOCK_BUY
+  STOCK_SELL
+  SHOP_PURCHASE
+  REWARD
+  REVERSAL
+  MINT
+  BURN
+}
+
+enum TransactionStatus {
+  PENDING
+  VALIDATING
+  AUTHORIZED
+  PROCESSING
+  SETTLING
+  FINALIZING
+  COMPLETED
+  FAILED
+  REVERSED
+  CANCELLED
+}
+
+enum TransactionEntryType {
+  DEBIT
+  CREDIT
+}
+
+enum TransactionScope {
+  INTERNAL
+  INTER_BANK
+}
+
+enum SettlementStage {
+  VALIDATING
+  AUTHORIZED
+  PROCESSING
+  SETTLING
+  FINALIZING
+  COMPLETED
+  FAILED
+  REVERSED
+}
+
+enum BankAccountType {
+  SAVINGS
+  CURRENT
+}
+
+enum BankAccountStatus {
+  ACTIVE
+  SUSPENDED
+  FROZEN
+  CLOSED
+  DORMANT
+}
+
+enum FdStatus {
+  ACTIVE
+  MATURED
+  BROKEN
+  PENDING
+}
+
+enum LoanStatus {
+  APPLIED
+  UNDER_REVIEW
+  APPROVED
+  DISBURSED
+  REPAID
+  DEFAULTED
+  REJECTED
+}
+
+enum OrderSide {
+  BUY
+  SELL
+}
+
+enum OrderType {
+  LIMIT
+  MARKET
+  STOP
+}
+
+enum OrderStatus {
+  OPEN
+  PARTIALLY_FILLED
+  FILLED
+  CANCELLED
+  EXPIRED
+  REJECTED
+}
+
+enum TradeStatus {
+  SETTLING
+  SETTLED
+  FAILED
+}
+
+enum ShopCategory {
+  all
+  pets
+  avatars
+  frames
+  banners
+  inventory
+}
+
+enum RarityTier {
+  normal
+  rare
+  epic
+  gold
+}
+
+enum AuditSeverity {
+  INFO
+  NOTICE
+  WARNING
+  CRITICAL
+}
+
+enum NotificationCategory {
+  TRANSFER
+  SETTLEMENT
+  STOCK
+  SHOP
+  FD
+  LOAN
+  REWARD
+  SYSTEM
+  SECURITY
+  POLICY
+}
+
+enum NotificationPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+}
+
+// =============================================================================
+// STEP 1: CORE IDENTITY
+// =============================================================================
+
+model GovId {
+  id                  String      @id @default(uuid())
+  govIdNumber         String      @unique @db.VarChar(20) // e.g. "GOV-8419-2041"
+  email               String      @unique @db.VarChar(255)
+  passwordHash        String      @db.VarChar(255) // Argon2id hash
+  emailVerified       Boolean     @default(false)
+  status              GovIdStatus @default(ACTIVE)
+  failedLoginAttempts Int         @default(0)
+  lockedUntil         DateTime?
+  createdAt           DateTime    @default(now())
+  updatedAt           DateTime    @updatedAt
+
+  user User?
+
+  @@index([email])
+  @@index([govIdNumber])
+}
+
+model User {
+  id                    String     @id @default(uuid())
+  govId                 String     @unique
+  financialPasswordHash String     @db.VarChar(255) // Argon2id hash (strictly isolated)
+  displayName           String     @db.VarChar(100)
+  role                  UserRole   @default(USER)
+  status                UserStatus @default(ACTIVE)
+  createdAt             DateTime   @default(now())
+  updatedAt             DateTime   @updatedAt
+
+  govIdRel           GovId               @relation(fields: [govId], references: [id])
+  sessions           Session[]
+  bankCustomers      BankCustomer[]
+  bankAccounts       BankAccount[]
+  initiatedTx        Transaction[]       @relation("InitiatedTransactions")
+  fds                UserFd[]
+  loans              Loan[]
+  orders             Order[]
+  buyTrades          Trade[]             @relation("BuyerTrades")
+  sellTrades         Trade[]             @relation("SellerTrades")
+  holdings           PortfolioHolding[]
+  taxEvents          TaxEvent[]
+  inventory          UserInventory[]
+  loadout            UserLoadout?
+  rewardTransactions RewardTransaction[]
+  notifications      Notification[]
+  mailboxMessages    MailboxMessage[]
+  interestPayoutLogs InterestPayoutLog[]
+
+  @@index([role])
+}
+
+model Session {
+  id        String   @id @default(uuid())
+  userId    String
+  tokenHash String   @unique @db.VarChar(255)
+  ipAddress String?  @db.VarChar(45)
+  userAgent String?  @db.Text
+  expiresAt DateTime
+  revoked   Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([tokenHash])
+}
+
+model MfaToken {
+  id        String     @id @default(uuid())
+  email     String     @db.VarChar(255)
+  codeHash  String     @db.VarChar(255)
+  purpose   MfaPurpose
+  attempts  Int        @default(0)
+  expiresAt DateTime
+  consumed  Boolean    @default(false)
+  createdAt DateTime   @default(now())
+
+  @@index([email, purpose])
+}
+
+// =============================================================================
+// STEP 2: FINANCIAL ENTITIES
+// =============================================================================
+
+model Bank {
+  id                String   @id @db.VarChar(20) // "nava", "samaya", "setu", "sthira", "vayu"
+  name              String   @db.VarChar(100)
+  shortName         String   @db.VarChar(20)
+  tagline           String   @db.VarChar(255)
+  logoPath          String   @db.VarChar(255)
+  licenseNumber     String   @unique @db.VarChar(50)
+  establishedDate   DateTime @db.Date
+  accentColor       String   @db.VarChar(7)
+  status            String   @default("ACTIVE") @db.VarChar(20)
+  ownership         String   @db.Text
+  governingDirector String   @db.VarChar(100)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  customers         BankCustomer[]
+  accounts          BankAccount[]
+  outgoingSettle    Settlement[]     @relation("SourceBankSettlements")
+  incomingSettle    Settlement[]     @relation("DestBankSettlements")
+  fdSchemes         FdScheme[]
+  userFds           UserFd[]
+  loans             Loan[]
+  products          BankProduct[]
+  operations        OperationQueue[]
+  beneficiaries     Beneficiary[]
+
+  @@index([status])
+}
+
+model CentralBankConfig {
+  id                     String   @id @default(uuid())
+  institutionName        String   @db.VarChar(150)
+  charterId              String   @unique @db.VarChar(50)
+  sovereignSeat          String   @db.VarChar(150)
+  currentGovernor        String   @db.VarChar(100)
+  deputyGovernor         String   @db.VarChar(100)
+  auditQuorumCount       Int      @default(5)
+  sessionTimeoutMinutes  Int      @default(15)
+  dualPasswordEnforced   Boolean  @default(true)
+  ipWhitelistEnforced    Boolean  @default(true)
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+}
+
+// =============================================================================
+// STEP 3: CUSTOMER RELATIONSHIPS
+// =============================================================================
+
+model BankCustomer {
+  id             String   @id @default(uuid())
+  userId         String
+  bankId         String   @db.VarChar(20)
+  customerNumber String   @db.VarChar(30)
+  status         String   @default("ACTIVE") @db.VarChar(20)
+  tier           String   @default("Tier-1 Citizen") @db.VarChar(30)
+  joinedAt       DateTime @default(now())
+
+  user     User          @relation(fields: [userId], references: [id])
+  bank     Bank          @relation(fields: [bankId], references: [id])
+  accounts BankAccount[]
+
+  @@unique([userId, bankId])
+  @@index([customerNumber])
+}
+
+model BankAccount {
+  id                String            @id @default(uuid())
+  accountNumber     String            @unique @db.VarChar(30) // "ARTH-NAVA-001"
+  customerId        String
+  bankId            String            @db.VarChar(20)
+  userId            String
+  type              BankAccountType   @default(SAVINGS)
+  purpose           String            @db.VarChar(100)
+  status            BankAccountStatus @default(ACTIVE)
+  dailyLimitMinor   BigInt            @default(5000000) // 50,000.00 ARTH
+  monthlyLimitMinor BigInt            @default(50000000) // 500,000.00 ARTH
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  customer       BankCustomer    @relation(fields: [customerId], references: [id])
+  bank           Bank            @relation(fields: [bankId], references: [id])
+  user           User            @relation(fields: [userId], references: [id])
+  ledgerAccount  LedgerAccount?
+  outgoingTx     Transaction[]   @relation("SourceBankTransactions")
+  incomingTx     Transaction[]   @relation("DestBankTransactions")
+  beneficiaries  Beneficiary[]
+  fds            UserFd[]
+  stockOrders    Order[]
+
+  @@index([userId])
+  @@index([bankId])
+  @@index([accountNumber])
+}
+
+// =============================================================================
+// STEP 4: CORE LEDGER (DOUBLE-ENTRY INVARIANTS)
+// =============================================================================
+
+model LedgerAccount {
+  id              String            @id @default(uuid())
+  accountType     LedgerAccountType
+  ownerEntityId   String            @db.VarChar(64)
+  ownerEntityType String            @db.VarChar(50)
+  balanceSnapshot BigInt            @default(0) // Cached snapshot in minor units
+  snapshotAt      DateTime          @default(now())
+  bankAccountId   String?           @unique
+  createdAt       DateTime          @default(now())
+
+  bankAccount BankAccount?       @relation(fields: [bankAccountId], references: [id])
+  entries     TransactionEntry[]
+
+  @@index([accountType])
+  @@index([ownerEntityId, ownerEntityType])
+}
+
+/// APPEND-ONLY TABLE. No UPDATE or DELETE allowed at database permission level.
+model TransactionEntry {
+  id              String               @id @default(uuid())
+  transactionId   String
+  ledgerAccountId String
+  entryType       TransactionEntryType
+  amountMinor     BigInt // Strictly > 0 minor units
+  createdAt       DateTime             @default(now())
+
+  transaction   Transaction   @relation(fields: [transactionId], references: [id], onDelete: Restrict)
+  ledgerAccount LedgerAccount @relation(fields: [ledgerAccountId], references: [id], onDelete: Restrict)
+
+  @@index([transactionId])
+  @@index([ledgerAccountId])
+  @@index([createdAt])
+}
+
+// =============================================================================
+// STEP 5: TRANSACTIONAL LAYER
+// =============================================================================
+
+model Transaction {
+  id                     String            @id @default(uuid())
+  referenceNumber        String            @unique @db.VarChar(40) // "TX-260910-001"
+  type                   TransactionType
+  status                 TransactionStatus @default(PENDING)
+  scope                  TransactionScope  @default(INTERNAL)
+  amountMinor            BigInt
+  feesMinor              BigInt            @default(0)
+  taxMinor               BigInt            @default(0)
+  initiatedBy            String?
+  sourceAccountId        String?
+  destinationAccountId   String?
+  settlementId           String?
+  failureReason          String?           @db.Text
+  metadata               Json?
+  createdAt              DateTime          @default(now())
+  updatedAt              DateTime          @updatedAt
+
+  initiator           User?               @relation("InitiatedTransactions", fields: [initiatedBy], references: [id])
+  sourceAccount       BankAccount?        @relation("SourceBankTransactions", fields: [sourceAccountId], references: [id])
+  destinationAccount  BankAccount?        @relation("DestBankTransactions", fields: [destinationAccountId], references: [id])
+  settlement          Settlement?         @relation(fields: [settlementId], references: [id])
+  entries             TransactionEntry[]
+  monetaryEvents      MonetaryEvent[]
+  rewardTransactions  RewardTransaction[]
+
+  @@index([status])
+  @@index([type])
+  @@index([referenceNumber])
+  @@index([initiatedBy])
+  @@index([createdAt])
+}
+
+model Settlement {
+  id                    String          @id @default(uuid())
+  reference             String          @unique @db.VarChar(40)
+  sourceBankId          String          @db.VarChar(20)
+  destinationBankId     String          @db.VarChar(20)
+  amountMinor           BigInt
+  feeLevyMinor          BigInt          @default(0)
+  stage                 SettlementStage @default(VALIDATING)
+  clearingLatencyMs     Int?
+  failureReason         String?         @db.Text
+  reversalTransactionId String?         @db.VarChar(64)
+  timeline              Json?
+  createdAt             DateTime        @default(now())
+  updatedAt             DateTime        @updatedAt
+
+  sourceBank      Bank          @relation("SourceBankSettlements", fields: [sourceBankId], references: [id])
+  destinationBank Bank          @relation("DestBankSettlements", fields: [destinationBankId], references: [id])
+  transactions    Transaction[]
+
+  @@index([stage])
+  @@index([sourceBankId, destinationBankId])
+}
+
+// =============================================================================
+// STEP 6: SPECIALIZED BANKING
+// =============================================================================
+
+model Beneficiary {
+  id              String   @id @default(uuid())
+  accountId       String
+  beneficiaryName String   @db.VarChar(100)
+  accountNumber   String   @db.VarChar(30)
+  bankId          String   @db.VarChar(20)
+  nickname        String?  @db.VarChar(50)
+  createdAt       DateTime @default(now())
+
+  account BankAccount @relation(fields: [accountId], references: [id])
+  bank    Bank        @relation(fields: [bankId], references: [id])
+
+  @@index([accountId])
+}
+
+model FdScheme {
+  id                    String   @id @db.VarChar(30)
+  bankId                String   @db.VarChar(20)
+  name                  String   @db.VarChar(100)
+  tenureDays            Int
+  baseApy               Float
+  seniorApy             Float
+  minimumDepositMinor   BigInt
+  maximumDepositMinor   BigInt
+  lockInDays            Int
+  preclosurePenaltyRate Float
+  active                Boolean  @default(true)
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  bank    Bank     @relation(fields: [bankId], references: [id])
+  userFds UserFd[]
+
+  @@index([bankId, active])
+}
+
+model UserFd {
+  id                     String              @id @default(uuid())
+  userId                 String
+  accountId              String
+  bankId                 String              @db.VarChar(20)
+  schemeId               String              @db.VarChar(30)
+  certificateNumber      String              @unique @db.VarChar(40)
+  principalMinor         BigInt
+  maturityAmountMinor    BigInt
+  apy                    Float
+  status                 FdStatus            @default(ACTIVE)
+  startDate              DateTime
+  maturityDate           DateTime
+  interestPayoutFreq     String              @default("AT_MATURITY") @db.VarChar(20)
+  accruedInterestMinor   BigInt              @default(0)
+  autoRenew              Boolean             @default(false)
+  rolloverInstruction    String              @default("NONE") @db.VarChar(30)
+  closedAt               DateTime?
+  payoutAmountMinor      BigInt?
+  payoutTxId             String?
+  createdAt              DateTime            @default(now())
+  updatedAt              DateTime            @updatedAt
+
+  user               User                @relation(fields: [userId], references: [id])
+  account            BankAccount         @relation(fields: [accountId], references: [id])
+  bank               Bank                @relation(fields: [bankId], references: [id])
+  scheme             FdScheme            @relation(fields: [schemeId], references: [id])
+  interestPayoutLogs InterestPayoutLog[]
+
+  @@index([userId])
+  @@index([status])
+  @@index([bankId, status])
+}
+
+model InterestPayoutLog {
+  id               String   @id @default(uuid())
+  userFdId         String
+  userId           String
+  transactionId    String
+  grossAmountMinor BigInt
+  taxWithheldMinor BigInt   @default(0)
+  netAmountMinor   BigInt
+  payoutDate       DateTime @default(now())
+  payoutType       String   @db.VarChar(20) // MATURITY, PERIODIC, PRE_CLOSURE
+
+  userFd           UserFd   @relation(fields: [userFdId], references: [id], onDelete: Cascade)
+  user             User     @relation(fields: [userId], references: [id])
+
+  @@index([userFdId])
+  @@index([userId])
+}
+
+model Loan {
+  id                     String     @id @default(uuid())
+  userId                 String
+  bankId                 String     @db.VarChar(20)
+  loanType               String     @db.VarChar(30)
+  principalMinor         BigInt
+  interestRateApy        Float
+  tenureMonths           Int
+  monthlyEmiMinor        BigInt
+  outstandingBalanceMinor BigInt
+  status                 LoanStatus @default(APPLIED)
+  appliedDate            DateTime   @default(now())
+  disbursedDate          DateTime?
+  purpose                String     @db.Text
+  createdAt              DateTime   @default(now())
+  updatedAt              DateTime   @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+  bank Bank @relation(fields: [bankId], references: [id])
+
+  @@index([userId])
+  @@index([status])
+}
+
+model BankProduct {
+  id              String   @id @db.VarChar(40)
+  bankId          String   @db.VarChar(20)
+  name            String   @db.VarChar(100)
+  category        String   @db.VarChar(50)
+  description     String   @db.Text
+  minBalanceMinor BigInt   @default(0)
+  features        Json?
+  active          Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  bank Bank @relation(fields: [bankId], references: [id])
+
+  @@index([bankId, active])
+}
+
+model OperationQueue {
+  id             String   @id @default(uuid())
+  bankId         String   @db.VarChar(20)
+  type           String   @db.VarChar(50)
+  referenceId    String   @db.VarChar(64)
+  title          String   @db.VarChar(150)
+  description    String   @db.Text
+  assignedStaffId String?  @db.VarChar(64)
+  status         String   @default("QUEUED") @db.VarChar(20)
+  priority       String   @default("MEDIUM") @db.VarChar(20)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  bank Bank @relation(fields: [bankId], references: [id])
+
+  @@index([bankId, status])
+}
+
+// =============================================================================
+// STEP 7: MARKET INFRASTRUCTURE
+// =============================================================================
+
+model StockCompany {
+  symbol               String   @id @db.VarChar(10) // "ANVIK", "ARKA", etc.
+  name                 String   @db.VarChar(100)
+  sector               String   @db.VarChar(50)
+  currentPriceMinor    BigInt   // Stored in minor units (Decision 2)
+  openingPriceMinor    BigInt
+  dayHighMinor         BigInt
+  dayLowMinor          BigInt
+  previousCloseMinor   BigInt
+  changePercent        Float    @default(0.0)
+  volume               Int      @default(0)
+  marketCapMinor       BigInt
+  peRatio              Float    @default(15.0)
+  circuitLimitLowMinor BigInt
+  circuitLimitHighMinor BigInt
+  circuitBreakerActive Boolean  @default(false)
+  sharesOutstanding    Int
+  freeFloatPercent     Float
+  dividendYield        Float    @default(0.0)
+  description          String   @db.Text
+  listedDate           DateTime @db.Date
+  status               String   @default("ACTIVE") @db.VarChar(20)
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  tickers   StockTicker[]
+  orders    Order[]
+  trades    Trade[]
+  holdings  PortfolioHolding[]
+  taxEvents TaxEvent[]
+
+  @@index([status])
+}
+
+model StockTicker {
+  id            String   @id @default(uuid())
+  symbol        String   @db.VarChar(10)
+  priceMinor    BigInt
+  volume        Int
+  changePercent Float
+  timestamp     DateTime @default(now())
+
+  company StockCompany @relation(fields: [symbol], references: [symbol])
+
+  @@index([symbol, timestamp])
+}
+
+model Order {
+  id             String      @id @default(uuid())
+  userId         String
+  symbol         String      @db.VarChar(10)
+  side           OrderSide
+  type           OrderType   @default(LIMIT)
+  quantity       Int
+  filledQuantity Int         @default(0)
+  priceMinor     BigInt
+  status         OrderStatus @default(OPEN)
+  sourceAccountId String
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  user          User         @relation(fields: [userId], references: [id])
+  company       StockCompany @relation(fields: [symbol], references: [symbol])
+  sourceAccount BankAccount  @relation(fields: [sourceAccountId], references: [id])
+  buyTrades     Trade[]      @relation("BuyOrderTrades")
+  sellTrades    Trade[]      @relation("SellOrderTrades")
+
+  @@index([symbol, status])
+  @@index([userId])
+}
+
+model Trade {
+  id              String      @id @default(uuid())
+  buyOrderId      String
+  sellOrderId     String
+  symbol          String      @db.VarChar(10)
+  priceMinor      BigInt
+  quantity        Int
+  buyerUserId     String
+  sellerUserId    String
+  buyerFeeMinor   BigInt      @default(0)
+  sellerFeeMinor  BigInt      @default(0)
+  taxLevyMinor    BigInt      @default(0)
+  settlementStage TradeStatus @default(SETTLED)
+  executedAt      DateTime    @default(now())
+
+  buyOrder    Order        @relation("BuyOrderTrades", fields: [buyOrderId], references: [id])
+  sellOrder   Order        @relation("SellOrderTrades", fields: [sellOrderId], references: [id])
+  company     StockCompany @relation(fields: [symbol], references: [symbol])
+  buyer       User         @relation("BuyerTrades", fields: [buyerUserId], references: [id])
+  seller      User         @relation("SellerTrades", fields: [sellerUserId], references: [id])
+
+  @@index([symbol, executedAt])
+  @@index([buyerUserId])
+  @@index([sellerUserId])
+}
+
+model PortfolioHolding {
+  id                   String   @id @default(uuid())
+  userId               String
+  symbol               String   @db.VarChar(10)
+  shares               Int
+  averageBuyPriceMinor BigInt
+  updatedAt            DateTime @updatedAt
+
+  user    User         @relation(fields: [userId], references: [id])
+  company StockCompany @relation(fields: [symbol], references: [symbol])
+
+  @@unique([userId, symbol])
+  @@index([userId])
+}
+
+model TaxEvent {
+  id                  String   @id @default(uuid())
+  userId              String
+  symbol              String   @db.VarChar(10)
+  sharesSold          Int
+  sellPriceMinor      BigInt
+  buyPriceMinor       BigInt
+  realizedProfitMinor BigInt
+  taxRatePercent      Float
+  taxAmountMinor      BigInt
+  offsetAppliedMinor  BigInt   @default(0)
+  executedAt          DateTime @default(now())
+
+  user    User         @relation(fields: [userId], references: [id])
+  company StockCompany @relation(fields: [symbol], references: [symbol])
+
+  @@index([userId, executedAt])
+}
+
+model ThematicBasket {
+  id                 String   @id @db.VarChar(40)
+  name               String   @db.VarChar(100)
+  tagline            String   @db.VarChar(255)
+  description        String   @db.Text
+  riskTier           String   @db.VarChar(30)
+  rebalanceSchedule  String   @db.VarChar(50)
+  basketComposition  Json
+  active             Boolean  @default(true)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+// =============================================================================
+// STEP 8: GAMIFICATION (SHOP & REWARDS)
+// =============================================================================
+
+model ShopItem {
+  id               String       @id @db.VarChar(50)
+  name             String       @db.VarChar(100)
+  category         ShopCategory
+  rarity           RarityTier
+  priceMinor       BigInt
+  image            String       @db.VarChar(255)
+  secondaryImage   String?      @db.VarChar(255)
+  rank             String?      @db.VarChar(30)
+  role             String?      @db.VarChar(100)
+  gender           String?      @db.VarChar(10)
+  powerTitle       String?      @db.VarChar(150)
+  powerDescription String?      @db.Text
+  attireSpec       String?      @db.Text
+  accreditation    String?      @db.Text
+  covenantSection  String?      @db.VarChar(100)
+  perks            Json?
+  active           Boolean      @default(true)
+  status           String       @default("ACTIVE") @db.VarChar(20)
+  ownershipType    String       @default("UNIQUE_PER_USER") @db.VarChar(30)
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  inventories UserInventory[]
+
+  @@index([category, rarity])
+}
+
+model UserInventory {
+  id         String   @id @default(uuid())
+  userId     String
+  itemId     String   @db.VarChar(50)
+  acquiredAt DateTime @default(now())
+
+  user User     @relation(fields: [userId], references: [id])
+  item ShopItem @relation(fields: [itemId], references: [id])
+
+  @@unique([userId, itemId])
+  @@index([userId])
+}
+
+model UserLoadout {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  frameId   String?  @db.VarChar(50)
+  avatarId  String?  @db.VarChar(50)
+  bannerId  String?  @db.VarChar(50)
+  petId     String?  @db.VarChar(50)
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model RewardTask {
+  id          String   @id @db.VarChar(40)
+  title       String   @db.VarChar(150)
+  category    String   @db.VarChar(50)
+  description String   @db.Text
+  rewardMinor BigInt
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  rewardTransactions RewardTransaction[]
+}
+
+model RewardAchievement {
+  id          String   @id @db.VarChar(40)
+  title       String   @db.VarChar(150)
+  badgeName   String   @db.VarChar(100)
+  icon        String   @db.VarChar(255)
+  criteria    String   @db.Text
+  rewardMinor BigInt
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  rewardTransactions RewardTransaction[]
+}
+
+model RewardTransaction {
+  id            String   @id @default(uuid())
+  userId        String
+  taskId        String?  @db.VarChar(40)
+  achievementId String?  @db.VarChar(40)
+  amountMinor   BigInt
+  transactionId String
+  claimedAt     DateTime @default(now())
+
+  user        User               @relation(fields: [userId], references: [id])
+  task        RewardTask?        @relation(fields: [taskId], references: [id])
+  achievement RewardAchievement? @relation(fields: [achievementId], references: [id])
+  transaction Transaction        @relation(fields: [transactionId], references: [id])
+
+  @@index([userId])
+}
+
+// =============================================================================
+// STEP 9: SUPPORT SYSTEMS (COMMUNICATION & NOTIFICATIONS)
+// =============================================================================
+
+model Notification {
+  id              String               @id @default(uuid())
+  userId          String
+  category        NotificationCategory
+  priority        NotificationPriority @default(NORMAL)
+  title           String               @db.VarChar(200)
+  summary         String               @db.VarChar(500)
+  content         String               @db.Text
+  templateCode    String               @db.VarChar(100)
+  templateVersion Int                  @default(1)
+  sourceDomain    String               @db.VarChar(50)
+  sourceType      String               @db.VarChar(50)
+  sourceId        String               @db.VarChar(100)
+  eventId         String               @db.VarChar(100)
+  metadata        Json?
+  isRead          Boolean              @default(false)
+  readAt          DateTime?
+  isArchived      Boolean              @default(false)
+  createdAt       DateTime             @default(now())
+  updatedAt       DateTime             @updatedAt
+
+  user            User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, eventId])
+  @@index([userId, isRead, isArchived, createdAt(sort: Desc)])
+  @@index([userId, category])
+  @@index([sourceDomain, sourceId])
+}
+
+model Announcement {
+  id                    String   @id @db.VarChar(40) // "ANN-2026-042"
+  title                 String   @db.VarChar(200)
+  category              String   @db.VarChar(50)
+  audience              String   @db.VarChar(50)
+  status                String   @default("Published") @db.VarChar(20)
+  publishedAt           DateTime @default(now())
+  authorCouncil         String   @db.VarChar(100)
+  summary               String   @db.Text
+  fullBody              String   @db.Text
+  reachesCitizenMailbox Boolean  @default(false)
+  priority              String   @default("Normal") @db.VarChar(20)
+  createdAt             DateTime @default(now())
+
+  mailboxMessages MailboxMessage[]
+
+  @@index([status, publishedAt])
+}
+
+model MailboxMessage {
+  id             String   @id @default(uuid())
+  userId         String
+  announcementId String?  @db.VarChar(40)
+  title          String   @db.VarChar(200)
+  category       String   @db.VarChar(50)
+  sender         String   @db.VarChar(100)
+  body           String   @db.Text
+  read           Boolean  @default(false)
+  priority       String   @default("Normal") @db.VarChar(20)
+  receivedAt     DateTime @default(now())
+
+  user         User          @relation(fields: [userId], references: [id])
+  announcement Announcement? @relation(fields: [announcementId], references: [id])
+
+  @@index([userId, read])
+}
+
+// =============================================================================
+// STEP 10: OVERSIGHT LAYER (AUDIT, RULES & COMPLIANCE)
+// =============================================================================
+
+model FinancialRule {
+  id             String   @id @db.VarChar(40) // "pol-001"
+  key            String   @unique @db.VarChar(50) // "POL-BASE-RATE"
+  title          String   @db.VarChar(150)
+  currentValue   Float
+  unit           String   @db.VarChar(30)
+  category       String   @db.VarChar(50)
+  description    String   @db.Text
+  version        String   @db.VarChar(20)
+  lastModified   DateTime @default(now())
+  modifiedBy     String   @db.VarChar(100)
+  effectiveDate  DateTime @db.Date
+  statutoryBasis String   @db.VarChar(150)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([category])
+}
+
+model TaxRule {
+  id             String   @id @db.VarChar(40)
+  name           String   @db.VarChar(100)
+  code           String   @unique @db.VarChar(30)
+  category       String   @db.VarChar(50)
+  ratePercent    Float
+  thresholdMinor BigInt   @default(0)
+  description    String   @db.Text
+  version        String   @db.VarChar(20)
+  effectiveFrom  DateTime @db.Date
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([category])
+}
+
+model MonetaryEvent {
+  id            String   @id @default(uuid())
+  eventType     String   @db.VarChar(30) // "MINT", "BURN", "RESERVE_INJECTION"
+  amountMinor   BigInt
+  authorizedBy  String   @db.VarChar(100)
+  reason        String   @db.Text
+  transactionId String?
+  createdAt     DateTime @default(now())
+
+  transaction Transaction? @relation(fields: [transactionId], references: [id])
+
+  @@index([eventType, createdAt])
+}
+
+/// APPEND-ONLY TABLE. Compliance audit logs cannot be updated or deleted.
+model SystemLog {
+  id           String        @id @default(uuid())
+  eventType    String        @db.VarChar(50)
+  actorId      String        @db.VarChar(100)
+  actorRole    String        @db.VarChar(50)
+  targetEntity String        @db.VarChar(100)
+  action       String        @db.Text
+  severity     AuditSeverity @default(INFO)
+  ipAddress    String?       @db.VarChar(45)
+  sessionHash  String?       @db.VarChar(64)
+  beforeState  Json?
+  afterState   Json?
+  timestamp    DateTime      @default(now())
+
+  @@index([eventType, timestamp])
+  @@index([actorId])
+  @@index([severity])
+}
+
+/// APPEND-ONLY TABLE. Security events record authentication challenges, locks, and alarms.
+model SecurityEvent {
+  id           String   @id @default(uuid())
+  eventType    String   @db.VarChar(50)
+  targetEntity String   @db.VarChar(100)
+  severity     String   @default("WARNING") @db.VarChar(20)
+  ipAddress    String?  @db.VarChar(45)
+  actionTaken  String   @db.Text
+  metadata     Json?
+  timestamp    DateTime @default(now())
+
+  @@index([eventType, timestamp])
+}

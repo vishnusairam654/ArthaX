@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;1,6..72,500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "tertiary-container": "#263766", "error-container": "#ffdad6", "on-primary": "#ffffff", "surface-container-high": "#eae8e5", "error": "#ba1a1a", "on-error": "#ffffff", "on-surface-variant": "#43474e", "on-background": "#1b1c1a", "tertiary-fixed-dim": "#b4c5fd", "surface-tint": "#455f87", "tertiary": "#0d214f", "surface-variant": "#e4e2df", "on-error-container": "#93000a", "surface": "#fbf9f6", "surface-container-highest": "#e4e2df", "on-secondary-fixed": "#2a1800", "primary-fixed": "#d5e3ff", "primary-fixed-dim": "#adc8f5", "inverse-surface": "#30312f", "on-tertiary-container": "#91a1d7", "surface-container": "#efeeeb", "secondary": "#835408", "primary": "#022448", "secondary-container": "#fcbe6c", "on-tertiary-fixed": "#031847", "on-surface": "#1b1c1a", "on-secondary-container": "#774b00", "surface-container-low": "#f5f3f0", "primary-container": "#1e3a5f", "outline": "#74777f", "surface-container-lowest": "#ffffff", "inverse-on-surface": "#f2f0ed", "on-primary-container": "#8aa4cf", "tertiary-fixed": "#dbe1ff", "on-tertiary-fixed-variant": "#344574", "on-secondary": "#ffffff", "outline-variant": "#c4c6cf", "secondary-fixed": "#ffddb6", "secondary-fixed-dim": "#f9bb6a", "on-secondary-fixed-variant": "#643f00", "on-tertiary": "#ffffff", "on-primary-fixed": "#001c3b", "on-primary-fixed-variant": "#2d486d", "surface-dim": "#dbdad7", "background": "#fbf9f6", "surface-bright": "#fbf9f6", "inverse-primary": "#adc8f5" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "space-3xl": "4rem", "space-md": "0.75rem", "max-width-content": "1360px", "space-2xl": "3rem", "space-xs": "0.25rem", "gutter-mobile": "1rem", "margin-tablet": "2rem", "gutter-desktop": "1.5rem", "margin-mobile": "1rem", "space-2xs": "0.125rem", "space-base": "1rem", "margin-desktop": "3rem", "space-lg": "1.5rem", "space-sm": "0.5rem", "space-xl": "2rem" }, "fontFamily": { "headline-md": [ "Newsreader" ], "display-lg-mobile": [ "Newsreader" ], "display-lg": [ "Newsreader" ], "label-sm": [ "Inter" ], "body-lg": [ "Inter" ], "headline-sm": [ "Newsreader" ], "numeric-lg": [ "Inter" ], "label-lg": [ "Inter" ], "headline-lg": [ "Newsreader" ], "label-md": [ "Inter" ], "body-sm": [ "Inter" ], "body-md": [ "Inter" ], "numeric-md": [ "Inter" ] }, "fontSize": { "headline-md": [ "24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" } ], "display-lg-mobile": [ "36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "500" } ], "display-lg": [ "48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "500" } ], "label-sm": [ "11px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "600" } ], "body-lg": [ "16px", { "lineHeight": "24px", "fontWeight": "400" } ], "headline-sm": [ "20px", { "lineHeight": "28px", "letterSpacing": "-0.005em", "fontWeight": "600" } ], "numeric-lg": [ "24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600" } ], "label-lg": [ "14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" } ], "headline-lg": [ "32px", { "lineHeight": "40px", "letterSpacing": "-0.015em", "fontWeight": "600" } ], "label-md": [ "12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600" } ], "body-sm": [ "12px", { "lineHeight": "16px", "fontWeight": "400" } ], "body-md": [ "14px", { "lineHeight": "20px", "fontWeight": "400" } ], "numeric-md": [ "16px", { "lineHeight": "24px", "fontWeight": "500" } ] } } } };</script></head><body class="bg-background font-body-md text-body-md text-on-surface antialiased min-h-screen flex flex-col selection:bg-secondary-fixed selection:text-on-secondary-fixed"><header class="fixed top-0 left-0 right-0 z-50 bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-28"><div class="h-16 max-w-[1360px] mx-auto px-space-lg flex items-center justify-between gap-space-lg"><div class="flex items-center gap-space-md shrink-0"><div class="flex items-center justify-center p-space-2xs bg-surface-container rounded-lg shadow-[0_1px_4px_rgba(2,36,72,0.06)]"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1W4pXraTiDYiROdmlEPT51tNI1Tm4UOLDbC8mpkc9YHB43K3HdT-8L2arhEP5hVkrdhZMNpOmAg-nzUb5p8mG_ymmrjKpFSWdgQj-JALkf9J8Vt1UC3oVeSRlsuJVxa0V0YaYf7ZqZBaKTJLLB8bXWOuSVpz-yRYVvsK8qE9YcrpfvWpahzAs8PeV3FZ-2W6hXs6EQ6f0IfdqRLzW-KZs00EQZuDYSQVOeQZpfzLpXFs_hao4k129YCpnMeXbeuepJpwrJLZr9Aaw"/></div><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-primary tracking-tight">ARTHAX</span><span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">Shop &amp; Vault</span></div></div><div class="hidden md:flex flex-1 max-w-xl mx-auto"><div class="w-full flex items-center px-space-md py-space-xs bg-surface-container-low rounded-lg shadow-[0_1px_2px_rgba(2,36,72,0.04)]"><span class="material-symbols-outlined text-outline mr-space-sm text-[20px]">search</span><input class="w-full bg-transparent border-none outline-none font-body-md text-body-md text-on-surface placeholder:text-outline" placeholder="Search pets, avatars, frames, banners... [ALT+K]" readonly="" type="text"/><span class="font-label-sm text-label-sm px-space-xs py-space-2xs bg-surface-container-highest text-on-surface-variant rounded text-[10px]">⌘K</span></div></div><div class="flex items-center gap-space-md shrink-0"><div class="hidden xl:flex items-center gap-space-sm px-space-md py-space-xs bg-surface-container-lowest rounded-lg shadow-[0_1px_4px_rgba(2,36,72,0.05)]"><span class="material-symbols-outlined text-secondary text-[18px]">account_balance_wallet</span><div class="flex flex-col text-right"><div class="flex items-center gap-space-xs"><span class="font-label-sm text-label-sm text-on-surface-variant">Balance:</span><span class="font-numeric-md text-numeric-md text-primary font-bold">52,480.00 ARTH</span></div><span class="font-label-sm text-label-sm text-secondary text-[10px] uppercase font-semibold">DvP Vault Synced</span></div></div><div class="hidden lg:flex items-center gap-space-sm"><button class="px-space-md py-space-xs font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" type="button">User Portal</button><button class="px-space-md py-space-xs font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors" type="button">Central Guide</button></div><button aria-label="Notifications" class="relative p-space-xs text-on-surface-variant hover:text-primary rounded-lg transition-colors" type="button"><span class="material-symbols-outlined text-[22px]">notifications</span><span class="absolute top-1 right-1 w-2 h-2 bg-secondary rounded-full ring-2 ring-surface"></span></button><div class="flex items-center gap-space-sm pl-space-xs"><div class="relative flex items-center justify-center"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1W4pXraTiDYiROdmlEPT51tNI1Tm4UOLDbC8mpkc9YHB43K3HdT-8L2arhEP5hVkrdhZMNpOmAg-nzUb5p8mG_ymmrjKpFSWdgQj-JALkf9J8Vt1UC3oVeSRlsuJVxa0V0YaYf7ZqZBaKTJLLB8bXWOuSVpz-yRYVvsK8qE9YcrpfvWpahzAs8PeV3FZ-2W6hXs6EQ6f0IfdqRLzW-KZs00EQZuDYSQVOeQZpfzLpXFs_hao4k129YCpnMeXbeuepJpwrJLZr9Aaw"/><span class="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-secondary text-surface-container-lowest rounded-full flex items-center justify-center text-[8px] font-bold shadow-sm">1</span></div><div class="hidden sm:flex flex-col text-left"><span class="font-label-md text-label-md text-on-surface font-semibold leading-tight">Ananya Sharma</span><span class="font-label-sm text-label-sm text-secondary leading-tight">Tier-1 Citizen</span></div></div></div></div><div class="h-12 bg-surface-container-low/70 backdrop-blur-md shadow-[0_1px_4px_rgba(2,36,72,0.02)]"><div class="max-w-[1360px] mx-auto px-space-lg h-full flex items-center overflow-x-auto"><nav class="flex items-center gap-space-xs" data-active-classes="bg-surface-container-lowest text-secondary shadow-[0_1px_3px_rgba(2,36,72,0.06)] font-semibold"><a aria-current="page" class="px-space-md py-1.5 rounded-full transition-all whitespace-nowrap bg-surface-container-lowest text-secondary shadow-[0_1px_3px_rgba(2,36,72,0.06)] font-semibold" data-path="shop-home" href="#">Shop Home</a><a class="px-space-md py-1.5 rounded-full font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-all whitespace-nowrap" data-path="pet-store" href="#">Pet Store</a><a class="px-space-md py-1.5 rounded-full font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-all whitespace-nowrap" data-path="avatar-store" href="#">Avatar Store</a><a class="px-space-md py-1.5 rounded-full font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-all whitespace-nowrap" data-path="frame-store" href="#">Frame Store</a><a class="px-space-md py-1.5 rounded-full font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-all whitespace-nowrap" data-path="banner-store" href="#">Banner Store</a><a class="px-space-md py-1.5 rounded-full font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-all whitespace-nowrap" data-path="vault-inventory" href="#">Vault / Inventory</a></nav></div></div></div></header><main class="w-full pt-28 bg-background flex-1"><div class="max-w-[1360px] mx-auto px-space-lg py-space-xl"><div class="flex flex-col w-full space-y-space-2xl">
+<!-- Breadcrumbs & Sovereign Protocol Banner -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm pb-space-xs">
+<div class="flex items-center gap-space-xs font-label-md text-label-md text-on-surface-variant">
+<span class="hover:text-primary transition-colors cursor-pointer">Sovereign Treasury</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-primary font-semibold">Grand Marketplace</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-secondary font-semibold">Cycle 842-Alpha</span>
+</div>
+<div class="flex items-center gap-space-md">
+<div class="flex items-center gap-space-xs px-space-md py-1 bg-surface-container-low rounded-full shadow-sm">
+<span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">DvP Settlement: Instant 0-Loss Engine</span>
+</div>
+<div class="hidden md:flex items-center gap-1.5 px-space-md py-1 bg-secondary-fixed/50 text-on-secondary-fixed rounded-full font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[14px]">format_image_left</span>
+        Charter Mint Authenticated
+      </div>
+</div>
+</div>
+<!-- SECTION 1: HERO SHOWCASE (Asymmetric Split Banner) -->
+<section class="relative overflow-hidden rounded-xl bg-gradient-to-br from-primary via-primary-container to-tertiary text-on-primary shadow-xl p-space-lg md:p-space-2xl">
+<!-- Ambient gold blur overlay -->
+<div class="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-secondary/20 blur-3xl pointer-events-none"></div>
+<div class="absolute -bottom-24 left-1/4 w-80 h-80 rounded-full bg-tertiary-fixed-dim/10 blur-3xl pointer-events-none"></div>
+<div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-space-xl items-center">
+<!-- Left Column (7 cols): Editorial Headline & Utility Core -->
+<div class="lg:col-span-7 space-y-space-lg">
+<div class="inline-flex items-center gap-space-xs px-space-md py-1 rounded-full bg-surface-container-lowest/15 backdrop-blur-md text-secondary-fixed">
+<span class="material-symbols-outlined text-[16px]">stars</span>
+<span class="font-label-sm text-label-sm uppercase tracking-widest font-bold">National Depository • Sovereign Class</span>
+</div>
+<div class="space-y-space-sm">
+<h1 class="font-display-lg text-display-lg font-normal tracking-tight text-surface leading-tight">
+            The Sovereign Treasury of Virtual Assets &amp; Companions
+          </h1>
+<p class="font-body-lg text-body-lg text-primary-fixed-dim max-w-2xl leading-relaxed">
+            Every minted artifact maintains certified cryptographic custody and active ecosystem utility. Financial Pets provide verifiable, real-time yields—unlocking interest boosters, zero-fee inter-bank routing, and instant SETU tax harvesting.
+          </p>
+</div>
+<!-- Balance + Action Pills Row -->
+<div class="pt-space-xs flex flex-wrap items-center gap-space-md">
+<div class="px-space-md py-space-sm bg-surface/10 backdrop-blur-md rounded-lg flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-secondary-fixed text-[20px]">account_balance_wallet</span>
+<div>
+<div class="font-label-sm text-label-sm text-surface-container-high">Ready Allocation</div>
+<div class="font-numeric-md text-numeric-md text-secondary-fixed font-bold tracking-tight">52,480.00 ARTH</div>
+</div>
+</div>
+<div class="flex items-center gap-space-sm">
+<a class="px-space-lg py-3 bg-secondary-fixed text-on-secondary-fixed hover:bg-secondary-container rounded-lg font-label-lg text-label-lg transition-all shadow-md active:translate-y-0.5 flex items-center gap-space-xs" href="#featured-pets">
+<span>Explore 8 Financial Pets</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</a>
+<button class="px-space-lg py-3 bg-surface-container-lowest/15 hover:bg-surface-container-lowest/25 text-surface rounded-lg font-label-lg text-label-lg transition-all flex items-center gap-space-xs" onclick="openDrawer('vault-preview')" type="button">
+<span class="material-symbols-outlined text-[18px]">lock_open</span>
+<span>Enter Vault / Inventory</span>
+</button>
+</div>
+</div>
+<!-- Stat Row -->
+<div class="grid grid-cols-3 gap-space-md pt-space-sm border-t border-surface-container-lowest/10 max-w-xl">
+<div>
+<div class="font-numeric-lg text-numeric-lg text-surface font-semibold">100%</div>
+<div class="font-label-sm text-label-sm text-primary-fixed-dim uppercase tracking-wider">DvP Collateralized</div>
+</div>
+<div>
+<div class="font-numeric-lg text-numeric-lg text-secondary-fixed font-semibold">+1.25%</div>
+<div class="font-label-sm text-label-sm text-primary-fixed-dim uppercase tracking-wider">Max Yield Modifier</div>
+</div>
+<div>
+<div class="font-numeric-lg text-numeric-lg text-surface font-semibold">Zero-Loss</div>
+<div class="font-label-sm text-label-sm text-primary-fixed-dim uppercase tracking-wider">Mint Settlement</div>
+</div>
+</div>
+</div>
+<!-- Right Column (5 cols): Spotlight Gold Pet Card -->
+<div class="lg:col-span-5">
+<div class="relative bg-surface-container-lowest text-on-surface rounded-xl p-space-lg shadow-2xl transition-all hover:shadow-[0_16px_40px_rgba(2,36,72,0.18)]">
+<!-- Specular Gold Header Bar -->
+<div class="flex items-center justify-between pb-space-md mb-space-md border-b border-surface-container-high">
+<div class="flex items-center gap-space-xs">
+<span class="px-space-sm py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm font-bold tracking-wider uppercase flex items-center gap-1 shadow-sm">
+<span class="material-symbols-outlined text-[14px]">stars</span>
+                Gold Sovereign Spotlight
+              </span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono">ID: #PET-001-GAJA</span>
+</div>
+<!-- Pet Inset Showcase Area -->
+<div class="relative rounded-lg bg-surface-container-low p-space-md overflow-hidden flex items-center justify-center min-h-[220px]">
+<div class="absolute inset-0 bg-gradient-to-t from-secondary/10 to-transparent pointer-events-none"></div>
+<img alt="Wealth Elephant Gaja Sovereign" class="w-48 h-48 object-contain drop-shadow-xl transition-transform hover:scale-105 duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwYr0ZaA8Q3xGbeHHRuVmmC_4uuroUVYPmFwuRZTNmdmL-vdLAitfM-IJiKvtB2oqIc4gcXOEfRrxzsg57xzrqMeEtJGMDakuTnqNEU2x1-50LpHQnv4B_8W8bbJS5xZ0ePR0cBhSef_TSLjdn1u9VyxTgjiBsaHrceeV-uNaqwol3Vg1bjaz71W5GxfC76Rd53_y8l92vWk6KgFpsVodr2d1TBKgO9GT693H4eXPcmhHXCoXpPKIdXmZe_cwDE_xz26E"/>
+<div class="absolute bottom-2 left-2 px-space-sm py-0.5 bg-surface/90 backdrop-blur rounded font-label-sm text-label-sm text-secondary font-semibold">
+              Max Sovereign Tier
+            </div>
+</div>
+<!-- Title & Stats -->
+<div class="pt-space-md space-y-space-sm">
+<div class="flex items-start justify-between">
+<div>
+<h3 class="font-headline-md text-headline-md text-primary">Wealth Elephant ("Gaja")</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Sovereign Term Yield Protector</p>
+</div>
+<div class="text-right">
+<span class="font-label-sm text-label-sm text-on-surface-variant block uppercase tracking-wide">Market Mint</span>
+<span class="font-numeric-lg text-numeric-lg text-primary font-bold">9,200 ARTH</span>
+</div>
+</div>
+<!-- Modifiers Pill Grid -->
+<div class="grid grid-cols-2 gap-space-xs pt-space-xs">
+<div class="px-space-sm py-2 bg-surface-container rounded-lg">
+<div class="font-label-sm text-label-sm text-secondary font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+                  +1.25% FD Yield
+                </div>
+<div class="font-body-sm text-[11px] text-on-surface-variant leading-tight">Applied to all DvP deposits</div>
+</div>
+<div class="px-space-sm py-2 bg-surface-container rounded-lg">
+<div class="font-label-sm text-label-sm text-primary font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">bolt</span>
+                  SETU Auto-Sweep
+                </div>
+<div class="font-body-sm text-[11px] text-on-surface-variant leading-tight">Instant zero-cost harvesting</div>
+</div>
+</div>
+<div class="pt-space-xs flex items-center gap-space-sm">
+<button class="flex-1 py-2.5 bg-primary text-on-primary hover:bg-primary-container rounded-lg font-label-md text-label-md font-semibold transition-all shadow-md active:translate-y-0.5" onclick="openBuyModal('Wealth Elephant (Gaja)', '9,200 ARTH', 'https://lh3.googleusercontent.com/aida-public/AB6AXuCJA75puLyNw2Bo71FGKXVYeE_Y6r4IWROfXVI_wDDnFi-iHOQJXgWPVsW-UDlC5V54dnb1dSvMlh2G-hIeFYGbTtHVbmQunD2hnztdZW2ufrWkwoFJX0PtXXIC8tRkGYyvaKPFQvwHAuEj8mlotJEHjUAoVxTAwNYr8zRwNyVpLlgX0epdTwKa3oHpvqWlx18RYmbXPrwbGBV6p9JGTppwmKmPZHCC2hCISzUOVRQ95qnYyqMhucQoI359sa6WsW-UI0k', 'Gold Tier +1.25% FD Yield')" type="button">
+                Acquire with 1-Click
+              </button>
+<button class="px-space-md py-2.5 bg-surface-container hover:bg-surface-container-high text-primary rounded-lg font-label-md text-label-md font-semibold transition-colors" onclick="inspectAsset('Gaja Sovereign', 'Gold', '+1.25% Sovereign Term Deposit Yield Booster', '9200', 'https://lh3.googleusercontent.com/aida-public/AB6AXuAgeeUstTJOL58D4L73ZlLAZATNCRO6IdXEgTZ6f6t4l_zaeOvwsZ5l7UIp312TkeTTTGz6MESDU4g9e6eRv7dr8ENNfiIwdYzv1nDAH0g85XbWw2mZzQtUw0EikhkVVEeg7H3BsrheYQqlWNjxjUh3Js8MpFHNnwLSokl90uGwEXoNT17pMwp6krqdtPS2qDt5NQYlLcbkjU-8iQNzHg9TzrqbiyMBER_nHrHIyOW2iTCixDuk7to00y5iuJdJpksUqxE')" title="Inspect Asset" type="button">
+<span class="material-symbols-outlined text-[18px] align-middle">visibility</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 2: FOUR STORE QUICK-ACCESS CATEGORIES BAR -->
+<section class="space-y-space-md">
+<div class="flex items-center justify-between">
+<div class="space-y-space-2xs">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest font-bold">Treasury Portals</span>
+<h2 class="font-headline-lg text-headline-lg text-primary">Departmental Stores</h2>
+</div>
+<div class="hidden sm:flex items-center gap-space-xs font-label-sm text-label-sm text-on-surface-variant">
+<span>Curated Vault Registry</span>
+<span class="material-symbols-outlined text-[16px] text-secondary">verified</span>
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-md">
+<!-- Pet Store Card -->
+<div class="group bg-surface-container-lowest hover:bg-surface-container-low rounded-xl p-space-lg shadow-sm transition-all duration-200 cursor-pointer flex flex-col justify-between" onclick="switchTab('pets')">
+<div class="space-y-space-sm">
+<div class="flex items-center justify-between">
+<div class="w-10 h-10 rounded-lg bg-secondary-fixed/40 text-on-secondary-fixed flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]">pets</span>
+</div>
+<span class="px-space-xs py-0.5 rounded-full bg-secondary-fixed/50 text-on-secondary-fixed font-label-sm text-label-sm font-semibold">
+              8 Breeds Live
+            </span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-primary group-hover:text-secondary transition-colors">Pet Store</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1 leading-relaxed">
+              Active financial companions granting cashbacks, fee waivers &amp; fixed-deposit yield boosts.
+            </p>
+</div>
+</div>
+<div class="pt-space-md flex items-center justify-between text-primary font-label-md text-label-md font-semibold">
+<span>Enter Store</span>
+<span class="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</div>
+</div>
+<!-- Avatar Store Card -->
+<div class="group bg-surface-container-lowest hover:bg-surface-container-low rounded-xl p-space-lg shadow-sm transition-all duration-200 cursor-pointer flex flex-col justify-between" onclick="switchTab('avatars')">
+<div class="space-y-space-sm">
+<div class="flex items-center justify-between">
+<div class="w-10 h-10 rounded-lg bg-primary-fixed text-on-primary-fixed flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]">badge</span>
+</div>
+<span class="px-space-xs py-0.5 rounded-full bg-primary-fixed/70 text-on-primary-fixed font-label-sm text-label-sm font-semibold">
+              New Season Outfits
+            </span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-primary group-hover:text-secondary transition-colors">Avatar Store</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1 leading-relaxed">
+              Tier-1 Citizen personas, certified executive couture, and national legacy investor portraits.
+            </p>
+</div>
+</div>
+<div class="pt-space-md flex items-center justify-between text-primary font-label-md text-label-md font-semibold">
+<span>Enter Store</span>
+<span class="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</div>
+</div>
+<!-- Frame Store Card -->
+<div class="group bg-surface-container-lowest hover:bg-surface-container-low rounded-xl p-space-lg shadow-sm transition-all duration-200 cursor-pointer flex flex-col justify-between" onclick="switchTab('frames')">
+<div class="space-y-space-sm">
+<div class="flex items-center justify-between">
+<div class="w-10 h-10 rounded-lg bg-tertiary-fixed text-on-tertiary-fixed flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]">crop_portrait</span>
+</div>
+<span class="px-space-xs py-0.5 rounded-full bg-secondary-fixed/50 text-on-secondary-fixed font-label-sm text-label-sm font-semibold">
+              Gold Shimmer Unlocked
+            </span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-primary group-hover:text-secondary transition-colors">Frame Store</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1 leading-relaxed">
+              Prestige guilloche borders, archival filigree safe-rims, and DvP speed verified edges.
+            </p>
+</div>
+</div>
+<div class="pt-space-md flex items-center justify-between text-primary font-label-md text-label-md font-semibold">
+<span>Enter Store</span>
+<span class="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</div>
+</div>
+<!-- Banner Store Card -->
+<div class="group bg-surface-container-lowest hover:bg-surface-container-low rounded-xl p-space-lg shadow-sm transition-all duration-200 cursor-pointer flex flex-col justify-between" onclick="switchTab('banners')">
+<div class="space-y-space-sm">
+<div class="flex items-center justify-between">
+<div class="w-10 h-10 rounded-lg bg-surface-container-highest text-on-surface-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]">panorama</span>
+</div>
+<span class="px-space-xs py-0.5 rounded-full bg-surface-container-highest text-on-surface-variant font-label-sm text-label-sm font-semibold">
+              4 Rare Panoramas
+            </span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-primary group-hover:text-secondary transition-colors">Banner Store</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1 leading-relaxed">
+              Dalal trading floor twilight, central bank vault gilded halls, and sovereign settlement arenas.
+            </p>
+</div>
+</div>
+<div class="pt-space-md flex items-center justify-between text-primary font-label-md text-label-md font-semibold">
+<span>Enter Store</span>
+<span class="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</div>
+</div>
+</div>
+</section>
+<!-- FILTER & SEARCH CONTROL STRIP -->
+<section class="bg-surface-container-low p-space-md rounded-xl shadow-sm flex flex-col md:flex-row items-stretch md:items-center justify-between gap-space-md">
+<!-- Category Tabs -->
+<div class="flex items-center gap-space-xs overflow-x-auto pb-1 md:pb-0" id="filter-tabs">
+<button class="filter-btn px-space-md py-1.5 rounded-full font-label-md text-label-md bg-surface-container-lowest text-primary shadow-sm font-semibold whitespace-nowrap" onclick="setCatalogFilter('all', this)" type="button">
+        All Treasury Items (19)
+      </button>
+<button class="filter-btn px-space-md py-1.5 rounded-full font-label-md text-label-md text-on-surface-variant hover:text-primary whitespace-nowrap" onclick="setCatalogFilter('pets', this)" type="button">
+        Financial Pets (8)
+      </button>
+<button class="filter-btn px-space-md py-1.5 rounded-full font-label-md text-label-md text-on-surface-variant hover:text-primary whitespace-nowrap" onclick="setCatalogFilter('avatars', this)" type="button">
+        Citizen Personas (5)
+      </button>
+<button class="filter-btn px-space-md py-1.5 rounded-full font-label-md text-label-md text-on-surface-variant hover:text-primary whitespace-nowrap" onclick="setCatalogFilter('frames', this)" type="button">
+        Prestige Frames (3)
+      </button>
+<button class="filter-btn px-space-md py-1.5 rounded-full font-label-md text-label-md text-on-surface-variant hover:text-primary whitespace-nowrap" onclick="setCatalogFilter('banners', this)" type="button">
+        Royal Banners (3)
+      </button>
+</div>
+<!-- Quick Sort & Utilities -->
+<div class="flex items-center gap-space-sm shrink-0">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Sort By:</span>
+<select class="bg-surface-container-lowest text-primary font-label-md text-label-md px-space-md py-1.5 rounded-lg outline-none cursor-pointer shadow-sm">
+<option>Rarity (Highest First)</option>
+<option>Price: Low to High</option>
+<option>Price: High to Low</option>
+<option>Financial Yield Power</option>
+</select>
+</div>
+</section>
+<!-- SECTION 3: FEATURED SOVEREIGN PETS (Active Financial Companions) -->
+<section class="space-y-space-lg" id="featured-pets">
+<div class="flex flex-col sm:flex-row sm:items-end justify-between gap-space-xs">
+<div>
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary text-[20px]">military_tech</span>
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest font-bold">Active Yield Protocol</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-primary">Featured Sovereign Pets</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">
+          Minted companions granting verified real-world account boosts and commission waivers.
+        </p>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="px-space-sm py-1 bg-surface-container text-on-surface-variant rounded-md font-label-sm text-label-sm">
+          Auto-Compound Ready
+        </span>
+</div>
+</div>
+<!-- 4 Featured Pets Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-space-lg">
+<!-- Pet 1: Saver Fox (Epic Rarity) -->
+<div class="group bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+<div class="space-y-space-md">
+<!-- Top Tag & Rarity -->
+<div class="flex items-center justify-between">
+<span class="px-space-sm py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm font-semibold tracking-wider uppercase">
+              Epic Rarity
+            </span>
+<span class="material-symbols-outlined text-outline text-[18px] group-hover:text-secondary transition-colors">verified</span>
+</div>
+<!-- Inset Image Box -->
+<div class="relative bg-surface-container-low rounded-lg p-space-md flex items-center justify-center overflow-hidden min-h-[190px]">
+<img alt="Saver Fox Companion" class="w-36 h-36 object-contain group-hover:scale-105 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9nADYz1omWrTWQrTWuXPzLHemrduBp10fz72lGP2uWhGof19U04B_H8IYQiJe8GHrCdEIYndp3UAXrg7DA3aOlt_SJNWgEjjP2fJLXi_PMLW2WuPBwfCjW-G9kd5wUZ02d5q5RiOLqBaK4sofUdtxJdTWvjhZbp1htCGBkjGmqL0n6qDFiU46xRqjkP7ekv-sjB1sxcfaWzqDfwzZn37bIw7JPgiFJfbBVpcYBk9L7IVIYlR7WKtt43FsMA5e0ontsd4"/>
+<div class="absolute bottom-2 right-2 px-space-xs py-0.5 rounded bg-surface/90 text-primary font-numeric-md text-[11px] font-bold">
+              Rank #04
+            </div>
+</div>
+<!-- Pet Info & Power -->
+<div class="space-y-space-xs">
+<h3 class="font-headline-sm text-headline-sm text-primary">Saver Fox</h3>
+<div class="p-space-sm bg-surface-container rounded-lg">
+<div class="font-label-sm text-label-sm text-tertiary font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">percent</span>
+                Financial Power
+              </div>
+<p class="font-body-sm text-body-sm text-on-surface font-medium mt-0.5">
+                +15% Cashback on All Inter-bank DvP Transfers
+              </p>
+</div>
+</div>
+</div>
+<!-- Price & Actions -->
+<div class="pt-space-md mt-space-md border-t border-surface-container-high space-y-space-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Mint Price</span>
+<span class="font-numeric-md text-numeric-md text-primary font-bold">4,200 ARTH</span>
+</div>
+<div class="grid grid-cols-2 gap-space-xs">
+<button class="py-2 bg-surface-container text-primary hover:bg-surface-container-high rounded-lg font-label-sm text-label-sm font-semibold transition-colors" onclick="inspectAsset('Saver Fox', 'Epic', '+15% Cashback on All Inter-bank DvP Transfers', '4200', 'https://lh3.googleusercontent.com/aida-public/AB6AXuAE4vrw6bvGX4oTKWK2zwAeho6Kl3RUa03Mih9dnDFeU3Q3NH0DjLUB5hOhv92m0fTVtXNTO0myzf9UolxcvJHgBbo506Bz_iPIm3mJS7A0Rb5V5Se5iDhUoB815n9yxAppSM9ZEniGVZLJ9TUKY-c-wbfvW6z1yRixJ7TOqS_VhEwP-GSxn11Mj14EbZfP0qhw0lL9XJP69nb_ehBHnFfjul6X--HZO79g0IO-cP9GxQ1dHXchEJoWjnXafzFKrAZD3PE')" type="button">
+              Details
+            </button>
+<button class="py-2 bg-primary text-on-primary hover:bg-primary-container rounded-lg font-label-sm text-label-sm font-semibold transition-colors shadow-sm" onclick="openBuyModal('Saver Fox', '4,200 ARTH', 'https://lh3.googleusercontent.com/aida-public/AB6AXuAmgQhRHTQu10E7lhHnRB_8_0Gd38qZBu9ivsyPAGw4amnMhEIHvQIB_Puv5S3HfvapN8UsHHVKkcNE6kTqv-qOOl9eDVt43ChpBqhjmkNePOdIfIHeBwjEAGgPkrnNzKGXPuoDdLoc8EjanYTBkV-fai6gnSP9BW74k1UR-MP_GD9ZU-neaeM70KxvZGrFQIvpJ87hCDTVuLFRajBzP_NuuWgXVQm9gs1tr2x6tJ5TChbbLyFwjLgdOViKaLakc_bBJjc', 'Epic Tier +15% DvP Cashback')" type="button">
+              Buy Now
+            </button>
+</div>
+</div>
+</div>
+<!-- Pet 2: Market Bull (Gold Rarity) -->
+<div class="group bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+<div class="space-y-space-md">
+<!-- Top Tag & Rarity -->
+<div class="flex items-center justify-between">
+<span class="px-space-sm py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm font-bold tracking-wider uppercase flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">stars</span>
+              Gold Rarity
+            </span>
+<span class="material-symbols-outlined text-secondary text-[18px]">workspace_premium</span>
+</div>
+<!-- Inset Image Box -->
+<div class="relative bg-surface-container-low rounded-lg p-space-md flex items-center justify-center overflow-hidden min-h-[190px]">
+<img alt="Market Bull Companion" class="w-36 h-36 object-contain group-hover:scale-105 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDLDaeXBt2LiZSwQ4O1_CHmzzWC88YdnYuEFDQtxfI9bCOPKm82M_ILIFSwTLQM9ND46qdCSYbRW1ffKXSdxiCYSNoXDijiP41dFwKr51yBHtareZGHsoBnv-O83A4-H0ppROyx3RQ8vEQkwl3UBhBdp_D1nL-wKfew5g_V-XyXfmLhMT9gGrkWhBmxdWmwOzo78AvHbGaKSkzwCvJClNB_qsXP1dhvF9HLzWefV75aOEAgFRyNI1hd6x1DayVa7Iqeioc"/>
+<div class="absolute bottom-2 right-2 px-space-xs py-0.5 rounded bg-secondary-fixed text-on-secondary-fixed font-numeric-md text-[11px] font-bold">
+              Rank #02
+            </div>
+</div>
+<!-- Pet Info & Power -->
+<div class="space-y-space-xs">
+<h3 class="font-headline-sm text-headline-sm text-primary">Market Bull</h3>
+<div class="p-space-sm bg-surface-container rounded-lg">
+<div class="font-label-sm text-label-sm text-secondary font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">candlestick_chart</span>
+                Financial Power
+              </div>
+<p class="font-body-sm text-body-sm text-on-surface font-medium mt-0.5">
+                -50% Equities Brokerage &amp; Instant Depth Queue
+              </p>
+</div>
+</div>
+</div>
+<!-- Price & Actions -->
+<div class="pt-space-md mt-space-md border-t border-surface-container-high space-y-space-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Mint Price</span>
+<span class="font-numeric-md text-numeric-md text-primary font-bold">8,500 ARTH</span>
+</div>
+<div class="grid grid-cols-2 gap-space-xs">
+<button class="py-2 bg-surface-container text-primary hover:bg-surface-container-high rounded-lg font-label-sm text-label-sm font-semibold transition-colors" onclick="inspectAsset('Market Bull', 'Gold', '-50% Equities Brokerage &amp; Instant Depth Queue', '8500', 'https://lh3.googleusercontent.com/aida-public/AB6AXuCqcblvFby1Dlz5cWbDH40goYLAeITWxMsybtGVISiL40PfnTKfVW-3q0tZ5l2gOq0Zxc7D3rRRF10K7Pd9vLT-lU4db-cTMc805gDC7qBiUPTzEZ9ENskGWeLzxf6TNnVrUnxU-nolHLuz3XRbwtFgSB6g5ImLUslNOVijBFvKxD0VUahGOZqxw-yB5vbPpy0V1ttB_FKTzMmN5pCUzMpfhiR4fP_WBmeJUSk6S9k7UlJ4hy89mq9a8HqplCloJhw6y5s')" type="button">
+              Details
+            </button>
+<button class="py-2 bg-secondary text-on-secondary hover:bg-secondary-container hover:text-on-secondary-container rounded-lg font-label-sm text-label-sm font-semibold transition-colors shadow-sm" onclick="openBuyModal('Market Bull', '8,500 ARTH', 'https://lh3.googleusercontent.com/aida-public/AB6AXuBpYMdri9O1ZdNztjA5xCouLBITKJnJRA6-kYv-CGyiftWT3BoPN4rJMv7DRYeij24wjwivfmjNerPV51uTjFiAD6_KnzF9CUkZ0fRT6jNxU6kStUsAVOYY7fssWWZeN9di0LKrSQ8q_kakF6SggqJXpE7oSS0ibHikjRkCT3ZyWzYWbbz1WeB7hUWDM1Zn5v2BD39Df_l4f0QLBSsAi-DdzRywHENevBXsbOjSzAaYFYiJ1odMDKG-oGf_E_oXqTKq4D4', 'Gold Tier -50% Brokerage')" type="button">
+              Buy Now
+            </button>
+</div>
+</div>
+</div>
+<!-- Pet 3: Wealth Elephant (Gold Rarity) -->
+<div class="group bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+<div class="space-y-space-md">
+<!-- Top Tag & Rarity -->
+<div class="flex items-center justify-between">
+<span class="px-space-sm py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm font-bold tracking-wider uppercase flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">stars</span>
+              Gold Rarity
+            </span>
+<span class="material-symbols-outlined text-secondary text-[18px]">verified</span>
+</div>
+<!-- Inset Image Box -->
+<div class="relative bg-surface-container-low rounded-lg p-space-md flex items-center justify-center overflow-hidden min-h-[190px]">
+<img alt="Wealth Elephant Companion" class="w-36 h-36 object-contain group-hover:scale-105 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDBL8N5TwYzZQCZ3McYWgjSmNmAC9MIlpH1W6Lsmz_JO-oD-kuMpwosBryyPa_DRvAFH8ne65VTMIJUtGBNeoDvTjt-AuFqGxSprczYT8JJtQ47DzgY6V3JKvwFDckScMg2QDXHgEgG9599HGV2kr7W5A6rPEBKaHYk-g0AuSmnEhAtlVKersdEsZ2iuaBvHgCS5rmzwGAT7JiQNcCu9DxxH6UbuNE-PZ1RBFPqaKesBKuFguMGW0fVtofm4eXFGYDEtT8"/>
+<div class="absolute bottom-2 right-2 px-space-xs py-0.5 rounded bg-secondary-fixed text-on-secondary-fixed font-numeric-md text-[11px] font-bold">
+              Rank #01
+            </div>
+</div>
+<!-- Pet Info & Power -->
+<div class="space-y-space-xs">
+<h3 class="font-headline-sm text-headline-sm text-primary">Wealth Elephant</h3>
+<div class="p-space-sm bg-surface-container rounded-lg">
+<div class="font-label-sm text-label-sm text-secondary font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">account_balance</span>
+                Financial Power
+              </div>
+<p class="font-body-sm text-body-sm text-on-surface font-medium mt-0.5">
+                +1.25% Sovereign Term Deposit Yield Booster
+              </p>
+</div>
+</div>
+</div>
+<!-- Price & Actions -->
+<div class="pt-space-md mt-space-md border-t border-surface-container-high space-y-space-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Mint Price</span>
+<span class="font-numeric-md text-numeric-md text-primary font-bold">9,200 ARTH</span>
+</div>
+<div class="grid grid-cols-2 gap-space-xs">
+<button class="py-2 bg-surface-container text-primary hover:bg-surface-container-high rounded-lg font-label-sm text-label-sm font-semibold transition-colors" onclick="inspectAsset('Wealth Elephant', 'Gold', '+1.25% Sovereign Term Deposit Yield Booster', '9200', 'https://lh3.googleusercontent.com/aida-public/AB6AXuCpSH64nd4m0VmcFuuxfz5T8T_AqULd4ghCbf2h2JsbxAn_HrF59KWLiirjcWhiPE0ADV-DRRb6C7fQI34kZuasD07RZvqC_Kfd6TJU9gP7h0thTrilPUvF1IFj9V9sjXus6Wivq7Mbvf_PBLfXdWg8B3hnPGrknMyuQ36c4rkDyR_6hIjbXH97OuwFY-JZNOTcO4J-oQCMdEupsz0WK6TQVMWvxvcPO5Z_-VwPPTfTH01Km1iLLuJ-uNILhs2W_iYI1qk')" type="button">
+              Details
+            </button>
+<button class="py-2 bg-secondary text-on-secondary hover:bg-secondary-container hover:text-on-secondary-container rounded-lg font-label-sm text-label-sm font-semibold transition-colors shadow-sm" onclick="openBuyModal('Wealth Elephant', '9,200 ARTH', 'https://lh3.googleusercontent.com/aida-public/AB6AXuDIMUAm3cUgsp-5mWSxdOr7-fD_qDFULtkhJ73haOJogDnHFrs7ui7e34h0h-Sa4LKJqy9PmrTI-36-WPgV5atTshumKrTKbxJA5jdxPrzejil1PUIylxKde8he1DeDjVQmfx8Sww5eUTPYH_WA7wheFEzXD7ZFduOYpZEnnHbBz0j49NKI9KAB6ZFhLhKnpGsISk5j2aNR3wQNDJQdHiJ_aqD1_rPoG4H8iqUYABt5t8UipnK0e2JngvGA5yXXMorzh0k', 'Gold Tier +1.25% FD Yield')" type="button">
+              Buy Now
+            </button>
+</div>
+</div>
+</div>
+<!-- Pet 4: Flow Otter (Rare Rarity) -->
+<div class="group bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+<div class="space-y-space-md">
+<!-- Top Tag & Rarity -->
+<div class="flex items-center justify-between">
+<span class="px-space-sm py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm font-semibold tracking-wider uppercase">
+              Rare Rarity
+            </span>
+<span class="material-symbols-outlined text-outline text-[18px]">verified</span>
+</div>
+<!-- Inset Image Box -->
+<div class="relative bg-surface-container-low rounded-lg p-space-md flex items-center justify-center overflow-hidden min-h-[190px]">
+<img alt="Flow Otter Companion" class="w-36 h-36 object-contain group-hover:scale-105 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuClxJ12YrLvKYe6lBt5xOoy3WTSumDUJMjYSMunB6E7vZMiKxRTU8veKwj0BScA6noZQrQ73QzMRW0VkxEJfBk1LDUOQejxWHr0BEXAC0G_QyQIOz3MIH42qSQ0jBAqZR5YCLa9OcB3tpkmu6bKMhBecCY0n-cq9g-dayBQlOHYl75t5a0kJ5hbYswld0nKP9bEdPMe6V-aJNvWAtrN5SGBjnA_-HWCkN60K1PyutbDMDUztjclQLLdkHR_lOiIeOO4ibs"/>
+<div class="absolute bottom-2 right-2 px-space-xs py-0.5 rounded bg-surface/90 text-primary font-numeric-md text-[11px] font-bold">
+              Rank #07
+            </div>
+</div>
+<!-- Pet Info & Power -->
+<div class="space-y-space-xs">
+<h3 class="font-headline-sm text-headline-sm text-primary">Flow Otter</h3>
+<div class="p-space-sm bg-surface-container rounded-lg">
+<div class="font-label-sm text-label-sm text-primary-container font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">swap_horiz</span>
+                Financial Power
+              </div>
+<p class="font-body-sm text-body-sm text-on-surface font-medium mt-0.5">
+                Zero Gas on Real-Time CLS Inter-bank Clears
+              </p>
+</div>
+</div>
+</div>
+<!-- Price & Actions -->
+<div class="pt-space-md mt-space-md border-t border-surface-container-high space-y-space-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Mint Price</span>
+<span class="font-numeric-md text-numeric-md text-primary font-bold">2,800 ARTH</span>
+</div>
+<div class="grid grid-cols-2 gap-space-xs">
+<button class="py-2 bg-surface-container text-primary hover:bg-surface-container-high rounded-lg font-label-sm text-label-sm font-semibold transition-colors" onclick="inspectAsset('Flow Otter', 'Rare', 'Zero Gas on Real-Time CLS Inter-bank Clears', '2800', 'https://lh3.googleusercontent.com/aida-public/AB6AXuApW86yOKysEiY-VMV4PZIzsVnM7x5lKxfdYn5UW4nPcdV9hJYLbU5HTwnH5Z1ZQPGZXC0nkNe4YXBybURD5xcN9Jod7CWSxgU-ldH5oKLBt8PKAnvEH5MWn7Mf0ePkFKrBstzAAb8-IET9zJahAn-ntoiboCcVAXwfMqFUp1lbqgMM6AfHlB0FTPm1texW88CzsJuNiR5Jb5mS8y8OUSZrbUPgLbp09yQJzFiQFf8VYuyMyeQZWNrLU5Y8LVqoBjwLCSQ')" type="button">
+              Details
+            </button>
+<button class="py-2 bg-primary text-on-primary hover:bg-primary-container rounded-lg font-label-sm text-label-sm font-semibold transition-colors shadow-sm" onclick="openBuyModal('Flow Otter', '2,800 ARTH', 'https://lh3.googleusercontent.com/aida-public/AB6AXuBKNxxXqJJRPYwH47ksNawPWW_bJnqBBpp-6NfzmTcK6TFJ_O4vtBLgKuCywdshxHsR0X4xHYgoHadeGXdCLox83iCTltwBTeSPiBcU88hqYvGBimIZkanmY9JiHi30594p-GAkMenlYgTpWs-0fhYENqFvqUYXx2TnbLPzJAkNJA8kBw6HzkH0wuXpLwNy_myK7GT_hBnjyQXTc5OmlLJ_hr1m5AQUVg1z5fVgdoCjsdNzDUqYjcZvw2SSQCgbwafbneg', 'Rare Tier Zero-Gas Interbank')" type="button">
+              Buy Now
+            </button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 4: TRENDING AVATARS & CITIZEN IDENTITY DROPS -->
+<section class="space-y-space-lg" id="featured-avatars">
+<div class="flex flex-col sm:flex-row sm:items-end justify-between gap-space-xs">
+<div>
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary text-[20px]">person_check</span>
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest font-bold">Verified Persona Mint</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-primary">Trending Avatars &amp; Citizen Identity Drops</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">
+          High-resolution diplomatic portraits certified for sovereign registry and public forum participation.
+        </p>
+</div>
+<a class="font-label-md text-label-md text-secondary hover:text-primary transition-colors flex items-center gap-1 font-semibold" href="#">
+        View All 12 Personas
+        <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</a>
+</div>
+<!-- 3 Avatar Showcase Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-lg">
+<!-- Avatar 1: Businesswoman Sovereign Persona (Gold) -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+<div class="space-y-space-md">
+<div class="flex items-center justify-between">
+<span class="px-space-sm py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm font-bold uppercase tracking-wider flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">stars</span>
+              Gold Persona
+            </span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono">ID: #AVT-8821</span>
+</div>
+<!-- Avatar Image Box -->
+<div class="relative rounded-lg bg-surface-container-low overflow-hidden aspect-[4/5] flex items-center justify-center">
+<img alt="Businesswoman Sovereign Persona" class="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDilO3B3ITfqbKO9Sv9T2DNldQ_wmM6oHbWqys0F_GklvyUBpRDdcNFjnltXjECkMT7w6bMEZVjI_MN73lKKUpoew4d_mi7MgM2QU2XIZNBN4j8_NsrKkvF9Y6r2cFxe7w9ex56oeJHp0hxQyVttBhB9i8beXn3dTvd4kYg7LTNMG_ctxbZokEMmzqzFZGskzLHoF_g4GJ4ZCXV_HRYtW8caEA96xehkYN4kTMPL8iz7sMYqyKNKMRX2xskeqbD0P0xtd4"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/60 via-transparent to-transparent"></div>
+<div class="absolute bottom-3 left-3 right-3 text-on-primary">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary-fixed font-semibold">Attire Specification</span>
+<p class="font-body-sm text-body-sm text-surface font-medium leading-tight">Custom ARTH lapel pin, bespoke navy blazer &amp; gold watch</p>
+</div>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-primary">Executive Director Sovereign</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Approved for Sovereign Board Votes &amp; Escrow Signing.</p>
+</div>
+</div>
+<div class="pt-space-md mt-space-md border-t border-surface-container-high flex items-center justify-between">
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant block">Mint Price</span>
+<span class="font-numeric-md text-numeric-md text-primary font-bold">3,500 ARTH</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<button class="p-2 bg-surface-container text-on-surface-variant hover:text-primary rounded-lg transition-colors" onclick="giftCitizenModal('Executive Director Sovereign')" title="Gift to Citizen" type="button">
+<span class="material-symbols-outlined text-[18px]">card_giftcard</span>
+</button>
+<button class="px-space-md py-2 bg-primary text-on-primary hover:bg-primary-container rounded-lg font-label-sm text-label-sm font-semibold transition-all shadow-sm" onclick="openBuyModal('Executive Director Sovereign', '3,500 ARTH', 'https://lh3.googleusercontent.com/aida-public/AB6AXuA0LIzghXmdiJerXU0M6yns-T595xTaOBGbnvphAyJEUwEEe8jgeUnKhRYDVhmJj-imBOrUHZCwfMLWpOnjYFDlAQaiXRF6HiK1OpFQR3w-QDkv85iEweqNzO004quU6h-YCrAWp8DV_MoLp-Tpf6qqOp-HPEQQq4YD7E9L6uMLtdDT9mti4E2Rowz4A18o4EdpqmZ9Cj9Y-esFFjhMYqAx6s5VoNZm693nQdWBTYh8aJ0Dt0FqVEwbkiCnPg0ZLNgf5ew', 'Gold Tier Executive Identity')" type="button">
+              Acquire Persona
+            </button>
+</div>
+</div>
+</div>
+<!-- Avatar 2: Retired Institutional Investor (Epic) -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+<div class="space-y-space-md">
+<div class="flex items-center justify-between">
+<span class="px-space-sm py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm font-semibold uppercase tracking-wider">
+              Epic Persona
+            </span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono">ID: #AVT-7104</span>
+</div>
+<!-- Avatar Image Box -->
+<div class="relative rounded-lg bg-surface-container-low overflow-hidden aspect-[4/5] flex items-center justify-center">
+<img alt="Retired Institutional Investor" class="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBz7-fNdhcFvDjC3aZl83ZbDUz7uCNYKmnsiRchfDE00n0lLQctm6PewciaJ2leUnkK5w5QoVqazhX_vRimjVU4tNbb4Ak8Z43vA61LW8IsugH7Jh0_7ZjNBl1ZN52gXbMDlvXABu7orN__e3Ca0I-JaHmm6mnVox0W5zUeq5pwiALjbmv_TCU6WDMxrYqnRseE1YCzUKYVuZCVkT4GWXfRS4xhFDJnynZm8ANbjgFPuIxThTSZTpoFoKZWELZX0xXlT04"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/60 via-transparent to-transparent"></div>
+<div class="absolute bottom-3 left-3 right-3 text-on-primary">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary-fixed font-semibold">Attire Specification</span>
+<p class="font-body-sm text-body-sm text-surface font-medium leading-tight">Archival woven saree with gold accents &amp; wealth legacy ledger</p>
+</div>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-primary">Senior Trustee Investor</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Accredited for Sovereign Syndicate Pools &amp; Family Vaults.</p>
+</div>
+</div>
+<div class="pt-space-md mt-space-md border-t border-surface-container-high flex items-center justify-between">
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant block">Mint Price</span>
+<span class="font-numeric-md text-numeric-md text-primary font-bold">2,400 ARTH</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<button class="p-2 bg-surface-container text-on-surface-variant hover:text-primary rounded-lg transition-colors" onclick="giftCitizenModal('Senior Trustee Investor')" title="Gift to Citizen" type="button">
+<span class="material-symbols-outlined text-[18px]">card_giftcard</span>
+</button>
+<button class="px-space-md py-2 bg-primary text-on-primary hover:bg-primary-container rounded-lg font-label-sm text-label-sm font-semibold transition-all shadow-sm" onclick="openBuyModal('Senior Trustee Investor', '2,400 ARTH', 'https://lh3.googleusercontent.com/aida-public/AB6AXuBo8tLX9FH8zuE45yg2Qj5TA_hpZbW_DPRtJIwkc29UweR3Os8t1QqphiiS927Z_f2AikvBHZezbZjjZH370_aIPT9ClNVIlHVLq-YpU2kC0tLihescS6CRgy2yP40JOrdSQ19obhQVi5eOE3rS-nnjv64o665ksZlJhsNVVNlwQgqUqTIeJsawCz5aKFvVpkJjsGL1HpcnURJ6q28DTsSkWOr-d-LRQbZniYbIIUiF-u7CjBuD7cYyrLKwq_6NZ7gzIo0', 'Epic Tier Institutional Identity')" type="button">
+              Acquire Persona
+            </button>
+</div>
+</div>
+</div>
+<!-- Avatar 3: Young Innovator & Creator (Rare) -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+<div class="space-y-space-md">
+<div class="flex items-center justify-between">
+<span class="px-space-sm py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm font-semibold uppercase tracking-wider">
+              Rare Persona
+            </span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono">ID: #AVT-3990</span>
+</div>
+<!-- Avatar Image Box -->
+<div class="relative rounded-lg bg-surface-container-low overflow-hidden aspect-[4/5] flex items-center justify-center">
+<img alt="Young Innovator and Creator" class="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD11hl1ceiLd-ezkw2rd7YogiRAptrkHQrNb24siWOUkqCopPtYXTl7Z4hiU2pTFDA4tvR6DcWWhr0fodkLOMAKqZ0cqe0u9wAv8tecmHQNCnjMiX1ZxR_TFFnehIEOtNpWgn0z463USYywoBwWfL4N0klRjlJEbQC20Flo0G_UuuUIEG51-Sul_kYHp-9KK48GUk2uY8tGWYfqK3_BrUWMgDG1XsaEXdsCdPpuTdb16vx_DWE0Gt_73iaHbjOQGHkMUU0"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/60 via-transparent to-transparent"></div>
+<div class="absolute bottom-3 left-3 right-3 text-on-primary">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary-fixed font-semibold">Attire Specification</span>
+<p class="font-body-sm text-body-sm text-surface font-medium leading-tight">Modern tech workstation setup with designer sapphire jacket</p>
+</div>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-primary">Web3 Systems Architect</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Equipped with early access smart-contract sandbox tokens.</p>
+</div>
+</div>
+<div class="pt-space-md mt-space-md border-t border-surface-container-high flex items-center justify-between">
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant block">Mint Price</span>
+<span class="font-numeric-md text-numeric-md text-primary font-bold">1,800 ARTH</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<button class="p-2 bg-surface-container text-on-surface-variant hover:text-primary rounded-lg transition-colors" onclick="giftCitizenModal('Web3 Systems Architect')" title="Gift to Citizen" type="button">
+<span class="material-symbols-outlined text-[18px]">card_giftcard</span>
+</button>
+<button class="px-space-md py-2 bg-primary text-on-primary hover:bg-primary-container rounded-lg font-label-sm text-label-sm font-semibold transition-all shadow-sm" onclick="openBuyModal('Web3 Systems Architect', '1,800 ARTH', 'https://lh3.googleusercontent.com/aida-public/AB6AXuBpn0ISeKAaxbNnC0OlgaqEHcn_bRgGcIsWSJnBVPBRgS7PPH1J1UOp9CZecEv5xxT0Szh9XKxxxXxOWMFOZ2Y5B_fYxWBhoAkumwWm3bzYL5sEUb_eY4t_toHqPOnhGIb2E4B_SLoHBQjQ1U-IXkbdoB_7BVHwv00YlmCWFsG0hN5la9OaKSVTGll4HJ1-RTHz2sme64xfb1-qu5zRVeejNTjYvinAYXJZWXJfUd--W4tkBiwE3vTsKGIm4z7f8gS_H5w', 'Rare Tier Innovator Identity')" type="button">
+              Acquire Persona
+            </button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 5: PRESTIGE FRAMES & ROYAL BANNERS PREVIEW -->
+<section class="space-y-space-lg">
+<div class="flex flex-col sm:flex-row sm:items-end justify-between gap-space-xs">
+<div>
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary text-[20px]">palette</span>
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest font-bold">Aesthetic Adornments</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-primary">Prestige Frames &amp; Royal Banners</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">
+          Archival guilloche borders and panoramic trading floor backdrops for citizen profiles.
+        </p>
+</div>
+<div class="flex items-center gap-space-xs">
+<button class="px-space-md py-1 bg-surface-container-low hover:bg-surface-container text-primary rounded-lg font-label-sm text-label-sm font-semibold transition-colors" onclick="switchTab('frames')" type="button">
+          Inspect All Frames
+        </button>
+<button class="px-space-md py-1 bg-surface-container-low hover:bg-surface-container text-primary rounded-lg font-label-sm text-label-sm font-semibold transition-colors" onclick="switchTab('banners')" type="button">
+          Inspect All Banners
+        </button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-space-md">
+<!-- Frame 1: Sovereign Guilloche Gold Frame -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-lg transition-all flex flex-col justify-between">
+<div class="space-y-space-sm">
+<div class="flex items-center justify-between">
+<span class="px-space-xs py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm font-bold uppercase">
+              Tier Gold
+            </span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Avatar Frame</span>
+</div>
+<!-- Decorative Guilloche SVG Visualizer -->
+<div class="h-32 rounded-lg bg-surface-container-low flex items-center justify-center p-space-sm relative overflow-hidden">
+<div class="w-20 h-20 rounded-full border-4 border-dashed border-secondary flex items-center justify-center shadow-inner relative">
+<svg class="w-16 h-16 text-secondary animate-[spin_20s_linear_infinite]" viewbox="0 0 100 100">
+<circle cx="50" cy="50" fill="none" r="42" stroke="currentColor" stroke-dasharray="4 2" stroke-width="2"></circle>
+<circle cx="50" cy="50" fill="none" r="34" stroke="currentColor" stroke-width="1.5"></circle>
+<circle cx="50" cy="50" fill="none" r="26" stroke="currentColor" stroke-dasharray="2 2" stroke-width="1"></circle>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary text-[24px]">workspace_premium</span>
+</div>
+</div>
+<span class="absolute bottom-2 left-2 text-[10px] font-label-sm text-on-surface-variant">Continuous Guilloche Wave</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-primary">Sovereign Guilloche</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Deep bank-note intaglio gold border with anti-forgery shimmer.</p>
+</div>
+</div>
+<div class="pt-space-md mt-space-sm border-t border-surface-container-high flex items-center justify-between">
+<span class="font-numeric-md text-numeric-md text-primary font-bold">1,500 ARTH</span>
+<button class="px-space-md py-1.5 bg-primary text-on-primary hover:bg-primary-container rounded-lg font-label-sm text-label-sm font-semibold transition-colors" onclick="openBuyModal('Sovereign Guilloche Gold Frame', '1,500 ARTH', '', 'Gold Tier Profile Frame')" type="button">
+            Acquire Frame
+          </button>
+</div>
+</div>
+<!-- Frame 2: DvP Speed Azure Border -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-lg transition-all flex flex-col justify-between">
+<div class="space-y-space-sm">
+<div class="flex items-center justify-between">
+<span class="px-space-xs py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm font-semibold uppercase">
+              Tier Epic
+            </span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Avatar Frame</span>
+</div>
+<!-- Decorative Speed Azure Frame Visualizer -->
+<div class="h-32 rounded-lg bg-surface-container-low flex items-center justify-center p-space-sm relative overflow-hidden">
+<div class="w-20 h-20 rounded-full bg-tertiary-container text-on-tertiary-container flex items-center justify-center shadow-lg ring-4 ring-tertiary-fixed-dim/40">
+<svg class="w-14 h-14 text-surface-tint animate-pulse" viewbox="0 0 100 100">
+<circle cx="50" cy="50" fill="none" r="46" stroke="currentColor" stroke-dasharray="12 6" stroke-width="3"></circle>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-surface text-[22px]">bolt</span>
+</div>
+</div>
+<span class="absolute bottom-2 left-2 text-[10px] font-label-sm text-on-surface-variant">Real-Time Transit Aura</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-primary">DvP Speed Azure Border</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Reflects active fast-settlement priority during high volume.</p>
+</div>
+</div>
+<div class="pt-space-md mt-space-sm border-t border-surface-container-high flex items-center justify-between">
+<span class="font-numeric-md text-numeric-md text-primary font-bold">950 ARTH</span>
+<button class="px-space-md py-1.5 bg-primary text-on-primary hover:bg-primary-container rounded-lg font-label-sm text-label-sm font-semibold transition-colors" onclick="openBuyModal('DvP Speed Azure Border', '950 ARTH', '', 'Epic Tier Speed Border')" type="button">
+            Acquire Frame
+          </button>
+</div>
+</div>
+<!-- Banner 1: Dalal Trading Floor Twilight Banner -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-lg transition-all flex flex-col justify-between">
+<div class="space-y-space-sm">
+<div class="flex items-center justify-between">
+<span class="px-space-xs py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm font-semibold uppercase">
+              Tier Epic
+            </span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Profile Banner</span>
+</div>
+<!-- Decorative Banner Panorama Preview -->
+<div class="h-32 rounded-lg bg-gradient-to-r from-primary via-tertiary to-primary-container p-space-sm relative overflow-hidden flex items-end">
+<!-- Sparkline Graphic -->
+<svg class="w-full h-16 text-secondary-fixed opacity-70" preserveaspectratio="none" viewbox="0 0 200 60">
+<path d="M0,50 Q30,10 60,35 T120,20 T180,45 L200,10 L200,60 L0,60 Z" fill="currentColor" opacity="0.2"></path>
+<path d="M0,50 Q30,10 60,35 T120,20 T180,45 L200,10" fill="none" stroke="currentColor" stroke-width="2"></path>
+</svg>
+<div class="absolute top-2 left-2 px-space-xs py-0.5 bg-surface/20 backdrop-blur rounded text-surface font-label-sm text-[10px]">
+              Equities Twilight Desk
+            </div>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-primary">Dalal Trading Floor Twilight</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Atmospheric twilight view of Mumbai financial exchange floors.</p>
+</div>
+</div>
+<div class="pt-space-md mt-space-sm border-t border-surface-container-high flex items-center justify-between">
+<span class="font-numeric-md text-numeric-md text-primary font-bold">1,200 ARTH</span>
+<button class="px-space-md py-1.5 bg-primary text-on-primary hover:bg-primary-container rounded-lg font-label-sm text-label-sm font-semibold transition-colors" onclick="openBuyModal('Dalal Trading Floor Twilight', '1,200 ARTH', '', 'Epic Tier Panorama Banner')" type="button">
+            Acquire Banner
+          </button>
+</div>
+</div>
+<!-- Banner 2: Central Bank Vault Gilded Banner -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-lg transition-all flex flex-col justify-between">
+<div class="space-y-space-sm">
+<div class="flex items-center justify-between">
+<span class="px-space-xs py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm font-bold uppercase">
+              Tier Gold
+            </span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Profile Banner</span>
+</div>
+<!-- Decorative Bank Vault Gilded Preview -->
+<div class="h-32 rounded-lg bg-gradient-to-r from-secondary/80 via-surface-container to-secondary-container p-space-sm relative overflow-hidden flex items-end">
+<div class="absolute inset-0 flex items-center justify-center opacity-30">
+<span class="material-symbols-outlined text-[72px] text-primary">lock</span>
+</div>
+<div class="absolute top-2 left-2 px-space-xs py-0.5 bg-surface/80 backdrop-blur rounded text-primary font-label-sm text-[10px] font-bold">
+              Sub-Basement Bullion Safe
+            </div>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-primary">Central Bank Vault Gilded</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Massive cast-titanium door with engraved charter certificates.</p>
+</div>
+</div>
+<div class="pt-space-md mt-space-sm border-t border-surface-container-high flex items-center justify-between">
+<span class="font-numeric-md text-numeric-md text-primary font-bold">2,100 ARTH</span>
+<button class="px-space-md py-1.5 bg-secondary text-on-secondary hover:bg-secondary-container hover:text-on-secondary-container rounded-lg font-label-sm text-label-sm font-semibold transition-colors" onclick="openBuyModal('Central Bank Vault Gilded', '2,100 ARTH', '', 'Gold Tier Panorama Banner')" type="button">
+            Acquire Banner
+          </button>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 6: RARITY GUIDE & VAULT UTILITY PRIMER -->
+<section class="bg-surface-container-low rounded-xl p-space-lg md:p-space-xl space-y-space-lg">
+<div class="text-center max-w-2xl mx-auto space-y-space-xs">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest font-bold">Institutional Codification</span>
+<h2 class="font-headline-lg text-headline-lg text-primary">Rarity Guide &amp; Vault Utility Primer</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">
+        ARTHAX utilizes a four-tier sovereign rarity standard governing both visual prestige and active balance sheet utility modifiers.
+      </p>
+</div>
+<!-- Four-Column Tier Legend -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-md">
+<!-- Tier 1: Normal -->
+<div class="bg-surface-container-lowest rounded-lg p-space-md space-y-space-sm shadow-sm">
+<div class="flex items-center justify-between">
+<span class="px-space-sm py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm font-bold uppercase tracking-wider">
+            Normal
+          </span>
+<span class="font-label-sm text-label-sm text-outline">Tier 01</span>
+</div>
+<div class="font-headline-sm text-headline-sm text-primary">Slate Foundation</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+          Foundational styling and clean architectural geometry. Minted for baseline identification and entry-level marketplace participation.
+        </p>
+<div class="pt-space-xs border-t border-surface-container-high">
+<span class="font-label-sm text-label-sm text-on-surface font-semibold block">Yield Utility:</span>
+<span class="font-body-sm text-[12px] text-on-surface-variant">Zero baseline boost; standard 1x network rewards.</span>
+</div>
+</div>
+<!-- Tier 2: Rare -->
+<div class="bg-surface-container-lowest rounded-lg p-space-md space-y-space-sm shadow-sm">
+<div class="flex items-center justify-between">
+<span class="px-space-sm py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm font-bold uppercase tracking-wider">
+            Rare
+          </span>
+<span class="font-label-sm text-label-sm text-primary">Tier 02</span>
+</div>
+<div class="font-headline-sm text-headline-sm text-primary">Azure Blue</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+          Advanced aesthetics, custom chromatic gradients, and single tier-1 minor perks (+2% rewards or priority queue entry).
+        </p>
+<div class="pt-space-xs border-t border-surface-container-high">
+<span class="font-label-sm text-label-sm text-primary font-semibold block">Yield Utility:</span>
+<span class="font-body-sm text-[12px] text-on-surface-variant">Zero-gas settlement on select inter-bank clearings.</span>
+</div>
+</div>
+<!-- Tier 3: Epic -->
+<div class="bg-surface-container-lowest rounded-lg p-space-md space-y-space-sm shadow-sm">
+<div class="flex items-center justify-between">
+<span class="px-space-sm py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm font-bold uppercase tracking-wider">
+            Epic
+          </span>
+<span class="font-label-sm text-label-sm text-tertiary">Tier 03</span>
+</div>
+<div class="font-headline-sm text-headline-sm text-primary">Amethyst Violet</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+          Bespoke animation flair, Guilloche filigree highlights, and dual active financial modifiers (+15% cashback, -25% commissions).
+        </p>
+<div class="pt-space-xs border-t border-surface-container-high">
+<span class="font-label-sm text-label-sm text-tertiary font-semibold block">Yield Utility:</span>
+<span class="font-body-sm text-[12px] text-on-surface-variant">Active transaction rebates auto-credited daily.</span>
+</div>
+</div>
+<!-- Tier 4: Gold -->
+<div class="bg-surface-container-lowest rounded-lg p-space-md space-y-space-sm shadow-sm">
+<div class="flex items-center justify-between">
+<span class="px-space-sm py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm font-bold uppercase tracking-wider flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">stars</span>
+            Gold Sovereign
+          </span>
+<span class="font-label-sm text-label-sm text-secondary">Tier 04</span>
+</div>
+<div class="font-headline-sm text-headline-sm text-primary">Radiant Gold</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+          Specular shimmer aura, maximum sovereign utility modifiers (+1.25% FD booster, zero trade fees, instant priority settlement).
+        </p>
+<div class="pt-space-xs border-t border-surface-container-high">
+<span class="font-label-sm text-label-sm text-secondary font-semibold block">Yield Utility:</span>
+<span class="font-body-sm text-[12px] text-on-surface-variant">Instant SETU auto-sweep &amp; sovereign board voting rights.</span>
+</div>
+</div>
+</div>
+<!-- Escrow Guarantee Footer Strip -->
+<div class="p-space-md bg-surface-container-lowest rounded-lg flex flex-col sm:flex-row items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-secondary text-[24px]">verified_user</span>
+<div>
+<span class="font-label-md text-label-md text-primary font-semibold block">100% Cryptographic Delivery-versus-Payment (DvP)</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Assets are held in Escrow Charter 842. Zero counterparty risk on every transfer or mint.</span>
+</div>
+</div>
+<button class="px-space-md py-1.5 bg-surface-container hover:bg-surface-container-high text-primary rounded-lg font-label-sm text-label-sm font-semibold transition-colors shrink-0" type="button">
+        Review Sovereign Charter
+      </button>
+</div>
+</section>
+<!-- MODAL: 1-CLICK INSTANT ACQUISITION (Hidden by default, triggered via JS) -->
+<div class="fixed inset-0 z-50 bg-primary/40 backdrop-blur-sm hidden flex items-center justify-center p-space-md" id="buy-modal">
+<div class="bg-surface-container-lowest text-on-surface max-w-md w-full rounded-xl shadow-2xl p-space-lg space-y-space-md relative">
+<button class="absolute top-4 right-4 text-on-surface-variant hover:text-primary transition-colors" onclick="closeBuyModal()" type="button">
+<span class="material-symbols-outlined text-[24px]">close</span>
+</button>
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary text-[20px]">account_balance</span>
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest font-bold">DvP Escrow Checkout</span>
+</div>
+<div class="space-y-space-xs">
+<h3 class="font-headline-md text-headline-md text-primary" id="modal-item-name">Item Name</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant" id="modal-item-tier">Tier Details</p>
+</div>
+<!-- Item Preview Mini Inset -->
+<div class="bg-surface-container-low rounded-lg p-space-md flex items-center gap-space-md">
+<div class="w-16 h-16 rounded bg-surface-container-lowest flex items-center justify-center shrink-0" id="modal-img-container">
+<span class="material-symbols-outlined text-secondary text-[32px]">redeem</span>
+</div>
+<div>
+<div class="font-label-sm text-label-sm text-on-surface-variant">Sovereign Mint Price</div>
+<div class="font-numeric-lg text-numeric-lg text-primary font-bold" id="modal-item-price">0 ARTH</div>
+<div class="font-label-sm text-[11px] text-secondary">Zero-Loss Escrow Protection</div>
+</div>
+</div>
+<!-- Balance Check Bar -->
+<div class="space-y-space-xs pt-space-xs border-t border-surface-container-high">
+<div class="flex justify-between font-body-sm text-body-sm">
+<span class="text-on-surface-variant">Current DvP Balance:</span>
+<span class="font-numeric-md font-bold text-primary">52,480.00 ARTH</span>
+</div>
+<div class="flex justify-between font-body-sm text-body-sm">
+<span class="text-on-surface-variant">Network Settlement Fee:</span>
+<span class="text-secondary font-semibold">0.00 ARTH (Exempt)</span>
+</div>
+</div>
+<!-- Affirmative CTA -->
+<div class="pt-space-xs space-y-space-xs">
+<button class="w-full py-3 bg-secondary text-on-secondary hover:bg-secondary-container hover:text-on-secondary-container rounded-lg font-label-lg text-label-lg font-semibold transition-all shadow-md active:translate-y-0.5" onclick="confirmPurchase()" type="button">
+          Confirm 1-Click Mint
+        </button>
+<button class="w-full py-2 bg-transparent text-on-surface-variant hover:text-primary rounded-lg font-label-md text-label-md transition-colors" onclick="closeBuyModal()" type="button">
+          Cancel &amp; Return
+        </button>
+</div>
+</div>
+</div>
+<!-- MODAL: GIFT TO CITIZEN -->
+<div class="fixed inset-0 z-50 bg-primary/40 backdrop-blur-sm hidden flex items-center justify-center p-space-md" id="gift-modal">
+<div class="bg-surface-container-lowest text-on-surface max-w-md w-full rounded-xl shadow-2xl p-space-lg space-y-space-md relative">
+<button class="absolute top-4 right-4 text-on-surface-variant hover:text-primary transition-colors" onclick="closeGiftModal()" type="button">
+<span class="material-symbols-outlined text-[24px]">close</span>
+</button>
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary text-[20px]">card_giftcard</span>
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest font-bold">Transfer / Gift Protocol</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md text-primary">Gift Artifact to Citizen</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1" id="gift-item-title">Item Name</p>
+</div>
+<div class="space-y-space-sm">
+<div>
+<label class="font-label-sm text-label-sm text-on-surface-variant block mb-1">Recipient Citizen ID or SETU Address</label>
+<input class="w-full px-space-md py-2 bg-surface-container-low rounded-lg outline-none text-primary font-body-md text-body-md placeholder:text-outline focus:ring-1 focus:ring-primary" placeholder="e.g. ARTH-CTZN-99402 or 0x82...FA1" type="text"/>
+</div>
+<div>
+<label class="font-label-sm text-label-sm text-on-surface-variant block mb-1">Dedication Note (Encrypted in Mint Ledger)</label>
+<input class="w-full px-space-md py-2 bg-surface-container-low rounded-lg outline-none text-primary font-body-md text-body-md placeholder:text-outline focus:ring-1 focus:ring-primary" placeholder="e.g. In appreciation of sovereign syndicate advisory" type="text"/>
+</div>
+</div>
+<div class="pt-space-xs">
+<button class="w-full py-3 bg-primary text-on-primary hover:bg-primary-container rounded-lg font-label-lg text-label-lg font-semibold transition-all shadow-md" onclick="sendGiftConfirmation()" type="button">
+          Execute Sovereign Gift Transfer
+        </button>
+</div>
+</div>
+</div>
+<!-- DRAWER: ASSET DETAIL INSPECT POP-OVER -->
+<div class="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-surface-container-lowest shadow-2xl p-space-xl overflow-y-auto transform translate-x-full transition-transform duration-300 space-y-space-lg flex flex-col justify-between" id="inspect-drawer">
+<div class="space-y-space-md">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest font-bold">Asset Inspection Ledger</span>
+<button class="p-1 rounded-full text-on-surface-variant hover:text-primary" onclick="closeInspectDrawer()" type="button">
+<span class="material-symbols-outlined text-[24px]">close</span>
+</button>
+</div>
+<div class="bg-surface-container-low rounded-xl p-space-md flex items-center justify-center min-h-[220px]">
+<img alt="Asset Inspection" class="w-48 h-48 object-contain" id="inspect-img" src=""/>
+</div>
+<div class="space-y-space-xs">
+<div class="flex items-center justify-between">
+<span class="px-space-xs py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm font-bold uppercase" id="inspect-tier">Gold</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono">Immutable Proof #842</span>
+</div>
+<h3 class="font-headline-lg text-headline-lg text-primary" id="inspect-title">Asset Title</h3>
+<p class="font-body-md text-body-md text-on-surface-variant" id="inspect-desc">Asset description and financial utility details.</p>
+</div>
+<div class="space-y-space-xs pt-space-xs">
+<div class="font-label-md text-label-md text-primary font-semibold">Smart Contract Escrow Attributes</div>
+<div class="p-space-sm bg-surface-container rounded-lg space-y-1 font-body-sm text-body-sm text-on-surface-variant">
+<div class="flex justify-between">
+<span>Staking Mod:</span>
+<span class="font-bold text-primary">Instant Compound</span>
+</div>
+<div class="flex justify-between">
+<span>Transferability:</span>
+<span class="font-bold text-primary">Unrestricted DvP</span>
+</div>
+<div class="flex justify-between">
+<span>Mint Standard:</span>
+<span class="font-bold text-primary">ARTH-ERC721-SOV</span>
+</div>
+</div>
+</div>
+</div>
+<div class="pt-space-md border-t border-surface-container-high space-y-space-xs">
+<div class="flex items-center justify-between mb-space-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Current Settlement Rate:</span>
+<span class="font-numeric-lg text-numeric-lg text-primary font-bold" id="inspect-price">0 ARTH</span>
+</div>
+<button class="w-full py-3 bg-secondary text-on-secondary hover:bg-secondary-container hover:text-on-secondary-container rounded-lg font-label-lg text-label-lg font-semibold transition-all shadow-md" onclick="acquireFromInspect()" type="button">
+        Acquire Into Depository
+      </button>
+</div>
+</div>
+<!-- TOAST NOTIFICATION -->
+<div class="fixed bottom-6 right-6 z-50 bg-primary text-on-primary px-space-lg py-space-md rounded-xl shadow-2xl flex items-center gap-space-sm transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none" id="toast">
+<span class="material-symbols-outlined text-secondary-fixed text-[22px]" id="toast-icon">check_circle</span>
+<span class="font-label-md text-label-md" id="toast-msg">Operation completed successfully.</span>
+</div>
+</div>
+<script>
+  let currentInspectData = {};
+
+  function openBuyModal(name, price, imgSrc, tierDesc) {
+    document.getElementById('modal-item-name').innerText = name;
+    document.getElementById('modal-item-price').innerText = price;
+    document.getElementById('modal-item-tier').innerText = tierDesc || 'Sovereign Treasury Item';
+    const imgCont = document.getElementById('modal-img-container');
+    if (imgSrc) {
+      imgCont.innerHTML = '<img src="' + imgSrc + '" class="w-14 h-14 object-contain" alt="' + name + '">';
+    } else {
+      imgCont.innerHTML = '<span class="material-symbols-outlined text-secondary text-[32px]">shield_check</span>';
+    }
+    document.getElementById('buy-modal').classList.remove('hidden');
+  }
+
+  function closeBuyModal() {
+    document.getElementById('buy-modal').classList.add('hidden');
+  }
+
+  function confirmPurchase() {
+    closeBuyModal();
+    showToast('Settlement Complete: Asset transferred into your Sovereign Vault.', 'verified');
+  }
+
+  function giftCitizenModal(itemName) {
+    document.getElementById('gift-item-title').innerText = 'Granting: ' + itemName;
+    document.getElementById('gift-modal').classList.remove('hidden');
+  }
+
+  function closeGiftModal() {
+    document.getElementById('gift-modal').classList.add('hidden');
+  }
+
+  function sendGiftConfirmation() {
+    closeGiftModal();
+    showToast('Gift successfully routed to recipient via SETU Escrow.', 'card_giftcard');
+  }
+
+  function inspectAsset(title, tier, desc, price, img) {
+    currentInspectData = { title, tier, desc, price, img };
+    document.getElementById('inspect-title').innerText = title;
+    document.getElementById('inspect-tier').innerText = tier + ' Tier';
+    document.getElementById('inspect-desc').innerText = desc;
+    document.getElementById('inspect-price').innerText = Number(price).toLocaleString() + ' ARTH';
+    document.getElementById('inspect-img').src = img;
+    document.getElementById('inspect-drawer').classList.remove('translate-x-full');
+  }
+
+  function closeInspectDrawer() {
+    document.getElementById('inspect-drawer').classList.add('translate-x-full');
+  }
+
+  function acquireFromInspect() {
+    closeInspectDrawer();
+    openBuyModal(currentInspectData.title, currentInspectData.price + ' ARTH', currentInspectData.img, currentInspectData.tier + ' Tier');
+  }
+
+  function openDrawer(id) {
+    showToast('Opening Vault Inventory overview...', 'lock_open');
+  }
+
+  function setCatalogFilter(filter, btn) {
+    const buttons = document.querySelectorAll('.filter-btn');
+    buttons.forEach(b => {
+      b.classList.remove('bg-surface-container-lowest', 'text-primary', 'shadow-sm', 'font-semibold');
+      b.classList.add('text-on-surface-variant');
+    });
+    btn.classList.add('bg-surface-container-lowest', 'text-primary', 'shadow-sm', 'font-semibold');
+    btn.classList.remove('text-on-surface-variant');
+
+    if (filter === 'pets') {
+      document.getElementById('featured-pets').scrollIntoView({ behavior: 'smooth' });
+    } else if (filter === 'avatars') {
+      document.getElementById('featured-avatars').scrollIntoView({ behavior: 'smooth' });
+    } else {
+      showToast('Filtered display for category: ' + filter.toUpperCase(), 'filter_list');
+    }
+  }
+
+  function switchTab(cat) {
+    if (cat === 'pets') {
+      document.getElementById('featured-pets').scrollIntoView({ behavior: 'smooth' });
+    } else if (cat === 'avatars') {
+      document.getElementById('featured-avatars').scrollIntoView({ behavior: 'smooth' });
+    } else {
+      showToast('Browsing department: ' + cat.toUpperCase(), 'storefront');
+    }
+  }
+
+  function showToast(msg, icon = 'check_circle') {
+    const toast = document.getElementById('toast');
+    const toastMsg = document.getElementById('toast-msg');
+    const toastIcon = document.getElementById('toast-icon');
+    toastMsg.innerText = msg;
+    toastIcon.innerText = icon;
+    toast.classList.remove('translate-y-24', 'opacity-0');
+    toast.classList.add('translate-y-0', 'opacity-100');
+    setTimeout(() => {
+      toast.classList.add('translate-y-24', 'opacity-0');
+      toast.classList.remove('translate-y-0', 'opacity-100');
+    }, 3800);
+  }
+</script></div></main><footer class="w-full bg-surface-container-low mt-auto"><div class="max-w-[1360px] mx-auto px-space-lg py-space-2xl"><div class="grid grid-cols-1 md:grid-cols-4 gap-space-xl mb-space-2xl"><div class="md:col-span-1 space-y-space-sm"><div class="flex items-center gap-space-xs"><span class="font-headline-sm text-headline-sm text-primary">ARTHAX</span><span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest font-semibold">Depository</span></div><p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">The sovereign digital asset mint and collateralized vault network. Providing certified minting, custody proofs, and zero-loss financial powers.</p><div class="flex items-center gap-space-xs pt-space-xs"><span class="inline-block w-2 h-2 rounded-full bg-secondary"></span><span class="font-label-sm text-label-sm text-secondary font-semibold uppercase tracking-wider">Reserve Status: Fully Backed</span></div></div><div class="space-y-space-sm"><h3 class="font-label-lg text-label-lg text-primary uppercase tracking-wider">Settlement Protocol</h3><ul class="space-y-space-xs font-body-sm text-body-sm text-on-surface-variant"><li><a class="hover:text-primary transition-colors" href="#">Delivery-versus-Payment (DvP)</a></li><li><a class="hover:text-primary transition-colors" href="#">Zero-Loss Escrow Engine</a></li><li><a class="hover:text-primary transition-colors" href="#">Sovereign Pet Collateral Yield</a></li><li><a class="hover:text-primary transition-colors" href="#">Prestige Tier Audit Registry</a></li></ul></div><div class="space-y-space-sm"><h3 class="font-label-lg text-label-lg text-primary uppercase tracking-wider">Regulatory Proofs</h3><ul class="space-y-space-xs font-body-sm text-body-sm text-on-surface-variant"><li><a class="hover:text-primary transition-colors" href="#">ARTH Settlement Compliance</a></li><li><a class="hover:text-primary transition-colors" href="#">Sovereign Mint Charter No. 842</a></li><li><a class="hover:text-primary transition-colors" href="#">Custodial Reserve Verifier</a></li><li><a class="hover:text-primary transition-colors" href="#">Real-Time Liquidity Attestations</a></li></ul></div><div class="space-y-space-sm"><h3 class="font-label-lg text-label-lg text-primary uppercase tracking-wider">Citizen Depository</h3><p class="font-body-sm text-body-sm text-on-surface-variant">All minted avatars, frames, banners, and pets maintain cryptographically immutable ownership verified by ARTHAX National Mint standards.</p><div class="p-space-sm bg-surface-container rounded-lg"><span class="font-label-sm text-label-sm text-primary block font-semibold">INSTITUTIONAL GRADE VAULT</span><span class="font-body-sm text-body-sm text-on-surface-variant">Zero counterparty custody risk under Escrow Charter.</span></div></div></div><div class="pt-space-lg flex flex-col sm:flex-row items-center justify-between gap-space-md"><div class="flex items-center gap-space-md"><span class="font-body-sm text-body-sm text-on-surface-variant">© 2025 ARTHAX Mint &amp; Vault Authority. All sovereign rights reserved.</span></div><div class="flex items-center gap-space-lg font-body-sm text-body-sm text-on-surface-variant"><a class="hover:text-primary transition-colors" href="#">Terms of Custody</a><a class="hover:text-primary transition-colors" href="#">Escrow Guarantees</a><a class="hover:text-primary transition-colors" href="#">Citizen Protocol</a></div></div></div></footer></body></html>

@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: arthax-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-arthax}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-arthax_dev}
+      POSTGRES_DB: ${POSTGRES_DB:-arthax_dev}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-arthax} -d ${POSTGRES_DB:-arthax_dev}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - arthax-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: arthax-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - arthax-network
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  arthax-network:
+    driver: bridge

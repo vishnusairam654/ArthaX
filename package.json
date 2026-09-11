@@ -1,0 +1,23 @@
+{
+  "name": "arthax",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ARTHAX Sovereign Financial Ecosystem Monorepo",
+  "scripts": {
+    "dev": "pnpm --filter web dev",
+    "dev:web": "pnpm --filter web dev",
+    "dev:api": "pnpm --filter @arthax/api dev",
+    "build": "pnpm --filter web build",
+    "build:api": "pnpm --filter @arthax/api build",
+    "docker:up": "docker compose -f config/docker/docker-compose.yml up -d",
+    "docker:down": "docker compose -f config/docker/docker-compose.yml down",
+    "lint": "pnpm --filter web lint"
+  },
+  "packageManager": "pnpm@12.3.4",
+  "dependencies": {
+    "@prisma/client": "6.19.3"
+  },
+  "devDependencies": {
+    "prisma": "6.19.3"
+  }
+}

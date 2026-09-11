@@ -1,0 +1,1211 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>ARTHAX Stock Portal - Companies Directory &amp; Institutional Filings</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;600;700&amp;family=IBM+Plex+Serif:wght@500;600;700&amp;family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "forest": "#173F35",
+            "forest-dark": "#0d2620",
+            "market-teal": "#2F7468",
+            "market-teal-hover": "#266056",
+            "mint": "#DCEEE8",
+            "mint-light": "#F0F8F5",
+            "warm-sand": "#F4F0E8",
+            "warm-bg": "#FAF8F5",
+            "arth-gold": "#A8742A",
+            "arth-gold-light": "#FDF6E9",
+            "bullish": "#287A55",
+            "bullish-bg": "#EBF6F0",
+            "bearish": "#B94A43",
+            "bearish-bg": "#FBEFED",
+            "border-soft": "rgba(23, 63, 53, 0.12)",
+            "border-subtle": "rgba(23, 63, 53, 0.08)"
+          },
+          fontFamily: {
+            "sans": ["Inter", "sans-serif"],
+            "serif": ["Fraunces", "IBM Plex Serif", "serif"],
+            "mono": ["JetBrains Mono", "monospace"]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    @layer base {
+      html, body {
+        margin: 0;
+        padding: 0;
+        font-feature-settings: "tnum" 1, "cv05" 1;
+        background-color: #FAF8F5;
+      }
+      body { overscroll-behavior: none; }
+    }
+    .scrollbar-none::-webkit-scrollbar { display: none; }
+    .scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="bg-warm-bg text-[#1a1c18] font-sans antialiased min-h-screen flex flex-col selection:bg-market-teal selection:text-white">
+<!-- TOP HEADER & TELEMETRY NAV -->
+<header class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-border-soft shadow-sm">
+<!-- Macro Telemetry Top Ticker Strip -->
+<div class="h-8 w-full bg-[#173F35] text-white flex items-center justify-between px-4 sm:px-6 overflow-hidden text-xs">
+<div class="flex items-center gap-4 whitespace-nowrap overflow-x-auto scrollbar-none font-mono">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-[#4ECCA3] animate-pulse"></span>
+<span class="font-bold tracking-wider text-[#A8E6CF]">ARTHAX 50</span>
+<span class="font-semibold text-white">3,842.10 ARTH</span>
+<span class="text-[#4ECCA3] font-bold text-[11px] bg-emerald-950/60 px-1 py-0.5 rounded">+1.42%</span>
+</div>
+<span class="text-white/30">|</span>
+<div class="flex items-center gap-1 text-white/80">
+<span class="text-[#A8E6CF]/70">VOL 24H:</span>
+<span class="text-white font-semibold">412.5M ARTH</span>
+</div>
+<span class="text-white/30">|</span>
+<div class="flex items-center gap-1.5">
+<span class="text-[#A8E6CF]/70">CLS SETTLEMENT:</span>
+<span class="text-[#4ECCA3] font-bold uppercase tracking-wider text-[11px]">SUB-12MS (SYNCED)</span>
+</div>
+<span class="text-white/30">|</span>
+<div class="flex items-center gap-1 text-white/80">
+<span class="text-[#A8E6CF]/70">USD PARITY:</span>
+<span class="text-white font-semibold tabular-nums">$1.0000</span>
+</div>
+<span class="text-white/30">|</span>
+<div class="flex items-center gap-1 text-white/80">
+<span class="text-[#A8E6CF]/70">BLOCK:</span>
+<span class="text-white font-mono text-[11px]">#28,102,510</span>
+</div>
+</div>
+<div class="hidden lg:flex items-center gap-4 whitespace-nowrap text-xs text-white/80 pl-4 font-mono">
+<span class="text-[#A8E6CF]/90">Continuous Auction Session #420</span>
+<span class="text-white/30">•</span>
+<div class="flex items-center gap-1 text-[#4ECCA3] font-medium">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+<span>Circuit Breaker: NORMAL / STABLE</span>
+</div>
+<span class="text-white/30">•</span>
+<span class="text-white/70">14:32:08 UTC</span>
+</div>
+</div>
+<!-- Main Navigation Bar -->
+<div class="h-16 w-full flex items-center justify-between px-4 sm:px-6 bg-white border-b border-border-soft">
+<div class="flex items-center gap-6">
+<!-- Arthax Brand Mark & Logo -->
+<a class="flex items-center gap-2.5 group" href="#">
+<div class="w-9 h-9 rounded-lg bg-forest flex items-center justify-center p-1.5 shadow-sm border border-emerald-950/20 group-hover:bg-market-teal transition-colors">
+<img alt="ARTHAX" class="w-full h-full object-contain invert brightness-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAsIQf194OpbbeCHho2aUpQhQmlyrvr2rncTbgIXrOSoUlROTPxUFUhHqm6SehpOd03O1W2-0GdbGSoz7TXVxo2_tArwGZKs4djFGBiFCBIUgox994xIYDi0t49ppScU6u5gw92T8EclfXdTzlzU1BsyKHFQ_351-8PXK7y2rerErK7SOxVaY0O93C1-AJojy1tbkqff-M64ji_O5dElS9PJw_w-zWIT-codMSw8kc_GN1dR5dpDlMpMywGXegy8vhMRcE">
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<span class="font-serif text-xl font-bold tracking-tight text-forest">ARTHAX</span>
+<span class="text-[10px] uppercase font-bold tracking-widest px-1.5 py-0.5 rounded bg-forest text-white">PORTAL</span>
+</div>
+<span class="text-[9px] font-bold tracking-wider text-forest/70 uppercase">SEBI &amp; SETU CHARTERED</span>
+</div>
+</a>
+<!-- Global Search Bar with ALT+K pill -->
+<div class="relative w-64 md:w-80">
+<div class="flex items-center bg-warm-sand/50 hover:bg-warm-sand/80 border border-border-soft rounded-xl px-3 py-1.5 text-[#1a1c18] transition-all focus-within:ring-2 focus-within:ring-market-teal/20 focus-within:border-market-teal focus-within:bg-white">
+<span class="material-symbols-outlined text-[18px] mr-2 text-forest/60">search</span>
+<input class="w-full bg-transparent border-none outline-none text-xs sm:text-sm placeholder:text-[#1a1c18]/50" placeholder="Ticker / ISIN / Company..." type="text">
+<kbd class="text-[10px] font-mono text-forest/80 border border-border-soft rounded-md px-1.5 py-0.5 bg-white shadow-2xs">ALT+K</kbd>
+</div>
+</div>
+</div>
+<!-- Right Action Dials & User Badge -->
+<div class="flex items-center gap-3 sm:gap-4">
+<!-- DvP Clearing Pool Balance Chip -->
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-mint/50 border border-market-teal/20 text-forest shadow-2xs">
+<span class="material-symbols-outlined text-[18px] text-market-teal">account_balance_wallet</span>
+<div class="flex flex-col text-left leading-tight">
+<span class="text-[9px] uppercase tracking-wider text-forest/70 font-semibold">DVP CLEARING POOL</span>
+<span class="text-xs font-bold font-mono text-forest">38,450.00 <span class="text-arth-gold font-bold">ARTH</span></span>
+</div>
+</div>
+<div class="h-7 w-[1px] bg-border-soft hidden sm:block"></div>
+<!-- User Profile Badge -->
+<div class="flex items-center gap-2.5">
+<div class="hidden sm:flex flex-col text-right leading-tight">
+<span class="text-xs font-bold text-forest">Ananya Sharma</span>
+<span class="text-[10px] text-market-teal font-medium flex items-center justify-end gap-0.5">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block"></span> Tier-1 Verified • Desk #04
+            </span>
+</div>
+<div class="w-8 h-8 rounded-full ring-2 ring-market-teal/20 overflow-hidden border border-white shadow-2xs">
+<img alt="User profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1W4pXraTiDYiROdmlEPT51tNI1Tm4UOLDbC8mpkc9YHB43K3HdT-8L2arhEP5hVkrdhZMNpOmAg-nzUb5p8mG_ymmrjKpFSWdgQj-JALkf9J8Vt1UC3oVeSRlsuJVxa0V0YaYf7ZqZBaKTJLLB8bXWOuSVpz-yRYVvsK8qE9YcrpfvWpahzAs8PeV3FZ-2W6hXs6EQ6f0IfdqRLzW-KZs00EQZuDYSQVOeQZpfzLpXFs_hao4k129YCpnMeXbeuepJpwrJLZr9Aaw">
+</div>
+</div>
+<div class="h-7 w-[1px] bg-border-soft hidden md:block"></div>
+<div class="hidden md:flex items-center gap-2 text-xs text-forest/80 font-medium">
+<a class="hover:text-market-teal transition-colors" href="#">User Portal</a>
+<span class="text-black/20">•</span>
+<a class="hover:text-market-teal transition-colors" href="#">Central Guide</a>
+</div>
+</div>
+</div>
+<!-- Secondary Navigation Strip (Tactile Material 3 Tabs) -->
+<div class="w-full bg-white px-4 sm:px-6 overflow-x-auto scrollbar-none border-b border-border-soft">
+<nav class="flex items-center gap-1.5 py-1.5">
+<a class="px-3.5 py-1.5 rounded-full text-xs font-medium text-forest/70 hover:text-forest hover:bg-warm-sand/50 transition-colors whitespace-nowrap" href="#">Market Overview</a>
+<!-- Active Tab: Companies Directory -->
+<a class="px-4 py-1.5 rounded-full text-xs font-semibold bg-market-teal text-white shadow-sm flex items-center gap-1.5 whitespace-nowrap" href="#">
+<span>Companies Directory</span>
+<span class="px-1.5 py-0.2 rounded-full bg-white/20 text-white font-mono text-[10px]">42</span>
+</a>
+<a class="px-3.5 py-1.5 rounded-full text-xs font-medium text-forest/70 hover:text-forest hover:bg-warm-sand/50 transition-colors whitespace-nowrap" href="#">Stock Details</a>
+<a class="px-3.5 py-1.5 rounded-full text-xs font-medium text-forest/70 hover:text-forest hover:bg-warm-sand/50 transition-colors whitespace-nowrap" href="#">Atomic Trading Dock</a>
+<a class="px-3.5 py-1.5 rounded-full text-xs font-medium text-forest/70 hover:text-forest hover:bg-warm-sand/50 transition-colors whitespace-nowrap" href="#">Orders &amp; Blotter</a>
+<a class="px-3.5 py-1.5 rounded-full text-xs font-medium text-forest/70 hover:text-forest hover:bg-warm-sand/50 transition-colors whitespace-nowrap" href="#">Portfolio &amp; Allocation</a>
+<a class="px-3.5 py-1.5 rounded-full text-xs font-medium text-forest/70 hover:text-forest hover:bg-warm-sand/50 transition-colors whitespace-nowrap" href="#">Profit &amp; Tax</a>
+<a class="px-3.5 py-1.5 rounded-full text-xs font-medium text-forest/70 hover:text-forest hover:bg-warm-sand/50 transition-colors whitespace-nowrap" href="#">Watchlist</a>
+</nav>
+</div>
+</header>
+<!-- MAIN VIEW CONTAINER -->
+<main class="flex-1 w-full max-w-[1600px] mx-auto px-4 sm:px-6 py-6 space-y-6">
+<!-- 1. TOP STAT RIBBON (Tactile Material 3 Metric Cards) -->
+<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+<!-- Stat 1 -->
+<div class="bg-white rounded-2xl p-4 border border-border-soft shadow-sm hover:shadow transition-shadow">
+<div class="flex items-center justify-between text-forest/70 mb-2">
+<span class="text-xs font-semibold uppercase tracking-wider">Market Cap Aggregate</span>
+<span class="material-symbols-outlined text-[20px] text-market-teal">corporate_fare</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="font-serif text-2xl sm:text-3xl font-bold text-forest tracking-tight tabular-nums">14.82B</span>
+<span class="text-xs font-bold text-arth-gold font-mono">ARTH</span>
+<span class="ml-auto inline-flex items-center text-xs font-semibold px-2 py-0.5 rounded-full bg-bullish-bg text-bullish">
+            +2.18% 24H
+          </span>
+</div>
+<p class="text-[11px] text-forest/60 mt-1.5 flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-market-teal"></span> Real-time settlement on-ledger
+        </p>
+</div>
+<!-- Stat 2 -->
+<div class="bg-white rounded-2xl p-4 border border-border-soft shadow-sm hover:shadow transition-shadow">
+<div class="flex items-center justify-between text-forest/70 mb-2">
+<span class="text-xs font-semibold uppercase tracking-wider">SEBI &amp; SETU Listings</span>
+<span class="material-symbols-outlined text-[20px] text-market-teal">verified</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="font-serif text-2xl sm:text-3xl font-bold text-forest tracking-tight tabular-nums">42</span>
+<span class="text-xs font-medium text-forest/80">Active Equities</span>
+<span class="ml-auto inline-flex items-center text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-mint text-forest">
+            100% Audited
+          </span>
+</div>
+<p class="text-[11px] text-forest/60 mt-1.5">No unverified issues or non-compliant debt</p>
+</div>
+<!-- Stat 3 -->
+<div class="bg-white rounded-2xl p-4 border border-border-soft shadow-sm hover:shadow transition-shadow">
+<div class="flex items-center justify-between text-forest/70 mb-2">
+<span class="text-xs font-semibold uppercase tracking-wider">ISO-20022 Filings</span>
+<span class="material-symbols-outlined text-[20px] text-market-teal">history_edu</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="font-serif text-2xl sm:text-3xl font-bold text-forest tracking-tight tabular-nums">124</span>
+<span class="text-xs font-medium text-forest/80">Cryptographic Disclosures</span>
+</div>
+<div class="flex items-center justify-between text-[11px] text-forest/60 mt-1.5">
+<span>Root Merkle Block: <span class="font-mono text-market-teal font-semibold">#28.1M</span></span>
+<span class="text-bullish font-semibold">All Passed</span>
+</div>
+</div>
+<!-- Stat 4 -->
+<div class="bg-white rounded-2xl p-4 border border-border-soft shadow-sm hover:shadow transition-shadow">
+<div class="flex items-center justify-between text-forest/70 mb-2">
+<span class="text-xs font-semibold uppercase tracking-wider">DvP Liquidity Cleared</span>
+<span class="material-symbols-outlined text-[20px] text-market-teal">sync_alt</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="font-serif text-2xl sm:text-3xl font-bold text-market-teal tracking-tight tabular-nums">842.6M</span>
+<span class="text-xs font-bold text-arth-gold font-mono">ARTH</span>
+</div>
+<div class="flex items-center justify-between text-[11px] text-forest/60 mt-1.5 font-mono">
+<span class="flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span> Stasis: ENFORCED
+          </span>
+<span class="text-forest/70">Hash: 0x37a8...c81f</span>
+</div>
+</div>
+</section>
+<!-- 2. FILTER RAIL & DIRECTORY SEARCH WORKSPACE -->
+<section class="bg-white rounded-2xl p-4 sm:p-5 border border-border-soft shadow-sm space-y-4">
+<!-- Sector Filter Pills -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-border-subtle">
+<div class="flex items-center gap-2 overflow-x-auto scrollbar-none py-1">
+<button class="px-3.5 py-1.5 rounded-full text-xs font-semibold bg-forest text-white shadow-2xs hover:bg-forest-dark transition-colors whitespace-nowrap">
+            All Sectors (42)
+          </button>
+<button class="px-3.5 py-1.5 rounded-full text-xs font-medium bg-warm-sand/60 hover:bg-warm-sand text-forest transition-colors whitespace-nowrap">
+            Space &amp; Defense (6)
+          </button>
+<button class="px-3.5 py-1.5 rounded-full text-xs font-medium bg-warm-sand/60 hover:bg-warm-sand text-forest transition-colors whitespace-nowrap">
+            Electric Rail &amp; Transit (4)
+          </button>
+<button class="px-3.5 py-1.5 rounded-full text-xs font-medium bg-warm-sand/60 hover:bg-warm-sand text-forest transition-colors whitespace-nowrap">
+            Genomics &amp; Life Sciences (5)
+          </button>
+<button class="px-3.5 py-1.5 rounded-full text-xs font-medium bg-warm-sand/60 hover:bg-warm-sand text-forest transition-colors whitespace-nowrap">
+            Merchant &amp; Reserve Banking (8)
+          </button>
+<button class="px-3.5 py-1.5 rounded-full text-xs font-medium bg-warm-sand/60 hover:bg-warm-sand text-forest transition-colors whitespace-nowrap">
+            Deep-Sea Ports (5)
+          </button>
+<button class="px-3.5 py-1.5 rounded-full text-xs font-medium bg-warm-sand/60 hover:bg-warm-sand text-forest transition-colors whitespace-nowrap">
+            Clean Energy (6)
+          </button>
+<button class="px-3.5 py-1.5 rounded-full text-xs font-medium bg-warm-sand/60 hover:bg-warm-sand text-forest transition-colors whitespace-nowrap">
+            Agritech &amp; Heavy Ind (8)
+          </button>
+</div>
+<div class="flex items-center gap-2 shrink-0 text-xs text-forest/70 font-medium">
+<span class="material-symbols-outlined text-[16px] text-market-teal">tune</span>
+<span>Allocation Index: <strong class="text-forest font-semibold">Balanced</strong></span>
+</div>
+</div>
+<!-- Action & View Controls Bar -->
+<div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+<div class="flex items-center gap-3 flex-1 max-w-2xl">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-forest/50 text-[18px]">filter_list</span>
+<input class="w-full pl-9 pr-3 py-2 bg-warm-bg border border-border-soft rounded-xl text-xs sm:text-sm text-forest placeholder:text-forest/40 focus:outline-none focus:border-market-teal focus:ring-2 focus:ring-market-teal/15 transition-all" placeholder="Filter company registry by corporate title, ISIN prefix, or statutory ticker..." type="text">
+</div>
+<div class="relative shrink-0">
+<select class="appearance-none bg-warm-bg border border-border-soft rounded-xl pl-3 pr-8 py-2 text-xs font-semibold text-forest cursor-pointer focus:outline-none focus:border-market-teal focus:ring-2 focus:ring-market-teal/15 transition-all">
+<option>Sort: Market Cap (Desc)</option>
+<option>Sort: 24h Price Delta (%)</option>
+<option>Sort: P/E Ratio (Asc)</option>
+<option>Sort: Dividend Yield (Desc)</option>
+<option>Sort: Volume Turnover</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-forest/60 text-[16px] pointer-events-none">expand_more</span>
+</div>
+</div>
+<div class="flex items-center gap-2.5 justify-end">
+<!-- View Toggle -->
+<div class="flex items-center bg-warm-sand/50 p-1 rounded-xl border border-border-soft">
+<button class="px-3 py-1 rounded-lg bg-white text-forest text-xs font-bold shadow-2xs flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[15px] text-market-teal">table_rows</span>
+<span>Ledger View</span>
+</button>
+<button class="px-3 py-1 rounded-lg text-forest/70 hover:text-forest text-xs font-medium flex items-center gap-1.5 transition-colors">
+<span class="material-symbols-outlined text-[15px]">grid_view</span>
+<span>Bento Matrix</span>
+</button>
+</div>
+<button class="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-warm-bg hover:bg-warm-sand/60 border border-border-soft text-forest text-xs font-semibold transition-colors shadow-2xs">
+<span class="material-symbols-outlined text-[16px] text-market-teal">file_download</span>
+<span>Export (.XBRL)</span>
+</button>
+</div>
+</div>
+</section>
+<!-- 3. DENSE INSTITUTIONAL COMPANIES LEDGER TABLE -->
+<section class="bg-white rounded-2xl border border-border-soft shadow-sm overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full border-collapse text-left">
+<thead>
+<tr class="bg-warm-sand/40 border-b border-border-soft text-forest/75 text-[11px] font-bold uppercase tracking-wider">
+<th class="py-3 px-4">Company &amp; Identification</th>
+<th class="py-3 px-4">Primary Sector</th>
+<th class="py-3 px-4 text-right">Share Price</th>
+<th class="py-3 px-4 text-right">24h Net</th>
+<th class="py-3 px-4 text-right">Market Cap</th>
+<th class="py-3 px-4 text-right">P/E &amp; EPS</th>
+<th class="py-3 px-4 text-right">Div Yield</th>
+<th class="py-3 px-4 text-right">24h Volume</th>
+<th class="py-3 px-4 text-center">7D Performance</th>
+<th class="py-3 px-4">Stasis Status</th>
+<th class="py-3 px-4 text-right">Desk Order</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-border-subtle text-xs">
+<!-- Row 1: NILA Systems Ltd -->
+<tr class="hover:bg-mint-light/60 transition-colors group">
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-white border border-border-soft shadow-2xs flex items-center justify-center p-1 shrink-0 group-hover:scale-105 transition-transform">
+<img alt="NILA Systems Logo" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBGt02orxuR9cTU6aaogTrB8RELlpvPy9oQyDngIiB9YfABrE8hQiW0IliMmySorrSC9siUdqFOfuxGuK3VWXc0HRgY0EdBcY63hlhOUZ_P1KscZn-Cs-zw9IH1y-KSGEev4XSXpB7q-TWwW8mTiYGbS81Lhtx2jDJfNQd30r4NUXXDsf-21k5kJW3nHdPSGvY3lTeAhUiYhR2TlaWa3A7v7WNn__2D5591UN2BUDmhL5TEoJQRxENNp5pN1vLYZTN1Sso">
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-serif font-bold text-sm text-forest group-hover:text-market-teal transition-colors truncate">NILA Systems Ltd</span>
+<span class="text-[10px] font-mono font-bold px-1.5 py-0.2 bg-forest text-white rounded">NILA:SYS</span>
+</div>
+<div class="flex items-center gap-1.5 text-forest/60 text-[11px] font-mono mt-0.5">
+<span>INE094J01018</span>
+<span>•</span>
+<span class="text-market-teal font-semibold flex items-center gap-0.5 font-sans">
+<span class="material-symbols-outlined text-[12px]">verified</span>SEBI Core
+                      </span>
+</div>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-4">
+<span class="px-2.5 py-1 rounded-lg bg-warm-sand/60 text-forest text-[11px] font-medium whitespace-nowrap">
+                  Space Mesh &amp; Defense
+                </span>
+</td>
+<td class="py-3.5 px-4 text-right tabular-nums">
+<span class="font-serif text-sm sm:text-base font-bold text-forest">142.50</span>
+<span class="text-[10px] font-bold text-arth-gold ml-0.5">ARTH</span>
+</td>
+<td class="py-3.5 px-4 text-right tabular-nums">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-bullish-bg text-bullish text-xs font-bold">
+                  +4.12%
+                </span>
+</td>
+<td class="py-3.5 px-4 text-right tabular-nums font-semibold text-forest">
+                3.42B <span class="text-forest/60 text-[10px] font-normal">ARTH</span>
+</td>
+<td class="py-3.5 px-4 text-right tabular-nums text-forest">
+<div class="font-semibold">24.2x</div>
+<div class="text-forest/60 text-[10px] font-mono">5.88 ARTH</div>
+</td>
+<td class="py-3.5 px-4 text-right tabular-nums font-semibold text-forest">
+                2.40%
+              </td>
+<td class="py-3.5 px-4 text-right tabular-nums text-forest">
+<div class="font-semibold">142.5M ARTH</div>
+<div class="text-forest/60 text-[10px] font-mono">1.00M Units</div>
+</td>
+<td class="py-3.5 px-4 text-center">
+<svg class="w-24 h-6 inline-block text-bullish" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 100 24">
+<path d="M0,18 L15,16 L30,20 L45,12 L60,14 L75,6 L100,2" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</td>
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-bullish"></span>
+<span class="text-xs font-semibold text-forest">Q4 Audited</span>
+</div>
+<span class="text-[10px] text-forest/60 font-mono">ISO-20022 Filed</span>
+</td>
+<td class="py-3.5 px-4 text-right">
+<div class="flex items-center justify-end gap-1.5">
+<button class="px-3 py-1 rounded-lg bg-market-teal hover:bg-market-teal-hover text-white text-xs font-bold shadow-2xs transition-colors">Trade</button>
+<button class="p-1 rounded-lg text-forest/60 hover:text-forest hover:bg-warm-sand/50 transition-colors" title="Inspect Filings">
+<span class="material-symbols-outlined text-[18px]">description</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2: Tarang Mobility Ltd -->
+<tr class="hover:bg-mint-light/60 transition-colors group">
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-white border border-border-soft shadow-2xs flex items-center justify-center p-1 shrink-0 group-hover:scale-105 transition-transform">
+<img alt="Tarang Mobility Logo" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCv_9PKDFEf9MTt5aoFiJ5n8pp4VNH47Pg517m4kM08AvWx4jrCB1wBt8mW2_vLQjbaOlLMKGc_HUe88XQnhbzidn1_bNk0mmF9V48TJtcPC3TS-Y2QtjMBh4yD8LJN6xK0QMQWclDBwCR3v6TF-ttPippC_WwTpruNWyp9ILfcZCdzc-3vYilvDhRW6Q1YxvbTwQd_i0xVCIMQwccYplct8rNFy6WD8LcGRMDZyIO0sFs8MC7j8exLw-vgtOEFb1y7U2s">
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-serif font-bold text-sm text-forest group-hover:text-market-teal transition-colors truncate">Tarang Mobility Ltd</span>
+<span class="text-[10px] font-mono font-bold px-1.5 py-0.2 bg-forest text-white rounded">TRNG:MOB</span>
+</div>
+<div class="flex items-center gap-1.5 text-forest/60 text-[11px] font-mono mt-0.5">
+<span>INE821K01024</span>
+<span>•</span>
+<span class="text-market-teal font-semibold flex items-center gap-0.5 font-sans">
+<span class="material-symbols-outlined text-[12px]">verified</span>SEBI Core
+                      </span>
+</div>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-4">
+<span class="px-2.5 py-1 rounded-lg bg-warm-sand/60 text-forest text-[11px] font-medium whitespace-nowrap">
+                  Electric Rail &amp; Transit
+                </span>
+</td>
+<td class="py-3.5 px-4 text-right tabular-nums">
+<span class="font-serif text-sm sm:text-base font-bold text-forest">89.20</span>
+<span class="text-[10px] font-bold text-arth-gold ml-0.5">ARTH</span>
+</td>
+<td class="py-3.5 px-4 text-right tabular-nums">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-bullish-bg text-bullish text-xs font-bold">
+                  +2.85%
+                </span>
+</td>
+<td class="py-3.5 px-4 text-right tabular-nums font-semibold text-forest">
+                2.14B <span class="text-forest/60 text-[10px] font-normal">ARTH</span>
+</td>
+<td class="py-3.5 px-4 text-right tabular-nums text-forest">
+<div class="font-semibold">18.6x</div>
+<div class="text-forest/60 text-[10px] font-mono">4.79 ARTH</div>
+</td>
+<td class="py-3.5 px-4 text-right tabular-nums font-semibold text-forest">
+                3.10%
+              </td>
+<td class="py-3.5 px-4 text-right tabular-nums text-forest">
+<div class="font-semibold">84.2M ARTH</div>
+<div class="text-forest/60 text-[10px] font-mono">944K Units</div>
+</td>
+<td class="py-3.5 px-4 text-center">
+<svg class="w-24 h-6 inline-block text-bullish" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 100 24">
+<path d="M0,19 L20,17 L40,11 L60,13 L80,8 L100,3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</td>
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-bullish"></span>
+<span class="text-xs font-semibold text-forest">Capex Certified</span>
+</div>
+<span class="text-[10px] text-forest/60 font-mono">Metro Rail Annex IV</span>
+</td>
+<td class="py-3.5 px-4 text-right">
+<div class="flex items-center justify-end gap-1.5">
+<button class="px-3 py-1 rounded-lg bg-market-teal hover:bg-market-teal-hover text-white text-xs font-bold shadow-2xs transition-colors">Trade</button>
+<button class="p-1 rounded-lg text-forest/60 hover:text-forest hover:bg-warm-sand/50 transition-colors" title="Inspect Filings">
+<span class="material-symbols-outlined text-[18px]">description</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3: Veda Health Sciences -->
+<tr class="hover:bg-mint-light/60 transition-colors group">
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-white border border-border-soft shadow-2xs flex items-center justify-center p-1 shrink-0 group-hover:scale-105 transition-transform">
+<img alt="Veda Health Logo" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDEZ29Nrsqtv-fyJ751JihITtjZcOFwQsaBhe-GOY5bVXjU27IL76vkIDNExxpMsddBsQuZPfa01HysRYfdawyZUpdgxviLN46zz2kfWiD3rxvD72cSco_muUBUzolVT016QiN6vazWD1Ir9pz5AYA9nGeZfJSZw7wdGoX1CagZrpr01J2Vh5dSn_BJu5ldVJ9BkSVhnGwnLCaldz_zD90tJympCURh1KQ-BPMFL10pIRr1BPEJevHY0lGFKglM25fFpyc">
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-serif font-bold text-sm text-forest group-hover:text-market-teal transition-colors truncate">Veda Health Sciences</span>
+<span class="text-[10px] font-mono font-bold px-1.5 py-0.2 bg-forest text-white rounded">VEDA:HLT</span>
+</div>
+<div class="flex items-center gap-1.5 text-forest/60 text-[11px] font-mono mt-0.5">
+<span>INE331B01099</span>
+<span>•</span>
+<span class="text-market-teal font-semibold flex items-center gap-0.5 font-sans">
+<span class="material-symbols-outlined text-[12px]">verified</span>SEBI Core
+                      </span>
+</div>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-4">
+<span class="px-2.5 py-1 rounded-lg bg-warm-sand/60 text-forest text-[11px] font-medium whitespace-nowrap">
+                  Genomics &amp; Synthesis
+                </span>
+</td>
+<td class="py-3.5 px-4 text-right tabular-nums">
+<span class="font-serif text-sm sm:text-base font-bold text-forest">215.00</span>
+<span class="text-[10px] font-bold text-arth-gold ml-0.5">ARTH</span>
+</td>
+<td class="py-3.5 px-4 text-right tabular-nums">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-bullish-bg text-bullish text-xs font-bold">
+                  +1.10%
+                </span>
+</td>
+<td class="py-3.5 px-4 text-right tabular-nums font-semibold text-forest">
+                2.85B <span class="text-forest/60 text-[10px] font-normal">ARTH</span>
+</td>
+<td class="py-3.5 px-4 text-right tabular-nums text-forest">
+<div class="font-semibold">32.4x</div>
+<div class="text-forest/60 text-[10px] font-mono">6.63 ARTH</div>
+</td>
+<td class="py-3.5 px-4 text-right tabular-nums font-semibold text-forest">
+                1.20%
+              </td>
+<td class="py-3.5 px-4 text-right tabular-nums text-forest">
+<div class="font-semibold">56.8M ARTH</div>
+<div class="text-forest/60 text-[10px] font-mono">264K Units</div>
+</td>
+<td class="py-3.5 px-4 text-center">
+<svg class="w-24 h-6 inline-block text-bullish" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 100 24">
+<path d="M0,14 L25,16 L50,11 L75,12 L100,7" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</td>
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-bullish"></span>
+<span class="text-xs font-semibold text-forest">Phase III Signed</span>
+</div>
+<span class="text-[10px] text-forest/60 font-mono">CDSCO Statutory</span>
+</td>
+<td class="py-3.5 px-4 text-right">
+<div class="flex items-center justify-end gap-1.5">
+<button class="px-3 py-1 rounded-lg bg-market-teal hover:bg-market-teal-hover text-white text-xs font-bold shadow-2xs transition-colors">Trade</button>
+<button class="p-1 rounded-lg text-forest/60 hover:text-forest hover:bg-warm-sand/50 transition-colors" title="Inspect Filings">
+<span class="material-symbols-outlined text-[18px]">description</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 4: Meru Capital Ltd -->
+<tr class="hover:bg-mint-light/60 transition-colors group">
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-white border border-border-soft shadow-2xs flex items-center justify-center p-1 shrink-0 group-hover:scale-105 transition-transform">
+<img alt="Meru Capital Logo" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCiTm9HR6WClFil0oFLimm9W6SzFJLEF796hucjA3po8F7IK-LPb38gF5uDUUQrjjNCDKqOSmXYAdYm29BzPJFhpqlq4jMTwoqJsXKdwpVCH9_QlAAe_lbf7e6_J7E6zFGXkNklC8Vx8sy3vYmdHIXzhiNJ9AkJ8q3HbPRcZFOB1e4xYvVvz-nLYBKq4PI5uLVJq7iA4aYoFRpGKbI5THbMzj0mF8tuZqX2WAzzgqNN52ze8RF6gocxRiwfUeulDjeWvsc">
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-serif font-bold text-sm text-forest group-hover:text-market-teal transition-colors truncate">Meru Capital Ltd</span>
+<span class="text-[10px] font-mono font-bold px-1.5 py-0.2 bg-forest text-white rounded">MERU:CAP</span>
+</div>
+<div class="flex items-center gap-1.5 text-forest/60 text-[11px] font-mono mt-0.5">
+<span>INE441C01052</span>
+<span>•</span>
+<span class="text-market-teal font-semibold flex items-center gap-0.5 font-sans">
+<span class="material-symbols-outlined text-[12px]">verified</span>SEBI Core
+                      </span>
+</div>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-4">
+<span class="px-2.5 py-1 rounded-lg bg-warm-sand/60 text-forest text-[11px] font-medium whitespace-nowrap">
+                  Merchant &amp; Liquidity
+                </span>
+</td>
+<td class="py-3.5 px-4 text-right tabular-nums">
+<span class="font-serif text-sm sm:text-base font-bold text-forest">512.00</span>
+<span class="text-[10px] font-bold text-arth-gold ml-0.5">ARTH</span>
+</td>
+<td class="py-3.5 px-4 text-right tabular-nums">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-bullish-bg text-bullish text-xs font-bold">
+                  +3.20%
+                </span>
+</td>
+<td class="py-3.5 px-4 text-right tabular-nums font-semibold text-forest">
+                4.10B <span class="text-forest/60 text-[10px] font-normal">ARTH</span>
+</td>
+<td class="py-3.5 px-4 text-right tabular-nums text-forest">
+<div class="font-semibold">14.8x</div>
+<div class="text-forest/60 text-[10px] font-mono">34.59 ARTH</div>
+</td>
+<td class="py-3.5 px-4 text-right tabular-nums font-semibold text-forest">
+                4.50%
+              </td>
+<td class="py-3.5 px-4 text-right tabular-nums text-forest">
+<div class="font-semibold">198.4M ARTH</div>
+<div class="text-forest/60 text-[10px] font-mono">387K Units</div>
+</td>
+<td class="py-3.5 px-4 text-center">
+<svg class="w-24 h-6 inline-block text-bullish" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 100 24">
+<path d="M0,20 L20,18 L40,14 L60,8 L80,10 L100,2" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</td>
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-bullish"></span>
+<span class="text-xs font-semibold text-forest">Reserve Stasis OK</span>
+</div>
+<span class="text-[10px] text-forest/60 font-mono">Basel III Ratio 18.2%</span>
+</td>
+<td class="py-3.5 px-4 text-right">
+<div class="flex items-center justify-end gap-1.5">
+<button class="px-3 py-1 rounded-lg bg-market-teal hover:bg-market-teal-hover text-white text-xs font-bold shadow-2xs transition-colors">Trade</button>
+<button class="p-1 rounded-lg text-forest/60 hover:text-forest hover:bg-warm-sand/50 transition-colors" title="Inspect Filings">
+<span class="material-symbols-outlined text-[18px]">description</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 5: Kshiti Infra & Terminals -->
+<tr class="hover:bg-mint-light/60 transition-colors group">
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-white border border-border-soft shadow-2xs flex items-center justify-center p-1 shrink-0 group-hover:scale-105 transition-transform">
+<img alt="Kshiti Infra Logo" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOT0lvksRAePvmk3rJoUJe4-X2KEzWkYKZzvk6Su19ARKiC0WJoo0kbd8kHj69EZ-IpWqFJNcec6Dn9bphL82IYwrbZvo1hOQSphxJeCnchG7qJ6l7RoGVRjsKWF1MuevvXHE2Dba7miTn_RbTfGKduaSjCnHGIi7zrTXIdSSn8sYzCIW0ePERhODZk1EBsddgKxbYXmNW2q5hBZt5VoztbZSX0t-9hf9HfSY2p2ZfheTfcP4dIXz0FOX4FJdp8Uap6qA">
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-serif font-bold text-sm text-forest group-hover:text-market-teal transition-colors truncate">Kshiti Infra &amp; Terminals</span>
+<span class="text-[10px] font-mono font-bold px-1.5 py-0.2 bg-forest text-white rounded">KSHT:INF</span>
+</div>
+<div class="flex items-center gap-1.5 text-forest/60 text-[11px] font-mono mt-0.5">
+<span>INE552D01088</span>
+<span>•</span>
+<span class="text-market-teal font-semibold flex items-center gap-0.5 font-sans">
+<span class="material-symbols-outlined text-[12px]">verified</span>SEBI Core
+                      </span>
+</div>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-4">
+<span class="px-2.5 py-1 rounded-lg bg-warm-sand/60 text-forest text-[11px] font-medium whitespace-nowrap">
+                  Deep-Sea Ports
+                </span>
+</td>
+<td class="py-3.5 px-4 text-right tabular-nums">
+<span class="font-serif text-sm sm:text-base font-bold text-forest">340.50</span>
+<span class="text-[10px] font-bold text-arth-gold ml-0.5">ARTH</span>
+</td>
+<td class="py-3.5 px-4 text-right tabular-nums">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-bearish-bg text-bearish text-xs font-bold">
+                  -0.65%
+                </span>
+</td>
+<td class="py-3.5 px-4 text-right tabular-nums font-semibold text-forest">
+                1.95B <span class="text-forest/60 text-[10px] font-normal">ARTH</span>
+</td>
+<td class="py-3.5 px-4 text-right tabular-nums text-forest">
+<div class="font-semibold">16.2x</div>
+<div class="text-forest/60 text-[10px] font-mono">21.01 ARTH</div>
+</td>
+<td class="py-3.5 px-4 text-right tabular-nums font-semibold text-forest">
+                2.80%
+              </td>
+<td class="py-3.5 px-4 text-right tabular-nums text-forest">
+<div class="font-semibold">42.1M ARTH</div>
+<div class="text-forest/60 text-[10px] font-mono">123K Units</div>
+</td>
+<td class="py-3.5 px-4 text-center">
+<svg class="w-24 h-6 inline-block text-bearish" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 100 24">
+<path d="M0,6 L25,8 L50,14 L75,12 L100,19" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</td>
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-amber-500"></span>
+<span class="text-xs font-semibold text-forest">Concession Audit</span>
+</div>
+<span class="text-[10px] text-forest/60 font-mono">Tariff Surcharge Rev</span>
+</td>
+<td class="py-3.5 px-4 text-right">
+<div class="flex items-center justify-end gap-1.5">
+<button class="px-3 py-1 rounded-lg bg-market-teal hover:bg-market-teal-hover text-white text-xs font-bold shadow-2xs transition-colors">Trade</button>
+<button class="p-1 rounded-lg text-forest/60 hover:text-forest hover:bg-warm-sand/50 transition-colors" title="Inspect Filings">
+<span class="material-symbols-outlined text-[18px]">description</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 6: Arka Renewable Energy -->
+<tr class="hover:bg-mint-light/60 transition-colors group">
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-white border border-border-soft shadow-2xs flex items-center justify-center p-1 shrink-0 group-hover:scale-105 transition-transform">
+<img alt="Arka Energy Logo" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBU_HJe0wIEML3P_YxKvvWCzjWxHKbHLi86FkjtitwBnV0p5z8TlAPOrhz9hSVUoTosc9zV17RusSIbAizZAKvhjfPkno0M09m2kYugADUQ7zMeJj2UjK9rP_53G_4-3s1cMB9ttPigEuOM-SooeTjJxL1n4pFjg5vOXbPUh3617hyzIrHTr_eyzqDWhPqNBm3ZW34o6dNIBaC2JGOAagUOOdF3d0zUbu-JJiFXCe2D8b3woyjaBaWkIgozX0tI0z9Ihj4">
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-serif font-bold text-sm text-forest group-hover:text-market-teal transition-colors truncate">Arka Renewable Energy</span>
+<span class="text-[10px] font-mono font-bold px-1.5 py-0.2 bg-forest text-white rounded">ARKA:ENG</span>
+</div>
+<div class="flex items-center gap-1.5 text-forest/60 text-[11px] font-mono mt-0.5">
+<span>INE774E01017</span>
+<span>•</span>
+<span class="text-market-teal font-semibold flex items-center gap-0.5 font-sans">
+<span class="material-symbols-outlined text-[12px]">verified</span>SEBI Core
+                      </span>
+</div>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-4">
+<span class="px-2.5 py-1 rounded-lg bg-warm-sand/60 text-forest text-[11px] font-medium whitespace-nowrap">
+                  Solar &amp; Hydrogen
+                </span>
+</td>
+<td class="py-3.5 px-4 text-right tabular-nums">
+<span class="font-serif text-sm sm:text-base font-bold text-forest">164.80</span>
+<span class="text-[10px] font-bold text-arth-gold ml-0.5">ARTH</span>
+</td>
+<td class="py-3.5 px-4 text-right tabular-nums">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-bullish-bg text-bullish text-xs font-bold">
+                  +5.80%
+                </span>
+</td>
+<td class="py-3.5 px-4 text-right tabular-nums font-semibold text-forest">
+                1.68B <span class="text-forest/60 text-[10px] font-normal">ARTH</span>
+</td>
+<td class="py-3.5 px-4 text-right tabular-nums text-forest">
+<div class="font-semibold">28.5x</div>
+<div class="text-forest/60 text-[10px] font-mono">5.78 ARTH</div>
+</td>
+<td class="py-3.5 px-4 text-right tabular-nums font-semibold text-forest">
+                1.80%
+              </td>
+<td class="py-3.5 px-4 text-right tabular-nums text-forest">
+<div class="font-semibold">92.6M ARTH</div>
+<div class="text-forest/60 text-[10px] font-mono">561K Units</div>
+</td>
+<td class="py-3.5 px-4 text-center">
+<svg class="w-24 h-6 inline-block text-bullish" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 100 24">
+<path d="M0,22 L20,19 L40,15 L60,11 L80,5 L100,1" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</td>
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-bullish"></span>
+<span class="text-xs font-semibold text-forest">Green Bond Active</span>
+</div>
+<span class="text-[10px] text-forest/60 font-mono">120M Facility Sync</span>
+</td>
+<td class="py-3.5 px-4 text-right">
+<div class="flex items-center justify-end gap-1.5">
+<button class="px-3 py-1 rounded-lg bg-market-teal hover:bg-market-teal-hover text-white text-xs font-bold shadow-2xs transition-colors">Trade</button>
+<button class="p-1 rounded-lg text-forest/60 hover:text-forest hover:bg-warm-sand/50 transition-colors" title="Inspect Filings">
+<span class="material-symbols-outlined text-[18px]">description</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 7: Aroha Foods Ltd -->
+<tr class="hover:bg-mint-light/60 transition-colors group">
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-white border border-border-soft shadow-2xs flex items-center justify-center p-1 shrink-0 group-hover:scale-105 transition-transform">
+<img alt="Aroha Foods Logo" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9_PGepkTCP5vhUEVDA4bDNEpJO_O3s2zbQ-Lo3EFQBHCQsC7-HLNtElf69hCSF1hkGNZHbpQ9EdZM-KMimyTKdKXyZbfkt4Wsw0nLyNFMfWYCV_MUlB_-7I_7V95Y7PM5yZqygblZyyutEkGloXPyp05cyhtEJ4d3i4H89vpP-ATzTJCxZA8kICq1d8SFF_MguelUhVNRBkjlndOaptnLuKT6BYdCwS-ZA5EYvW33JoicRQyXs4RYFPtLhoZv6L4uLeE">
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-serif font-bold text-sm text-forest group-hover:text-market-teal transition-colors truncate">Aroha Foods Ltd</span>
+<span class="text-[10px] font-mono font-bold px-1.5 py-0.2 bg-forest text-white rounded">AROH:FOD</span>
+</div>
+<div class="flex items-center gap-1.5 text-forest/60 text-[11px] font-mono mt-0.5">
+<span>INE991F01033</span>
+<span>•</span>
+<span class="text-market-teal font-semibold flex items-center gap-0.5 font-sans">
+<span class="material-symbols-outlined text-[12px]">verified</span>SEBI Core
+                      </span>
+</div>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-4">
+<span class="px-2.5 py-1 rounded-lg bg-warm-sand/60 text-forest text-[11px] font-medium whitespace-nowrap">
+                  Grain &amp; Agri Logistics
+                </span>
+</td>
+<td class="py-3.5 px-4 text-right tabular-nums">
+<span class="font-serif text-sm sm:text-base font-bold text-forest">78.40</span>
+<span class="text-[10px] font-bold text-arth-gold ml-0.5">ARTH</span>
+</td>
+<td class="py-3.5 px-4 text-right tabular-nums">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-bullish-bg text-bullish text-xs font-bold">
+                  +0.95%
+                </span>
+</td>
+<td class="py-3.5 px-4 text-right tabular-nums font-semibold text-forest">
+                890M <span class="text-forest/60 text-[10px] font-normal">ARTH</span>
+</td>
+<td class="py-3.5 px-4 text-right tabular-nums text-forest">
+<div class="font-semibold">12.4x</div>
+<div class="text-forest/60 text-[10px] font-mono">6.32 ARTH</div>
+</td>
+<td class="py-3.5 px-4 text-right tabular-nums font-semibold text-forest">
+                3.60%
+              </td>
+<td class="py-3.5 px-4 text-right tabular-nums text-forest">
+<div class="font-semibold">28.3M ARTH</div>
+<div class="text-forest/60 text-[10px] font-mono">361K Units</div>
+</td>
+<td class="py-3.5 px-4 text-center">
+<svg class="w-24 h-6 inline-block text-bullish" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 100 24">
+<path d="M0,15 L25,14 L50,16 L75,10 L100,8" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</td>
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-bullish"></span>
+<span class="text-xs font-semibold text-forest">Commodity Ledger</span>
+</div>
+<span class="text-[10px] text-forest/60 font-mono">Silo Stock Audited</span>
+</td>
+<td class="py-3.5 px-4 text-right">
+<div class="flex items-center justify-end gap-1.5">
+<button class="px-3 py-1 rounded-lg bg-market-teal hover:bg-market-teal-hover text-white text-xs font-bold shadow-2xs transition-colors">Trade</button>
+<button class="p-1 rounded-lg text-forest/60 hover:text-forest hover:bg-warm-sand/50 transition-colors" title="Inspect Filings">
+<span class="material-symbols-outlined text-[18px]">description</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 8: Anvik Heavy Industries -->
+<tr class="hover:bg-mint-light/60 transition-colors group">
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-white border border-border-soft shadow-2xs flex items-center justify-center p-1 shrink-0 group-hover:scale-105 transition-transform">
+<img alt="Anvik Industries Logo" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDyIc7GSb81hlDbDWX5cTEzC7_-lsmL3TMINnU8n18W_QjN46VANFusBjmTpmdpjGFH1OmYeHXdUGJwCLEal9M4y0VVS-mw0qrMEXsXTR5hyDNVQmKacBsK2CRRVadIoe0BSmxjEAyAehy_f-A9WRSMmzpxErK50y9huSkVYGCcfxmonvCSKQo-mup3sy_IV2fLQwfJGvOq1ob1Jy-fwRpKibGF8osxJks6UGCQBdxZyqXtfjt61brDCVatEhRZGkSWOD0">
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-serif font-bold text-sm text-forest group-hover:text-market-teal transition-colors truncate">Anvik Heavy Industries</span>
+<span class="text-[10px] font-mono font-bold px-1.5 py-0.2 bg-forest text-white rounded">ANVK:IND</span>
+</div>
+<div class="flex items-center gap-1.5 text-forest/60 text-[11px] font-mono mt-0.5">
+<span>INE663G01045</span>
+<span>•</span>
+<span class="text-market-teal font-semibold flex items-center gap-0.5 font-sans">
+<span class="material-symbols-outlined text-[12px]">verified</span>SEBI Core
+                      </span>
+</div>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-4">
+<span class="px-2.5 py-1 rounded-lg bg-warm-sand/60 text-forest text-[11px] font-medium whitespace-nowrap">
+                  Precision Robotics
+                </span>
+</td>
+<td class="py-3.5 px-4 text-right tabular-nums">
+<span class="font-serif text-sm sm:text-base font-bold text-forest">95.30</span>
+<span class="text-[10px] font-bold text-arth-gold ml-0.5">ARTH</span>
+</td>
+<td class="py-3.5 px-4 text-right tabular-nums">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-bullish-bg text-bullish text-xs font-bold">
+                  +1.45%
+                </span>
+</td>
+<td class="py-3.5 px-4 text-right tabular-nums font-semibold text-forest">
+                1.15B <span class="text-forest/60 text-[10px] font-normal">ARTH</span>
+</td>
+<td class="py-3.5 px-4 text-right tabular-nums text-forest">
+<div class="font-semibold">21.0x</div>
+<div class="text-forest/60 text-[10px] font-mono">4.53 ARTH</div>
+</td>
+<td class="py-3.5 px-4 text-right tabular-nums font-semibold text-forest">
+                2.10%
+              </td>
+<td class="py-3.5 px-4 text-right tabular-nums text-forest">
+<div class="font-semibold">48.7M ARTH</div>
+<div class="text-forest/60 text-[10px] font-mono">511K Units</div>
+</td>
+<td class="py-3.5 px-4 text-center">
+<svg class="w-24 h-6 inline-block text-bullish" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 100 24">
+<path d="M0,17 L25,15 L50,12 L75,14 L100,9" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</td>
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-bullish"></span>
+<span class="text-xs font-semibold text-forest">Contract Annexed</span>
+</div>
+<span class="text-[10px] text-forest/60 font-mono">Defense Order Book</span>
+</td>
+<td class="py-3.5 px-4 text-right">
+<div class="flex items-center justify-end gap-1.5">
+<button class="px-3 py-1 rounded-lg bg-market-teal hover:bg-market-teal-hover text-white text-xs font-bold shadow-2xs transition-colors">Trade</button>
+<button class="p-1 rounded-lg text-forest/60 hover:text-forest hover:bg-warm-sand/50 transition-colors" title="Inspect Filings">
+<span class="material-symbols-outlined text-[18px]">description</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Table Bottom Telemetry & Pagination -->
+<div class="bg-warm-sand/40 px-4 sm:px-6 py-3 border-t border-border-soft flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-forest/70">
+<div class="flex items-center gap-3">
+<span>Showing <strong class="text-forest font-semibold">1–8</strong> of <strong class="text-forest font-semibold">42</strong> Listed Equities</span>
+<span class="text-black/15">|</span>
+<span class="text-market-teal font-medium flex items-center gap-1 font-mono">
+<span class="material-symbols-outlined text-[14px]">sync</span>
+            Data Stream: Sub-12ms Active Feed
+          </span>
+</div>
+<div class="flex items-center gap-1">
+<button class="px-2.5 py-1 rounded-lg bg-white border border-border-soft text-forest/50 font-semibold cursor-not-allowed text-xs" disabled="">Previous</button>
+<span class="w-7 h-7 rounded-lg bg-forest text-white font-bold flex items-center justify-center text-xs">1</span>
+<button class="w-7 h-7 rounded-lg hover:bg-warm-sand text-forest font-medium flex items-center justify-center text-xs transition-colors">2</button>
+<button class="w-7 h-7 rounded-lg hover:bg-warm-sand text-forest font-medium flex items-center justify-center text-xs transition-colors">3</button>
+<button class="w-7 h-7 rounded-lg hover:bg-warm-sand text-forest font-medium flex items-center justify-center text-xs transition-colors">4</button>
+<button class="w-7 h-7 rounded-lg hover:bg-warm-sand text-forest font-medium flex items-center justify-center text-xs transition-colors">5</button>
+<button class="px-2.5 py-1 rounded-lg bg-white border border-border-soft text-forest font-semibold hover:bg-warm-sand text-xs transition-colors">Next</button>
+</div>
+</div>
+</section>
+<!-- 4. INSTITUTIONAL FILINGS & CORPORATE GOVERNANCE DOCK -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+<!-- Left 7 Cols: Mandatory Statutory Disclosures (ISO-20022) -->
+<div class="lg:col-span-7 bg-white rounded-2xl p-5 sm:p-6 border border-border-soft shadow-sm space-y-4">
+<div class="flex items-center justify-between border-b border-border-subtle pb-3">
+<div class="flex items-center gap-2 text-forest">
+<span class="material-symbols-outlined text-[22px] text-market-teal">assignment_turned_in</span>
+<h3 class="font-serif text-lg font-bold">Mandatory Statutory Disclosures</h3>
+</div>
+<span class="text-[10px] font-mono uppercase font-bold tracking-wider px-2.5 py-1 rounded-full bg-mint text-forest border border-market-teal/20">
+            Accord Section 18-C
+          </span>
+</div>
+<p class="text-xs text-forest/70 leading-relaxed">
+          Cryptographically attested financial disclosures, quarterly audited balance sheets, and debt covenants filed under SETU Depository ISO-20022 protocols. Hashes are immutably written into the national Merkle state tree.
+        </p>
+<!-- Filings Cards List -->
+<div class="space-y-2.5 pt-1">
+<!-- Filing 1 -->
+<div class="p-3.5 rounded-xl bg-warm-bg hover:bg-mint-light/40 border border-border-soft flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 transition-colors">
+<div class="flex items-start gap-3">
+<div class="w-8 h-8 rounded-lg bg-white border border-border-soft p-1 shrink-0 mt-0.5">
+<img alt="NILA" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBBrcOVFKHY0cp6BxdfoQOE3Gpew7g6GjTZHJddEq3_fXpnYCZ9gtZpGO0_9WUl6Pea3h14KIX8gktanoAV3VhWb-tuNbWq2EhsFMA4ExSfpbcgJA0QlB75dGkggJwahY-8z7MJtU4JNRfGehhKF0Ff87kF0TH5y-lQmp_T8-F08nvzaFGLpbwOEmFsL997iqoir3fbzsQnQdmveYFyywsxR80KLg2YT2jUU9Ki6HHIm9oGJYaZkLXflc6bZa9Gm2hQiC4">
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-serif font-bold text-sm text-forest">NILA Systems Ltd</span>
+<span class="text-[10px] font-mono px-1.5 py-0.2 rounded bg-mint text-forest font-semibold">FY25 Q4 Audited</span>
+</div>
+<span class="text-xs text-forest/80 font-medium mt-0.5">Space Mesh Contract Expansion &amp; Ministry of Space Telecom Annex</span>
+<span class="text-[11px] font-mono text-forest/50 mt-1">SHA-256: 0x9f8e42...ca81 • 14:02 UTC • SETU Depository Node #003</span>
+</div>
+</div>
+<div class="flex items-center gap-2 shrink-0 self-end sm:self-center">
+<button class="px-2.5 py-1 rounded-lg border border-border-soft bg-white hover:bg-warm-sand text-forest text-xs font-semibold flex items-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-[15px] text-market-teal">download</span>
+<span>XBRL</span>
+</button>
+<button class="px-2.5 py-1 rounded-lg bg-forest hover:bg-forest-dark text-white text-xs font-semibold flex items-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-[15px]">visibility</span>
+<span>Audit Stasis</span>
+</button>
+</div>
+</div>
+<!-- Filing 2 -->
+<div class="p-3.5 rounded-xl bg-warm-bg hover:bg-mint-light/40 border border-border-soft flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 transition-colors">
+<div class="flex items-start gap-3">
+<div class="w-8 h-8 rounded-lg bg-white border border-border-soft p-1 shrink-0 mt-0.5">
+<img alt="MERU" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDWBOV8yqeQ_ze2e5oTkKnvrMneRmaPkVhxh71eiea-hdjWhm3HhuS7Xq3uIFPXCoydMiPirH2KnCPTDdM8FWAn8zuM9Bocc4g-N_pAhNq3fBTBuUBOIQoPVf0xegGznk50loO2HfbDYPXMVbmus3r-lk07aB6YhDFTEj4tMRZLAqxLt5CjJfM-biY1JgTgXCaC4YH9dZU3DRIqs9zUqy0IZn389__4IDcA5FxX3flOucekfyuPRhXNQiDKIwJDzQNZClQ">
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-serif font-bold text-sm text-forest">Meru Capital Ltd</span>
+<span class="text-[10px] font-mono px-1.5 py-0.2 rounded bg-mint text-forest font-semibold">Liquidity Stasis</span>
+</div>
+<span class="text-xs text-forest/80 font-medium mt-0.5">Inter-Bank DvP Liquidity Clearing Ratio &amp; Capital Adequacy Basel Report</span>
+<span class="text-[11px] font-mono text-forest/50 mt-1">SHA-256: 0x12b4e7...88df • 13:45 UTC • Sovereign Vault Verified</span>
+</div>
+</div>
+<div class="flex items-center gap-2 shrink-0 self-end sm:self-center">
+<button class="px-2.5 py-1 rounded-lg border border-border-soft bg-white hover:bg-warm-sand text-forest text-xs font-semibold flex items-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-[15px] text-market-teal">download</span>
+<span>XBRL</span>
+</button>
+<button class="px-2.5 py-1 rounded-lg bg-forest hover:bg-forest-dark text-white text-xs font-semibold flex items-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-[15px]">visibility</span>
+<span>Audit Stasis</span>
+</button>
+</div>
+</div>
+<!-- Filing 3 -->
+<div class="p-3.5 rounded-xl bg-warm-bg hover:bg-mint-light/40 border border-border-soft flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 transition-colors">
+<div class="flex items-start gap-3">
+<div class="w-8 h-8 rounded-lg bg-white border border-border-soft p-1 shrink-0 mt-0.5">
+<img alt="ARKA" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCbrK7TgSTuOUfoy9b3xgRFJnESa0BTSDEpxgI4Y720yofOeH-YRgfPcVKgRiCKCqTd34sHpASMOStX_CnDjZ1zAaPfdqFxhnbM8vkQ2J6ffVovmEIcIAD72-rkDfKROzGHnRZJblb1GDbrdwCgt9kU_qKYcE_mSl56JMTWv4fqJbdPzheqkAKQ4itWnogE-87a2oaMum0FxFmtbjLp11xtcJtVMGXj2zg3k6uat5fw2MgTRbhRKqbEodVN90BmSqK9pBA">
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-serif font-bold text-sm text-forest">Arka Renewable Energy</span>
+<span class="text-[10px] font-mono px-1.5 py-0.2 rounded bg-mint text-forest font-semibold">Green Facility</span>
+</div>
+<span class="text-xs text-forest/80 font-medium mt-0.5">Allocation Manifest: 120M ARTH 4.15% Sovereign Green Infrastructure Bond</span>
+<span class="text-[11px] font-mono text-forest/50 mt-1">SHA-256: 0xaa5409...1088 • 11:20 UTC • Climate Accord Cert</span>
+</div>
+</div>
+<div class="flex items-center gap-2 shrink-0 self-end sm:self-center">
+<button class="px-2.5 py-1 rounded-lg border border-border-soft bg-white hover:bg-warm-sand text-forest text-xs font-semibold flex items-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-[15px] text-market-teal">download</span>
+<span>XBRL</span>
+</button>
+<button class="px-2.5 py-1 rounded-lg bg-forest hover:bg-forest-dark text-white text-xs font-semibold flex items-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-[15px]">visibility</span>
+<span>Audit Stasis</span>
+</button>
+</div>
+</div>
+<!-- Filing 4 -->
+<div class="p-3.5 rounded-xl bg-warm-bg hover:bg-mint-light/40 border border-border-soft flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 transition-colors">
+<div class="flex items-start gap-3">
+<div class="w-8 h-8 rounded-lg bg-white border border-border-soft p-1 shrink-0 mt-0.5">
+<img alt="TARANG" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrYBEXDi_JJsRqaqohI4n8jfiut3IELq2v-9lYJaxhhXmo0Vb6lAfws3nqQ83BjqPC9IVm3svtW5zLPbYkbi8e7maJZmekLrEbnSG8osgZ-GtSpc0hczn9rVxaVnJY0gPvoTINqjSra9l3Ylms9A4YU1dbe5ozje9g5GFgxm0fSqIR_zyiPLXayKmzjiAVGZkYFpXTucbnqXSnfgmmuDNFnrNJLTm6wXBLVTgTQiTsVJomTfdEF5eUa6Hj2Hcw_4Ce6vE">
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-serif font-bold text-sm text-forest">Tarang Mobility Ltd</span>
+<span class="text-[10px] font-mono px-1.5 py-0.2 rounded bg-mint text-forest font-semibold">Metro Debt Audit</span>
+</div>
+<span class="text-xs text-forest/80 font-medium mt-0.5">Metro Rail Phase IV Rolling Stock Delivery Schedule &amp; Sinking Fund Stasis</span>
+<span class="text-[11px] font-mono text-forest/50 mt-1">SHA-256: 0x51c72a...77e2 • 09:12 UTC • Railway Finance Corp</span>
+</div>
+</div>
+<div class="flex items-center gap-2 shrink-0 self-end sm:self-center">
+<button class="px-2.5 py-1 rounded-lg border border-border-soft bg-white hover:bg-warm-sand text-forest text-xs font-semibold flex items-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-[15px] text-market-teal">download</span>
+<span>XBRL</span>
+</button>
+<button class="px-2.5 py-1 rounded-lg bg-forest hover:bg-forest-dark text-white text-xs font-semibold flex items-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-[15px]">visibility</span>
+<span>Audit Stasis</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Right 5 Cols: Governance Resolutions & AGM Calendar -->
+<div class="lg:col-span-5 bg-white rounded-2xl p-5 sm:p-6 border border-border-soft shadow-sm space-y-4">
+<div class="flex items-center justify-between border-b border-border-subtle pb-3">
+<div class="flex items-center gap-2 text-forest">
+<span class="material-symbols-outlined text-[22px] text-market-teal">gavel</span>
+<h3 class="font-serif text-lg font-bold">Corporate Governance Calendar</h3>
+</div>
+<span class="text-[10px] font-mono uppercase font-bold text-market-teal bg-mint/50 px-2 py-0.5 rounded-full">
+            SETU Sync Active
+          </span>
+</div>
+<div class="flex items-center justify-between bg-warm-sand/50 p-2.5 rounded-xl border border-border-soft">
+<span class="text-xs font-bold text-forest">Ecosystem AGM &amp; Dividend Votes</span>
+<span class="text-[10px] font-semibold text-bullish bg-bullish-bg px-2 py-0.5 rounded-full">All Verified</span>
+</div>
+<div class="space-y-3">
+<!-- Event 1 -->
+<div class="p-3 rounded-xl bg-warm-bg border border-border-soft flex items-start gap-3">
+<div class="flex flex-col items-center justify-center p-2 rounded-xl bg-mint text-forest font-bold min-w-[50px] text-center shrink-0">
+<span class="text-[9px] uppercase tracking-wider text-forest/70 font-semibold">NOV</span>
+<span class="font-serif text-xl leading-none tabular-nums">18</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-serif font-bold text-xs sm:text-sm text-forest">NILA Systems AGM</span>
+<span class="text-[10px] font-semibold text-market-teal bg-mint/60 px-1.5 py-0.2 rounded-full">Proxy Voting Open</span>
+</div>
+<p class="text-xs text-forest/75 mt-1 leading-relaxed">
+                Resolution 04-B: Approval of Deep-Space Transceiver Fab Capital Expenditure (340M ARTH facility).
+              </p>
+<div class="flex items-center gap-2 mt-2 text-[11px] text-forest/60">
+<span class="font-medium text-forest">Voting Closes: 23:59 UTC</span>
+<span>•</span>
+<a class="text-market-teal font-semibold hover:underline" href="#">Download Ballot (.SEBI)</a>
+</div>
+</div>
+</div>
+<!-- Event 2 -->
+<div class="p-3 rounded-xl bg-warm-bg border border-border-soft flex items-start gap-3">
+<div class="flex flex-col items-center justify-center p-2 rounded-xl bg-mint text-forest font-bold min-w-[50px] text-center shrink-0">
+<span class="text-[9px] uppercase tracking-wider text-forest/70 font-semibold">NOV</span>
+<span class="font-serif text-xl leading-none tabular-nums">22</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-serif font-bold text-xs sm:text-sm text-forest">Tarang Mobility EGM</span>
+</div>
+<p class="text-xs text-forest/75 mt-1 leading-relaxed">
+                Special resolution on the issuance of Tier-2 perpetual subordinate bonds to Sovereign Fund of India.
+              </p>
+<div class="flex items-center gap-2 mt-2 text-[11px] text-forest/60">
+<span class="font-medium text-forest">Quorum: 84.1%</span>
+<span>•</span>
+<a class="text-market-teal font-semibold hover:underline" href="#">Explanatory Statement</a>
+</div>
+</div>
+</div>
+<!-- Event 3 -->
+<div class="p-3 rounded-xl bg-warm-bg border border-border-soft flex items-start gap-3">
+<div class="flex flex-col items-center justify-center p-2 rounded-xl bg-mint text-forest font-bold min-w-[50px] text-center shrink-0">
+<span class="text-[9px] uppercase tracking-wider text-forest/70 font-semibold">DEC</span>
+<span class="font-serif text-xl leading-none tabular-nums">04</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-serif font-bold text-xs sm:text-sm text-forest">Meru Capital Dividend Date</span>
+</div>
+<p class="text-xs text-forest/75 mt-1 leading-relaxed">
+                Interim dividend declaration: 23.04 ARTH per registered security. Atomic DvP settlement credit automatically dispatched.
+              </p>
+<div class="flex items-center gap-2 mt-2 text-[11px] text-forest/60">
+<span class="text-bullish font-semibold">Ex-Date: DEC 02</span>
+<span>•</span>
+<a class="text-market-teal font-semibold hover:underline" href="#">Distribution Schedule</a>
+</div>
+</div>
+</div>
+</div>
+<div class="p-3 bg-warm-sand/40 rounded-xl border border-border-soft flex items-center justify-between text-xs text-forest/70">
+<span>Statutory Depository Surveillance:</span>
+<span class="font-bold text-bullish uppercase text-[11px]">All 42 Equities in Compliance</span>
+</div>
+</div>
+</section>
+</main>
+<!-- 5. INSTITUTIONAL PROTOCOL FOOTER -->
+<footer class="w-full bg-[#173F35] text-white border-t border-emerald-950/30 mt-10">
+<div class="w-full max-w-[1600px] mx-auto px-4 sm:px-6 py-10">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+<!-- Col 1 -->
+<div class="flex flex-col gap-2">
+<div class="flex items-center gap-2 text-[#A8E6CF] font-serif text-base font-bold">
+<span class="material-symbols-outlined text-[20px]">verified_user</span>
+<span>SEBI &amp; SETU Accord</span>
+</div>
+<p class="text-xs text-white/75 leading-relaxed">
+            Institutional capital markets execution platform operating in compliance with Section 18-C of the National Capital Accord. All transactions clearing-house verified with automated risk mitigations.
+          </p>
+</div>
+<!-- Col 2 -->
+<div class="flex flex-col gap-2">
+<div class="flex items-center gap-2 text-white font-serif text-base font-bold">
+<span class="material-symbols-outlined text-[20px] text-[#4ECCA3]">swap_horiz</span>
+<span>DvP &amp; Settlement</span>
+</div>
+<p class="text-xs text-white/75 leading-relaxed">
+            Atomic Delivery versus Payment (DvP) infrastructure natively integrated with Continuous Linked Settlement (CLS) protocols. Cryptographic Merkle tree state root confirmations executed at block finality.
+          </p>
+</div>
+<!-- Col 3 -->
+<div class="flex flex-col gap-2">
+<div class="flex items-center gap-2 text-white font-serif text-base font-bold">
+<span class="material-symbols-outlined text-[20px] text-[#4ECCA3]">receipt_long</span>
+<span>Tax &amp; Compliance</span>
+</div>
+<p class="text-xs text-white/75 leading-relaxed">
+            Real-time capital gains accounting adhering to 15% Short-Term Capital Gains (STCG) and 10% Long-Term Capital Gains (LTCG) frameworks. Automated withholding certificates generated post-blotter reconciliation.
+          </p>
+</div>
+<!-- Col 4 -->
+<div class="flex flex-col gap-2">
+<div class="flex items-center gap-2 text-white font-serif text-base font-bold">
+<span class="material-symbols-outlined text-[20px] text-[#4ECCA3]">dns</span>
+<span>Depository Telemetry</span>
+</div>
+<div class="flex flex-col text-xs text-white/80 font-mono space-y-1.5 pt-1">
+<div class="flex items-center justify-between pb-1 border-b border-white/10">
+<span class="text-white/60">Active Node:</span>
+<span class="text-white font-semibold">SETU Depository #003</span>
+</div>
+<div class="flex items-center justify-between pb-1 border-b border-white/10">
+<span class="text-white/60">Time Sync:</span>
+<span class="text-white font-semibold">UTC (NIST Stratum-1)</span>
+</div>
+<div class="flex items-center justify-between pb-1 border-b border-white/10">
+<span class="text-white/60">RTT Latency:</span>
+<span class="text-[#4ECCA3] font-bold">0.84ms (Ultra-Low)</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-white/60">Disaster Recovery:</span>
+<span class="text-[#4ECCA3] font-bold">Hot Standby Active</span>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-8 pt-6 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-white/60">
+<div class="flex items-center gap-2">
+<span>© 2025 ARTHAX Capital Markets Corporation. All rights reserved.</span>
+<span>•</span>
+<span class="font-mono text-white/80">Terminal ID: FLR-DESK-04-NYC</span>
+</div>
+<div class="flex items-center gap-4 text-white/80">
+<a class="hover:text-white transition-colors" href="#">Master Clearing Terms</a>
+<a class="hover:text-white transition-colors" href="#">Risk Disclosure Note</a>
+<a class="hover:text-white transition-colors" href="#">API Feeds Status</a>
+<a class="hover:text-white transition-colors" href="#">Surveillance Escalations</a>
+</div>
+</div>
+</div>
+</footer>
+</body></html>

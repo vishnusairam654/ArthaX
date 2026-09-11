@@ -1,0 +1,1132 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>ARTHAX Sovereign Monetary Infrastructure — Central Guide</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#022448",
+            "primary-container": "#1e3a5f",
+            "on-primary": "#ffffff",
+            "secondary": "#4c5d8e",
+            "secondary-container": "#dbe1ff",
+            "tertiary": "#361f00",
+            "tertiary-container": "#533300",
+            "gold-accent": "#A8742A",
+            "gold-light": "#FDF8F0",
+            "gold-border": "#DFB87A",
+            "surface": "#f8f9ff",
+            "surface-dim": "#d1dbeb",
+            "surface-bright": "#f8f9ff",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#eef4ff",
+            "surface-container": "#e5efff",
+            "surface-container-high": "#dfe9fa",
+            "surface-container-highest": "#d9e3f4",
+            "on-surface": "#121c28",
+            "on-surface-variant": "#43474e",
+            "outline": "#74777f",
+            "outline-variant": "#c4c6cf",
+            "emerald-live": "#10B981"
+          },
+          fontFamily: {
+            serif: ["Newsreader", "Georgia", "serif"],
+            sans: ["Inter", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "sans-serif"],
+            mono: ["JetBrains Mono", "ui-monospace", "SFMono-Regular", "monospace"]
+          },
+          borderRadius: {
+            '2xl': '1.25rem',
+            '3xl': '1.75rem',
+            '4xl': '2.25rem'
+          },
+          boxShadow: {
+            'm3-1': '0px 1px 3px 1px rgba(0, 0, 0, 0.05), 0px 1px 2px 0px rgba(0, 0, 0, 0.08)',
+            'm3-2': '0px 2px 6px 2px rgba(0, 0, 0, 0.06), 0px 1px 2px 0px rgba(0, 0, 0, 0.08)',
+            'm3-3': '0px 4px 12px 3px rgba(0, 0, 0, 0.07), 0px 1px 3px 0px rgba(0, 0, 0, 0.1)',
+            'm3-hover': '0px 12px 32px rgba(2, 36, 72, 0.12)'
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    @layer base {
+      html { scroll-behavior: smooth; }
+      body {
+        background-color: #f8f9ff;
+        color: #121c28;
+        font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+      }
+    }
+
+    /* M3 Kinetic State Layers & Transitions */
+    .m3-interactive {
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
+      will-change: transform, box-shadow;
+    }
+    .m3-interactive:hover {
+      transform: translateY(-5px) scale(1.008);
+      box-shadow: 0px 14px 34px -4px rgba(2, 36, 72, 0.13), 0px 4px 12px rgba(168, 116, 42, 0.08);
+      border-color: rgba(223, 184, 122, 0.65);
+    }
+    
+    /* GSAP-Style Kinetic Staggered Reveal Animations */
+    .reveal-elem {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
+    }
+    .reveal-elem.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Interactive Ripple Effect */
+    .ripple-btn {
+      position: relative;
+      overflow: hidden;
+    }
+    .ripple-effect {
+      position: absolute;
+      border-radius: 50%;
+      transform: scale(0);
+      animation: ripple 600ms linear;
+      background-color: rgba(255, 255, 255, 0.35);
+      pointer-events: none;
+    }
+    @keyframes ripple {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+
+    /* Subtle Green Numeric Flash on Updates */
+    .num-flash {
+      animation: flashGreen 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes flashGreen {
+      0% { color: #059669; transform: scale(1.05); }
+      50% { color: #10B981; }
+      100% { color: inherit; transform: scale(1); }
+    }
+
+    /* CLS Pipeline Interactive Pulse Active State */
+    .pipeline-step {
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: pointer;
+    }
+    .pipeline-step.active-step {
+      border-color: #A8742A !important;
+      background-color: #ffffff !important;
+      transform: translateY(-4px) scale(1.015);
+      box-shadow: 0px 10px 25px -3px rgba(168, 116, 42, 0.18);
+    }
+    .step-badge-ping {
+      position: absolute;
+      inset: -4px;
+      border-radius: 9999px;
+      border: 2px solid #A8742A;
+      opacity: 0;
+      animation: pulseRing 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    @keyframes pulseRing {
+      0% { transform: scale(0.9); opacity: 0.8; }
+      100% { transform: scale(1.4); opacity: 0; }
+    }
+
+    /* Accordion Drawer */
+    .accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+      opacity: 0;
+    }
+    .accordion-open .accordion-content {
+      max-height: 280px;
+      opacity: 1;
+    }
+    .accordion-open .accordion-icon {
+      transform: rotate(180deg);
+    }
+
+    /* Ticker Continuous Gentle Pulse */
+    @keyframes subtlePulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.65; }
+    }
+    .ticker-pulse {
+      animation: subtlePulse 3s ease-in-out infinite;
+    }
+
+    /* Custom threejs-scene element definition */
+    threejs-scene canvas {
+      display: block;
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal-elem {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+      }
+      .m3-interactive, .pipeline-step {
+        transform: none !important;
+        transition: none !important;
+      }
+      .num-flash, .ticker-pulse, .step-badge-ping {
+        animation: none !important;
+      }
+      .accordion-content {
+        transition: none !important;
+      }
+    }
+  </style>
+<!-- Three.js Library for Custom Element Rendering -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+    // Register custom element for threejs-scene
+    class ThreeJSSceneElement extends HTMLElement {
+      connectedCallback() {
+        const src = this.getAttribute('src');
+        if (!src) return;
+        const container = this;
+        try {
+          const initScene = new Function('container', 'THREE', src);
+          this._cleanup = initScene(container, window.THREE);
+        } catch (e) {
+          console.error("ThreeJS Scene Execution Error:", e);
+        }
+      }
+      disconnectedCallback() {
+        if (typeof this._cleanup === 'function') {
+          this._cleanup();
+        }
+      }
+    }
+    customElements.define('threejs-scene', ThreeJSSceneElement);
+  </script>
+</head>
+<body class="bg-surface font-sans text-on-surface antialiased selection:bg-gold-accent selection:text-white">
+<!-- ==================== 1. MASTER NAVIGATION & SOVEREIGN HEADER ==================== -->
+<header class="fixed top-0 left-0 w-full z-50 bg-surface-container-lowest/90 backdrop-blur-xl border-b border-outline-variant/30 shadow-xs transition-all duration-300">
+<!-- Tier 1: Main Brand Bar -->
+<div class="max-w-7xl mx-auto px-6 lg:px-8 h-20 flex items-center justify-between gap-6">
+<!-- Brand Logo Presentation -->
+<div class="flex items-center gap-6">
+<a aria-label="ARTHAX Sovereign Network" class="flex items-center group transition-opacity hover:opacity-90" href="#">
+<div class="h-10 flex items-center">
+<svg class="h-9 w-auto" fill="none" viewBox="0 0 160 40" xmlns="http://www.w3.org/2000/svg">
+<g transform="translate(4, 4)">
+<rect fill="#1E3A5F" height="32" rx="7" width="32" x="0" y="0"></rect>
+<path d="M7 24L16 8L25 24H19.5L16 17.5L12.5 24H7Z" fill="#F4EDE0"></path>
+<circle cx="16" cy="14" fill="#A8742A" r="2.2"></circle>
+<path d="M10 21H22" stroke="#A8742A" stroke-linecap="round" stroke-width="1.5"></path>
+<circle cx="16" cy="24" fill="#A8742A" r="1.5"></circle>
+</g>
+<text fill="#1E3A5F" font-family="'Newsreader', Georgia, serif" font-size="20" font-weight="700" letter-spacing="1.5" x="44" y="25">ARTHAX</text>
+<text fill="#A8742A" font-family="'JetBrains Mono', monospace" font-size="7.5" font-weight="600" letter-spacing="0.8" x="126" y="16">SOV.NET</text>
+</svg>
+</div>
+</a>
+<!-- Vertical Separator -->
+<div class="hidden lg:block h-6 w-px bg-outline-variant/40"></div>
+<!-- Institutional Health Pill (M3 Tonal Status Badge) -->
+<div class="hidden md:inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-800 text-xs font-mono font-medium shadow-xs transition hover:bg-emerald-500/15 cursor-default">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+</span>
+<span class="">CLS Network: <strong class="text-emerald-700 font-semibold" id="network-status-text">100% Operational</strong></span>
+</div>
+</div>
+<!-- Navigation Links -->
+
+<!-- Action Array -->
+<div class="flex items-center gap-3">
+<button class="ripple-btn hidden sm:inline-flex items-center gap-2 px-4 py-2 text-xs font-medium text-on-surface-variant hover:text-primary bg-surface-container hover:bg-surface-container-high rounded-full border border-outline-variant/30 transition shadow-xs active:scale-95" id="btn-gov-id">
+<span class="material-symbols-outlined text-[17px] text-gold-accent">fingerprint</span>
+<span id="gov-id-text" class="">Connect GOV ID</span>
+</button>
+<a class="ripple-btn inline-flex items-center gap-2 px-5 py-2.5 text-xs font-semibold text-white bg-primary-container hover:bg-primary rounded-full shadow-m3-1 hover:shadow-m3-2 transition duration-200 active:scale-95" href="#switchboard" id="btn-console">
+<span class="">Enter Console</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</a>
+</div>
+</div>
+<!-- Tier 2: Real-time Macroeconomic Ticker Ribbon -->
+<div class="bg-surface-container-low/90 border-t border-outline-variant/30 py-2.5 px-6 lg:px-8 overflow-x-auto text-[12px] font-mono text-on-surface-variant scrollbar-none select-none">
+<div class="max-w-7xl mx-auto flex items-center justify-between min-w-max gap-8">
+<div class="flex items-center gap-7">
+<div class="flex items-center gap-2">
+<span class="text-outline uppercase tracking-wider text-[10px] font-sans font-semibold">BENCHMARK</span>
+<span class="text-on-surface font-semibold ticker-pulse" id="ticker-peg">ARTH/USD $1.0002</span>
+<span class="text-emerald-600 text-[11px] font-medium bg-emerald-500/10 px-1.5 py-0.5 rounded-full">+0.02%</span>
+</div>
+<span class="text-outline-variant">•</span>
+<div class="flex items-center gap-2">
+<span class="text-outline uppercase tracking-wider text-[10px] font-sans font-semibold">M1 CIRCULATION</span>
+<span class="text-on-surface font-semibold transition-all duration-300" id="ribbon-circ-display">ARTH 842.10M</span>
+</div>
+<span class="text-outline-variant">•</span>
+<div class="flex items-center gap-2">
+<span class="text-outline uppercase tracking-wider text-[10px] font-sans font-semibold">RESERVE RATIO</span>
+<span class="text-primary-container font-bold bg-secondary-container/40 text-primary px-2 py-0.5 rounded-full">14.8% (TIER-1)</span>
+</div>
+<span class="text-outline-variant">•</span>
+<div class="flex items-center gap-2">
+<span class="text-outline uppercase tracking-wider text-[10px] font-sans font-semibold">24H CLS VELOCITY</span>
+<span class="text-on-surface font-semibold transition-all duration-300 num-flash" id="ticker-velocity">$3.87B CLEARED</span>
+</div>
+<span class="text-outline-variant">•</span>
+<div class="flex items-center gap-2">
+<span class="text-outline uppercase tracking-wider text-[10px] font-sans font-semibold">FINALITY</span>
+<span class="text-emerald-700 font-bold">400 ms</span>
+</div>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="text-outline uppercase tracking-wider text-[10px] font-sans font-semibold">EPOCH</span>
+<span class="text-gold-accent font-semibold px-2 py-0.5 rounded-full bg-gold-light border border-gold-border/40" id="live-epoch-tag">#4,819</span>
+<span class="text-outline font-sans text-[11px]">(T+0 Continuous)</span>
+</div>
+</div>
+</div>
+</header>
+<main class="pt-36 pb-24">
+<!-- ==================== 2. EDITORIAL SOVEREIGN HERO SECTION (WITH 3D SCENE) ==================== -->
+<section class="max-w-7xl mx-auto px-6 lg:px-8 pt-6 pb-20" id="hero">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center">
+<!-- Left Column: Editorial Manifesto -->
+<div class="lg:col-span-7 flex flex-col space-y-6 reveal-elem active">
+<!-- Sovereign Dignity Badge (M3 Pill) -->
+<div class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-gold-light border border-gold-border/60 w-fit shadow-xs transition hover:bg-gold-light/80 cursor-default">
+<span class="h-2 w-2 rounded-full bg-gold-accent animate-ping"></span>
+<span class="font-mono text-[11px] tracking-wider uppercase font-semibold text-gold-accent">
+              SOVEREIGN MONETARY PROTOCOL • V2.4
+            </span>
+</div>
+<!-- Hero Headline -->
+<h1 class="font-serif text-4xl sm:text-5xl lg:text-[54px] text-primary-container font-normal leading-[1.14] tracking-tight">
+            The Architectural Standard for Digital Sovereignty and Real-Time Settlement.
+          </h1>
+<!-- Editorial Description -->
+<p class="font-sans text-lg text-on-surface-variant leading-relaxed font-normal max-w-2xl">
+            A mathematically verified, singular double-entry accounting matrix. ARTHAX unifies sovereign minting, tier-one commercial clearing, capital aggregation, and citizen treasury accounts under one immutable standard: <strong class="text-primary-container font-semibold">The ARTH Unit</strong>.
+          </p>
+<!-- Action CTA Array -->
+<div class="pt-3 flex flex-wrap items-center gap-4">
+<a class="ripple-btn inline-flex items-center gap-3 px-7 py-3.5 bg-primary-container hover:bg-primary text-white font-medium text-sm rounded-full shadow-m3-2 hover:shadow-m3-3 transition-all duration-200 group active:scale-95" href="#switchboard">
+<span class="">Explore Portals</span>
+<span class="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</a>
+<a class="ripple-btn inline-flex items-center gap-2.5 px-6 py-3.5 bg-surface-container hover:bg-surface-container-high text-primary-container font-medium text-sm rounded-full border border-outline-variant/30 shadow-xs transition active:scale-95" href="#ledger-engine">
+<span class="material-symbols-outlined text-[19px] text-on-surface-variant">account_balance</span>
+<span class="">Read Monetary Treaty</span>
+</a>
+<div class="w-full sm:w-auto mt-2 sm:mt-0 sm:ml-auto inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-container-high/60 font-mono text-xs text-on-surface-variant border border-outline-variant/20 hover:border-gold-accent/40 transition">
+<span class="material-symbols-outlined text-sm text-gold-accent">gavel</span>
+<span class="">Charter 409-C Enacted</span>
+</div>
+</div>
+<!-- Inscription Pillars (Material 3 Cards) -->
+<div class="grid grid-cols-3 gap-4 pt-6 border-t border-outline-variant/30">
+<div class="p-4 bg-surface-container-lowest rounded-2xl border border-outline-variant/30 shadow-xs hover:border-primary/40 hover:-translate-y-1 transition duration-300 cursor-default">
+<span class="block text-[11px] font-mono uppercase text-outline">LEGAL ANCHOR</span>
+<span class="font-serif text-xl font-medium text-primary-container mt-0.5 block">Treaty 409-C</span>
+<span class="text-xs text-on-surface-variant mt-1 block">Full Legislative Force</span>
+</div>
+<div class="p-4 bg-surface-container-lowest rounded-2xl border border-outline-variant/30 shadow-xs hover:border-gold-accent/50 hover:-translate-y-1 transition duration-300 cursor-default">
+<span class="block text-[11px] font-mono uppercase text-outline">LIQUIDITY PARITY</span>
+<span class="font-serif text-xl font-medium text-primary-container mt-0.5 block">1 : 1.0000</span>
+<span class="text-xs text-on-surface-variant mt-1 block">Bullion Basket Peg</span>
+</div>
+<div class="p-4 bg-surface-container-lowest rounded-2xl border border-outline-variant/30 shadow-xs hover:border-emerald-500/50 hover:-translate-y-1 transition duration-300 cursor-default">
+<span class="block text-[11px] font-mono uppercase text-outline">FINALITY SPEED</span>
+<span class="font-serif text-xl font-medium text-emerald-700 mt-0.5 block">400 ms</span>
+<span class="text-xs text-on-surface-variant mt-1 block">Atomic DvP Consensus</span>
+</div>
+</div>
+</div>
+<!-- Right Column: Interactive 3D Monolith & Floating Telemetry HUD -->
+<div class="lg:col-span-5 reveal-elem relative active">
+<!-- Main 3D Container -->
+<div class="bg-surface-container-lowest rounded-3xl border border-outline-variant/40 shadow-m3-2 overflow-hidden relative group">
+<!-- Surface Header Pill Bar -->
+<div class="px-6 py-3.5 bg-surface-container-low/80 border-b border-outline-variant/30 flex items-center justify-between backdrop-blur-sm">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+<span class="font-mono text-xs font-semibold text-primary-container uppercase tracking-wider">Sovereign Vault Monolith</span>
+</div>
+<span class="px-2.5 py-0.5 rounded-full bg-surface-container-high font-mono text-[11px] text-on-surface-variant">RTGS // T+0 ACTIVE</span>
+</div>
+<!-- Embedded 3D Scene -->
+<div class="relative w-full h-[410px] bg-gradient-to-b from-surface-container-low/50 to-surface-container-highest/30">
+
+<!-- Material 3 Floating Metric Pills Overlaid on 3D Scene -->
+<div class="absolute top-4 left-4 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-container-lowest/90 backdrop-blur-md border border-outline-variant/30 text-xs font-mono font-medium shadow-m3-1 text-primary-container hover:bg-white transition cursor-default">
+<span class="material-symbols-outlined text-[15px] text-emerald-600">timer</span>
+<span class="">Consensus Finality: <strong class="text-emerald-700">400ms</strong></span>
+</div>
+<div class="absolute top-4 right-4 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-container-lowest/90 backdrop-blur-md border border-outline-variant/30 text-xs font-mono font-medium shadow-m3-1 text-primary-container hover:bg-white transition cursor-default">
+<span class="material-symbols-outlined text-[15px] text-gold-accent">shield_with_heart</span>
+<span class="">Active Reserve: <strong class="text-gold-accent">104.2%</strong></span>
+</div>
+<div class="absolute bottom-4 left-4 right-4 flex items-center justify-between p-3.5 rounded-2xl bg-surface-container-lowest/95 backdrop-blur-md border border-outline-variant/30 shadow-m3-2 transition-all duration-300 hover:shadow-m3-3">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-xl bg-primary-container text-white flex items-center justify-center font-serif text-sm font-semibold shadow-xs">
+                    Σ
+                  </div>
+<div>
+<span class="text-[10px] font-mono uppercase text-outline block">CIRCULATION (M1)</span>
+<span class="font-mono text-sm font-bold text-primary-container tracking-tight transition-all duration-300 num-flash" id="live-circ-display">842,100,252 ARTH</span>
+</div>
+</div>
+<div class="text-right">
+<span class="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-700 text-[10px] font-mono font-semibold" id="epoch-chip">
+                    Epoch #4,819
+                  </span>
+</div>
+</div>
+</div>
+<!-- Collateral Allocation Breakdown Footer -->
+<div class="p-5 bg-surface-container-low/70 border-t border-outline-variant/30 space-y-3">
+<div class="flex justify-between items-center text-xs font-mono">
+<span class="text-outline uppercase">Reserve Collateral Weighting</span>
+<span class="font-medium text-primary-container bg-surface-container-high px-2 py-0.5 rounded-full">104.2% Basel III</span>
+</div>
+<div class="h-2.5 w-full bg-surface-container-highest rounded-full overflow-hidden flex">
+<div class="bg-primary-container h-full transition-all duration-500 hover:opacity-90 cursor-help" style="width: 54%" title="Sovereign Bullion 54%"></div>
+<div class="bg-gold-accent h-full transition-all duration-500 hover:opacity-90 cursor-help" style="width: 38.2%" title="Treasury Gilts 38.2%"></div>
+<div class="bg-emerald-600 h-full transition-all duration-500 hover:opacity-90 cursor-help" style="width: 7.8%" title="Cash Settlement 7.8%"></div>
+</div>
+<div class="grid grid-cols-3 gap-2 text-[11px] font-mono">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-primary-container"></span>
+<span class="text-on-surface-variant">Bullion: 54%</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-gold-accent"></span>
+<span class="text-on-surface-variant">Gilts: 38.2%</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+<span class="text-on-surface-variant">Cash: 7.8%</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- ==================== 3. ECOSYSTEM TOPOLOGY: BESPOKE PORTAL ARCHITECTURE ==================== -->
+<section class="max-w-7xl mx-auto px-6 lg:px-8 py-20 border-t border-outline-variant/30" id="switchboard">
+<!-- Section Header -->
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6 reveal-elem active">
+<div>
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold-light border border-gold-border/50 text-gold-accent font-mono text-xs font-semibold uppercase tracking-wider mb-2">
+<span class="">ARCHITECTURAL TOPOLOGY</span>
+</div>
+<h2 class="font-serif text-3xl sm:text-4xl text-primary-container font-normal mt-1 tracking-tight">
+            Unified Public Switchboard
+          </h2>
+<p class="font-sans text-sm text-on-surface-variant max-w-xl mt-2">Three specialized public access nodes operating concurrently on the ARTHAX Double-Entry protocol with strict separation of powers.</p>
+</div>
+<!-- M3 Segmented Buttons / Tonal Filters -->
+<div class="inline-flex p-1 rounded-full bg-surface-container border border-outline-variant/40 shadow-xs" id="portal-filters" role="tablist"><button class="filter-tab px-4 py-1.5 rounded-full text-xs font-semibold bg-surface-container-lowest text-primary-container shadow-xs transition duration-200" data-filter="all">All Portals</button>
+<button class="filter-tab px-4 py-1.5 rounded-full text-xs font-medium text-on-surface-variant hover:text-primary-container transition duration-200" data-filter="vault">Personal Vault</button>
+<button class="filter-tab px-4 py-1.5 rounded-full text-xs font-medium text-on-surface-variant hover:text-primary-container transition duration-200" data-filter="markets">Markets</button>
+<button class="filter-tab px-4 py-1.5 rounded-full text-xs font-medium text-on-surface-variant hover:text-primary-container transition duration-200" data-filter="shop">Prestige Shop</button></div>
+</div>
+<!-- Bespoke Non-Uniform Matrix Grid with M3 Tonal Surfaces -->
+<div class="grid grid-cols-1 gap-8 md:grid-cols-3" id="portal-cards-grid"><!-- PORTAL 01: Citizen Treasury (User Portal) -->
+<div class="bg-surface-container-lowest rounded-3xl border border-outline-variant/40 p-8 shadow-m3-1 m3-interactive flex flex-col justify-between group reveal-elem active" data-category="vault">
+<div class="space-y-6">
+<div class="flex items-center justify-between">
+<span class="text-[11px] font-mono uppercase text-outline tracking-wider">PORTAL 01 // CITIZEN VAULT</span>
+<span class="px-3 py-1 rounded-full bg-secondary-container/60 text-primary font-mono text-[10px] font-semibold">TIER-1 PERSONAL</span>
+</div>
+<!-- Digital Vault Passport Plaque -->
+<div class="p-6 rounded-2xl bg-surface-container-low border border-outline-variant/40 space-y-4 relative group-hover:border-gold-accent/40 transition duration-300">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3.5">
+<div class="w-12 h-12 rounded-2xl bg-primary-container text-white flex items-center justify-center font-serif text-xl font-medium shadow-m3-1 group-hover:scale-105 transition-transform duration-300">
+                    AX
+                  </div>
+<div>
+<h3 class="font-serif text-lg font-medium text-primary-container leading-snug">Citizen Sovereign Vault</h3>
+<span class="font-mono text-xs text-outline">IDENT: #8491-904-LX</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-gold-accent text-2xl group-hover:rotate-12 transition-transform duration-300">verified_user</span>
+</div>
+<!-- Dual-Credential Status Indicators -->
+<div class="grid grid-cols-2 gap-2.5 pt-1">
+<div class="p-2.5 rounded-xl bg-surface-container-lowest border border-outline-variant/30 flex items-center gap-2 hover:border-primary/40 transition">
+<span class="material-symbols-outlined text-sm text-primary-container">key</span>
+<div class="text-[11px]">
+<span class="block text-outline uppercase font-mono text-[9px]">Gov Password</span>
+<span class="font-mono font-semibold text-primary-container">ENCRYPTED</span>
+</div>
+</div>
+<div class="p-2.5 rounded-xl bg-surface-container-lowest border border-outline-variant/30 flex items-center gap-2 hover:border-gold-accent/40 transition">
+<span class="material-symbols-outlined text-sm text-gold-accent">lock</span>
+<div class="text-[11px]">
+<span class="block text-outline uppercase font-mono text-[9px]">Financial PIN</span>
+<span class="font-mono font-semibold text-gold-accent">HARDENED</span>
+</div>
+</div>
+</div>
+</div>
+<p class="font-sans text-sm text-on-surface-variant leading-relaxed">
+              Manage sovereign liquid balances, inter-citizen transfers, and interest-bearing deposits with zero custodial counterparty exposure.
+            </p>
+</div>
+<div class="pt-6 mt-6 border-t border-outline-variant/30 flex items-center justify-between">
+<span class="text-xs font-mono text-outline">Direct Ledger Session</span>
+<a class="ripple-btn inline-flex items-center gap-2 px-5 py-2.5 bg-primary-container text-white text-xs font-semibold rounded-full group-hover:bg-primary transition duration-200 shadow-xs active:scale-95" href="#">
+<span class="">Launch Portal</span>
+<span class="material-symbols-outlined text-[15px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</a>
+</div>
+</div>
+
+<!-- PORTAL 02: Capital Markets (Securities) -->
+<div class="bg-surface-container-lowest rounded-3xl border border-outline-variant/40 p-8 shadow-m3-1 m3-interactive flex flex-col justify-between group reveal-elem active" data-category="markets">
+<div class="space-y-5">
+<div class="flex items-center justify-between">
+<span class="text-[11px] font-mono uppercase text-outline tracking-wider">PORTAL 02 // SECURITIES</span>
+<span class="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-700 font-mono font-semibold text-xs">+3.18% ↑</span>
+</div>
+<div>
+<h3 class="font-serif text-2xl font-medium text-primary-container">Capital Markets</h3>
+<p class="font-sans text-xs text-on-surface-variant mt-1">Sovereign Gilts, Index Baskets &amp; DvP Settlement</p>
+</div>
+<!-- Mini Sparkline Vector inside M3 Card -->
+<div class="p-4 bg-surface-container-low rounded-2xl border border-outline-variant/30 group-hover:border-primary/30 transition">
+<div class="flex justify-between text-xs font-mono mb-2">
+<span class="text-primary-container font-semibold">SOV-EX 100</span>
+<span class="text-on-surface-variant">1,489.20</span>
+</div>
+<svg class="w-full h-14 text-primary-container" fill="none" viewBox="0 0 200 50">
+<path class="group-hover:stroke-gold-accent transition-colors duration-300" d="M0 40 L30 35 L60 38 L90 22 L120 28 L150 12 L180 16 L200 5" stroke="currentColor" stroke-linecap="round" stroke-width="2.5"></path>
+<path d="M0 40 L30 35 L60 38 L90 22 L120 28 L150 12 L180 16 L200 5 L200 50 L0 50 Z" fill="currentColor" fill-opacity="0.08"></path>
+</svg>
+<div class="flex justify-between text-[10px] font-mono text-outline mt-1.5">
+<span class="">VOL: 48.2M ARTH</span>
+<span class="">FINALITY: T+0</span>
+</div>
+</div>
+<p class="font-sans text-xs text-on-surface-variant">
+              Atomic Delivery-versus-Payment order matching engine with instant settlement and sovereign clearing guarantees.
+            </p>
+</div>
+<div class="pt-6 mt-6 border-t border-outline-variant/30">
+<a class="ripple-btn w-full inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-surface-container hover:bg-surface-container-high group-hover:bg-primary-container group-hover:text-white text-primary-container text-xs font-semibold rounded-full transition duration-300 active:scale-95" href="#">
+<span class="">Trading Terminal</span>
+<span class="material-symbols-outlined text-[15px] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">trending_up</span>
+</a>
+</div>
+</div>
+
+<!-- PORTAL 03: Prestige Vault & Royal Treasury (The Shop) -->
+<div class="bg-surface-container-lowest rounded-3xl border border-outline-variant/40 p-8 shadow-m3-1 m3-interactive flex flex-col justify-between group reveal-elem active" data-category="shop">
+<div class="space-y-5">
+<div class="flex items-center justify-between">
+<span class="text-[11px] font-mono uppercase text-outline tracking-wider">PORTAL 03 // PRESTIGE ASSETS</span>
+<span class="px-3 py-1 rounded-full bg-gold-light text-gold-accent border border-gold-border/50 text-[10px] font-mono font-semibold">ROYAL VAULT</span>
+</div>
+<div>
+<h3 class="font-serif text-2xl font-medium text-primary-container">The Shop &amp; Vault</h3>
+<p class="font-sans text-xs text-on-surface-variant mt-1">Yield-Enhancing Artifacts &amp; Sovereign Emblems</p>
+</div>
+<!-- Showcase Item Preview inside M3 Tonal Container -->
+<div class="p-4 bg-surface-container-low rounded-2xl border border-outline-variant/30 space-y-2.5 group-hover:border-gold-accent/40 transition">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-gold-light border border-gold-border/60 text-gold-accent flex items-center justify-center shadow-xs group-hover:rotate-6 transition-transform">
+<span class="material-symbols-outlined text-[20px]">workspace_premium</span>
+</div>
+<div>
+<span class="font-sans font-semibold text-xs text-primary-container block">Yield Griffin #09</span>
+<span class="font-mono text-[10px] text-emerald-700 font-bold">+0.85% APY Boost</span>
+</div>
+</div>
+<span class="font-mono text-xs font-bold text-primary-container bg-surface-container px-2.5 py-1 rounded-full">5,400 ARTH</span>
+</div>
+</div>
+<p class="font-sans text-xs text-on-surface-variant">
+              Acquire certified sovereign relics, civic utility badges, and protocol-recognized yield multiplying avatars.
+            </p>
+</div>
+<div class="pt-6 mt-6 border-t border-outline-variant/30">
+<a class="ripple-btn w-full inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-surface-container hover:bg-surface-container-high group-hover:bg-primary-container group-hover:text-white text-primary-container text-xs font-semibold rounded-full transition duration-300 active:scale-95" href="#">
+<span class="">Browse Vault Inventory</span>
+<span class="material-symbols-outlined text-[15px]">storefront</span>
+</a>
+</div>
+</div></div>
+</section>
+<!-- ==================== 4. SETTLEMENT ARCHITECTURE & VERIFICATION FLOW ==================== -->
+<section class="max-w-7xl mx-auto px-6 lg:px-8 py-20 border-t border-outline-variant/30" id="ledger-engine">
+<!-- Section Title -->
+<div class="max-w-3xl mb-12 reveal-elem active">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold-light border border-gold-border/50 text-gold-accent font-mono text-xs font-semibold uppercase tracking-wider mb-2">
+<span class="">ATOMIC SETTLEMENT SPECIFICATION</span>
+</div>
+<h2 class="font-serif text-3xl sm:text-4xl text-primary-container font-normal mt-1 tracking-tight">
+          How Continuous Linked Settlement (CLS) Operates
+        </h2>
+<p class="font-sans text-sm text-on-surface-variant mt-2">
+          Eliminating counterparty risk through a three-stage mathematical consensus pipeline. Click any step below to simulate live cryptographic attestation.
+        </p>
+</div>
+<!-- Horizontal 3-Stage Atomic Step Diagram (M3 Elevated Cards) -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 relative mb-8" id="cls-pipeline">
+<!-- Stage 1 -->
+<div class="pipeline-step p-7 bg-surface-container-lowest rounded-3xl border border-outline-variant/40 relative shadow-m3-1 reveal-elem active-step active" data-step="1">
+<div class="flex items-center justify-between mb-4">
+<div class="relative">
+<span class="w-9 h-9 rounded-full bg-primary-container text-white flex items-center justify-center font-mono text-xs font-bold shadow-xs">1</span>
+<span class="step-badge-ping"></span>
+</div>
+<span class="px-2.5 py-0.5 rounded-full bg-surface-container-high font-mono text-[10px] text-outline uppercase font-semibold">STAGE 01</span>
+</div>
+<h4 class="font-serif text-lg font-semibold text-primary-container mb-2">Dual Sovereign Signatory</h4>
+<p class="font-sans text-xs text-on-surface-variant leading-relaxed mb-5">
+            Citizen Gov ID authenticates the payload request. For any balance decrement, the isolated Financial PIN generates a single-use transaction proof.
+          </p>
+<div class="step-code-box p-3 bg-surface-container-low rounded-xl font-mono text-[11px] text-on-surface-variant border border-outline-variant/30 flex items-center justify-between">
+<code id="code-step-1">AUTH: [GovID &amp;&amp; FinPIN] → VALID</code>
+<span class="material-symbols-outlined text-[16px] text-emerald-600">check_circle</span>
+</div>
+</div>
+<!-- Stage 2 -->
+<div class="pipeline-step p-7 bg-surface-container-lowest rounded-3xl border border-outline-variant/40 relative shadow-m3-1 reveal-elem active" data-step="2">
+<div class="flex items-center justify-between mb-4">
+<div class="relative">
+<span class="w-9 h-9 rounded-full bg-gold-accent text-white flex items-center justify-center font-mono text-xs font-bold shadow-xs">2</span>
+<span class="step-badge-ping hidden"></span>
+</div>
+<span class="px-2.5 py-0.5 rounded-full bg-gold-light text-gold-accent font-mono text-[10px] uppercase font-semibold border border-gold-border/40">STAGE 02</span>
+</div>
+<h4 class="font-serif text-lg font-semibold text-primary-container mb-2">Wholesale CLS Commitment</h4>
+<p class="font-sans text-xs text-on-surface-variant leading-relaxed mb-5">
+            Debtor and Creditor commercial banks post synchronized balance commitments into Central Bank settlement buffers simultaneously.
+          </p>
+<div class="step-code-box p-3 bg-gold-light/60 rounded-xl font-mono text-[11px] text-gold-accent border border-gold-border/40 flex items-center justify-between">
+<code id="code-step-2">CLS: ATOMIC DUAL COMMIT (#4,819)</code>
+<span class="material-symbols-outlined text-[16px] text-gold-accent">sync</span>
+</div>
+</div>
+<!-- Stage 3 -->
+<div class="pipeline-step p-7 bg-surface-container-lowest rounded-3xl border border-outline-variant/40 relative shadow-m3-1 reveal-elem active" data-step="3">
+<div class="flex items-center justify-between mb-4">
+<div class="relative">
+<span class="w-9 h-9 rounded-full bg-emerald-600 text-white flex items-center justify-center font-mono text-xs font-bold shadow-xs">3</span>
+<span class="step-badge-ping hidden"></span>
+</div>
+<span class="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 font-mono text-[10px] uppercase font-semibold">STAGE 03</span>
+</div>
+<h4 class="font-serif text-lg font-semibold text-primary-container mb-2">Immutable Root Consensus</h4>
+<p class="font-sans text-xs text-on-surface-variant leading-relaxed mb-5">
+            Double-entry checksum verification ensures zero currency drift across all ledgers: Σ(Debits) − Σ(Credits) = 0.00000000 ARTH.
+          </p>
+<div class="step-code-box p-3 bg-emerald-50 rounded-xl font-mono text-[11px] text-emerald-700 border border-emerald-200/60 flex items-center justify-between">
+<code id="code-step-3">ZERO_DELTA: 0.00000000 ARTH</code>
+<span class="material-symbols-outlined text-[16px] text-emerald-600">verified</span>
+</div>
+</div>
+</div>
+<!-- Interactive Live Consensus Telemetry Simulation Bar -->
+<div class="p-4 mb-16 rounded-2xl bg-surface-container-low border border-outline-variant/30 flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-xs">
+<div class="flex items-center gap-3">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-gold-accent opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-gold-accent"></span>
+</span>
+<span class="text-outline">Active Consensus Proof:</span>
+<span class="font-semibold text-primary-container tracking-tight" id="hash-verification-display">0x8F9B...4D82: VERIFIED (400ms)</span>
+</div>
+<button class="ripple-btn px-4 py-1.5 rounded-full bg-surface-container-lowest border border-outline-variant/30 text-primary-container font-semibold hover:bg-white hover:border-gold-accent/50 shadow-xs text-[11px] transition active:scale-95 flex items-center gap-1.5" id="btn-reverify">
+<span class="material-symbols-outlined text-[14px]">refresh</span>
+<span class="">Simulate DvP Epoch</span>
+</button>
+</div>
+<!-- Comparative Taxonomy Matrix (M3 Tonal Table) -->
+<div class="bg-surface-container-lowest rounded-3xl border border-outline-variant/40 shadow-m3-2 overflow-hidden reveal-elem active">
+<div class="px-7 py-5 bg-surface-container-low border-b border-outline-variant/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+<div>
+<h3 class="font-serif text-lg font-medium text-primary-container">System Taxonomy Comparison</h3>
+<p class="font-sans text-xs text-on-surface-variant">Legacy correspondent banking vs. ARTHAX Sovereign Double-Entry Matrix</p>
+</div>
+<span class="px-3.5 py-1.5 bg-surface-container-lowest rounded-full border border-outline-variant/30 font-mono text-xs text-primary-container font-medium shadow-xs">
+            T+2 vs. T+0 Settlement
+          </span>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left font-sans text-xs">
+<thead>
+<tr class="bg-surface-container border-b border-outline-variant/30 text-outline font-mono text-[11px] uppercase tracking-wider">
+<th class="py-3.5 px-7">Dimension</th>
+<th class="py-3.5 px-7">Legacy Siloed Financial System</th>
+<th class="py-3.5 px-7 text-primary-container font-bold">ARTHAX Sovereign Ledger</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/20 text-on-surface-variant">
+<tr class="hover:bg-primary/5 transition duration-200 cursor-default group">
+<td class="py-4 px-7 font-medium text-primary-container font-mono group-hover:text-gold-accent transition-colors">Settlement Horizon</td>
+<td class="py-4 px-7">T+2 Business Days (Batch SWIFT / Clearinghouse)</td>
+<td class="py-4 px-7 font-semibold text-emerald-700 bg-emerald-500/5 group-hover:bg-emerald-500/10 transition-colors">Sub-second Atomic DvP Settlement (400ms)</td>
+</tr>
+<tr class="hover:bg-primary/5 transition duration-200 cursor-default group">
+<td class="py-4 px-7 font-medium text-primary-container font-mono group-hover:text-gold-accent transition-colors">Book Reconciliation</td>
+<td class="py-4 px-7">Fragmented Nostro / Vostro accounts across intermediaries</td>
+<td class="py-4 px-7 font-semibold text-primary-container bg-primary-container/5 group-hover:bg-primary-container/10 transition-colors">Single Shared Double-Entry Root Tree</td>
+</tr>
+<tr class="hover:bg-primary/5 transition duration-200 cursor-default group">
+<td class="py-4 px-7 font-medium text-primary-container font-mono group-hover:text-gold-accent transition-colors">Reserve Verifiability</td>
+<td class="py-4 px-7">Quarterly audited self-disclosures with delay</td>
+<td class="py-4 px-7 font-semibold text-gold-accent bg-gold-accent/5 group-hover:bg-gold-accent/10 transition-colors">Continuous Real-Time Cryptographic Attestation (104.2%)</td>
+</tr>
+<tr class="hover:bg-primary/5 transition duration-200 cursor-default group">
+<td class="py-4 px-7 font-medium text-primary-container font-mono group-hover:text-gold-accent transition-colors">Identity Custody</td>
+<td class="py-4 px-7">Dispersed 3rd party bureaus, centralized single passwords</td>
+<td class="py-4 px-7 font-semibold text-primary-container bg-primary-container/5 group-hover:bg-primary-container/10 transition-colors">Sovereign Dual Credential (Gov Password + Hardware Financial PIN)</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<!-- ==================== 5. SOVEREIGN DUAL-CREDENTIAL SECURITY SHOWCASE ==================== -->
+<section class="max-w-7xl mx-auto px-6 lg:px-8 py-20 border-t border-outline-variant/30">
+<div class="text-center max-w-2xl mx-auto mb-12 reveal-elem active">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold-light border border-gold-border/50 text-gold-accent font-mono text-xs font-semibold uppercase tracking-wider mb-2">
+<span class="">SECURITY FRAMEWORK</span>
+</div>
+<h2 class="font-serif text-3xl sm:text-4xl text-primary-container font-normal mt-1 tracking-tight">
+          Strict Separation of Powers: The Dual-Password Standard
+        </h2>
+<p class="font-sans text-sm text-on-surface-variant mt-2">
+          In the ARTHAX paradigm, identity authentication is mathematically separated from asset disposition to eliminate session hijacking risk. Click either tier below to inspect architectural protocols.
+        </p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<!-- TIER A: Sovereign Identity (Gov Password) Accordion Card -->
+<div class="accordion-item bg-surface-container-lowest rounded-3xl border border-outline-variant/40 p-8 shadow-m3-1 m3-interactive relative reveal-elem cursor-pointer select-none active" id="tier-a-card">
+<div class="flex items-center justify-between mb-6">
+<span class="px-3 py-1 rounded-full bg-secondary-container/50 text-primary font-mono text-xs font-semibold">
+              TIER A // SOVEREIGN IDENTITY
+            </span>
+<span class="material-symbols-outlined text-primary-container text-2xl">shield_person</span>
+</div>
+<div class="flex items-center justify-between">
+<h3 class="font-serif text-2xl text-primary-container font-medium mb-1">The Government Password</h3>
+<span class="material-symbols-outlined accordion-icon text-on-surface-variant transition-transform duration-300">expand_more</span>
+</div>
+<p class="font-sans text-sm text-on-surface-variant leading-relaxed mb-6 mt-2">
+            Governs authentication into the sovereign network, accessing read-only ledger telemetry, profile attestations, and civic governance.
+          </p>
+<div class="space-y-3.5 pt-2 font-sans text-xs">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-emerald-600 text-[18px]">check_circle</span>
+<span class="text-on-surface">Authenticates into citizen user portal and commercial terminal</span>
+</div>
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-emerald-600 text-[18px]">check_circle</span>
+<span class="text-on-surface">Unlocks non-financial civic communications and official notices</span>
+</div>
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-red-500 text-[18px]">block</span>
+<span class="text-on-surface-variant font-medium">Strictly CANNOT authorize transfer of capital or trade execution</span>
+</div>
+</div>
+<!-- Expandable Accordion Specs Drawer -->
+<div class="accordion-content pt-4 mt-4 border-t border-outline-variant/20 text-xs font-mono text-on-surface-variant space-y-2">
+<div class="flex justify-between py-1">
+<span class="text-outline">Algorithm:</span>
+<span class="text-primary-container font-semibold">Argon2id + RSA-4096 Salt</span>
+</div>
+<div class="flex justify-between py-1">
+<span class="text-outline">Session Expiry:</span>
+<span class="text-primary-container font-semibold">8 Hours or Tab Closure</span>
+</div>
+<div class="flex justify-between py-1">
+<span class="text-outline">Scope:</span>
+<span class="text-emerald-700 font-semibold">Read-Only Telemetry &amp; Civic Voting</span>
+</div>
+</div>
+<div class="mt-6 pt-4 border-t border-outline-variant/30 font-mono text-[11px] text-outline flex justify-between items-center">
+<span class="">Entropy Standard: 14+ Chars • Biometric Salt</span>
+<span class="text-[10px] text-primary-container underline font-sans">Toggle Specs</span>
+</div>
+</div>
+<!-- TIER B: Liquid Disposition (Financial PIN) Accordion Card -->
+<div class="accordion-item bg-surface-container-lowest rounded-3xl border border-gold-border/70 p-8 shadow-m3-1 m3-interactive relative reveal-elem cursor-pointer select-none active" id="tier-b-card">
+<div class="flex items-center justify-between mb-6">
+<span class="px-3 py-1 rounded-full bg-gold-light text-gold-accent border border-gold-border/60 font-mono text-xs font-semibold">
+              TIER B // LIQUID DISPOSITION
+            </span>
+<span class="material-symbols-outlined text-gold-accent text-2xl">key</span>
+</div>
+<div class="flex items-center justify-between">
+<h3 class="font-serif text-2xl text-primary-container font-medium mb-1">The Financial PIN / Key</h3>
+<span class="material-symbols-outlined accordion-icon text-gold-accent transition-transform duration-300">expand_more</span>
+</div>
+<p class="font-sans text-sm text-on-surface-variant leading-relaxed mb-6 mt-2">
+            A high-security cryptographic key required strictly at the precise instant of balance reduction, order execution, and vault withdrawals.
+          </p>
+<div class="space-y-3.5 pt-2 font-sans text-xs">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-gold-accent text-[18px]">verified</span>
+<span class="text-on-surface font-medium">Mandatory for any debit transaction above 0.00 ARTH</span>
+</div>
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-gold-accent text-[18px]">verified</span>
+<span class="text-on-surface">Required for capital market limit bids and vault unlocks</span>
+</div>
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-gold-accent text-[18px]">verified</span>
+<span class="text-on-surface">Executed inside isolated secure enclave with zero session storage</span>
+</div>
+</div>
+<!-- Expandable Accordion Specs Drawer -->
+<div class="accordion-content pt-4 mt-4 border-t border-gold-border/30 text-xs font-mono text-on-surface-variant space-y-2">
+<div class="flex justify-between py-1">
+<span class="text-outline">Signature Standard:</span>
+<span class="text-gold-accent font-semibold">Ed25519 Ephemeral Enclave</span>
+</div>
+<div class="flex justify-between py-1">
+<span class="text-outline">Memory Persistence:</span>
+<span class="text-red-600 font-semibold">0ms (Immediate Zeroization)</span>
+</div>
+<div class="flex justify-between py-1">
+<span class="text-outline">Hardware Anchor:</span>
+<span class="text-gold-accent font-semibold">FIPS 140-3 Level 4 Secure HSM</span>
+</div>
+</div>
+<div class="mt-6 pt-4 border-t border-gold-border/40 font-mono text-[11px] text-gold-accent font-medium flex justify-between items-center">
+<span class="">Zero Session Caching • Single-Shot Cryptographic</span>
+<span class="text-[10px] text-gold-accent underline font-sans">Toggle Specs</span>
+</div>
+</div>
+</div>
+</section>
+<!-- ==================== 6. INSTITUTIONAL ONBOARDING CTA BANNER ==================== -->
+<section class="max-w-7xl mx-auto px-6 lg:px-8 pt-6 reveal-elem active">
+<div class="rounded-3xl bg-primary text-white p-8 lg:p-14 shadow-m3-3 flex flex-col lg:flex-row items-center justify-between gap-8 relative overflow-hidden group">
+<div class="space-y-3.5 max-w-2xl relative z-10">
+<div class="inline-flex items-center gap-2 font-mono text-xs text-gold-accent font-semibold uppercase tracking-wider bg-white/10 px-3 py-1 rounded-full">
+<span class="material-symbols-outlined text-sm">integration_instructions</span>
+<span class="">PUBLIC ARCHIVAL SPECIFICATION</span>
+</div>
+<h3 class="font-serif text-3xl sm:text-4xl font-normal leading-tight">
+            Ready to integrate institutional nodes or verify public balances?
+          </h3>
+<p class="font-sans text-sm text-slate-300">
+            The ARTHAX core API, ISO 20022 schemas, and zero-knowledge ledger test vectors are open for certified participants.
+          </p>
+</div>
+<div class="flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto relative z-10">
+<a class="ripple-btn w-full sm:w-auto text-center px-7 py-3.5 bg-gold-accent hover:bg-[#936421] text-white font-medium text-xs rounded-full shadow-xs transition active:scale-95" href="#switchboard">
+            Open User Account
+          </a>
+<a class="ripple-btn w-full sm:w-auto text-center px-7 py-3.5 bg-surface-container-lowest hover:bg-surface-container text-primary font-medium text-xs rounded-full transition active:scale-95" href="#switchboard">
+            Charter Node Access
+          </a>
+</div>
+</div>
+</section>
+</main>
+<!-- ==================== 7. GLOBAL INSTITUTIONAL FOOTER ==================== -->
+<footer class="bg-surface-container-lowest border-t border-outline-variant/30 pt-16 pb-12 text-on-surface-variant text-xs">
+<div class="max-w-7xl mx-auto px-6 lg:px-8">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-outline-variant/30">
+<!-- Identity Col -->
+<div class="md:col-span-4 space-y-4">
+<div class="flex items-center gap-3">
+<svg class="h-7 w-auto" fill="none" viewBox="0 0 160 40" xmlns="http://www.w3.org/2000/svg">
+<g transform="translate(4, 4)">
+<rect fill="#1E3A5F" height="32" rx="7" width="32" x="0" y="0"></rect>
+<path d="M7 24L16 8L25 24H19.5L16 17.5L12.5 24H7Z" fill="#F4EDE0"></path>
+<circle cx="16" cy="14" fill="#A8742A" r="2.2"></circle>
+<path d="M10 21H22" stroke="#A8742A" stroke-linecap="round" stroke-width="1.5"></path>
+<circle cx="16" cy="24" fill="#A8742A" r="1.5"></circle>
+</g>
+<text fill="#1E3A5F" font-family="'Newsreader', Georgia, serif" font-size="20" font-weight="700" letter-spacing="1.5" x="44" y="25">ARTHAX</text>
+<text fill="#A8742A" font-family="'JetBrains Mono', monospace" font-size="7.5" font-weight="600" letter-spacing="0.8" x="126" y="16">SOV.NET</text>
+</svg>
+</div>
+<p class="font-sans text-xs leading-relaxed text-on-surface-variant">
+            Sovereign Digital Fiscal Network and Central Ledger Protocol. Governed by multi-signatory monetary stabilization covenants and tier-one reserve anchoring.
+          </p>
+<div class="inline-flex items-center gap-2 font-mono text-[11px] text-outline bg-surface-container px-3 py-1.5 rounded-full">
+<span class="material-symbols-outlined text-sm text-gold-accent">verified</span>
+<span class="">Root Node Trust Cert #8491-X</span>
+</div>
+</div>
+<!-- Navigation Columns -->
+<div class="md:col-span-8 grid grid-cols-2 sm:grid-cols-3 gap-8">
+<div class="space-y-3"><span class="font-mono text-[11px] uppercase tracking-wider text-outline font-semibold block">Public Documentation</span>
+<ul class="space-y-2">
+<li class=""><a class="hover:text-primary-container transition" href="#hero">Central Guide</a></li>
+<li class=""><a class="hover:text-primary-container transition" href="#switchboard">Citizen Vault Access</a></li>
+<li class=""><a class="hover:text-primary-container transition" href="#ledger-engine">Monetary Treaty &amp; CLS</a></li>
+<li class=""><a class="hover:text-primary-container transition" href="#switchboard">Public Archival Ledger</a></li>
+</ul></div>
+<div class="space-y-3">
+<span class="font-mono text-[11px] uppercase tracking-wider text-outline font-semibold block">Markets &amp; Assets</span>
+<ul class="space-y-2">
+<li class=""><a class="hover:text-primary-container transition" href="#switchboard">Capital Markets Orderbook</a></li>
+<li class=""><a class="hover:text-primary-container transition" href="#switchboard">Sovereign Gilts Auction</a></li>
+<li class=""><a class="hover:text-primary-container transition" href="#switchboard">The Royal Vault Shop</a></li>
+<li class=""><a class="hover:text-primary-container transition" href="#switchboard">Citizen Vault Access</a></li>
+</ul>
+</div>
+<div class="space-y-3">
+<span class="font-mono text-[11px] uppercase tracking-wider text-outline font-semibold block">Compliance</span>
+<p class="text-xs leading-relaxed text-on-surface-variant">
+              All transactions executed via atomic delivery-versus-payment (DvP) adhering to Basel III liquidity accords and ISO 20022 messaging.
+            </p>
+</div>
+</div>
+</div>
+<!-- Legal bottom bar -->
+<div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-[11px] text-outline">
+<div class="">© 2025 ARTHAX Sovereign Financial System. Immutable Archival Ledger.</div>
+<div class="flex items-center gap-4">
+<span class="inline-flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            BLOCK HEIGHT <span id="footer-block-height" class="">28,102,537</span>
+</span>
+<span class="">•</span>
+<span id="footer-clock" class="">UTC 04:49:14</span>
+</div>
+</div>
+</div>
+</footer>
+<!-- ==================== ANIMATION & MICRO-INTERACTION SCRIPT ==================== -->
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // 1. GSAP-Style Kinetic Staggered Entrance Observer
+      const reveals = document.querySelectorAll(".reveal-elem");
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, idx) => {
+          if (entry.isIntersecting) {
+            setTimeout(() => {
+              entry.target.classList.add("active");
+            }, idx * 75);
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.08 });
+
+      reveals.forEach(r => observer.observe(r));
+
+      // 2. Material 3 Tactile Ripple Effect on Buttons
+      const rippleButtons = document.querySelectorAll(".ripple-btn");
+      rippleButtons.forEach(button => {
+        button.addEventListener("click", function (e) {
+          const circle = document.createElement("span");
+          const diameter = Math.max(button.clientWidth, button.clientHeight);
+          const radius = diameter / 2;
+          const rect = button.getBoundingClientRect();
+          
+          circle.style.width = circle.style.height = `${diameter}px`;
+          circle.style.left = `${e.clientX - rect.left - radius}px`;
+          circle.style.top = `${e.clientY - rect.top - radius}px`;
+          circle.classList.add("ripple-effect");
+
+          const existingRipple = button.getElementsByClassName("ripple-effect")[0];
+          if (existingRipple) {
+            existingRipple.remove();
+          }
+
+          button.appendChild(circle);
+        });
+      });
+
+      // 3. Connect GOV ID Interactive Micro-Interaction
+      const govIdBtn = document.getElementById("btn-gov-id");
+      const govIdText = document.getElementById("gov-id-text");
+      let govConnected = false;
+      if (govIdBtn && govIdText) {
+        govIdBtn.addEventListener("click", () => {
+          govConnected = !govConnected;
+          if (govConnected) {
+            govIdText.innerText = "GOV ID: #8491-LX (VERIFIED)";
+            govIdBtn.classList.add("border-emerald-500/50", "bg-emerald-50", "text-emerald-800");
+          } else {
+            govIdText.innerText = "Connect GOV ID";
+            govIdBtn.classList.remove("border-emerald-500/50", "bg-emerald-50", "text-emerald-800");
+          }
+        });
+      }
+
+      // 4. Animated Financial Numeric Rolling Counter for Circulation
+      const circElem = document.getElementById("live-circ-display");
+      const ribbonCirc = document.getElementById("ribbon-circ-display");
+      let currentCirc = 842100000;
+      const targetCirc = 842109420;
+      const duration = 1800;
+      const start = performance.now();
+
+      function animateCirc(now) {
+        const progress = Math.min((now - start) / duration, 1);
+        const ease = 1 - Math.pow(1 - progress, 3);
+        const val = Math.floor(currentCirc + (targetCirc - currentCirc) * ease);
+        if (circElem) circElem.innerText = val.toLocaleString() + " ARTH";
+        if (progress < 1) {
+          requestAnimationFrame(animateCirc);
+        } else {
+          // Trigger Periodic Live Increments
+          setInterval(() => {
+            currentCirc += Math.floor(Math.random() * 40) + 10;
+            if (circElem) {
+              circElem.innerText = currentCirc.toLocaleString() + " ARTH";
+              circElem.classList.remove("num-flash");
+              void circElem.offsetWidth;
+              circElem.classList.add("num-flash");
+            }
+            if (ribbonCirc) {
+              ribbonCirc.innerText = "ARTH " + (currentCirc / 1000000).toFixed(2) + "M";
+            }
+          }, 4500);
+        }
+      }
+      requestAnimationFrame(animateCirc);
+
+      // Periodic subtle flash on CLS Velocity in Ribbon
+      const velocityElem = document.getElementById("ticker-velocity");
+      setInterval(() => {
+        if (velocityElem) {
+          const amt = (3.84 + Math.random() * 0.05).toFixed(2);
+          velocityElem.innerText = `$${amt}B CLEARED`;
+          velocityElem.classList.remove("num-flash");
+          void velocityElem.offsetWidth;
+          velocityElem.classList.add("num-flash");
+        }
+      }, 6000);
+
+      // 5. M3 Segmented Switchboard Tab Filtering with Smooth Transitions
+      const filterButtons = document.querySelectorAll("#portal-filters .filter-tab");
+      const portalCards = document.querySelectorAll("#portal-cards-grid > div");
+
+      filterButtons.forEach(btn => {
+        btn.addEventListener("click", () => {
+          filterButtons.forEach(b => {
+            b.classList.remove("bg-surface-container-lowest", "text-primary-container", "font-semibold", "shadow-xs");
+            b.classList.add("text-on-surface-variant", "font-medium");
+          });
+          btn.classList.add("bg-surface-container-lowest", "text-primary-container", "font-semibold", "shadow-xs");
+          btn.classList.remove("text-on-surface-variant", "font-medium");
+
+          const filter = btn.getAttribute("data-filter");
+          portalCards.forEach(card => {
+            const cat = card.getAttribute("data-category");
+            if (filter === "all" || cat === filter) {
+              card.style.display = "flex";
+              card.style.transition = "opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1)";
+              setTimeout(() => {
+                card.style.opacity = "1";
+                card.style.transform = "scale(1)";
+              }, 15);
+            } else {
+              card.style.transition = "opacity 0.25s ease, transform 0.25s ease";
+              card.style.opacity = "0";
+              card.style.transform = "scale(0.96)";
+              setTimeout(() => {
+                card.style.display = "none";
+              }, 260);
+            }
+          });
+        });
+      });
+
+      // 6. Interactive 3-Stage Continuous Linked Settlement (CLS) Simulation
+      const pipelineSteps = document.querySelectorAll(".pipeline-step");
+      const hashDisplay = document.getElementById("hash-verification-display");
+      const reverifyBtn = document.getElementById("btn-reverify");
+
+      const hashes = [
+        "0x8F9B...4D82: STAGE 01 VALIDATED (GovID Authenticated)",
+        "0x4C1A...77E0: STAGE 02 WHOLESALE DUAL COMMIT (Epoch #4,819)",
+        "0x1E09...B991: STAGE 03 ROOT ZERO-DELTA VERIFIED (0.00000000 ARTH)"
+      ];
+
+      function setActiveStep(stepIndex) {
+        pipelineSteps.forEach((step, idx) => {
+          const ping = step.querySelector(".step-badge-ping");
+          if (idx === stepIndex) {
+            step.classList.add("active-step");
+            if (ping) ping.classList.remove("hidden");
+          } else {
+            step.classList.remove("active-step");
+            if (ping) ping.classList.add("hidden");
+          }
+        });
+        if (hashDisplay) {
+          hashDisplay.innerText = hashes[stepIndex];
+          hashDisplay.classList.remove("num-flash");
+          void hashDisplay.offsetWidth;
+          hashDisplay.classList.add("num-flash");
+        }
+      }
+
+      pipelineSteps.forEach((step, idx) => {
+        step.addEventListener("click", () => {
+          setActiveStep(idx);
+        });
+      });
+
+      if (reverifyBtn) {
+        let simStep = 0;
+        reverifyBtn.addEventListener("click", () => {
+          simStep = (simStep + 1) % 3;
+          setActiveStep(simStep);
+        });
+      }
+
+      // 7. Interactive Accordions on Dual-Password Standard Cards
+      const accordionItems = document.querySelectorAll(".accordion-item");
+      accordionItems.forEach(item => {
+        item.addEventListener("click", () => {
+          item.classList.toggle("accordion-open");
+        });
+      });
+
+      // 8. Live UTC Clock & Block Height in Footer
+      const clockElem = document.getElementById("footer-clock");
+      const blockElem = document.getElementById("footer-block-height");
+      let currentBlock = 28102491;
+
+      setInterval(() => {
+        const now = new Date();
+        const timeStr = "UTC " + now.toUTCString().split(" ")[4];
+        if (clockElem) clockElem.innerText = timeStr;
+      }, 1000);
+
+      setInterval(() => {
+        currentBlock += 1;
+        if (blockElem) blockElem.innerText = currentBlock.toLocaleString();
+      }, 12000);
+    });
+  </script>
+
+
+
+
+</body></html>

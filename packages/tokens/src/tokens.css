@@ -1,0 +1,98 @@
+:root {
+  /* =========================================================
+     Arthax Sovereign — Canonical Design Tokens (DESIGN.md)
+     ========================================================= */
+
+  /* Primary Sovereign Palette */
+  --color-primary: #022448;
+  --color-primary-container: #1e3a5f;
+  --color-on-primary: #ffffff;
+  --color-on-primary-container: #8aa4cf;
+  --color-inverse-primary: #adc8f5;
+
+  /* Secondary Royal Indigo */
+  --color-secondary: #4c5d8e;
+  --color-secondary-container: #b4c5fd;
+  --color-on-secondary: #ffffff;
+  --color-on-secondary-container: #405181;
+
+  /* Tertiary / Sovereign Gold Leaf Accent */
+  --color-tertiary: #361f00;
+  --color-tertiary-container: #533300;
+  --color-on-tertiary: #ffffff;
+  --color-on-tertiary-container: #d2984b;
+
+  /* Arth Gold (Reserved Currency / Audited Verification Seals) */
+  --color-gold-accent: #a8742a;
+  --color-gold-light: #fdf8f0;
+  --color-gold-border: #dfb87a;
+  --color-gold-border-alpha: rgba(168, 116, 42, 0.3);
+
+  /* Semantic State Colors */
+  --color-positive: #10b981;
+  --color-loss: #b5482e; /* Resolved terracotta red */
+  --color-warning: #a8742a;
+  --color-info: #496c80;
+  --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #93000a;
+
+  /* Base Surfaces & Containers */
+  --color-surface: #f8f9ff;
+  --color-surface-dim: #d1dbeb;
+  --color-surface-bright: #f8f9ff;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #eef4ff;
+  --color-surface-container: #e5efff;
+  --color-surface-container-high: #dfe9fa;
+  --color-surface-container-highest: #d9e3f4;
+  --color-surface-variant: #d9e3f4;
+  --color-surface-tint: #455f87;
+
+  /* Text & Inks */
+  --color-on-surface: #121c28;
+  --color-on-surface-variant: #43474e;
+  --color-inverse-surface: #27313e;
+  --color-inverse-on-surface: #eaf1ff;
+  --color-outline: #74777f;
+  --color-outline-variant: #c4c6cf;
+  --color-hairline: rgba(30, 58, 95, 0.08);
+
+  /* Typography Families */
+  --font-display: 'Newsreader', 'Fraunces', Georgia, serif;
+  --font-headline: 'Newsreader', 'Fraunces', Georgia, serif;
+  --font-body: 'Inter', 'Cantarell', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+  --font-accent: 'Amarante', cursive;
+
+  /* Elevation (Material Rounded Smooth / M3) */
+  --shadow-m3-1: 0px 1px 3px 1px rgba(0, 0, 0, 0.05), 0px 1px 2px 0px rgba(0, 0, 0, 0.08);
+  --shadow-m3-2: 0px 2px 6px 2px rgba(0, 0, 0, 0.06), 0px 1px 2px 0px rgba(0, 0, 0, 0.08);
+  --shadow-m3-3: 0px 4px 12px 3px rgba(0, 0, 0, 0.07), 0px 1px 3px 0px rgba(0, 0, 0, 0.1);
+  --shadow-m3-hover: 0px 12px 32px rgba(2, 36, 72, 0.12);
+  --shadow-overlay: 0 4px 20px -2px rgba(30, 58, 95, 0.06), 0 0 0 1px rgba(30, 58, 95, 0.1);
+
+  /* Shapes & Radii (Constrained architectural precision) */
+  --radius-xs: 0.125rem; /* 2px */
+  --radius-sm: 0.25rem;  /* 4px - Inputs, Buttons, Triggers */
+  --radius-md: 0.375rem; /* 6px */
+  --radius-lg: 0.5rem;   /* 8px - Ledger Sheets, Structural Modules */
+  --radius-xl: 0.75rem;  /* 12px */
+  --radius-2xl: 1.25rem; /* 20px */
+  --radius-3xl: 1.75rem; /* 28px - Cards */
+  --radius-4xl: 2.25rem; /* 36px */
+  --radius-full: 9999px;
+
+  /* Spatial Baseline (4px step) */
+  --space-3xs: 0.125rem;
+  --space-2xs: 0.25rem;
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+  --space-4xl: 6rem;
+}

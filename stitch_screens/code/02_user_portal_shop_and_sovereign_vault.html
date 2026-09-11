@@ -1,0 +1,819 @@
+<!DOCTYPE html><html class="h-full bg-[#f8f9fa]" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>ARTHAX User Portal - Shop &amp; Sovereign Vault</title>
+<!-- Tailwind CSS v3 with Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              navy: '#0d1726',
+              deep: '#101d32',
+              card: '#15243d',
+              accent: '#d97706',
+              gold: '#c59a3f',
+              goldDark: '#9a7322',
+              surface: '#f8f9fa',
+              border: '#e2e8f0',
+              textPrimary: '#0f172a',
+              textMuted: '#64748b'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'sans-serif'],
+            mono: ['JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-typography">
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+    body {
+      font-family: 'Inter', sans-serif;
+      color: #0f172a;
+    }
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+  </style>
+</head>
+<body class="min-h-full flex flex-col bg-[#f8f9fa] antialiased selection:bg-amber-200 selection:text-amber-900">
+<!-- BEGIN: TelemetryBar -->
+<!-- Top global institutional telemetry bar displaying real-time settlement & ledger integrity stats -->
+<aside class="bg-[#0a111c] text-[#8ea5c8] text-[11px] font-mono border-b border-[#1b2b46] py-1.5 px-4 sm:px-8 tracking-tight z-50" data-purpose="telemetry-bar">
+<div class="max-w-[1440px] mx-auto flex flex-wrap items-center justify-between gap-y-1">
+<div class="flex items-center space-x-3">
+<span class="inline-flex items-center text-emerald-400">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse mr-1.5"></span>
+          PARITY ARTH/USD $1.0002 <span class="text-emerald-300/80 ml-1">(+124.80 ARTH 24h)</span>
+</span>
+<span class="text-slate-600">|</span>
+<span>CLS FINALITY: <strong class="text-slate-200 font-semibold">380ms</strong></span>
+<span class="text-slate-600">|</span>
+<span>CORE LEDGER: <span class="text-slate-200">#28,102,510</span></span>
+</div>
+<div class="flex items-center space-x-4">
+<span class="inline-flex items-center text-slate-300">
+<svg class="w-3.5 h-3.5 text-emerald-400 mr-1.5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+          ISO 20022 End-to-End Encrypted
+        </span>
+<span class="text-slate-600">|</span>
+<span class="text-amber-400/90 font-medium">⬡ Node: SETU #003</span>
+</div>
+</div>
+</aside>
+<!-- END: TelemetryBar -->
+<!-- BEGIN: MasterHeader -->
+<!-- Primary brand header with resident verification and biometric enclave state -->
+<header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm" data-purpose="master-header">
+<div class="max-w-[1440px] mx-auto px-4 sm:px-8 py-3.5 flex items-center justify-between">
+<!-- Brand & Mode Indicator -->
+<div class="flex items-center space-x-3.5">
+<div class="w-10 h-10 rounded-lg bg-[#0d1726] flex items-center justify-center text-amber-400 font-bold text-lg shadow-inner">
+          A
+        </div>
+<div>
+<div class="flex items-center space-x-2">
+<span class="font-extrabold text-slate-900 tracking-wider text-base">ARTHAX</span>
+<span class="text-xs font-semibold text-slate-400">PORTAL</span>
+<span class="px-2 py-0.5 text-[10px] font-mono tracking-wide bg-emerald-50 text-emerald-700 rounded-full border border-emerald-200 flex items-center gap-1 font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> COCKPIT MODE
+            </span>
+</div>
+<p class="text-[10px] font-mono text-slate-500 uppercase tracking-wider">SOVEREIGN CITIZEN LEDGER</p>
+</div>
+</div>
+<!-- Resident Citizen Profile Context -->
+<div class="flex items-center space-x-5">
+<div class="text-right hidden sm:block">
+<div class="flex items-center justify-end space-x-1.5">
+<span class="font-semibold text-slate-800 text-sm">Ananya Sharma</span>
+<span class="inline-flex items-center text-[10px] font-medium bg-emerald-50 text-emerald-700 px-1.5 py-0.5 rounded border border-emerald-200">
+<svg class="w-2.5 h-2.5 mr-0.5 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
+<path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path>
+</svg>
+              Tier-1 Verified
+            </span>
+</div>
+<p class="text-[11px] font-mono text-slate-500">
+            GOV - ID: <span class="text-slate-700">#8491-904-IN</span> • 
+            <span class="text-amber-700 font-medium">🔒 Fin PIN: Enclave Ready</span>
+</p>
+</div>
+<!-- Notification Bell -->
+<button aria-label="Notifications" class="relative p-2 text-slate-500 hover:text-slate-800 transition-colors rounded-lg hover:bg-slate-100" type="button">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+</svg>
+<span class="absolute top-1.5 right-1.5 w-4 h-4 bg-rose-500 text-white rounded-full text-[9px] font-bold flex items-center justify-center">3</span>
+</button>
+<!-- Avatar Thumbnail with filigree rim -->
+<div class="relative">
+<div class="w-10 h-10 rounded-full ring-2 ring-amber-400/80 p-0.5 bg-gradient-to-tr from-amber-500 to-amber-200 shadow-sm overflow-hidden">
+<img alt="Ananya Sharma Avatar" class="w-full h-full object-cover rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAeoNYyfFRAuw_k8j8H_j4MIEYF6b283eFejdySMWBsfKhIlRgEBG5WeMA43dr_o66fkMenDur6n1KYOBMM1A1-jcLHUIK6AZk9nrozIAF1_aJuzI2wg5bhQg9YA-f86qmYqBuAAE1pJgjwFD77O76-YhMJD1FxGYMWdQkPY2dWtvg8K406bwLgt_5vfyArAIgDio5wqfzva9sistL3m8iYujDGJUFcvxGqNEzXaai17XQc7f0gGqltkw">
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- END: MasterHeader -->
+<!-- BEGIN: MasterNavigation -->
+<!-- 8 Core Protocol Navigation Items + Shop contextual balance bar -->
+<nav class="bg-white border-b border-slate-200" data-purpose="master-navigation">
+<div class="max-w-[1440px] mx-auto px-4 sm:px-8">
+<div class="flex items-center justify-between overflow-x-auto py-2.5 gap-4">
+<!-- 8 Core Tabs matching Shell exactly -->
+<ul class="flex items-center space-x-1 sm:space-x-2 text-sm font-medium whitespace-nowrap">
+<li><a class="px-3 py-1.5 text-slate-600 hover:text-slate-900 rounded-md hover:bg-slate-100 transition" href="#">Overview</a></li>
+<li><a class="px-3 py-1.5 text-slate-600 hover:text-slate-900 rounded-md hover:bg-slate-100 transition" href="#">My Banks &amp; Accounts</a></li>
+<li><a class="px-3 py-1.5 text-slate-600 hover:text-slate-900 rounded-md hover:bg-slate-100 transition" href="#">Transfers &amp; DvP</a></li>
+<li><a class="px-3 py-1.5 text-slate-600 hover:text-slate-900 rounded-md hover:bg-slate-100 transition" href="#">Fixed Deposits</a></li>
+<li><a class="px-3 py-1.5 text-slate-600 hover:text-slate-900 rounded-md hover:bg-slate-100 transition" href="#">Stock Portfolio</a></li>
+<li><a class="px-3 py-1.5 text-slate-600 hover:text-slate-900 rounded-md hover:bg-slate-100 transition" href="#">Rewards</a></li>
+<!-- ACTIVE ITEM: Shop & Vault -->
+<li>
+<a class="inline-flex items-center px-3.5 py-1.5 bg-[#1e3a5f] text-white rounded-full text-sm font-semibold shadow-sm transition" href="#">
+<span class="w-2 h-2 rounded-full bg-amber-400 mr-2"></span>
+              Shop &amp; Vault
+            </a>
+</li>
+<li>
+<a class="px-3 py-1.5 text-slate-600 hover:text-slate-900 rounded-md hover:bg-slate-100 transition" href="#">
+              Mailbox <span class="ml-1 px-1.5 py-0.2 bg-rose-100 text-rose-700 rounded-full text-xs font-bold">3</span>
+</a>
+</li>
+</ul>
+</div>
+<!-- Sub-Bar: Filters and Balance Chip -->
+<div class="py-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 text-xs">
+<div class="flex items-center space-x-2 overflow-x-auto pb-1 sm:pb-0">
+<button class="px-3 py-1 rounded-full bg-slate-900 text-white font-medium shadow-xs">● All Items</button>
+<button class="px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium transition">Guardian Companions (Financial Modifiers)</button>
+<button class="px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium transition">Prestige Avatars &amp; Identities</button>
+<button class="px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium transition">Sovereign Enclave Frames</button>
+<button class="px-3 py-1 rounded-full bg-amber-50 border border-amber-300 text-amber-900 font-medium hover:bg-amber-100 transition">
+            My Active Vault / Inventory <span class="font-bold text-amber-800">(4 Owned)</span>
+</button>
+</div>
+<!-- Citizen ARTH Balance Chip -->
+<div class="flex items-center space-x-2 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200/80 px-3 py-1 rounded-lg">
+<span class="text-slate-500 font-mono text-[11px]">Available to Spend:</span>
+<span class="font-mono font-bold text-slate-900 text-sm tracking-tight">38,450.00 ARTH</span>
+<button class="ml-2 text-[10px] font-semibold bg-amber-500 hover:bg-amber-600 text-white px-2 py-0.5 rounded shadow-xs transition">
+            + Top-up via NAVA Payroll
+          </button>
+</div>
+</div>
+</div>
+</nav>
+<!-- END: MasterNavigation -->
+<!-- BEGIN: MainContent -->
+<main class="flex-1 max-w-[1440px] w-full mx-auto px-4 sm:px-8 py-6 space-y-7">
+<!-- BEGIN: HeroBanner -->
+<!-- Architectural hero container with current equipped loadout and modifier stats -->
+<section class="relative overflow-hidden rounded-2xl bg-[#0d1726] border border-[#1d2d47] text-white p-6 sm:p-8 shadow-xl" data-purpose="hero-banner">
+<!-- Watermark / Geometric Grid Background -->
+<div class="absolute inset-0 opacity-10 pointer-events-none bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:18px_18px]"></div>
+<div class="absolute -right-16 -top-16 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+<div class="relative z-10 grid lg:grid-cols-12 gap-6 items-center">
+<!-- Text & Headline -->
+<div class="lg:col-span-8 space-y-3">
+<div class="inline-flex items-center gap-2 px-2.5 py-1 bg-amber-400/10 border border-amber-400/30 rounded-md text-amber-300 text-xs font-mono">
+<span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+            SOVEREIGN ARTIFACT COVENANT • SECTION 18-G
+          </div>
+<h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-white">
+            Sovereign Artifacts &amp; Financial Modifiers
+          </h1>
+<p class="text-slate-300 text-sm leading-relaxed max-w-2xl">
+            Equip authenticated guardian companions and cryptographic identity frames to amplify Fixed Deposit APYs, reduce stock execution fees, and elevate your citizen ledger rank.
+          </p>
+<!-- Quick Stats / Active Buffs Strip -->
+<div class="pt-3 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+<div class="bg-[#15243d] border border-slate-700/60 p-2.5 rounded-lg">
+<span class="text-slate-400 block text-[10px] uppercase font-mono tracking-wider">Equipped Companion</span>
+<span class="font-semibold text-amber-300">Vidya Owl</span>
+<span class="block text-[10px] text-emerald-400 font-mono">+0.25% FD Yield Booster</span>
+</div>
+<div class="bg-[#15243d] border border-slate-700/60 p-2.5 rounded-lg">
+<span class="text-slate-400 block text-[10px] uppercase font-mono tracking-wider">Active Frame</span>
+<span class="font-semibold text-slate-200">Titanium Enclave</span>
+<span class="block text-[10px] text-emerald-400 font-mono">-30% Clearing Delay</span>
+</div>
+<div class="bg-[#15243d] border border-slate-700/60 p-2.5 rounded-lg">
+<span class="text-slate-400 block text-[10px] uppercase font-mono tracking-wider">Modifier Slot</span>
+<span class="font-semibold text-slate-200">1 / 2 Active</span>
+<span class="block text-[10px] text-slate-400 font-mono">1 Slot Unlocked at Tier-2</span>
+</div>
+<div class="bg-[#15243d] border border-slate-700/60 p-2.5 rounded-lg">
+<span class="text-slate-400 block text-[10px] uppercase font-mono tracking-wider">Vault Net Asset Value</span>
+<span class="font-semibold text-amber-400 font-mono">14,200.00 ARTH</span>
+<span class="block text-[10px] text-slate-400 font-mono">4 Total Artifacts</span>
+</div>
+</div>
+</div>
+<!-- Hero Actions -->
+<div class="lg:col-span-4 flex flex-col sm:flex-row lg:flex-col justify-center gap-3 border-t lg:border-t-0 lg:border-l border-slate-700/60 pt-4 lg:pt-0 lg:pl-6">
+<button class="w-full py-2.5 px-4 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-lg transition shadow-md flex items-center justify-center gap-2">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+            Manage Equipped Vault
+          </button>
+<button class="w-full py-2.5 px-4 bg-slate-800/80 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-medium rounded-lg transition flex items-center justify-center gap-2">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+            View Modifier Rules
+          </button>
+</div>
+</div>
+</section>
+<!-- END: HeroBanner -->
+<!-- BEGIN: GuardianCompanionsGrid -->
+<!-- Section 1: 8 Official ARTHAX Companion Entities with Yield Modifiers -->
+<section class="space-y-4" data-purpose="guardian-companions">
+<div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3">
+<div>
+<h2 class="text-lg font-bold text-slate-900 tracking-tight flex items-center gap-2">
+<span class="text-amber-500">✨</span> Guardian Companions &amp; Active Yield Modifiers
+          </h2>
+<p class="text-xs text-slate-500">Cryptographically bound sovereign companions providing continuous mathematical interest and fee reductions</p>
+</div>
+<div class="flex items-center space-x-2 text-xs font-mono text-slate-500">
+<span>Sort by:</span>
+<select class="text-xs font-mono bg-white border border-slate-300 rounded py-1 px-2 focus:ring-1 focus:ring-amber-500">
+<option>Highest Yield Multiplier</option>
+<option>Price: Low to High</option>
+<option>Price: High to Low</option>
+<option>Rarity Tier</option>
+</select>
+</div>
+</div>
+<!-- 8 Companions Architectural Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+<!-- 1. Gaja King Elephant -->
+<article class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between relative group">
+<div class="absolute top-3 right-3 z-10">
+<span class="bg-amber-100 text-amber-800 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded border border-amber-300">
+              Airavata Tier
+            </span>
+</div>
+<div>
+<div class="w-full aspect-square bg-gradient-to-b from-amber-50 to-slate-100 rounded-lg overflow-hidden flex items-center justify-center p-3 mb-3 border border-slate-100">
+<img alt="Gaja King Elephant" class="object-contain w-full h-full group-hover:scale-105 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6ocTiU2_VGzbwgNoYFdbBalkfnKJwvduppAt0tsQGX9gvc6ohnXWEO7iYwshsnzHHzxkpchAdAxrmploSJLq6QzkhMtq6MuErmBJ_DgbWCSVO5jK9_JGAAkQrmk34ibz6oDJaFlZ5DTOSyEsLGA3gJRz4Tgmaxvvf8mnXRs9vCr3FEE4YOhZlhWKeoh7PRsz3Np-boEgdjthvfsztYFYMpoSzJgUMsIDcRLtXgEYoTonBPrstDAw4xAF5OBn_ZXqJrfA">
+</div>
+<div class="space-y-1">
+<span class="text-[10px] font-mono text-slate-400 uppercase tracking-wider">Institutional Reserve Tier</span>
+<h3 class="font-bold text-slate-900 text-sm">Gaja King Elephant</h3>
+<div class="bg-emerald-50 border border-emerald-200 text-emerald-800 p-2 rounded text-[11px] font-medium leading-snug my-2">
+<strong>Active Power:</strong> +0.50% APY across all Bank Fixed Deposits &amp; +10% Stasis Yield
+              </div>
+</div>
+</div>
+<div class="pt-3 border-t border-slate-100 mt-2 flex items-center justify-between">
+<div>
+<span class="text-[10px] font-mono text-slate-400 block">Protocol Price</span>
+<span class="font-mono font-bold text-slate-900 text-sm">12,500.00 <span class="text-xs text-amber-600">ARTH</span></span>
+</div>
+<button class="bg-[#0d1726] hover:bg-slate-800 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition flex items-center gap-1.5 shadow-sm">
+<svg class="w-3 h-3 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+<path clip-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" fill-rule="evenodd"></path>
+</svg>
+              Acquire
+            </button>
+</div>
+</article>
+<!-- 2. Kurma Scholar Turtle -->
+<article class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between relative group">
+<div class="absolute top-3 right-3 z-10">
+<span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded border border-emerald-300">
+              Sthira Tier
+            </span>
+</div>
+<div>
+<div class="w-full aspect-square bg-gradient-to-b from-emerald-50 to-slate-100 rounded-lg overflow-hidden flex items-center justify-center p-3 mb-3 border border-slate-100">
+<img alt="Kurma Scholar Turtle" class="object-contain w-full h-full group-hover:scale-105 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC4brQzFyrtsfH4FGISJl-m-0ptMbyYeTplSmP1vVi9uTuA8G7Xym-WtvptntRQ4-e-PZArVQUH8cJ695PJCWe-FqTmSPI7nwJX0W5CNhp9bYkNqTNlmnGRDmFm8xpoStoF9qLhgC6qqTwRxjDArvxVzdrvAfxkmis6kiX6nPmbwVgGnnwBqjv1VsKNZMnTCyyFUKw-_f5yz_RiaDkRzYpAeIRddsMPmv7EKjj7dtUaq6W568_AkirfMOHkxJcSZtZ9m6s">
+</div>
+<div class="space-y-1">
+<span class="text-[10px] font-mono text-slate-400 uppercase tracking-wider">Liquidity Defense</span>
+<h3 class="font-bold text-slate-900 text-sm">Kurma Scholar Turtle</h3>
+<div class="bg-emerald-50 border border-emerald-200 text-emerald-800 p-2 rounded text-[11px] font-medium leading-snug my-2">
+<strong>Active Power:</strong> Zero Penalty on Early FD Liquidation (up to 50k ARTH)
+              </div>
+</div>
+</div>
+<div class="pt-3 border-t border-slate-100 mt-2 flex items-center justify-between">
+<div>
+<span class="text-[10px] font-mono text-slate-400 block">Protocol Price</span>
+<span class="font-mono font-bold text-slate-900 text-sm">8,200.00 <span class="text-xs text-amber-600">ARTH</span></span>
+</div>
+<button class="bg-[#0d1726] hover:bg-slate-800 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition flex items-center gap-1.5 shadow-sm">
+<svg class="w-3 h-3 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+<path clip-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" fill-rule="evenodd"></path>
+</svg>
+              Acquire
+            </button>
+</div>
+</article>
+<!-- 3. Baka Celestial Crane -->
+<article class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between relative group">
+<div class="absolute top-3 right-3 z-10">
+<span class="bg-sky-100 text-sky-800 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded border border-sky-300">
+              Tarang Tier
+            </span>
+</div>
+<div>
+<div class="w-full aspect-square bg-gradient-to-b from-sky-50 to-slate-100 rounded-lg overflow-hidden flex items-center justify-center p-3 mb-3 border border-slate-100">
+<img alt="Baka Celestial Crane" class="object-contain w-full h-full group-hover:scale-105 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQLRJEv2brqsczR04iWpXqq_EZHnUXkbSZfjh5NV0zTAIuXmRRXw7TNjtNQL9NdHiorSY3YeZwC00tQ4j3spb8g96Ksa9K3wc3TlkrmccQ8gJVP_C9KYUhOen42EpouzOi_kW1r5aydTLj55q8DhE0StU7q-zIoOSHVNQYvpMIfLZ3up5f9s5MCIKB3X3qPYYbO6-QD-RFS3LW5Ai9_Ch-wDaGVvaLyB94Uyn_wREQhyjS4b3AjBvOneXvrttDlJwX5cY">
+</div>
+<div class="space-y-1">
+<span class="text-[10px] font-mono text-slate-400 uppercase tracking-wider">High-Velocity DvP</span>
+<h3 class="font-bold text-slate-900 text-sm">Baka Celestial Crane</h3>
+<div class="bg-sky-50 border border-sky-200 text-sky-900 p-2 rounded text-[11px] font-medium leading-snug my-2">
+<strong>Active Power:</strong> Sub-200ms Priority CLS Finality &amp; 0% Cross-Bank Wire Stamp
+              </div>
+</div>
+</div>
+<div class="pt-3 border-t border-slate-100 mt-2 flex items-center justify-between">
+<div>
+<span class="text-[10px] font-mono text-slate-400 block">Protocol Price</span>
+<span class="font-mono font-bold text-slate-900 text-sm">9,400.00 <span class="text-xs text-amber-600">ARTH</span></span>
+</div>
+<button class="bg-[#0d1726] hover:bg-slate-800 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition flex items-center gap-1.5 shadow-sm">
+<svg class="w-3 h-3 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+<path clip-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" fill-rule="evenodd"></path>
+</svg>
+              Acquire
+            </button>
+</div>
+</article>
+<!-- 4. Vidya Sage Owl (EQUIPPED ACTIVE) -->
+<article class="bg-amber-50/60 border-2 border-amber-400 rounded-xl p-4 shadow-md flex flex-col justify-between relative group">
+<div class="absolute top-3 right-3 z-10">
+<span class="bg-amber-500 text-white text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded shadow-xs">
+              Equipped Active
+            </span>
+</div>
+<div>
+<div class="w-full aspect-square bg-gradient-to-b from-amber-100 to-amber-50 rounded-lg overflow-hidden flex items-center justify-center p-3 mb-3 border border-amber-200">
+<img alt="Vidya Sage Owl" class="object-contain w-full h-full group-hover:scale-105 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBhzzEEIGHo0f_Xq58JO2U_fF7W8H1nJnB_w6KehLuvnxe8DG1b5lR5JtfSUo5g0j9H4Bq0-Ac38YV-n2jF-EnNvMWlgTWwMTvWVQNHNdkzE44fMcWxZHuA6jCAsVhxJfRrJLQHF4wVUdctr_CI57Ou5cnt_7KHA2t-VaS__BQHpqETI1OAdiRHB2jFNAMByImkxEsddSAbZIXjVC31Gq46mCL3qrn8ZHwYxHK0c0BuJOfP82NdInoRC0alFB_jhtzZ8oY">
+</div>
+<div class="space-y-1">
+<span class="text-[10px] font-mono text-amber-800 font-semibold uppercase tracking-wider">Slot 1 Modifier Attached</span>
+<h3 class="font-bold text-slate-900 text-sm">Vidya Sage Owl (Samaya)</h3>
+<div class="bg-white border border-amber-300 text-slate-800 p-2 rounded text-[11px] font-medium leading-snug my-2">
+<strong>Active Power:</strong> +0.25% FD Yield Booster &amp; Real-Time Stock Analytics Feed
+              </div>
+</div>
+</div>
+<div class="pt-3 border-t border-amber-200 mt-2 flex items-center justify-between">
+<div>
+<span class="text-[10px] font-mono text-emerald-700 font-semibold block">CURRENTLY ACTIVE</span>
+<span class="font-mono text-xs text-slate-600">[SLOT 1 / 2]</span>
+</div>
+<div class="flex gap-1.5">
+<button class="bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 text-xs font-semibold px-2.5 py-1.5 rounded transition">
+                Configure
+              </button>
+<button class="bg-slate-200 hover:bg-rose-100 hover:text-rose-700 text-slate-700 text-xs font-semibold px-2 py-1.5 rounded transition">
+                Unequip
+              </button>
+</div>
+</div>
+</article>
+<!-- 5. Vrishabha Bull -->
+<article class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between relative group">
+<div class="absolute top-3 right-3 z-10">
+<span class="bg-indigo-100 text-indigo-800 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded border border-indigo-300">
+              Meru Tier
+            </span>
+</div>
+<div>
+<div class="w-full aspect-square bg-gradient-to-b from-indigo-50 to-slate-100 rounded-lg overflow-hidden flex items-center justify-center p-3 mb-3 border border-slate-100">
+<img alt="Vrishabha Bull" class="object-contain w-full h-full group-hover:scale-105 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBX6Y8neKQoeubpHGhmZK3WXoLcPyeaHKUYHdy3jkSbZfduHDwh2P_uMLi3lPwWr3Q7MGO_WhsJwGgi7nPn4kSECWQv-nG-ZbZex8eSYQwQlQ5m75b5edGManf53Q3RkVQekLWWTpna-Yd4dzo8cxSso4ykpATVtTihNH55lKNI9IGEoCxElBh2EqPxXtS-nMP72UzntjdQTWwXYVy03qKvvhlUb4uFvSRBN4COyfhja9T8A_mB_COCIa3Qv7YbMR71mR8">
+</div>
+<div class="space-y-1">
+<span class="text-[10px] font-mono text-slate-400 uppercase tracking-wider">Equities Accelerator</span>
+<h3 class="font-bold text-slate-900 text-sm">Vrishabha Apex Bull</h3>
+<div class="bg-indigo-50 border border-indigo-200 text-indigo-900 p-2 rounded text-[11px] font-medium leading-snug my-2">
+<strong>Active Power:</strong> -40% Stock Market Trading Fees &amp; Priority Order Matching
+              </div>
+</div>
+</div>
+<div class="pt-3 border-t border-slate-100 mt-2 flex items-center justify-between">
+<div>
+<span class="text-[10px] font-mono text-slate-400 block">Protocol Price</span>
+<span class="font-mono font-bold text-slate-900 text-sm">11,000.00 <span class="text-xs text-amber-600">ARTH</span></span>
+</div>
+<button class="bg-[#0d1726] hover:bg-slate-800 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition flex items-center gap-1.5 shadow-sm">
+<svg class="w-3 h-3 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+<path clip-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" fill-rule="evenodd"></path>
+</svg>
+              Acquire
+            </button>
+</div>
+</article>
+<!-- 6. Lopamudra Mystic Fox -->
+<article class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between relative group">
+<div class="absolute top-3 right-3 z-10">
+<span class="bg-orange-100 text-orange-800 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded border border-orange-300">
+              Vault Guardian
+            </span>
+</div>
+<div>
+<div class="w-full aspect-square bg-gradient-to-b from-orange-50 to-slate-100 rounded-lg overflow-hidden flex items-center justify-center p-3 mb-3 border border-slate-100">
+<img alt="Lopamudra Mystic Fox" class="object-contain w-full h-full group-hover:scale-105 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCp1h3teC4llTXVNbxrW7wnNk1Y4bVtr_8mmQKBhd3zlHqGqbQCeU2o-7FeIT3ZlkncbKGCgVn9ha6eC7zOkdtAnY87I_vdXX42cCAipV2pB5TuPJHEnpbM3LbJj8sfQZ5S45E0ZhrcjQfqMHQVp_EdMHXarVQYsE7ktsYl1J_Ds-U_2Zry1wK8BZw6LLZNVPKC1Vp871e5hekPJX6tMcNo6U3lMUvZayYTlA6SWwkAhIYAz-OqHY25-OW-2g1DGZrPpE0">
+</div>
+<div class="space-y-1">
+<span class="text-[10px] font-mono text-slate-400 uppercase tracking-wider">Yield Automation</span>
+<h3 class="font-bold text-slate-900 text-sm">Lopamudra Mystic Fox</h3>
+<div class="bg-orange-50 border border-orange-200 text-orange-900 p-2 rounded text-[11px] font-medium leading-snug my-2">
+<strong>Active Power:</strong> Automated Yield Harvesting &amp; Daily +5 ARTH Civic Bounty
+              </div>
+</div>
+</div>
+<div class="pt-3 border-t border-slate-100 mt-2 flex items-center justify-between">
+<div>
+<span class="text-[10px] font-mono text-slate-400 block">Protocol Price</span>
+<span class="font-mono font-bold text-slate-900 text-sm">7,500.00 <span class="text-xs text-amber-600">ARTH</span></span>
+</div>
+<button class="bg-[#0d1726] hover:bg-slate-800 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition flex items-center gap-1.5 shadow-sm">
+<svg class="w-3 h-3 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+<path clip-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" fill-rule="evenodd"></path>
+</svg>
+              Acquire
+            </button>
+</div>
+</article>
+<!-- 7. Jala River Otter -->
+<article class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between relative group">
+<div class="absolute top-3 right-3 z-10">
+<span class="bg-cyan-100 text-cyan-800 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded border border-cyan-300">
+              Stream Tier
+            </span>
+</div>
+<div>
+<div class="w-full aspect-square bg-gradient-to-b from-cyan-50 to-slate-100 rounded-lg overflow-hidden flex items-center justify-center p-3 mb-3 border border-slate-100">
+<img alt="Jala River Otter" class="object-contain w-full h-full group-hover:scale-105 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDm3acg-dRhqPMwB9NEtxLP1fXaml1W0zuXLOXEJJ2JAQHNP3rx5exDiCKooBqjT1FTQsAm1RCmj4TsrzCP1O-MVqzj_xhlyRfr-p5esOKBjCycq4Iv2qeUU9VoEakkpB6qgCnrnO1KIKDKYoENURhFZt1o2m_c4PcljfAKmsLMVZ2ch5EWIpx6jJY8IS0wzNmaYjw9XnVdM7iYRzdKbKV56lbNUV5W2j99bbWHR0RjLFsSXRxFJ5O4j56zo0pKYVyNt6Q">
+</div>
+<div class="space-y-1">
+<span class="text-[10px] font-mono text-slate-400 uppercase tracking-wider">Cashflow Booster</span>
+<h3 class="font-bold text-slate-900 text-sm">Jala Playful Otter</h3>
+<div class="bg-cyan-50 border border-cyan-200 text-cyan-900 p-2 rounded text-[11px] font-medium leading-snug my-2">
+<strong>Active Power:</strong> +1.0% Cashback on All Commercial Bank Card Outflows
+              </div>
+</div>
+</div>
+<div class="pt-3 border-t border-slate-100 mt-2 flex items-center justify-between">
+<div>
+<span class="text-[10px] font-mono text-slate-400 block">Protocol Price</span>
+<span class="font-mono font-bold text-slate-900 text-sm">6,800.00 <span class="text-xs text-amber-600">ARTH</span></span>
+</div>
+<button class="bg-[#0d1726] hover:bg-slate-800 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition flex items-center gap-1.5 shadow-sm">
+<svg class="w-3 h-3 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+<path clip-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" fill-rule="evenodd"></path>
+</svg>
+              Acquire
+            </button>
+</div>
+</article>
+<!-- 8. Marjara Mail Cat -->
+<article class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between relative group">
+<div class="absolute top-3 right-3 z-10">
+<span class="bg-purple-100 text-purple-800 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded border border-purple-300">
+              Audit Tier
+            </span>
+</div>
+<div>
+<div class="w-full aspect-square bg-gradient-to-b from-purple-50 to-slate-100 rounded-lg overflow-hidden flex items-center justify-center p-3 mb-3 border border-slate-100">
+<img alt="Marjara Mail Cat" class="object-contain w-full h-full group-hover:scale-105 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-QjoQUaeFl8S0eVJtVTw5wC9qmpoeBQV1BDBs_hObL17xwkpNqttwG6SvjN44Ba1sCHZzL_5lgirqccDDF7YJB2EsWjwdQ11IjSa3zcz3-2vOUDknp-Tfbby-JMB7Wu-3SgwjINoi4FoYTu1a0Ed4zeAmH1eElwk5y7RTqeCEz6z3OBCataw7VzP6d6SRkkFvIyUmKDTMTMD0mB_qjJ46dlTnJZvkf-vZ7jrPhoBXmEWOBvWZjf4_8-TakCEPPRrjOio">
+</div>
+<div class="space-y-1">
+<span class="text-[10px] font-mono text-slate-400 uppercase tracking-wider">Communication Enclave</span>
+<h3 class="font-bold text-slate-900 text-sm">Marjara Mail Cat</h3>
+<div class="bg-purple-50 border border-purple-200 text-purple-900 p-2 rounded text-[11px] font-medium leading-snug my-2">
+<strong>Active Power:</strong> Zero-Latency Central Bank Notices &amp; SMS Enclave Dispatch
+              </div>
+</div>
+</div>
+<div class="pt-3 border-t border-slate-100 mt-2 flex items-center justify-between">
+<div>
+<span class="text-[10px] font-mono text-slate-400 block">Protocol Price</span>
+<span class="font-mono font-bold text-slate-900 text-sm">5,200.00 <span class="text-xs text-amber-600">ARTH</span></span>
+</div>
+<button class="bg-[#0d1726] hover:bg-slate-800 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition flex items-center gap-1.5 shadow-sm">
+<svg class="w-3 h-3 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+<path clip-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" fill-rule="evenodd"></path>
+</svg>
+              Acquire
+            </button>
+</div>
+</article>
+</div>
+</section>
+<!-- END: GuardianCompanionsGrid -->
+<!-- BEGIN: ResidentIdentityVault -->
+<!-- Section 2: Split 2-Column Citizen Loadout & Enclave Frames Marketplace -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start" data-purpose="identity-vault">
+<!-- Left Column: Equipped Citizen Loadout (5 cols) -->
+<div class="lg:col-span-5 bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-4">
+<div class="border-b border-slate-200 pb-3 flex items-center justify-between">
+<div>
+<h3 class="font-bold text-slate-900 text-base flex items-center gap-2">
+<svg class="w-4 h-4 text-amber-500" fill="currentColor" viewBox="0 0 20 20">
+<path clip-rule="evenodd" d="M10 2a1 1 0 00-1 1v1a1 1 0 002 0V3a1 1 0 00-1-1zM4 5a1 1 0 011 1v1a1 1 0 01-2 0V6a1 1 0 011-1zm12 0a1 1 0 011 1v1a1 1 0 11-2 0V6a1 1 0 011-1zM2 10a1 1 0 011-1h1a1 1 0 110 2H3a1 1 0 01-1-1zm14 0a1 1 0 011-1h1a1 1 0 110 2h-1a1 1 0 01-1-1zm-9 5a1 1 0 011-1h4a1 1 0 110 2H8a1 1 0 01-1-1z" fill-rule="evenodd"></path>
+</svg>
+              Equipped Citizen Loadout
+            </h3>
+<p class="text-xs text-slate-500">Live configuration active on the Settlement Engine</p>
+</div>
+<span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-mono font-bold rounded">
+            SYNCED
+          </span>
+</div>
+<!-- Visual Slot Stack -->
+<div class="space-y-3">
+<!-- Slot 1: Avatar Frame -->
+<div class="flex items-center justify-between p-3 rounded-lg bg-slate-50 border border-slate-200">
+<div class="flex items-center space-x-3">
+<div class="w-10 h-10 rounded-lg bg-amber-100 border border-amber-300 flex items-center justify-center text-amber-700 font-bold text-sm">
+                🪞
+              </div>
+<div>
+<span class="text-[10px] font-mono text-slate-400 block uppercase">Cryptographic Frame</span>
+<span class="font-semibold text-slate-800 text-xs">Sovereign Gold Filigree Rim</span>
+<span class="block text-[10px] text-emerald-600 font-medium">Equipped (Item #FRM-902)</span>
+</div>
+</div>
+<button class="text-xs text-slate-500 hover:text-slate-900 font-medium underline">Swap</button>
+</div>
+<!-- Slot 2: Active Sovereign Badge -->
+<div class="flex items-center justify-between p-3 rounded-lg bg-slate-50 border border-slate-200">
+<div class="flex items-center space-x-3">
+<div class="w-10 h-10 rounded-lg bg-indigo-100 border border-indigo-300 flex items-center justify-center text-indigo-700 font-bold text-sm">
+                🛡️
+              </div>
+<div>
+<span class="text-[10px] font-mono text-slate-400 block uppercase">Identity Ribbon</span>
+<span class="font-semibold text-slate-800 text-xs">Tier-1 Citizen Vanguard</span>
+<span class="block text-[10px] text-indigo-600 font-medium">Rank Merit: Level 3 Anchor</span>
+</div>
+</div>
+<button class="text-xs text-slate-500 hover:text-slate-900 font-medium underline">Details</button>
+</div>
+<!-- Slot 3: Apex Banner -->
+<div class="flex items-center justify-between p-3 rounded-lg bg-slate-50 border border-slate-200">
+<div class="flex items-center space-x-3">
+<div class="w-10 h-10 rounded-lg bg-amber-50 border border-amber-300 flex items-center justify-center text-amber-700 font-bold text-sm">
+                🚩
+              </div>
+<div>
+<span class="text-[10px] font-mono text-slate-400 block uppercase">Enclave Backdrop</span>
+<span class="font-semibold text-slate-800 text-xs">Apex Meridian Silk</span>
+<span class="block text-[10px] text-amber-700 font-medium">Prestige Ledger Accent</span>
+</div>
+</div>
+<button class="text-xs text-slate-500 hover:text-slate-900 font-medium underline">Swap</button>
+</div>
+<!-- Slot 4: Guardian Pet -->
+<div class="flex items-center justify-between p-3 rounded-lg bg-amber-50/70 border border-amber-300">
+<div class="flex items-center space-x-3">
+<div class="w-10 h-10 rounded-lg bg-white border border-amber-300 overflow-hidden flex items-center justify-center">
+<img alt="Vidya Owl Thumbnail" class="w-8 h-8 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA4xhibUW0Z-a6vmbDUW3cpMi1JqELz0kY2pu5of_bf8tznKMuC80oTvp_AvB_xVL9pMwxIKl2DG7K--lgiIEeONtUBveTwU9mRsexM3ZxEwA-4_UpVPmqFFHrJo2MnOx9Oie1f0cFeA6gvUXVViZVtlPIDT51SZppFGk6srHmpfKZ6Ee8EsNmhb2VO2vaPs-7qCe35MpHTeV1cucymOLGzALaRXmiTUXHoWt7zCh0M8F5KbOeh0QaCJhmVRYFvTFeziv4">
+</div>
+<div>
+<span class="text-[10px] font-mono text-amber-700 block uppercase font-bold">Companion Slot #1</span>
+<span class="font-semibold text-slate-900 text-xs">Vidya Sage Owl</span>
+<span class="block text-[10px] text-emerald-700 font-semibold font-mono">+0.25% FD Yield Modifier</span>
+</div>
+</div>
+<span class="px-2 py-0.5 bg-amber-200 text-amber-900 text-[10px] font-bold rounded">ACTIVE</span>
+</div>
+</div>
+<!-- Cumulative Real-Time Yield Calculation Card -->
+<div class="p-3.5 bg-slate-900 text-white rounded-lg space-y-1.5 border border-slate-800">
+<div class="text-[10px] font-mono uppercase text-slate-400">Total Active Compound Boost</div>
+<div class="text-xs font-semibold text-amber-300 font-mono flex flex-wrap gap-2">
+<span>+0.25% FD APY</span> • 
+            <span>-40% DvP Surcharge</span> • 
+            <span>Zero Wire Fees</span>
+</div>
+<p class="text-[10px] text-slate-400 leading-snug">
+            All modifiers calculate at epoch boundary (UTC 00:00:00). Directly disbursed into NAVA Sovereign Payroll.
+          </p>
+</div>
+</div>
+<!-- Right Column: Enclave Frames & Banner Marketplace (7 cols) -->
+<div class="lg:col-span-7 bg-white border border-slate-200 rounded-xl p-5 shadow-sm space-y-4">
+<div class="border-b border-slate-200 pb-3 flex items-center justify-between">
+<div>
+<h3 class="font-bold text-slate-900 text-base">Enclave Frames &amp; Cryptographic Skins</h3>
+<p class="text-xs text-slate-500">Immutable presentation layers minted to your sovereign identity address</p>
+</div>
+<span class="text-xs font-mono text-amber-600 font-medium">Shop Season: Cycle 24/28</span>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+<!-- Frame Item 1 (Equipped) -->
+<div class="border border-slate-200 rounded-lg p-3.5 bg-slate-50/50 flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-2">
+<span class="text-[10px] font-mono px-1.5 py-0.5 bg-slate-200 text-slate-700 rounded font-semibold">SOVEREIGN FRAME</span>
+<span class="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-1.5 py-0.5 rounded">OWNED</span>
+</div>
+<h4 class="font-bold text-slate-900 text-xs">Sovereign Titanium Frame</h4>
+<p class="text-[11px] text-slate-500 mt-1">Brushed dark-matte titanium bezel with SETU consensus node glyphs.</p>
+</div>
+<div class="pt-3 mt-3 border-t border-slate-200 flex items-center justify-between">
+<span class="font-mono text-xs font-bold text-slate-700">3,500 ARTH</span>
+<button class="text-[11px] font-semibold bg-slate-200 text-slate-600 px-2.5 py-1 rounded cursor-not-allowed" disabled="">
+                Equipped
+              </button>
+</div>
+</div>
+<!-- Frame Item 2 (Acquire) -->
+<div class="border border-slate-200 rounded-lg p-3.5 bg-white hover:border-amber-400 transition-colors flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-2">
+<span class="text-[10px] font-mono px-1.5 py-0.5 bg-amber-100 text-amber-800 rounded font-semibold">PRESTIGE FRAME</span>
+<span class="text-[10px] font-mono text-slate-400">#FRM-883</span>
+</div>
+<h4 class="font-bold text-slate-900 text-xs">Reserve Gold Guilloche Frame</h4>
+<p class="text-[11px] text-slate-500 mt-1">Intricate mathematical guilloche patterns mirroring Central Bank bond certificates.</p>
+</div>
+<div class="pt-3 mt-3 border-t border-slate-100 flex items-center justify-between">
+<span class="font-mono text-xs font-bold text-slate-900">4,800 ARTH</span>
+<button class="text-[11px] font-semibold bg-[#0d1726] hover:bg-slate-800 text-white px-3 py-1 rounded transition">
+                Acquire
+              </button>
+</div>
+</div>
+<!-- Banner Item 3 (Acquire) -->
+<div class="border border-slate-200 rounded-lg p-3.5 bg-white hover:border-amber-400 transition-colors flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-2">
+<span class="text-[10px] font-mono px-1.5 py-0.5 bg-blue-100 text-blue-800 rounded font-semibold">ENCLAVE BANNER</span>
+<span class="text-[10px] font-mono text-slate-400">#BNR-104</span>
+</div>
+<h4 class="font-bold text-slate-900 text-xs">Monetary Apex Silk Banner</h4>
+<p class="text-[11px] text-slate-500 mt-1">Animated deep blue and golden weave signifying continuous DvP liquidity contributions.</p>
+</div>
+<div class="pt-3 mt-3 border-t border-slate-100 flex items-center justify-between">
+<span class="font-mono text-xs font-bold text-slate-900">2,200 ARTH</span>
+<button class="text-[11px] font-semibold bg-[#0d1726] hover:bg-slate-800 text-white px-3 py-1 rounded transition">
+                Acquire
+              </button>
+</div>
+</div>
+<!-- Frame Item 4 (Restricted) -->
+<div class="border border-slate-200 rounded-lg p-3.5 bg-slate-50 flex flex-col justify-between opacity-80">
+<div>
+<div class="flex items-center justify-between mb-2">
+<span class="text-[10px] font-mono px-1.5 py-0.5 bg-rose-100 text-rose-800 rounded font-semibold">RESTRICTED</span>
+<span class="text-[10px] font-mono text-slate-400">Tier 4 Req</span>
+</div>
+<h4 class="font-bold text-slate-900 text-xs">Central Bank Auditor Badge Frame</h4>
+<p class="text-[11px] text-slate-500 mt-1">Reserved exclusively for sovereign citizens who operate or stake SETU full validator nodes.</p>
+</div>
+<div class="pt-3 mt-3 border-t border-slate-200 flex items-center justify-between">
+<span class="font-mono text-xs font-bold text-slate-500">5,000 ARTH</span>
+<button class="text-[11px] font-semibold bg-slate-200 text-slate-500 px-2 py-1 rounded cursor-not-allowed flex items-center gap-1" disabled="">
+<svg class="w-3 h-3 text-slate-400" fill="currentColor" viewBox="0 0 20 20">
+<path clip-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" fill-rule="evenodd"></path>
+</svg>
+                Restricted to Tier 4
+              </button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- END: ResidentIdentityVault -->
+<!-- BEGIN: ProofOfCustodyLedger -->
+<!-- Section 3: Depository Node & Merkle cryptographic verification strip -->
+<section class="bg-[#0d1726] rounded-xl border border-[#1d2d47] p-4 text-white space-y-3" data-purpose="proof-of-custody">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+<div class="flex items-center space-x-3">
+<div class="w-9 h-9 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<div>
+<h4 class="font-bold text-sm text-slate-100">
+              Double-Signed Sovereign Proof of Custody • SETU Depository Node #003
+            </h4>
+<p class="text-xs text-slate-400">
+              All virtual companions and identity artifacts are minted on the immutable ARTHAX core ledger and backed by Section 18-G Virtual Asset Covenants.
+            </p>
+</div>
+</div>
+<div class="flex items-center space-x-2 shrink-0">
+<span class="px-2 py-1 bg-slate-800 text-slate-300 font-mono text-[11px] rounded border border-slate-700">ISO 20022</span>
+<span class="px-2 py-1 bg-slate-800 text-slate-300 font-mono text-[11px] rounded border border-slate-700">Basel-III</span>
+<button class="px-3 py-1 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs rounded transition flex items-center gap-1.5 shadow-sm">
+<svg class="w-3.5 h-3.5 text-slate-900" fill="currentColor" viewBox="0 0 20 20">
+<path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path>
+</svg>
+            Verify Merkle Proof
+          </button>
+</div>
+</div>
+<!-- Merkle Hash Strip -->
+<div class="bg-[#080d15] p-2.5 rounded-lg border border-slate-800 flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
+<div class="flex items-center space-x-2 text-slate-400">
+<span class="text-amber-400 font-bold">ZK MERKLE ROOT:</span>
+<span class="text-slate-300 select-all">0x89fd4a71bc993e110298a002bc4501a398f7129</span>
+</div>
+<button class="text-slate-400 hover:text-white text-[11px] flex items-center gap-1 transition">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+          Copy Root
+        </button>
+</div>
+</section>
+<!-- END: ProofOfCustodyLedger -->
+</main>
+<!-- END: MainContent -->
+<!-- BEGIN: MasterProtocolFooter -->
+<!-- Authoritative institutional footer identical to core screens -->
+<footer class="bg-white border-t border-slate-200 mt-12 text-xs text-slate-600" data-purpose="master-footer">
+<div class="max-w-[1440px] mx-auto px-4 sm:px-8 py-10 grid grid-cols-1 md:grid-cols-5 gap-8">
+<!-- Brand & Covenant Column -->
+<div class="md:col-span-2 space-y-3">
+<div class="flex items-center space-x-2">
+<div class="w-6 h-6 rounded bg-[#0d1726] flex items-center justify-center text-amber-400 font-bold text-xs">
+            A
+          </div>
+<span class="font-extrabold text-slate-900 tracking-wider">ARTHAX</span>
+<span class="text-[10px] font-mono text-slate-400">SOVEREIGN FINANCIAL PROTOCOL</span>
+</div>
+<p class="text-xs text-slate-500 max-w-sm leading-relaxed">
+          Sovereign Digital Fiscal Network and Central Ledger Protocol. Governed by multi-signatory monetary stabilization covenants and tier-one reserve anchoring.
+        </p>
+<div class="pt-1 text-[11px] font-mono text-emerald-700 flex items-center gap-1.5">
+<svg class="w-3.5 h-3.5 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
+<path clip-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" fill-rule="evenodd"></path>
+</svg>
+          Gov ID Verified Gateway • Root Node Trust Cert #8491-X
+        </div>
+</div>
+<!-- Ledger Integrity Links -->
+<div class="space-y-2.5">
+<h5 class="font-mono font-bold text-slate-900 text-[11px] uppercase tracking-wider">Ledger Integrity</h5>
+<ul class="space-y-1.5 text-slate-600">
+<li><a class="hover:text-slate-900 transition" href="#">Core Enclave</a></li>
+<li><a class="hover:text-slate-900 transition" href="#">Block Explorer</a></li>
+<li><a class="hover:text-slate-900 transition" href="#">Proof-of-Reserve</a></li>
+<li><a class="hover:text-slate-900 transition" href="#">Consensus Epochs</a></li>
+</ul>
+</div>
+<!-- Settlement Protocol Links -->
+<div class="space-y-2.5">
+<h5 class="font-mono font-bold text-slate-900 text-[11px] uppercase tracking-wider">Settlement Protocol</h5>
+<ul class="space-y-1.5 text-slate-600">
+<li><a class="hover:text-slate-900 transition" href="#">Atomic DvP Engine</a></li>
+<li><a class="hover:text-slate-900 transition" href="#">SETU Depository</a></li>
+<li><a class="hover:text-slate-900 transition" href="#">Clearing Finality</a></li>
+<li><a class="hover:text-slate-900 transition" href="#">Liquidity Windows</a></li>
+</ul>
+</div>
+<!-- Security Arch & Node Authority -->
+<div class="space-y-2.5">
+<h5 class="font-mono font-bold text-slate-900 text-[11px] uppercase tracking-wider">Node Authority</h5>
+<ul class="space-y-1.5 text-slate-600">
+<li><a class="hover:text-slate-900 transition" href="#">Central Bank Apex</a></li>
+<li><a class="hover:text-slate-900 transition" href="#">Charter 14-B Legal</a></li>
+<li><a class="hover:text-slate-900 transition" href="#">Prudential Limits</a></li>
+<li><a class="hover:text-slate-900 transition" href="#">Dispute Arbitration</a></li>
+</ul>
+</div>
+</div>
+<!-- Bottom Status Strip -->
+<div class="border-t border-slate-200 bg-slate-50 py-3 px-4 sm:px-8 font-mono text-[11px] text-slate-500">
+<div class="max-w-[1440px] mx-auto flex flex-wrap items-center justify-between gap-2">
+<div>
+          © 2025 ARTHAX Sovereign Financial System. Immutable Archival Depository Ledger.
+        </div>
+<div class="flex items-center space-x-3 text-emerald-700 font-medium">
+<span class="inline-flex items-center">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5 animate-pulse"></span>
+            CLS SETTLEMENT ENGINE SYNCED
+          </span>
+<span class="text-slate-400">•</span>
+<span>UTC 14:48:02</span>
+<span class="text-slate-400">•</span>
+<span>BLOCK HEIGHT 28,102,510</span>
+</div>
+</div>
+</div>
+</footer>
+<!-- END: MasterProtocolFooter -->
+</body></html>

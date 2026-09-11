@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"on-primary-container":"#82aa9d","primary":"#002920","on-background":"#1a1c18","on-secondary-container":"#296f63","background":"#fafaf3","inverse-surface":"#2f312d","primary-fixed":"#c1ecdd","surface-container-low":"#f4f4ed","tertiary-fixed-dim":"#b9cac5","surface-container-lowest":"#ffffff","surface-variant":"#e3e3dc","on-tertiary-fixed-variant":"#3a4a46","surface-bright":"#fafaf3","error-container":"#ffdad6","secondary":"#22695d","on-error":"#ffffff","surface-dim":"#dadad4","on-primary":"#ffffff","tertiary":"#172623","surface-tint":"#3f665a","secondary-fixed-dim":"#8fd3c5","tertiary-fixed":"#d4e6e0","outline-variant":"#c0c8c4","on-primary-fixed-variant":"#274e43","on-secondary-fixed":"#00201b","surface-container-highest":"#e3e3dc","surface-container":"#eeeee8","primary-container":"#173f35","on-tertiary-container":"#95a6a1","on-tertiary-fixed":"#0f1e1b","on-surface-variant":"#414845","secondary-fixed":"#abf0e1","on-primary-fixed":"#002019","surface-container-high":"#e8e9e2","outline":"#717975","primary-fixed-dim":"#a6cfc1","on-tertiary":"#ffffff","on-surface":"#1a1c18","inverse-on-surface":"#f1f1ea","tertiary-container":"#2c3c38","inverse-primary":"#a6cfc1","secondary-container":"#abf0e1","on-secondary-fixed-variant":"#005046","error":"#ba1a1a","on-error-container":"#93000a","on-secondary":"#ffffff","surface":"#fafaf3"},borderRadius:{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},spacing:{"gutter-compact":"0.5rem","space-lg":"1.5rem","space-md":"0.75rem","space-2xl":"3rem","space-base":"1rem","space-xxs":"0.125rem","margin-screen":"1.5rem","space-xs":"0.25rem","space-sm":"0.5rem","space-xl":"2rem","gutter-default":"1rem"},fontFamily:{"body-sm":["Inter"],"label-sm":["Inter"],"label-lg":["Inter"],"headline-md":["IBM Plex Serif"],"display-lg":["IBM Plex Serif"],"title-md":["Inter"],"display-lg-mobile":["IBM Plex Serif"],"headline-sm":["IBM Plex Serif"],"label-md":["Inter"],"body-lg":["Inter"],"headline-lg":["IBM Plex Serif"],"body-md":["Inter"]},fontSize:{"body-sm":["0.75rem",{"lineHeight":"1rem","fontWeight":"400"}],"label-sm":["0.6875rem",{"lineHeight":"0.875rem","letterSpacing":"0.04em","fontWeight":"700"}],"label-lg":["0.875rem",{"lineHeight":"1.25rem","letterSpacing":"0.01em","fontWeight":"600"}],"headline-md":["1.5rem",{"lineHeight":"2rem","fontWeight":"500"}],"display-lg":["3.5rem",{"lineHeight":"4rem","letterSpacing":"-0.02em","fontWeight":"600"}],"title-md":["1rem",{"lineHeight":"1.5rem","letterSpacing":"0.005em","fontWeight":"600"}],"display-lg-mobile":["2.25rem",{"lineHeight":"2.75rem","letterSpacing":"-0.01em","fontWeight":"600"}],"headline-sm":["1.25rem",{"lineHeight":"1.75rem","fontWeight":"500"}],"label-md":["0.75rem",{"lineHeight":"1rem","letterSpacing":"0.02em","fontWeight":"600"}],"body-lg":["1rem",{"lineHeight":"1.5rem","fontWeight":"400"}],"headline-lg":["2rem",{"lineHeight":"2.5rem","letterSpacing":"-0.01em","fontWeight":"600"}],"body-md":["0.875rem",{"lineHeight":"1.25rem","fontWeight":"400"}]}}}}</script></head><body class="bg-background font-body-md text-on-surface antialiased"><header class="fixed top-0 left-0 w-full z-50 bg-surface shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-28 flex flex-col justify-between w-full"><div class="h-8 w-full bg-primary text-surface-bright px-margin-screen flex items-center justify-between font-label-sm text-label-sm border-b border-primary-container"><div class="flex items-center gap-space-lg"><div class="flex items-center gap-space-xs"><span class="w-1.5 h-1.5 rounded-full bg-secondary-fixed"></span><span class="tracking-wider uppercase text-surface-bright font-bold">ARTHAX 50</span><span class="text-secondary-fixed font-bold tabular-nums">3,842.10 ARTH (+1.42%)</span></div><span class="text-outline-variant">|</span><div class="flex items-center gap-space-xs"><span class="text-surface-variant font-normal">VOL 24H:</span><span class="text-surface-bright font-bold tabular-nums">412.5M ARTH</span></div><span class="text-outline-variant hidden md:inline">|</span><div class="hidden md:flex items-center gap-space-xs"><span class="text-surface-variant font-normal">CLS SETTLEMENT:</span><span class="text-secondary-fixed font-bold tabular-nums">0.84MS LATENCY (SYNCED)</span></div></div><div class="flex items-center gap-space-lg"><div class="hidden lg:flex items-center gap-space-xs"><span class="text-surface-variant font-normal">Continuous Auction Session #420</span></div><span class="text-outline-variant hidden lg:inline">|</span><div class="flex items-center gap-space-xs"><span class="text-surface-variant font-normal">CIRCUIT BREAKER:</span><span class="text-secondary-fixed uppercase font-bold tracking-wider">NORMAL / STABLE</span></div></div></div><div class="h-12 w-full px-margin-screen flex items-center justify-between border-b border-surface-container-high bg-surface"><div class="flex items-center gap-space-lg"><div class="flex items-center gap-space-sm"><img alt="favicon.png" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1VLmcb18oUh0tJB8pVYSQAiHfUtmj0EiyNCNNyHUnjfwiwVZRI5HkxQGvelLWbAbzz3iuK01L_T6ra9wefr4sVgMgUEUyqQdJnfobL217t1aENxA6jLT_uUUyRiLlWtbNCNDZAf1imZtoZFnBtn3N2F1vgJRWWWqwTytHTjVCX5SSdw-YnM8e4MK7hxHxaUaxkQbof6Mm5_cY_ueZNg2PKPdTQwgpwo7pvpsdEl_aFhyVv6O8vH_8z5Btnco910BXDnmIOq4HgU4g"/><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-primary tracking-tight font-bold leading-tight">ARTHAX</span><span class="font-label-sm text-[0.55rem] uppercase tracking-widest text-secondary font-bold -mt-0.5">Capital Markets</span></div></div><div class="relative hidden sm:block w-72"><input class="w-full bg-surface-container-low text-on-surface font-body-sm text-body-sm px-space-md py-1 border border-outline-variant rounded-lg focus:outline-none focus:border-primary" placeholder="Search ticker, ISIN, debt... (ALT+K)" type="text"/><kbd class="absolute right-2.5 top-1.5 font-label-sm text-[0.625rem] bg-surface-container px-1 py-0.5 rounded text-outline font-semibold">ALT+K</kbd></div></div><div class="flex items-center gap-space-lg"><div class="hidden md:flex items-center gap-space-sm bg-secondary-container/50 px-space-sm py-1 rounded border border-secondary-container"><span class="material-symbols-outlined text-secondary text-sm">verified_user</span><div class="flex flex-col text-right"><span class="font-label-sm text-[0.625rem] uppercase text-on-secondary-container font-bold leading-tight">DvP READY</span><span class="font-label-md text-label-md font-bold text-primary tabular-nums leading-tight">38,450.00 ARTH</span></div></div><div class="hidden xl:flex items-center gap-space-md font-label-md text-label-md"><a class="text-on-surface-variant hover:text-on-surface transition-colors" data-path="central-guide" href="#">Central Guide</a><a class="text-on-surface-variant hover:text-on-surface transition-colors" data-path="user-portal" href="#">User Portal</a></div><div class="flex items-center gap-space-sm pl-space-sm border-l border-surface-container-high"><div class="text-right hidden sm:block"><span class="block font-label-md text-label-md font-bold text-on-surface leading-tight">Ananya Sharma</span><span class="block font-label-sm text-[0.65rem] text-on-surface-variant leading-tight">Tier-1 Verified • Desk #04</span></div><img alt="Profile" class="w-8 h-8 rounded-full object-cover border border-outline-variant" src="https://lh3.googleusercontent.com/aida/AEtjO1W03LQRDmE3ogVK95hGn4TDCFDLJ_4zPipEodcuboR4C6SLFTj9IJYCzwBcQhb5d1o1wYq_j2Jh2XZ6QKOmL15wz3wJDawrdwVsNXCaQGjr5MHAsimIZ95d-AiPxIwrYPdQOSzYqcEdb89UE3sALWmuKCujuiGReaDU4ilxPYWIZ_PkU38bOpcVqGOxw6HXTR5PF2VXuBN0HlGbnUwi1uo4qofm2GoCZni_GfWbDkk0A7ND67NFq1P1ELn-DaW6Q2KeSS_TVFv3nnA"/></div></div></div><div class="h-8 w-full px-margin-screen bg-surface-container-low flex items-center justify-between border-b border-surface-container-high"><nav class="flex items-center gap-space-xs overflow-x-auto h-full" data-active-classes="bg-primary text-on-primary font-bold shadow-sm"><a class="px-space-sm py-1 rounded text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-colors whitespace-nowrap" data-path="market-overview" href="#">Market Overview</a><a class="px-space-sm py-1 rounded text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-colors whitespace-nowrap" data-path="companies-directory" href="#">Companies Directory</a><a class="px-space-sm py-1 rounded text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-colors whitespace-nowrap" data-path="stock-details" href="#">Stock Details</a><a class="px-space-sm py-1 rounded text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-colors whitespace-nowrap" data-path="atomic-trading-dock" href="#">Atomic Trading Dock</a><a class="px-space-sm py-1 rounded text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-colors whitespace-nowrap" data-path="orders-and-blotter" href="#">Orders &amp; Blotter</a><a class="px-space-sm py-1 rounded text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-colors whitespace-nowrap" data-path="portfolio-and-allocation" href="#">Portfolio &amp; Allocation</a><a class="px-space-sm py-1 rounded text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-colors whitespace-nowrap" data-path="profit-and-tax" href="#">Profit &amp; Tax</a><a aria-current="page" class="px-space-sm py-1 rounded transition-colors whitespace-nowrap bg-primary text-on-primary font-bold shadow-sm" data-path="watchlist" href="#">Watchlist</a></nav><div class="hidden lg:flex items-center gap-space-xs font-label-sm text-label-sm text-outline tabular-nums"><span class="inline-block w-2 h-2 rounded-full bg-secondary-fixed"></span><span>FEED: SYNCED 14:02:18 UTC</span></div></div></div></header><main class="w-full pt-28 bg-background min-h-[calc(100vh-28rem)]"><div class="flex flex-col w-full">
+<!-- Breadcrumb & Surveillance Sub-Header -->
+<div class="w-full bg-surface-container-low px-margin-screen py-space-sm">
+<div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-space-sm text-body-sm">
+<div class="flex items-center gap-space-xs font-label-sm text-outline">
+<a class="hover:text-primary transition-colors" data-path="market-overview" href="#">Arthax Terminal</a>
+<span>/</span>
+<a class="text-primary font-bold" data-path="watchlist" href="#">Watchlist &amp; Sector Baskets</a>
+<span>/</span>
+<span class="text-on-surface-variant font-medium">Continuous Telemetry Dock</span>
+</div>
+<div class="flex items-center gap-space-md">
+<div class="flex items-center gap-space-xs bg-surface-container-highest/60 px-space-sm py-0.5 rounded text-[0.6875rem] font-label-sm text-on-surface font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+<span>SETU REGULATED DVP-III</span>
+</div>
+<div class="flex items-center gap-space-xs text-[0.6875rem] font-label-sm text-outline tabular-nums">
+<span class="material-symbols-outlined text-sm text-secondary">memory</span>
+<span>ALGO SURVEILLANCE NODE #04 ACTIVE</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Page Command Header -->
+<div class="w-full bg-surface px-margin-screen py-space-lg">
+<div class="max-w-7xl mx-auto flex flex-col lg:flex-row lg:items-center lg:justify-between gap-space-md">
+<div class="flex flex-col gap-space-xs">
+<div class="flex flex-wrap items-center gap-space-sm">
+<h1 class="font-headline-lg text-headline-lg text-primary tracking-tight font-bold">
+            Watchlist &amp; Sector Baskets
+          </h1>
+<span class="inline-flex items-center gap-1 px-space-xs py-0.5 rounded bg-primary text-on-primary font-label-sm text-[0.625rem] tracking-wider uppercase font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary-fixed animate-pulse"></span>
+            LIVE TICKER STREAM
+          </span>
+<span class="inline-flex items-center gap-1 px-space-xs py-0.5 rounded bg-secondary-container text-on-secondary-container font-label-sm text-[0.625rem] uppercase font-bold">
+            ALGO SURVEILLANCE ACTIVE
+          </span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-2xl">
+          Custom asset tracking, dynamic volatility triggers, thematic sovereign baskets, and instant DvP execution docks under Continuous Auction Protocol.
+        </p>
+</div>
+<div class="flex flex-wrap items-center gap-space-xs">
+<button class="px-space-md py-2 rounded bg-primary text-on-primary hover:bg-primary-container font-label-md text-label-md font-bold transition-colors flex items-center gap-space-xs shadow-sm" id="btn-new-basket">
+<span class="material-symbols-outlined text-base">add_circle</span>
+<span>New Custom Basket</span>
+</button>
+<button class="px-space-md py-2 rounded bg-surface-container-high hover:bg-surface-variant text-primary font-label-md text-label-md font-bold transition-colors flex items-center gap-space-xs" id="btn-config-alerts">
+<span class="material-symbols-outlined text-base">notifications_active</span>
+<span>Price Alerts (3)</span>
+</button>
+<button class="px-space-md py-2 rounded bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md font-medium transition-colors flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-base">file_download</span>
+<span>Export CSV</span>
+</button>
+</div>
+</div>
+<!-- Active Filter Strip -->
+<div class="max-w-7xl mx-auto mt-space-md">
+<div class="flex items-center gap-space-xs overflow-x-auto pb-1" id="filter-tabs">
+<button class="tab-btn px-space-md py-1.5 rounded bg-primary-container text-on-primary font-label-md text-label-md font-bold transition-colors flex items-center gap-space-xs" data-tab="primary">
+<span>Primary Watchlist</span>
+<span class="px-1.5 py-0.2 rounded-full bg-primary text-secondary-fixed text-[0.625rem]">12</span>
+</button>
+<button class="tab-btn px-space-md py-1.5 rounded bg-surface-container-high hover:bg-surface-variant text-on-surface font-label-md text-label-md transition-colors flex items-center gap-space-xs" data-tab="sovereign">
+<span>Thematic Sovereign Baskets</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container-highest text-on-surface-variant text-[0.625rem]">4</span>
+</button>
+<button class="tab-btn px-space-md py-1.5 rounded bg-surface-container-high hover:bg-surface-variant text-on-surface font-label-md text-label-md transition-colors flex items-center gap-space-xs" data-tab="volatility">
+<span>High Volatility &amp; Breakout</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container-highest text-on-surface-variant text-[0.625rem]">6</span>
+</button>
+<button class="tab-btn px-space-md py-1.5 rounded bg-surface-container-high hover:bg-surface-variant text-on-surface font-label-md text-label-md transition-colors flex items-center gap-space-xs" data-tab="dividend">
+<span>Dividend Aristocrats</span>
+<span class="px-1.5 py-0.2 rounded-full bg-surface-container-highest text-on-surface-variant text-[0.625rem]">5</span>
+</button>
+</div>
+</div>
+</div>
+<!-- 4-Metric Summary Bar -->
+<div class="w-full bg-surface-container-low px-margin-screen py-space-md">
+<div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-md">
+<!-- Metric 1 -->
+<div class="bg-surface-container-lowest p-space-md rounded shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-label-sm text-label-sm uppercase font-bold text-outline">Aggregated Value</span>
+<span class="material-symbols-outlined text-secondary text-base">account_balance_wallet</span>
+</div>
+<div class="mt-space-xs flex items-baseline justify-between">
+<span class="font-headline-md text-headline-md font-bold text-primary tabular-nums">1,248,500.00</span>
+<span class="font-label-sm text-secondary font-bold tabular-nums">+2.14% 24h</span>
+</div>
+<div class="mt-space-xs flex items-center justify-between">
+<span class="text-body-sm text-outline font-label-sm text-[0.6875rem]">ARTH Nominated Liquidity</span>
+<!-- Inline Sparkline (Tiny SVG) -->
+<svg class="w-20 h-5 text-secondary" fill="none" viewbox="0 0 100 24">
+<path d="M0,18 Q15,16 30,10 T60,12 T85,4 L100,2" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path>
+<path d="M0,18 Q15,16 30,10 T60,12 T85,4 L100,2 L100,24 L0,24 Z" fill="currentColor" fill-opacity="0.08"></path>
+</svg>
+</div>
+</div>
+<!-- Metric 2 -->
+<div class="bg-surface-container-lowest p-space-md rounded shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-label-sm text-label-sm uppercase font-bold text-outline">Top Momentum Ticker</span>
+<span class="material-symbols-outlined text-secondary text-base">trending_up</span>
+</div>
+<div class="mt-space-xs flex items-baseline justify-between">
+<div class="flex items-center gap-1">
+<span class="font-headline-md text-headline-md font-bold text-primary">NILA</span>
+<span class="text-body-sm font-label-sm text-on-surface-variant">TECH</span>
+</div>
+<span class="font-label-sm text-secondary font-bold tabular-nums">+4.82%</span>
+</div>
+<div class="mt-space-xs flex items-center justify-between text-body-sm">
+<span class="font-label-sm text-[0.6875rem] text-outline">24H Vol: 84.2M ARTH</span>
+<span class="text-[0.625rem] font-label-sm bg-secondary-container text-on-secondary-container px-1 rounded font-bold">ALPHA #1</span>
+</div>
+</div>
+<!-- Metric 3 -->
+<div class="bg-surface-container-lowest p-space-md rounded shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-label-sm text-label-sm uppercase font-bold text-outline">Armed Volatility Triggers</span>
+<span class="material-symbols-outlined text-secondary text-base">notifications_active</span>
+</div>
+<div class="mt-space-xs flex items-baseline justify-between">
+<span class="font-headline-md text-headline-md font-bold text-primary tabular-nums">3 Alerts</span>
+<span class="font-label-sm text-on-surface-variant font-semibold">Active Engine</span>
+</div>
+<div class="mt-space-xs text-[0.6875rem] font-body-sm text-outline truncate">
+          Tarang &gt; 270 ARTH • Aroha dip &lt; 80 ARTH
+        </div>
+</div>
+<!-- Metric 4 -->
+<div class="bg-surface-container-lowest p-space-md rounded shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between text-on-surface-variant">
+<span class="font-label-sm text-label-sm uppercase font-bold text-outline">Sovereign Composite Alpha</span>
+<span class="material-symbols-outlined text-secondary text-base">speed</span>
+</div>
+<div class="mt-space-xs flex items-baseline justify-between">
+<span class="font-headline-md text-headline-md font-bold text-secondary tabular-nums">+4.12%</span>
+<span class="font-label-sm text-outline font-medium">vs ARTHAX 50</span>
+</div>
+<div class="mt-space-xs flex items-center gap-space-xs">
+<div class="w-full bg-surface-container-high h-1.5 rounded-full overflow-hidden">
+<div class="bg-secondary h-full rounded-full" style="width: 72%;"></div>
+</div>
+<span class="text-[0.625rem] font-label-sm text-secondary font-bold">P-RANK 88</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Workspace Container: 2/3 Content + 1/3 Execution Dock -->
+<div class="w-full max-w-7xl mx-auto px-margin-screen py-space-lg grid grid-cols-1 lg:grid-cols-12 gap-space-lg">
+<!-- LEFT / CENTER: Primary Watchlist & Baskets (8 Cols) -->
+<div class="lg:col-span-8 flex flex-col gap-space-xl">
+<!-- Primary Watchlist Table Card -->
+<div class="bg-surface-container-lowest rounded shadow-sm overflow-hidden flex flex-col">
+<!-- Card Control Header -->
+<div class="p-space-md bg-surface flex flex-wrap items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-xl">view_list</span>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-primary font-bold leading-tight">Live Securities Registry</h2>
+<span class="font-label-sm text-outline text-[0.6875rem]">Order Matching Engine: IN-SETU-CLS-19</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs">
+<div class="relative">
+<input class="bg-surface-container-low text-on-surface font-body-sm text-body-sm pl-7 pr-space-sm py-1 rounded focus:outline-none focus:bg-surface-container-lowest" id="table-search" placeholder="Filter symbol / ISIN..." type="text"/>
+<span class="material-symbols-outlined text-outline text-sm absolute left-2 top-1.5">search</span>
+</div>
+<button class="p-1 rounded bg-surface-container hover:bg-surface-container-high text-on-surface-variant transition-colors" title="Column Density">
+<span class="material-symbols-outlined text-base">density_small</span>
+</button>
+<button class="p-1 rounded bg-surface-container hover:bg-surface-container-high text-on-surface-variant transition-colors" title="Refresh L2 Feed">
+<span class="material-symbols-outlined text-base">sync</span>
+</button>
+</div>
+</div>
+<!-- High-Density Institutional Table -->
+<div class="w-full overflow-x-auto">
+<table class="w-full text-left font-body-sm text-body-sm" id="watchlist-table">
+<thead>
+<tr class="bg-surface-container-low text-outline font-label-sm text-label-sm uppercase tracking-wider">
+<th class="py-2.5 px-space-md">Security / ISIN</th>
+<th class="py-2.5 px-space-sm text-right">LTP (ARTH)</th>
+<th class="py-2.5 px-space-sm text-right">24H Chg</th>
+<th class="py-2.5 px-space-sm text-right">Bid / Ask</th>
+<th class="py-2.5 px-space-sm text-right">Volume (24H)</th>
+<th class="py-2.5 px-space-sm text-center">Trend</th>
+<th class="py-2.5 px-space-sm">Volatility Signal</th>
+<th class="py-2.5 px-space-md text-center">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y-0 text-on-surface">
+<!-- Row 1: NILA Systems -->
+<tr class="hover:bg-surface-container-low transition-colors cursor-pointer group" onclick="selectSecurity('NILA Systems', '161.40', '+4.82%')">
+<td class="py-2.5 px-space-md">
+<div class="flex items-center gap-space-xs">
+<button class="text-secondary hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-sm">star</span>
+</button>
+<div>
+<div class="font-label-md text-label-md font-bold text-primary flex items-center gap-1">
+                        NILA Systems Ltd
+                        <span class="bg-surface-container px-1 py-0.2 rounded text-[0.625rem] text-outline font-semibold">TECH</span>
+</div>
+<div class="font-label-sm text-[0.6875rem] text-outline tabular-nums">INE1029S481 • Tier-1</div>
+</div>
+</div>
+</td>
+<td class="py-2.5 px-space-sm text-right font-label-md text-label-md font-bold tabular-nums text-primary">161.40</td>
+<td class="py-2.5 px-space-sm text-right font-label-md text-label-md font-bold tabular-nums text-secondary">+4.82%</td>
+<td class="py-2.5 px-space-sm text-right font-label-sm text-[0.6875rem] tabular-nums text-on-surface-variant">
+<span class="text-secondary">161.35</span> / <span class="text-error">161.45</span>
+</td>
+<td class="py-2.5 px-space-sm text-right font-label-sm text-label-sm tabular-nums text-on-surface">84.2M ARTH</td>
+<td class="py-2.5 px-space-sm text-center">
+<svg class="w-16 h-5 inline-block text-secondary" fill="none" viewbox="0 0 60 20">
+<path d="M0,16 L15,14 L30,8 L45,10 L60,2" stroke="currentColor" stroke-linecap="round" stroke-width="1.75"></path>
+</svg>
+</td>
+<td class="py-2.5 px-space-sm">
+<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[0.625rem] font-label-sm font-bold bg-secondary-container text-on-secondary-container">
+<span class="w-1 h-1 rounded-full bg-secondary"></span>
+                    Bullish Breakout
+                  </span>
+</td>
+<td class="py-2.5 px-space-md text-center">
+<div class="flex items-center justify-center gap-1 opacity-80 group-hover:opacity-100 transition-opacity">
+<button class="px-2 py-0.5 rounded bg-primary text-on-primary font-label-sm text-[0.625rem] font-bold hover:bg-primary-container" onclick="event.stopPropagation(); loadTrade('NILA', '161.40')">
+                      Trade
+                    </button>
+<button class="p-1 rounded text-outline hover:text-primary" title="Trigger Alert">
+<span class="material-symbols-outlined text-sm">notifications</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2: Tarang Mobility -->
+<tr class="hover:bg-surface-container-low transition-colors cursor-pointer group bg-surface-container-lowest" onclick="selectSecurity('Tarang Mobility', '265.00', '+1.18%')">
+<td class="py-2.5 px-space-md">
+<div class="flex items-center gap-space-xs">
+<button class="text-secondary hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-sm">star</span>
+</button>
+<div>
+<div class="font-label-md text-label-md font-bold text-primary flex items-center gap-1">
+                        Tarang Mobility
+                        <span class="bg-surface-container px-1 py-0.2 rounded text-[0.625rem] text-outline font-semibold">EV/INFRA</span>
+</div>
+<div class="font-label-sm text-[0.6875rem] text-outline tabular-nums">INE8493M019 • Sovereign ESG</div>
+</div>
+</div>
+</td>
+<td class="py-2.5 px-space-sm text-right font-label-md text-label-md font-bold tabular-nums text-primary">265.00</td>
+<td class="py-2.5 px-space-sm text-right font-label-md text-label-md font-bold tabular-nums text-secondary">+1.18%</td>
+<td class="py-2.5 px-space-sm text-right font-label-sm text-[0.6875rem] tabular-nums text-on-surface-variant">
+<span class="text-secondary">264.80</span> / <span class="text-error">265.20</span>
+</td>
+<td class="py-2.5 px-space-sm text-right font-label-sm text-label-sm tabular-nums text-on-surface">42.1M ARTH</td>
+<td class="py-2.5 px-space-sm text-center">
+<svg class="w-16 h-5 inline-block text-secondary" fill="none" viewbox="0 0 60 20">
+<path d="M0,12 L15,10 L30,14 L45,8 L60,6" stroke="currentColor" stroke-linecap="round" stroke-width="1.75"></path>
+</svg>
+</td>
+<td class="py-2.5 px-space-sm">
+<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[0.625rem] font-label-sm font-bold bg-surface-container text-on-surface-variant">
+<span class="w-1 h-1 rounded-full bg-outline"></span>
+                    Consolidation
+                  </span>
+</td>
+<td class="py-2.5 px-space-md text-center">
+<div class="flex items-center justify-center gap-1 opacity-80 group-hover:opacity-100 transition-opacity">
+<button class="px-2 py-0.5 rounded bg-primary text-on-primary font-label-sm text-[0.625rem] font-bold hover:bg-primary-container" onclick="event.stopPropagation(); loadTrade('TARANG', '265.00')">
+                      Trade
+                    </button>
+<button class="p-1 rounded text-outline hover:text-primary" title="Trigger Alert">
+<span class="material-symbols-outlined text-sm">notifications</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3: Veda Health Sci -->
+<tr class="hover:bg-surface-container-low transition-colors cursor-pointer group" onclick="selectSecurity('Veda Health Sci', '304.20', '+0.89%')">
+<td class="py-2.5 px-space-md">
+<div class="flex items-center gap-space-xs">
+<button class="text-secondary hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-sm">star</span>
+</button>
+<div>
+<div class="font-label-md text-label-md font-bold text-primary flex items-center gap-1">
+                        Veda Health Sci
+                        <span class="bg-surface-container px-1 py-0.2 rounded text-[0.625rem] text-outline font-semibold">BIO</span>
+</div>
+<div class="font-label-sm text-[0.6875rem] text-outline tabular-nums">INE3091H728 • Tier-1</div>
+</div>
+</div>
+</td>
+<td class="py-2.5 px-space-sm text-right font-label-md text-label-md font-bold tabular-nums text-primary">304.20</td>
+<td class="py-2.5 px-space-sm text-right font-label-md text-label-md font-bold tabular-nums text-secondary">+0.89%</td>
+<td class="py-2.5 px-space-sm text-right font-label-sm text-[0.6875rem] tabular-nums text-on-surface-variant">
+<span class="text-secondary">303.90</span> / <span class="text-error">304.50</span>
+</td>
+<td class="py-2.5 px-space-sm text-right font-label-sm text-label-sm tabular-nums text-on-surface">31.8M ARTH</td>
+<td class="py-2.5 px-space-sm text-center">
+<svg class="w-16 h-5 inline-block text-secondary" fill="none" viewbox="0 0 60 20">
+<path d="M0,14 L20,13 L40,9 L60,7" stroke="currentColor" stroke-linecap="round" stroke-width="1.75"></path>
+</svg>
+</td>
+<td class="py-2.5 px-space-sm">
+<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[0.625rem] font-label-sm font-bold bg-surface-container text-on-surface-variant">
+<span class="w-1 h-1 rounded-full bg-secondary"></span>
+                    Steady Accumulation
+                  </span>
+</td>
+<td class="py-2.5 px-space-md text-center">
+<div class="flex items-center justify-center gap-1 opacity-80 group-hover:opacity-100 transition-opacity">
+<button class="px-2 py-0.5 rounded bg-primary text-on-primary font-label-sm text-[0.625rem] font-bold hover:bg-primary-container" onclick="event.stopPropagation(); loadTrade('VEDA', '304.20')">
+                      Trade
+                    </button>
+<button class="p-1 rounded text-outline hover:text-primary" title="Trigger Alert">
+<span class="material-symbols-outlined text-sm">notifications</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 4: Meru Capital Corp -->
+<tr class="hover:bg-surface-container-low transition-colors cursor-pointer group" onclick="selectSecurity('Meru Capital Corp', '120.05', '+3.12%')">
+<td class="py-2.5 px-space-md">
+<div class="flex items-center gap-space-xs">
+<button class="text-secondary hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-sm">star</span>
+</button>
+<div>
+<div class="font-label-md text-label-md font-bold text-primary flex items-center gap-1">
+                        Meru Capital Corp
+                        <span class="bg-surface-container px-1 py-0.2 rounded text-[0.625rem] text-outline font-semibold">FINTECH</span>
+</div>
+<div class="font-label-sm text-[0.6875rem] text-outline tabular-nums">INE4491C092 • Tier-1 High Liquid</div>
+</div>
+</div>
+</td>
+<td class="py-2.5 px-space-sm text-right font-label-md text-label-md font-bold tabular-nums text-primary">120.05</td>
+<td class="py-2.5 px-space-sm text-right font-label-md text-label-md font-bold tabular-nums text-secondary">+3.12%</td>
+<td class="py-2.5 px-space-sm text-right font-label-sm text-[0.6875rem] tabular-nums text-on-surface-variant">
+<span class="text-secondary">119.90</span> / <span class="text-error">120.20</span>
+</td>
+<td class="py-2.5 px-space-sm text-right font-label-sm text-label-sm tabular-nums text-on-surface">58.4M ARTH</td>
+<td class="py-2.5 px-space-sm text-center">
+<svg class="w-16 h-5 inline-block text-secondary" fill="none" viewbox="0 0 60 20">
+<path d="M0,18 L15,15 L35,11 L48,6 L60,3" stroke="currentColor" stroke-linecap="round" stroke-width="1.75"></path>
+</svg>
+</td>
+<td class="py-2.5 px-space-sm">
+<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[0.625rem] font-label-sm font-bold bg-secondary-container text-on-secondary-container">
+<span class="w-1 h-1 rounded-full bg-secondary"></span>
+                    Volume Surge
+                  </span>
+</td>
+<td class="py-2.5 px-space-md text-center">
+<div class="flex items-center justify-center gap-1 opacity-80 group-hover:opacity-100 transition-opacity">
+<button class="px-2 py-0.5 rounded bg-primary text-on-primary font-label-sm text-[0.625rem] font-bold hover:bg-primary-container" onclick="event.stopPropagation(); loadTrade('MERU', '120.05')">
+                      Trade
+                    </button>
+<button class="p-1 rounded text-outline hover:text-primary" title="Trigger Alert">
+<span class="material-symbols-outlined text-sm">notifications</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 5: Aroha Foods Ltd -->
+<tr class="hover:bg-surface-container-low transition-colors cursor-pointer group" onclick="selectSecurity('Aroha Foods Ltd', '82.10', '-0.42%')">
+<td class="py-2.5 px-space-md">
+<div class="flex items-center gap-space-xs">
+<button class="text-outline-variant hover:text-secondary transition-colors">
+<span class="material-symbols-outlined text-sm">star_border</span>
+</button>
+<div>
+<div class="font-label-md text-label-md font-bold text-primary flex items-center gap-1">
+                        Aroha Foods Ltd
+                        <span class="bg-surface-container px-1 py-0.2 rounded text-[0.625rem] text-outline font-semibold">FMCG</span>
+</div>
+<div class="font-label-sm text-[0.6875rem] text-outline tabular-nums">INE7310F112 • Defensive</div>
+</div>
+</div>
+</td>
+<td class="py-2.5 px-space-sm text-right font-label-md text-label-md font-bold tabular-nums text-primary">82.10</td>
+<td class="py-2.5 px-space-sm text-right font-label-md text-label-md font-bold tabular-nums text-error">-0.42%</td>
+<td class="py-2.5 px-space-sm text-right font-label-sm text-[0.6875rem] tabular-nums text-on-surface-variant">
+<span class="text-secondary">82.00</span> / <span class="text-error">82.25</span>
+</td>
+<td class="py-2.5 px-space-sm text-right font-label-sm text-label-sm tabular-nums text-on-surface">18.2M ARTH</td>
+<td class="py-2.5 px-space-sm text-center">
+<svg class="w-16 h-5 inline-block text-error" fill="none" viewbox="0 0 60 20">
+<path d="M0,6 L20,8 L40,11 L60,15" stroke="currentColor" stroke-linecap="round" stroke-width="1.75"></path>
+</svg>
+</td>
+<td class="py-2.5 px-space-sm">
+<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[0.625rem] font-label-sm font-bold bg-surface-container-high text-on-surface-variant">
+<span class="w-1 h-1 rounded-full bg-outline"></span>
+                    Near Support
+                  </span>
+</td>
+<td class="py-2.5 px-space-md text-center">
+<div class="flex items-center justify-center gap-1 opacity-80 group-hover:opacity-100 transition-opacity">
+<button class="px-2 py-0.5 rounded bg-primary text-on-primary font-label-sm text-[0.625rem] font-bold hover:bg-primary-container" onclick="event.stopPropagation(); loadTrade('AROHA', '82.10')">
+                      Trade
+                    </button>
+<button class="p-1 rounded text-outline hover:text-primary" title="Trigger Alert">
+<span class="material-symbols-outlined text-sm">notifications</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 6: Arka Energy Glob -->
+<tr class="hover:bg-surface-container-low transition-colors cursor-pointer group" onclick="selectSecurity('Arka Energy Glob', '126.84', '+0.64%')">
+<td class="py-2.5 px-space-md">
+<div class="flex items-center gap-space-xs">
+<button class="text-secondary hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-sm">star</span>
+</button>
+<div>
+<div class="font-label-md text-label-md font-bold text-primary flex items-center gap-1">
+                        Arka Energy Glob
+                        <span class="bg-surface-container px-1 py-0.2 rounded text-[0.625rem] text-outline font-semibold">SOLAR</span>
+</div>
+<div class="font-label-sm text-[0.6875rem] text-outline tabular-nums">INE5528E802 • Sovereign ESG</div>
+</div>
+</div>
+</td>
+<td class="py-2.5 px-space-sm text-right font-label-md text-label-md font-bold tabular-nums text-primary">126.84</td>
+<td class="py-2.5 px-space-sm text-right font-label-md text-label-md font-bold tabular-nums text-secondary">+0.64%</td>
+<td class="py-2.5 px-space-sm text-right font-label-sm text-[0.6875rem] tabular-nums text-on-surface-variant">
+<span class="text-secondary">126.50</span> / <span class="text-error">127.10</span>
+</td>
+<td class="py-2.5 px-space-sm text-right font-label-sm text-label-sm tabular-nums text-on-surface">22.9M ARTH</td>
+<td class="py-2.5 px-space-sm text-center">
+<svg class="w-16 h-5 inline-block text-secondary" fill="none" viewbox="0 0 60 20">
+<path d="M0,13 L20,11 L40,12 L60,8" stroke="currentColor" stroke-linecap="round" stroke-width="1.75"></path>
+</svg>
+</td>
+<td class="py-2.5 px-space-sm">
+<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[0.625rem] font-label-sm font-bold bg-surface-container text-on-surface-variant">
+<span class="w-1 h-1 rounded-full bg-secondary"></span>
+                    Stable Yield
+                  </span>
+</td>
+<td class="py-2.5 px-space-md text-center">
+<div class="flex items-center justify-center gap-1 opacity-80 group-hover:opacity-100 transition-opacity">
+<button class="px-2 py-0.5 rounded bg-primary text-on-primary font-label-sm text-[0.625rem] font-bold hover:bg-primary-container" onclick="event.stopPropagation(); loadTrade('ARKA', '126.84')">
+                      Trade
+                    </button>
+<button class="p-1 rounded text-outline hover:text-primary" title="Trigger Alert">
+<span class="material-symbols-outlined text-sm">notifications</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 7: Kshiti Infra -->
+<tr class="hover:bg-surface-container-low transition-colors cursor-pointer group" onclick="selectSecurity('Kshiti Infra', '194.50', '+2.40%')">
+<td class="py-2.5 px-space-md">
+<div class="flex items-center gap-space-xs">
+<button class="text-secondary hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-sm">star</span>
+</button>
+<div>
+<div class="font-label-md text-label-md font-bold text-primary flex items-center gap-1">
+                        Kshiti Infra
+                        <span class="bg-surface-container px-1 py-0.2 rounded text-[0.625rem] text-outline font-semibold">URBAN INFRA</span>
+</div>
+<div class="font-label-sm text-[0.6875rem] text-outline tabular-nums">INE9021K034 • Bond Backed</div>
+</div>
+</div>
+</td>
+<td class="py-2.5 px-space-sm text-right font-label-md text-label-md font-bold tabular-nums text-primary">194.50</td>
+<td class="py-2.5 px-space-sm text-right font-label-md text-label-md font-bold tabular-nums text-secondary">+2.40%</td>
+<td class="py-2.5 px-space-sm text-right font-label-sm text-[0.6875rem] tabular-nums text-on-surface-variant">
+<span class="text-secondary">194.20</span> / <span class="text-error">194.80</span>
+</td>
+<td class="py-2.5 px-space-sm text-right font-label-sm text-label-sm tabular-nums text-on-surface">39.5M ARTH</td>
+<td class="py-2.5 px-space-sm text-center">
+<svg class="w-16 h-5 inline-block text-secondary" fill="none" viewbox="0 0 60 20">
+<path d="M0,15 L15,14 L35,8 L50,9 L60,4" stroke="currentColor" stroke-linecap="round" stroke-width="1.75"></path>
+</svg>
+</td>
+<td class="py-2.5 px-space-sm">
+<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[0.625rem] font-label-sm font-bold bg-secondary-container text-on-secondary-container">
+<span class="w-1 h-1 rounded-full bg-secondary"></span>
+                    Momentum Up
+                  </span>
+</td>
+<td class="py-2.5 px-space-md text-center">
+<div class="flex items-center justify-center gap-1 opacity-80 group-hover:opacity-100 transition-opacity">
+<button class="px-2 py-0.5 rounded bg-primary text-on-primary font-label-sm text-[0.625rem] font-bold hover:bg-primary-container" onclick="event.stopPropagation(); loadTrade('KSHITI', '194.50')">
+                      Trade
+                    </button>
+<button class="p-1 rounded text-outline hover:text-primary" title="Trigger Alert">
+<span class="material-symbols-outlined text-sm">notifications</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 8: Prava Retail -->
+<tr class="hover:bg-surface-container-low transition-colors cursor-pointer group" onclick="selectSecurity('Prava Retail', '98.30', '-1.15%')">
+<td class="py-2.5 px-space-md">
+<div class="flex items-center gap-space-xs">
+<button class="text-outline-variant hover:text-secondary transition-colors">
+<span class="material-symbols-outlined text-sm">star_border</span>
+</button>
+<div>
+<div class="font-label-md text-label-md font-bold text-primary flex items-center gap-1">
+                        Prava Retail
+                        <span class="bg-surface-container px-1 py-0.2 rounded text-[0.625rem] text-outline font-semibold">CONSUMER</span>
+</div>
+<div class="font-label-sm text-[0.6875rem] text-outline tabular-nums">INE6182P881 • Tier-2</div>
+</div>
+</div>
+</td>
+<td class="py-2.5 px-space-sm text-right font-label-md text-label-md font-bold tabular-nums text-primary">98.30</td>
+<td class="py-2.5 px-space-sm text-right font-label-md text-label-md font-bold tabular-nums text-error">-1.15%</td>
+<td class="py-2.5 px-space-sm text-right font-label-sm text-[0.6875rem] tabular-nums text-on-surface-variant">
+<span class="text-secondary">98.10</span> / <span class="text-error">98.50</span>
+</td>
+<td class="py-2.5 px-space-sm text-right font-label-sm text-label-sm tabular-nums text-on-surface">14.7M ARTH</td>
+<td class="py-2.5 px-space-sm text-center">
+<svg class="w-16 h-5 inline-block text-error" fill="none" viewbox="0 0 60 20">
+<path d="M0,5 L15,8 L35,12 L50,11 L60,17" stroke="currentColor" stroke-linecap="round" stroke-width="1.75"></path>
+</svg>
+</td>
+<td class="py-2.5 px-space-sm">
+<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[0.625rem] font-label-sm font-bold bg-surface-container-high text-on-surface-variant">
+<span class="w-1 h-1 rounded-full bg-error"></span>
+                    Oversold Test
+                  </span>
+</td>
+<td class="py-2.5 px-space-md text-center">
+<div class="flex items-center justify-center gap-1 opacity-80 group-hover:opacity-100 transition-opacity">
+<button class="px-2 py-0.5 rounded bg-primary text-on-primary font-label-sm text-[0.625rem] font-bold hover:bg-primary-container" onclick="event.stopPropagation(); loadTrade('PRAVA', '98.30')">
+                      Trade
+                    </button>
+<button class="p-1 rounded text-outline hover:text-primary" title="Trigger Alert">
+<span class="material-symbols-outlined text-sm">notifications</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Table Footing Status -->
+<div class="px-space-md py-space-sm bg-surface-container-low flex flex-wrap items-center justify-between text-body-sm font-label-sm text-outline">
+<div class="flex items-center gap-space-md">
+<span>Showing 8 of 12 Monitored Assets</span>
+<span class="hidden sm:inline">•</span>
+<span class="hidden sm:inline">SETU Continuous Latency: 0.84ms</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="w-2 h-2 rounded-full bg-secondary-fixed"></span>
+<span class="text-on-surface font-semibold">Continuous Auction Active</span>
+</div>
+</div>
+</div>
+<!-- Thematic Sovereign Baskets Section -->
+<div class="flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-xl">token</span>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-primary font-bold">Thematic Sovereign Baskets</h2>
+<p class="text-body-sm font-body-sm text-on-surface-variant">Curated algorithmic asset bundles rebalanced monthly per SETU Sovereign Capital standards.</p>
+</div>
+</div>
+<a class="font-label-md text-label-md text-secondary hover:text-primary font-bold flex items-center gap-1" href="#">
+<span>View All Baskets</span>
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</a>
+</div>
+<!-- 3 Basket Cards Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-md">
+<!-- Basket 1 -->
+<div class="bg-surface-container-lowest p-space-md rounded shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-start justify-between">
+<span class="p-2 rounded bg-secondary-container text-on-secondary-container">
+<span class="material-symbols-outlined text-lg">eco</span>
+</span>
+<span class="font-label-sm text-secondary font-bold tabular-nums bg-surface-container-low px-1.5 py-0.5 rounded">
+                  Yield +8.4%
+                </span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary font-bold mt-1">Green Transition</h3>
+<p class="font-body-sm text-body-sm text-outline">Clean energy, transport, and smart grid composite.</p>
+<div class="mt-space-sm flex flex-col gap-1 text-[0.6875rem] font-label-sm text-on-surface-variant">
+<div class="flex justify-between py-0.5">
+<span>Arka Energy (SOLAR)</span>
+<span class="font-bold text-primary tabular-nums">40%</span>
+</div>
+<div class="flex justify-between py-0.5">
+<span>Tarang Mobility (EV)</span>
+<span class="font-bold text-primary tabular-nums">35%</span>
+</div>
+<div class="flex justify-between py-0.5">
+<span>Kshiti Infra (URBAN)</span>
+<span class="font-bold text-primary tabular-nums">25%</span>
+</div>
+</div>
+</div>
+<div class="mt-space-md pt-space-sm bg-surface-container-low -mx-space-md -mb-space-md p-space-md rounded-b flex items-center justify-between">
+<div>
+<span class="block text-[0.625rem] font-label-sm uppercase text-outline">Min. Bundle Unit</span>
+<span class="font-label-md text-label-md font-bold text-primary tabular-nums">586.34 ARTH</span>
+</div>
+<button class="px-space-md py-1.5 rounded bg-secondary text-on-secondary font-label-sm text-label-sm font-bold hover:bg-secondary/90 transition-colors shadow-sm" onclick="executeBasket('Green Sovereign Transition', '586.34')">
+                1-Click Buy
+              </button>
+</div>
+</div>
+<!-- Basket 2 -->
+<div class="bg-surface-container-lowest p-space-md rounded shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-start justify-between">
+<span class="p-2 rounded bg-surface-container-highest text-primary">
+<span class="material-symbols-outlined text-lg">terminal</span>
+</span>
+<span class="font-label-sm text-secondary font-bold tabular-nums bg-surface-container-low px-1.5 py-0.5 rounded">
+                  Alpha +12.6%
+                </span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary font-bold mt-1">Deep Tech &amp; Core</h3>
+<p class="font-body-sm text-body-sm text-outline">Compute infrastructure, ledger nodes, and fintech.</p>
+<div class="mt-space-sm flex flex-col gap-1 text-[0.6875rem] font-label-sm text-on-surface-variant">
+<div class="flex justify-between py-0.5">
+<span>NILA Systems Ltd</span>
+<span class="font-bold text-primary tabular-nums">60%</span>
+</div>
+<div class="flex justify-between py-0.5">
+<span>Meru Capital Corp</span>
+<span class="font-bold text-primary tabular-nums">40%</span>
+</div>
+<div class="flex justify-between py-0.5 text-outline">
+<span>Dynamic Hedging Ratio</span>
+<span class="font-bold tabular-nums">1.14x</span>
+</div>
+</div>
+</div>
+<div class="mt-space-md pt-space-sm bg-surface-container-low -mx-space-md -mb-space-md p-space-md rounded-b flex items-center justify-between">
+<div>
+<span class="block text-[0.625rem] font-label-sm uppercase text-outline">Min. Bundle Unit</span>
+<span class="font-label-md text-label-md font-bold text-primary tabular-nums">281.45 ARTH</span>
+</div>
+<button class="px-space-md py-1.5 rounded bg-secondary text-on-secondary font-label-sm text-label-sm font-bold hover:bg-secondary/90 transition-colors shadow-sm" onclick="executeBasket('Deep Tech &amp; Algorithmic Core', '281.45')">
+                1-Click Buy
+              </button>
+</div>
+</div>
+<!-- Basket 3 -->
+<div class="bg-surface-container-lowest p-space-md rounded shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-start justify-between">
+<span class="p-2 rounded bg-surface-container text-on-surface-variant">
+<span class="material-symbols-outlined text-lg">health_and_safety</span>
+</span>
+<span class="font-label-sm text-secondary font-bold tabular-nums bg-surface-container-low px-1.5 py-0.5 rounded">
+                  Div Yield 4.2%
+                </span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary font-bold mt-1">Defensive Health</h3>
+<p class="font-body-sm text-body-sm text-outline">Low beta sovereign consumer staples and healthcare.</p>
+<div class="mt-space-sm flex flex-col gap-1 text-[0.6875rem] font-label-sm text-on-surface-variant">
+<div class="flex justify-between py-0.5">
+<span>Veda Health Sci</span>
+<span class="font-bold text-primary tabular-nums">55%</span>
+</div>
+<div class="flex justify-between py-0.5">
+<span>Aroha Foods Ltd</span>
+<span class="font-bold text-primary tabular-nums">45%</span>
+</div>
+<div class="flex justify-between py-0.5 text-outline">
+<span>Composite Beta</span>
+<span class="font-bold tabular-nums">0.68 (Low)</span>
+</div>
+</div>
+</div>
+<div class="mt-space-md pt-space-sm bg-surface-container-low -mx-space-md -mb-space-md p-space-md rounded-b flex items-center justify-between">
+<div>
+<span class="block text-[0.625rem] font-label-sm uppercase text-outline">Min. Bundle Unit</span>
+<span class="font-label-md text-label-md font-bold text-primary tabular-nums">386.30 ARTH</span>
+</div>
+<button class="px-space-md py-1.5 rounded bg-secondary text-on-secondary font-label-sm text-label-sm font-bold hover:bg-secondary/90 transition-colors shadow-sm" onclick="executeBasket('Defensive Staples &amp; Sovereign Health', '386.30')">
+                1-Click Buy
+              </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- RIGHT: Surveillance Triggers & Execution Dock (4 Cols) -->
+<div class="lg:col-span-4 flex flex-col gap-space-lg">
+<!-- Surveillance & Volatility Trigger Dock -->
+<div class="bg-surface-container-lowest p-space-md rounded shadow-sm flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary text-xl">sensors</span>
+<h3 class="font-headline-sm text-headline-sm text-primary font-bold">Surveillance Triggers</h3>
+</div>
+<span class="text-[0.625rem] font-label-sm bg-surface-container px-2 py-0.5 rounded text-outline font-bold">L3 FEED</span>
+</div>
+<!-- Active Trigger List with Toggles -->
+<div class="flex flex-col gap-space-xs">
+<!-- Trigger 1 -->
+<div class="p-space-sm rounded bg-surface-container-low flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-primary font-bold">TARANG Breakout Alert</span>
+<span class="text-[0.6875rem] font-body-sm text-outline tabular-nums">Trigger: Price &gt; 270.00 ARTH</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-8 h-4 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-secondary"></div>
+</label>
+</div>
+<!-- Trigger 2 -->
+<div class="p-space-sm rounded bg-surface-container-low flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-primary font-bold">AROHA Dip Detector</span>
+<span class="text-[0.6875rem] font-body-sm text-outline tabular-nums">Trigger: Price &lt; 80.00 ARTH</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-8 h-4 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-secondary"></div>
+</label>
+</div>
+<!-- Trigger 3 -->
+<div class="p-space-sm rounded bg-surface-container-low flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-primary font-bold">NILA Volume Shock</span>
+<span class="text-[0.6875rem] font-body-sm text-outline tabular-nums">Trigger: 10m Vol &gt; 200% MA</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-8 h-4 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-secondary"></div>
+</label>
+</div>
+</div>
+<!-- Inline Form: Create New Alert -->
+<div class="pt-space-xs flex flex-col gap-space-xs">
+<span class="font-label-sm text-label-sm font-bold text-primary uppercase tracking-wider">Quick Create Alert</span>
+<div class="grid grid-cols-2 gap-space-xs">
+<select class="bg-surface-container-low text-on-surface font-body-sm text-body-sm p-1.5 rounded focus:outline-none" id="alert-ticker">
+<option value="NILA">NILA Systems</option>
+<option value="TARANG">Tarang Mobility</option>
+<option value="VEDA">Veda Health</option>
+<option value="MERU">Meru Capital</option>
+<option value="AROHA">Aroha Foods</option>
+</select>
+<div class="flex gap-1">
+<select class="w-1/2 bg-surface-container-low text-on-surface font-body-sm text-body-sm p-1.5 rounded focus:outline-none" id="alert-condition">
+<option value="gt">&gt;=</option>
+<option value="lt">&lt;=</option>
+</select>
+<input class="w-1/2 bg-surface-container-low text-on-surface font-body-sm text-body-sm p-1.5 rounded focus:outline-none text-right tabular-nums" id="alert-price" placeholder="Target ARTH" type="text"/>
+</div>
+</div>
+<button class="mt-1 w-full py-1.5 rounded bg-surface-container-high hover:bg-surface-variant text-primary font-label-sm text-label-sm font-bold transition-colors flex items-center justify-center gap-1" id="btn-add-trigger">
+<span class="material-symbols-outlined text-sm">add_alert</span>
+<span>Arm Volatility Trigger</span>
+</button>
+</div>
+</div>
+<!-- Order Execution Quick-Pad (Sticky Dock) -->
+<div class="bg-surface-container-lowest p-space-md rounded shadow-sm flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-xl">bolt</span>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-primary font-bold">Execution Quick-Pad</h3>
+<span class="text-[0.625rem] font-label-sm text-outline">Atomic DvP-III Route</span>
+</div>
+</div>
+<span class="text-[0.6875rem] font-label-sm text-secondary font-bold tabular-nums">BAL: 38,450 ARTH</span>
+</div>
+<!-- Buy / Sell Side Selector -->
+<div class="grid grid-cols-2 gap-space-xs">
+<button class="py-1.5 rounded bg-secondary text-on-secondary font-label-md text-label-md font-bold shadow-sm" id="pad-buy" onclick="setSide('BUY')">
+            BUY / BID
+          </button>
+<button class="py-1.5 rounded bg-surface-container-high text-on-surface font-label-md text-label-md font-bold hover:bg-surface-variant" id="pad-sell" onclick="setSide('SELL')">
+            SELL / OFFER
+          </button>
+</div>
+<!-- Ticket Configuration -->
+<div class="flex flex-col gap-space-sm">
+<div class="flex flex-col gap-0.5">
+<label class="font-label-sm text-label-sm text-outline">Selected Instrument</label>
+<div class="flex items-center justify-between p-2 rounded bg-surface-container-low">
+<span class="font-label-md text-label-md font-bold text-primary" id="dock-ticker-label">NILA Systems Ltd</span>
+<span class="font-label-md text-label-md font-bold text-primary tabular-nums" id="dock-price-label">161.40 ARTH</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-space-xs">
+<div class="flex flex-col gap-0.5">
+<label class="font-label-sm text-label-sm text-outline">Order Type</label>
+<select class="bg-surface-container-low text-on-surface font-body-sm text-body-sm p-1.5 rounded focus:outline-none" id="order-type">
+<option value="LIMIT">Limit</option>
+<option value="MARKET">Market (DvP)</option>
+<option value="STOP">Stop Loss</option>
+</select>
+</div>
+<div class="flex flex-col gap-0.5">
+<label class="font-label-sm text-label-sm text-outline">Quantity (Lots: 50)</label>
+<input class="bg-surface-container-low text-on-surface font-body-sm text-body-sm p-1.5 rounded focus:outline-none text-right tabular-nums font-bold" id="order-qty" min="50" oninput="calculateTotal()" step="50" type="number" value="100"/>
+</div>
+</div>
+<!-- Settlement Summary Breakdown -->
+<div class="p-space-sm rounded bg-surface-container-low flex flex-col gap-1 text-[0.6875rem] font-body-sm">
+<div class="flex justify-between text-on-surface-variant">
+<span>Gross Trade Value:</span>
+<span class="tabular-nums font-medium text-on-surface" id="calc-gross">16,140.00 ARTH</span>
+</div>
+<div class="flex justify-between text-on-surface-variant">
+<span>SETU Clearing &amp; STT (0.1%):</span>
+<span class="tabular-nums font-medium text-on-surface" id="calc-tax">16.14 ARTH</span>
+</div>
+<div class="flex justify-between font-label-md text-label-md font-bold text-primary pt-1">
+<span>Total DvP Escrow:</span>
+<span class="tabular-nums text-secondary" id="calc-total">16,156.14 ARTH</span>
+</div>
+</div>
+<!-- Execution Action Button -->
+<button class="w-full py-2.5 rounded bg-primary text-on-primary hover:bg-primary-container font-label-lg text-label-lg font-bold transition-colors shadow-sm flex items-center justify-center gap-space-xs" id="execute-btn" onclick="executeAtomicTrade()">
+<span class="material-symbols-outlined text-lg">verified</span>
+<span id="btn-text">Execute 1-Click Atomic DvP</span>
+</button>
+<div class="flex items-center justify-between text-[0.625rem] font-label-sm text-outline">
+<span>Sovereign Settlement Guarantee</span>
+<span class="text-secondary font-bold">Finality: &lt;1.20s</span>
+</div>
+</div>
+</div>
+<!-- Depository Order Depth Sniffer -->
+<div class="bg-surface-container-lowest p-space-md rounded shadow-sm flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase font-bold text-primary">Depository Depth Ratio</span>
+<span class="font-label-sm text-[0.6875rem] text-secondary font-bold tabular-nums">0.84ms LATENCY</span>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex justify-between text-body-sm font-label-sm">
+<span class="text-secondary font-bold">62% Aggregate Buyers</span>
+<span class="text-error font-bold">38% Sellers</span>
+</div>
+<!-- Visual Bid / Ask Bar Indicator -->
+<div class="w-full h-2 rounded-full overflow-hidden flex bg-surface-container">
+<div class="bg-secondary h-full" style="width: 62%;"></div>
+<div class="bg-error h-full" style="width: 38%;"></div>
+</div>
+</div>
+<div class="pt-space-xs flex items-center justify-between text-[0.6875rem] font-body-sm text-outline">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-xs text-secondary">lock</span>
+<span>Block #28,102,525</span>
+</div>
+<span>CDSL/NSDL Verified Dual-Ledger</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Notification Toast Modal Container -->
+<div class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none" id="toast">
+<div class="bg-primary text-on-primary px-space-md py-space-sm rounded shadow-xl flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-secondary-fixed text-lg">task_alt</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md font-bold" id="toast-title">DvP Settlement Dispatched</span>
+<span class="font-body-sm text-body-sm text-surface-variant" id="toast-msg">Transaction routed with atomic settlement SLA &lt;1.20s</span>
+</div>
+</div>
+</div>
+</div>
+<script>
+  let currentSide = 'BUY';
+  let activeSecurityName = 'NILA Systems Ltd';
+  let activeLtp = 161.40;
+
+  function selectSecurity(name, price, change) {
+    activeSecurityName = name;
+    activeLtp = parseFloat(price);
+    const label = document.getElementById('dock-ticker-label');
+    const priceLabel = document.getElementById('dock-price-label');
+    if (label) label.textContent = name;
+    if (priceLabel) priceLabel.textContent = price + ' ARTH';
+    calculateTotal();
+  }
+
+  function loadTrade(ticker, price) {
+    selectSecurity(ticker, price);
+    const executeCard = document.getElementById('dock-ticker-label');
+    if (executeCard) {
+      executeCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
+
+  function setSide(side) {
+    currentSide = side;
+    const buyBtn = document.getElementById('pad-buy');
+    const sellBtn = document.getElementById('pad-sell');
+    const executeBtn = document.getElementById('execute-btn');
+    const btnText = document.getElementById('btn-text');
+
+    if (side === 'BUY') {
+      buyBtn.className = 'py-1.5 rounded bg-secondary text-on-secondary font-label-md text-label-md font-bold shadow-sm';
+      sellBtn.className = 'py-1.5 rounded bg-surface-container-high text-on-surface font-label-md text-label-md font-bold hover:bg-surface-variant';
+      executeBtn.className = 'w-full py-2.5 rounded bg-primary text-on-primary hover:bg-primary-container font-label-lg text-label-lg font-bold transition-colors shadow-sm flex items-center justify-center gap-space-xs';
+      if (btnText) btnText.textContent = 'Execute 1-Click Atomic Buy';
+    } else {
+      sellBtn.className = 'py-1.5 rounded bg-error text-on-error font-label-md text-label-md font-bold shadow-sm';
+      buyBtn.className = 'py-1.5 rounded bg-surface-container-high text-on-surface font-label-md text-label-md font-bold hover:bg-surface-variant';
+      executeBtn.className = 'w-full py-2.5 rounded bg-error text-on-error hover:opacity-90 font-label-lg text-label-lg font-bold transition-colors shadow-sm flex items-center justify-center gap-space-xs';
+      if (btnText) btnText.textContent = 'Execute 1-Click Atomic Sell';
+    }
+  }
+
+  function calculateTotal() {
+    const qtyInput = document.getElementById('order-qty');
+    const grossEl = document.getElementById('calc-gross');
+    const taxEl = document.getElementById('calc-tax');
+    const totalEl = document.getElementById('calc-total');
+
+    if (!qtyInput) return;
+    const qty = parseInt(qtyInput.value) || 0;
+    const gross = qty * activeLtp;
+    const tax = gross * 0.001; // 0.1% STT & Clearing
+    const total = currentSide === 'BUY' ? gross + tax : gross - tax;
+
+    if (grossEl) grossEl.textContent = gross.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ARTH';
+    if (taxEl) taxEl.textContent = tax.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ARTH';
+    if (totalEl) totalEl.textContent = total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' ARTH';
+  }
+
+  function showToast(title, msg) {
+    const toast = document.getElementById('toast');
+    const tTitle = document.getElementById('toast-title');
+    const tMsg = document.getElementById('toast-msg');
+
+    if (!toast) return;
+    if (tTitle) tTitle.textContent = title;
+    if (tMsg) tMsg.textContent = msg;
+
+    toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+    toast.classList.add('translate-y-0', 'opacity-100');
+
+    setTimeout(() => {
+      toast.classList.remove('translate-y-0', 'opacity-100');
+      toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+    }, 3800);
+  }
+
+  function executeAtomicTrade() {
+    const qty = document.getElementById('order-qty').value;
+    showToast('Atomic DvP Dispatched', currentSide + ' order for ' + qty + ' units of ' + activeSecurityName + ' confirmed under CLS finality.');
+  }
+
+  function executeBasket(basketName, price) {
+    showToast('Thematic Basket Dispatched', '1-Click allocation for "' + basketName + '" (' + price + ' ARTH) submitted to Sovereign Clearing.');
+  }
+
+  // Filter Tabs Event Listeners
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.tab-btn').forEach(b => {
+        b.className = 'tab-btn px-space-md py-1.5 rounded bg-surface-container-high hover:bg-surface-variant text-on-surface font-label-md text-label-md transition-colors flex items-center gap-space-xs';
+      });
+      this.className = 'tab-btn px-space-md py-1.5 rounded bg-primary-container text-on-primary font-label-md text-label-md font-bold transition-colors flex items-center gap-space-xs';
+    });
+  });
+
+  // Alert Adder micro-interaction
+  const addTriggerBtn = document.getElementById('btn-add-trigger');
+  if (addTriggerBtn) {
+    addTriggerBtn.addEventListener('click', () => {
+      const ticker = document.getElementById('alert-ticker').value;
+      const cond = document.getElementById('alert-condition').value === 'gt' ? '>' : '<';
+      const prc = document.getElementById('alert-price').value;
+      if (!prc) {
+        showToast('Configuration Warning', 'Please provide a valid threshold price in ARTH.');
+        return;
+      }
+      showToast('Surveillance Trigger Armed', 'Alert queued for ' + ticker + ' ' + cond + ' ' + prc + ' ARTH on high-frequency stream.');
+      document.getElementById('alert-price').value = '';
+    });
+  }
+
+  // Quick Table Search Filter
+  const searchInput = document.getElementById('table-search');
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase();
+      const rows = document.querySelectorAll('#watchlist-table tbody tr');
+      rows.forEach(r => {
+        const txt = r.textContent.toLowerCase();
+        r.style.display = txt.includes(query) ? '' : 'none';
+      });
+    });
+  }
+</script></main><footer class="w-full bg-surface-container-low border-t border-surface-container-high py-space-xl mt-space-2xl"><div class="max-w-7xl mx-auto px-margin-screen grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-space-xl"><div class="flex flex-col gap-space-sm"><div class="flex items-center gap-space-xs text-primary"><span class="material-symbols-outlined text-lg">account_balance</span><h4 class="font-label-lg text-label-lg font-bold uppercase tracking-wider text-primary">SEBI &amp; SETU Accord</h4></div><p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">Compliant with SETU Regulatory Sandbox Mandate Ref #778-B. Member of National Depository clearing networks with automated dual-ledger surveillance and atomic settlement audits.</p><div class="font-label-sm text-label-sm text-outline font-semibold">Broker ID: INZ000293438 • Clearing #9021</div></div><div class="flex flex-col gap-space-sm"><div class="flex items-center gap-space-xs text-primary"><span class="material-symbols-outlined text-lg">sync_saved_locally</span><h4 class="font-label-lg text-label-lg font-bold uppercase tracking-wider text-primary">DvP &amp; Settlement</h4></div><p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">Delivery versus Payment (DvP-III) direct settlement engine with instant ledger finality under Reserve Bank circulars. Capital balances ring-fenced under sovereign custodial escrow.</p><div class="font-label-sm text-label-sm text-secondary font-bold flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-secondary"></span><span>DvP SLA: &lt;1.20 SEC FINALITY</span></div></div><div class="flex flex-col gap-space-sm"><div class="flex items-center gap-space-xs text-primary"><span class="material-symbols-outlined text-lg">receipt_long</span><h4 class="font-label-lg text-label-lg font-bold uppercase tracking-wider text-primary">Tax &amp; Compliance Rules</h4></div><p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">Real-time capital gains assessment (STCG 20%, LTCG 12.5% under Finance Act 2024). Auto-generated Form 10DB and transactional securities tax (STT) calculation logs provided daily.</p><div class="font-label-sm text-label-sm text-outline font-semibold">Auditor: Sovereign Ledger Trust LLC</div></div><div class="flex flex-col gap-space-sm"><div class="flex items-center gap-space-xs text-primary"><span class="material-symbols-outlined text-lg">query_stats</span><h4 class="font-label-lg text-label-lg font-bold uppercase tracking-wider text-primary">Depository Telemetry</h4></div><div class="flex flex-col gap-space-xs font-body-sm text-body-sm"><div class="flex justify-between border-b border-surface-variant py-1"><span class="text-on-surface-variant">NSDL Gateway:</span><span class="font-bold text-primary tabular-nums">ONLINE (0.6ms)</span></div><div class="flex justify-between border-b border-surface-variant py-1"><span class="text-on-surface-variant">CDSL Ledger:</span><span class="font-bold text-primary tabular-nums">ONLINE (0.8ms)</span></div><div class="flex justify-between py-1"><span class="text-on-surface-variant">Disaster Recovery:</span><span class="font-bold text-secondary uppercase">STANDBY HOT</span></div></div></div></div><div class="max-w-7xl mx-auto px-margin-screen pt-space-lg mt-space-lg border-t border-surface-variant flex flex-col md:flex-row items-center justify-between gap-space-sm font-label-sm text-label-sm text-outline"><div class="flex items-center gap-space-md"><span>© 2025 ARTHAX Capital Markets Ltd. All rights reserved.</span><span>Licence #CM-89410-IN</span></div><div class="flex items-center gap-space-lg"><a class="hover:text-on-surface transition-colors" data-path="disclosure-policy" href="#">Disclosure Policy</a><a class="hover:text-on-surface transition-colors" data-path="risk-mandate" href="#">Risk Mandate</a><a class="hover:text-on-surface transition-colors" data-path="system-status" href="#">System Status</a></div></div></footer></body></html>

@@ -1,0 +1,766 @@
+<!DOCTYPE html><html lang="en" style=""><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"surface-container-highest":"#e0e2e9","on-success-container":"#002110","tertiary-container":"#ffdcb6","inverse-on-surface":"#eff0f6","on-error-container":"#410002","error-container":"#ffdad6","error":"#ba1a1a","inverse-primary":"#adc8f5","secondary-fixed-dim":"#bcc7dc","on-secondary-fixed-variant":"#3c4758","surface-container":"#eceef3","on-primary-fixed-variant":"#2d486d","on-secondary-fixed":"#111c2b","outline":"#74777f","secondary-container":"#d8e3f9","surface-dim":"#d8dadf","surface-container-high":"#e6e8ed","tertiary":"#351f00","primary-container":"#1e3a5f","on-tertiary-container":"#2a1700","on-error":"#ffffff","surface-container-low":"#f2f3f9","background":"#f8f9ff","on-secondary-container":"#111c2b","outline-variant":"#c4c6cf","on-primary-container":"#001b3e","surface-container-lowest":"#ffffff","surface-variant":"#e0e2ec","on-surface":"#191c20","surface-bright":"#f8f9ff","on-surface-variant":"#43474e","on-background":"#191c20","secondary":"#545f71","secondary-fixed":"#d8e3f9","on-tertiary-fixed":"#2a1800","on-primary":"#ffffff","primary-fixed":"#d5e3ff","tertiary-fixed":"#ffddb6","success":"#1b6d44","on-tertiary-fixed-variant":"#5d411a","on-secondary":"#ffffff","on-primary-fixed":"#001c3b","primary":"#022448","primary-fixed-dim":"#adc8f5","surface":"#f8f9ff","inverse-surface":"#2e3135","tertiary-fixed-dim":"#e9bf8d","on-tertiary":"#ffffff","surface-tint":"#455f87","success-container":"#a8f5bf"},"borderRadius":{"DEFAULT":"1rem","lg":"2rem","xl":"3rem","full":"9999px"},"spacing":{"margin-mobile":"1rem","space-md":"1rem","space-2xs":"0.25rem","space-lg":"1.5rem","margin-tablet":"2rem","space-3xl":"4rem","margin-desktop":"3rem","space-sm":"0.75rem","gutter-desktop":"1.5rem","gutter-mobile":"1rem","space-2xl":"3rem","space-xs":"0.5rem","space-xl":"2rem"},"fontFamily":{"label-md":["Inter"],"headline-lg":["Newsreader"],"title-lg":["Newsreader"],"display-lg":["Newsreader"],"body-lg":["Inter"],"title-md":["Inter"],"headline-md":["Newsreader"],"display-lg-mobile":["Newsreader"],"label-lg":["Inter"],"body-md":["Inter"]},"fontSize":{"label-md":["12px",{"lineHeight":"16px","fontWeight":"500"}],"headline-lg":["32px",{"lineHeight":"40px","fontWeight":"400"}],"title-lg":["22px",{"lineHeight":"28px","fontWeight":"600"}],"display-lg":["57px",{"lineHeight":"64px","fontWeight":"400"}],"body-lg":["16px",{"lineHeight":"24px","fontWeight":"400"}],"title-md":["16px",{"lineHeight":"24px","fontWeight":"600"}],"headline-md":["28px",{"lineHeight":"36px","fontWeight":"500"}],"display-lg-mobile":["40px",{"lineHeight":"48px","fontWeight":"400"}],"label-lg":["14px",{"lineHeight":"20px","fontWeight":"500"}],"body-md":["14px",{"lineHeight":"20px","fontWeight":"400"}]}}}}</script></head><body class="bg-background font-body-md text-on-surface antialiased"><header class="fixed top-0 left-0 right-0 w-full z-50 bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="bg-surface-container-high text-on-surface-variant"><div class="max-w-7xl mx-auto px-margin-mobile md:px-margin-tablet lg:px-margin-desktop h-7 flex items-center justify-between font-label-md text-label-md"><div class="flex items-center gap-space-md overflow-x-auto whitespace-nowrap"><span class="flex items-center gap-space-2xs"><span class="inline-block w-2 h-2 rounded-full bg-success"></span><span class="text-on-surface font-title-md text-label-md">CORE TELEMETRY</span></span><span class="text-outline">|</span><span class="">ARTH/USD <strong class="text-on-surface">$1.0002</strong></span><span class="text-outline">•</span><span class="">24h Yield <strong class="text-success">+124.80 ARTH</strong></span><span class="text-outline">•</span><span class="">CLS Finality <strong class="text-on-surface">380ms</strong></span><span class="text-outline">•</span><span class="">Core Ledger <strong class="text-on-surface">#28,102,510</strong></span></div><div class="hidden md:flex items-center gap-space-sm"><span class="flex items-center gap-space-2xs text-on-surface-variant"><span class="material-symbols-outlined text-[14px]">verified_user</span><span class="">ISO 20022 End-to-End Encrypted</span></span></div></div></div><div class="h-28 max-w-7xl mx-auto px-margin-mobile md:px-margin-tablet lg:px-margin-desktop flex flex-col justify-between py-space-xs"><div class="flex items-center justify-between gap-space-md pt-space-xs"><div class="flex items-center gap-space-md"><div class="flex items-center gap-space-sm"><img alt="Brand logo. - Primary color: #1e3a5f - Font: newsreader - Mode: light - Roundness: rounded-sm" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1VQCOGMUhJUNd1D1xfh9Yo5o8WXfFbDTgLTbdJQX29EyHALNGLzEtxvXaiujTodK_VsE7YaJi-ZRYQ_s1-E0U_huLt5AbpDuvlH5jRZZ8tIranKNd59RvSMfSHhJtjScfZX81HgyUVqgp5EyVYRGT7bjEIP7rl6cQEd_N1koVC344CBDOW4DpkT6zI4Su0FN1g_SVvtq_owmKCbkqarIqqdx1SfjPf5GAaO74wzURMZ7e4oiZdAxfagKN2Z"><div class="flex flex-col"><span class="font-headline-md text-headline-md text-primary tracking-tight leading-none">ARTHAX</span><span class="font-label-md text-label-md text-on-surface-variant tracking-wider uppercase">Personal Sovereign Cockpit</span></div></div><div class="hidden xl:flex items-center bg-surface-container-low px-space-sm py-space-2xs rounded-DEFAULT gap-space-xs"><div class="flex flex-col"><span class="font-title-md text-title-md text-on-surface leading-none">Ananya Sharma</span><span class="font-label-md text-label-md text-on-surface-variant">GOV ID: #8491-904-IN</span></div><span class="px-space-xs py-space-2xs bg-success-container text-on-success-container rounded-full font-label-md text-label-md font-semibold flex items-center gap-space-2xs"><span class="material-symbols-outlined text-[14px]">fingerprint</span>Tier-1 Verified</span><span class="px-space-xs py-space-2xs bg-secondary-container text-on-secondary-container rounded-full font-label-md text-label-md">Active Session</span></div></div><div class="flex items-center gap-space-sm"><div class="hidden lg:flex items-center gap-space-2xs bg-surface-container px-space-sm py-space-2xs rounded-full font-label-md text-label-md text-on-surface-variant"><span class="material-symbols-outlined text-[16px] text-primary">lock</span><span class="">Tier-B Fin PIN: <strong class="text-on-surface">Enclave Ready</strong></span></div><button aria-label="Notifications" class="relative p-space-xs rounded-full text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" type="button"><span class="material-symbols-outlined text-[22px]">notifications</span><span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-error"></span></button><div class="flex items-center gap-space-xs pl-space-xs"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1UHXRcz0lF59J0udtFuTB03Ncz4uL70yAF5J2EHiXv8TzWD48ejSw7UGLLyN5QKyFfwy8FzknWLngObhys1TedGDhGYWNJ7dl4VX-HlURFy4Nvz5sbuy1NgD7CXSnMquZv8SYOC9e-WTiSg2lmiwWPfds3BAwyy_RAxWDyuRMB8RwhFByeFxYUBzkL9aSSb4TBtvSvO4oOs9D2_6UKPZX6T0qfj2zdndhLPHCNvJd8bn0Zv2X9YbpFKhqPBPbK8pNXiMmydywfXxVQ"><button aria-label="Session Menu" class="text-on-surface-variant hover:text-on-surface" type="button"><span class="material-symbols-outlined text-[20px]">expand_more</span></button></div></div></div><div class="flex items-center overflow-x-auto pb-space-2xs pt-space-xs"><nav class="flex items-center gap-space-xs whitespace-nowrap" data-active-classes="bg-secondary-container text-on-secondary-container font-title-md rounded-full"><a aria-current="page" class="px-space-sm py-space-2xs transition-all bg-secondary-container text-on-secondary-container font-title-md rounded-full" data-path="overview" href="#">Overview</a><a class="px-space-sm py-space-2xs rounded-full font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="accounts" href="#">My Banks &amp; Accounts</a><a class="px-space-sm py-space-2xs rounded-full font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="transfers-and-dvp" href="#">Transfers &amp; DvP</a><a class="px-space-sm py-space-2xs rounded-full font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="fixed-deposits" href="#">Fixed Deposits</a><a class="px-space-sm py-space-2xs rounded-full font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="stock-portfolio" href="#">Stock Portfolio</a><a class="px-space-sm py-space-2xs rounded-full font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="rewards" href="#">Rewards</a><a class="px-space-sm py-space-2xs rounded-full font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="shop-and-inventory" href="#">Shop &amp; Inventory</a><a class="px-space-sm py-space-2xs rounded-full font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="mailbox" href="#">Mailbox (3)</a><a class="px-space-sm py-space-2xs rounded-full font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all" data-path="security-and-settings" href="#">Security &amp; Settings</a></nav></div></div></header><main class="w-full pt-35 bg-surface"><div class="max-w-7xl mx-auto px-margin-mobile md:px-margin-tablet lg:px-margin-desktop py-space-lg"><div class="flex flex-col w-full space-y-space-xl">
+<!-- Top Global Banner / Sovereign Identity Bar -->
+<div class="flex flex-wrap items-center justify-between gap-space-sm bg-surface-container-low px-space-lg py-space-sm rounded-DEFAULT">
+<div class="flex items-center gap-space-sm">
+<span class="flex h-2.5 w-2.5 rounded-full bg-success animate-pulse"></span>
+<span class="font-label-lg text-label-lg text-on-surface">Resident Settlement Session Active</span>
+<span class="text-outline-variant">•</span>
+<span class="font-label-md text-label-md text-on-surface-variant font-mono">ENCLAVE SEC-KEY: 0x9DF2...B831</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="px-space-xs py-space-2xs bg-surface-container-highest text-on-surface-variant font-label-md text-label-md rounded-full">Domestic Sovereign Tier-1</span>
+<span class="px-space-xs py-space-2xs bg-secondary-container text-on-secondary-container font-label-md text-label-md rounded-full flex items-center gap-space-2xs">
+<span class="material-symbols-outlined text-[14px]">bolt</span> DvP Finality Sub-second
+      </span>
+</div>
+</div>
+<!-- SECTION 1: SOVEREIGN WEALTH & TOTAL NET WORTH DISPLAY -->
+<section class="relative overflow-hidden rounded-3xl bg-surface-container-lowest border border-outline-variant/30 p-6 md:p-10 shadow-sm">
+  <!-- Subtle Ambient Atmospheric Glow -->
+  <div class="absolute -right-24 -top-24 w-[480px] h-[480px] rounded-full bg-gradient-to-br from-primary/5 via-secondary-container/20 to-transparent pointer-events-none blur-3xl"></div>
+  <div class="absolute -left-20 -bottom-20 w-80 h-80 rounded-full bg-tertiary-container/10 pointer-events-none blur-2xl"></div>
+
+  <div class="relative z-10 flex flex-col gap-8">
+    <!-- Top Header Meta Strip: Sovereign Ledger & Security Status -->
+    <div class="flex flex-wrap items-center justify-between gap-4 border-b border-surface-container-high pb-4">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+          <span class="material-symbols-outlined text-[18px]">account_balance</span>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-label-md text-xs font-semibold tracking-widest uppercase text-primary">Sovereign Monolith &amp; Vault Treasury</span>
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-success-container/70 text-on-success-container text-[11px] font-medium">
+              <span class="w-1.5 h-1.5 rounded-full bg-success animate-pulse"></span>CLS Certified
+            </span>
+          </div>
+          <p class="text-xs text-on-surface-variant font-mono mt-0.5">ISO 20022 pacs.008 • Basel III Capital Reserve 104.28%</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-container-low border border-outline-variant/30 text-xs font-mono text-on-surface-variant">
+        <span class="material-symbols-outlined text-[14px] text-success">verified_user</span>
+        <span class="">Ledger #28,102,510</span>
+        <span class="text-outline-variant">•</span>
+        <span class="">SHA-256 Validated</span>
+      </div>
+    </div>
+
+    <!-- Main Split Display -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+      <!-- Left / Main Column: Royal Balance & Primary Metrics -->
+      <div class="lg:col-span-7 flex flex-col justify-between space-y-6">
+        <div class="space-y-4">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container-high text-on-surface-variant text-xs font-medium">
+            <span class="w-2 h-2 rounded-full bg-primary"></span>
+            <span class="">Tier-1 Sovereign Reserve Account</span>
+            <span class="text-outline-variant">|</span>
+            <span class="font-mono">pacs.008.001.09</span>
+          </div>
+
+          <!-- Main Wealth Figures -->
+          <div class="flex flex-wrap items-baseline gap-x-4 gap-y-2 pt-1">
+            <div class="flex items-center gap-3">
+              <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXgFrj8cliWw3inD_ioF2WfYSK7K0HYg7MyYMunfDVgB00g7LAT9kXrJF8aVAf8TNzr06Y1_pVUYrqVv4an55MJlcL32wMXQn8ntlpm1HkgeLjxxHPGBLPvPHNbY5y21bF4KO4avjimYgLGjVRdb9gHZzmTwoZXoTWn-5wcvNZ8fXWL_9LYNAuOH0nRNaRC_zDB-wBCCU25bJFguTmjiy1Ds-BbjuujlAPwunICcJlzk2v4lbk_2GL0s9hscX9nAkxsUA" alt="ARTH Symbol" class="h-10 md:h-12 w-auto object-contain select-none filter drop-shadow-sm">
+              <span class="font-display-lg text-4xl sm:text-5xl md:text-6xl font-normal text-primary tracking-tight font-headline-lg">842,520.45</span>
+              <span class="text-xl md:text-2xl font-medium font-headline-md text-secondary">ARTH</span>
+            </div>
+            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container text-on-surface-variant text-xs font-mono">
+              <span class="material-symbols-outlined text-[14px] text-outline">currency_exchange</span>
+              <span class="">≈ $842,520.45 USD-EQ (1.0000 Peg)</span>
+            </div>
+          </div>
+
+          <!-- Performance Pills (Calm & Elegant) -->
+          <div class="flex flex-wrap items-center gap-2 pt-1">
+            <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-success-container/70 text-on-success-container text-xs font-semibold">
+              <span class="material-symbols-outlined text-[15px]">trending_up</span>
+              <span class="">+124.80 ARTH (+0.015% 24h)</span>
+            </div>
+            <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container-high text-on-surface text-xs font-medium">
+              <span class="material-symbols-outlined text-[15px] text-tertiary-fixed-variant">stars</span>
+              <span class="">+5.42% Net APY Yield</span>
+            </div>
+            <div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-secondary-container/60 text-on-secondary-container text-xs font-mono">
+              <span class="material-symbols-outlined text-[15px] text-primary">shield</span>
+              <span class="">104.28% Parity</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- High-Tier M3 Action Buttons -->
+        <div class="flex flex-wrap items-center gap-3 pt-2">
+          <button class="h-11 px-6 bg-primary text-on-primary font-medium text-sm rounded-full shadow-sm hover:opacity-95 transition-all inline-flex items-center gap-2 group" type="button">
+            <span class="material-symbols-outlined text-[18px] group-hover:translate-x-0.5 transition-transform">swap_horiz</span>
+            <span class="">Initiate DvP Transfer</span>
+          </button>
+          <button class="h-11 px-5 bg-secondary-container text-on-secondary-container font-medium text-sm rounded-full hover:bg-secondary-fixed-dim transition-all inline-flex items-center gap-2" type="button">
+            <span class="material-symbols-outlined text-[18px]">account_balance</span>
+            <span class="">Open High-Yield Term FD</span>
+          </button>
+          <button class="h-11 px-4 border border-outline-variant text-on-surface hover:bg-surface-container transition-all font-medium text-sm rounded-full inline-flex items-center gap-2" type="button">
+            <span class="material-symbols-outlined text-[18px] text-secondary">candlestick_chart</span>
+            <span class="">Capital Markets</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Right Column: Bespoke Asset Allocation & Health Card -->
+      <div class="lg:col-span-5 bg-surface-container-low/70 border border-outline-variant/30 rounded-2xl p-5 md:p-6 flex flex-col justify-between space-y-5 backdrop-blur-sm">
+        <div class="space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-primary text-[20px]">pie_chart</span>
+              <span class="font-title-md text-sm font-semibold text-on-surface">Asset Class Allocation</span>
+            </div>
+            <span class="text-[11px] font-mono text-success flex items-center gap-1 font-medium">
+              <span class="w-2 h-2 rounded-full bg-success"></span>Real-Time Rail Active
+            </span>
+          </div>
+
+          <!-- Fluid Segmented Liquidity Spectrum Bar -->
+          <div class="space-y-1.5">
+            <div class="w-full h-2.5 rounded-full bg-surface-container-highest overflow-hidden flex gap-0.5 p-0.5">
+              <div class="bg-primary h-full rounded-l-full transition-all duration-500" style="width: 40.9%;" title="Liquid Balances: 40.9%"></div>
+              <div class="bg-primary-fixed-dim h-full transition-all duration-500" style="width: 33.3%;" title="Fixed Term: 33.3%"></div>
+              <div class="bg-surface-tint h-full transition-all duration-500" style="width: 22.1%;" title="Capital Markets: 22.1%"></div>
+              <div class="bg-tertiary-fixed-dim h-full rounded-r-full transition-all duration-500" style="width: 3.7%;" title="Shop &amp; Relics: 3.7%"></div>
+            </div>
+            <div class="flex justify-between items-center text-[10px] text-on-surface-variant font-mono">
+              <span class="">Liquid: 40.9%</span>
+              <span class="">FD Vaults: 33.3%</span>
+              <span class="">Stocks: 22.1%</span>
+              <span class="">Relics: 3.7%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Allocation Quadrants -->
+        <div class="grid grid-cols-2 gap-3">
+          <div class="p-3 rounded-xl bg-surface-container-lowest border border-outline-variant/20 space-y-1">
+            <div class="flex items-center justify-between text-xs text-on-surface-variant">
+              <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-primary"></span>Liquid</span>
+              <span class="font-mono font-medium text-primary text-[11px]">40.9%</span>
+            </div>
+            <p class="font-mono font-bold text-sm text-on-surface">345,120.00 <span class="text-[10px] font-normal text-on-surface-variant">ARTH</span></p>
+          </div>
+
+          <div class="p-3 rounded-xl bg-surface-container-lowest border border-outline-variant/20 space-y-1">
+            <div class="flex items-center justify-between text-xs text-on-surface-variant">
+              <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-primary-fixed-dim"></span>Term Vault</span>
+              <span class="font-mono font-medium text-secondary text-[11px]">33.3%</span>
+            </div>
+            <p class="font-mono font-bold text-sm text-on-surface">280,520.45 <span class="text-[10px] font-normal text-on-surface-variant">ARTH</span></p>
+          </div>
+
+          <div class="p-3 rounded-xl bg-surface-container-lowest border border-outline-variant/20 space-y-1">
+            <div class="flex items-center justify-between text-xs text-on-surface-variant">
+              <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-surface-tint"></span>Equities</span>
+              <span class="font-mono font-medium text-success text-[11px]">+14.45%</span>
+            </div>
+            <p class="font-mono font-bold text-sm text-on-surface">185,880.00 <span class="text-[10px] font-normal text-on-surface-variant">ARTH</span></p>
+          </div>
+
+          <div class="p-3 rounded-xl bg-surface-container-lowest border border-outline-variant/20 space-y-1">
+            <div class="flex items-center justify-between text-xs text-on-surface-variant">
+              <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-tertiary-fixed-dim"></span>Relics &amp; Vault</span>
+              <span class="font-mono font-medium text-tertiary-fixed-variant text-[11px]">+0.85% APY</span>
+            </div>
+            <p class="font-mono font-bold text-sm text-on-surface">31,000.00 <span class="text-[10px] font-normal text-on-surface-variant">ARTH</span></p>
+          </div>
+        </div>
+
+        <!-- Bottom Micro Audit Ledger Verification -->
+        <div class="pt-2 border-t border-outline-variant/20 flex items-center justify-between text-[11px] text-on-surface-variant font-mono">
+          <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[13px] text-primary">lock</span>Consolidated Enclave</span>
+          <span class="text-primary font-medium hover:underline cursor-pointer flex items-center gap-0.5">View Ledger <span class="material-symbols-outlined text-[12px]">arrow_forward</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- SECTION 2: MY BANKS & CONNECTED INSTITUTIONS (The 5 Core ARTHAX Banks) -->
+<section class="space-y-space-md">
+<div class="flex flex-wrap items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm">
+<h2 class="font-headline-md text-headline-md text-primary">Connected Banking Nodes</h2>
+<span class="px-space-xs py-space-2xs bg-secondary-container text-on-secondary-container rounded-full font-label-md text-label-md font-semibold">
+          5 Institutions Active
+        </span>
+</div>
+<div class="flex items-center gap-space-xs">
+<button class="px-space-sm py-space-2xs rounded-full bg-surface-container-high text-on-surface font-label-md text-label-md hover:bg-surface-container-highest transition-all flex items-center gap-space-2xs" type="button">
+<span class="material-symbols-outlined text-[16px]">sync_alt</span>
+          Switch Active Bank
+        </button>
+<button class="px-space-sm py-space-2xs rounded-full bg-primary text-on-primary font-label-md text-label-md hover:opacity-95 transition-all flex items-center gap-space-2xs" type="button">
+<span class="material-symbols-outlined text-[16px]">add</span>
+          Connect Account by Purpose
+        </button>
+</div>
+</div>
+<!-- Responsive Bank Grid (5 Cards) -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-space-md">
+<!-- 1. NAVA Bank (Primary Node) -->
+<div class="bg-surface-container-lowest rounded-DEFAULT p-space-md shadow-sm flex flex-col justify-between space-y-space-md relative overflow-hidden group hover:shadow-md transition-all">
+<div class="absolute top-0 left-0 w-full h-1 bg-primary"></div>
+<div class="space-y-space-xs">
+<div class="flex items-center justify-between">
+<div class="h-8 w-24 flex items-center overflow-hidden">
+<img alt="NAVA Bank" class="h-full w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBNCK8ZyqQGeDBP6cAsse3g9gLWJWNRkOVBnmEwSHGYINHT_tLpnPxnyiu3UhCsURaKNDDGiF9ZuONKdXd1O2fjWI0AMYrSPI_NdDvYDyBeApuvVivSTXlVEVsGHBoImIoNmJTyWrZOVNUbyjo6d3TPJ5-L2kaM4kQbfnhrN6n_4FUpzqrkbnYaY_Km5J9N9ya8rDU0Pc8fpJ5UN8dwfSvesbikOocAUc55HFHsrYX2sxsKaNROjhvNw5m-DOJar9DzIHc">
+</div>
+<span class="px-space-2xs py-0.5 rounded-full bg-success-container text-on-success-container font-label-md text-[10px] font-bold uppercase">
+              Primary Node
+            </span>
+</div>
+<div class="pt-space-2xs">
+<p class="font-label-md text-label-md text-on-surface-variant">Salary &amp; Operating</p>
+<p class="font-title-md text-title-md text-on-surface font-mono font-bold">185,420.00 <span class="font-label-md text-on-surface-variant">ARTH</span></p>
+</div>
+</div>
+<div class="pt-space-xs flex items-center justify-between text-on-surface-variant font-label-md text-label-md">
+<span class="flex items-center gap-space-2xs text-success">
+<span class="material-symbols-outlined text-[14px]">sync</span> CLS Synced
+          </span>
+<span class="font-mono text-on-surface">#001-NAVA</span>
+</div>
+</div>
+<!-- 2. SAMAYA Bank -->
+<div class="bg-surface-container-lowest rounded-DEFAULT p-space-md shadow-sm flex flex-col justify-between space-y-space-md relative overflow-hidden hover:shadow-md transition-all">
+<div class="space-y-space-xs">
+<div class="flex items-center justify-between">
+<div class="h-8 w-24 flex items-center overflow-hidden">
+<img alt="SAMAYA Bank" class="h-full w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMEZe1W6YdPNaxCIOp2umzm3tdprxISxdS7QNceotAvIwOVsiPffmX4jJRnaoWk07agv3DIZ1oKx_8d47DH0h00yh1_0XKsk6t2ZFovo1jVp5gdcksRwo3r_YqywhfoyP5gtJK8O45tN-SGWDjty6sjY5HfhEZb31Cg61Q6GWydX_QWAGC7tZXWR65RLad-G9yYTFlZTam7IE_fpH0N5XtIYwSx1MeHwI-1xcCBFjvhS0zytzhwiYjkNuwv1jmqMWLxUM">
+</div>
+<span class="px-space-2xs py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-md text-[10px] font-semibold">
+              Term Vault
+            </span>
+</div>
+<div class="pt-space-2xs">
+<p class="font-label-md text-label-md text-on-surface-variant">Wealth &amp; Term High APY</p>
+<p class="font-title-md text-title-md text-on-surface font-mono font-bold">82,100.00 <span class="font-label-md text-on-surface-variant">ARTH</span></p>
+</div>
+</div>
+<div class="pt-space-xs flex items-center justify-between text-on-surface-variant font-label-md text-label-md">
+<span class="text-on-surface-variant">6.85% FD Rate</span>
+<span class="font-mono text-on-surface">#002-SAMY</span>
+</div>
+</div>
+<!-- 3. SETU Bank -->
+<div class="bg-surface-container-lowest rounded-DEFAULT p-space-md shadow-sm flex flex-col justify-between space-y-space-md relative overflow-hidden hover:shadow-md transition-all">
+<div class="space-y-space-xs">
+<div class="flex items-center justify-between">
+<div class="h-8 w-24 flex items-center overflow-hidden">
+<img alt="SETU Bank" class="h-full w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzUeZjziwkGd9J85oyHW1OPch7FrPu_PRv5kxWwi1qBZPjseGOfce0JjaKAtx7tT6BgGyIHFG15NzvWEDUzqUrK_bHXJ6ys8ucwH1KVUZ2xnkLNBPt3nLcHzdhyrvbk1z2bwXQgK_pElRZE62JCk0sxFaifANyTW-R5hoAwfy6o3hc-oPI5BCtXDDykxmpVhVbHxcx0X1C8kd-ywKIwYj5zJVjvp1rIumg-lfZNy5Y1uRMgtr0i_anzd2xsMF36v8FARY">
+</div>
+<span class="px-space-2xs py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-md text-[10px]">
+              Cross-Border
+            </span>
+</div>
+<div class="pt-space-2xs">
+<p class="font-label-md text-label-md text-on-surface-variant">Inter-Bank Clearing</p>
+<p class="font-title-md text-title-md text-on-surface font-mono font-bold">42,600.00 <span class="font-label-md text-on-surface-variant">ARTH</span></p>
+</div>
+</div>
+<div class="pt-space-xs flex items-center justify-between text-on-surface-variant font-label-md text-label-md">
+<span class="text-on-surface-variant">FX Ready (ISO 20022)</span>
+<span class="font-mono text-on-surface">#003-SETU</span>
+</div>
+</div>
+<!-- 4. STHIRA Bank -->
+<div class="bg-surface-container-lowest rounded-DEFAULT p-space-md shadow-sm flex flex-col justify-between space-y-space-md relative overflow-hidden hover:shadow-md transition-all">
+<div class="space-y-space-xs">
+<div class="flex items-center justify-between">
+<div class="h-8 w-24 flex items-center overflow-hidden">
+<img alt="STHIRA Bank" class="h-full w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1vFVYhEd9aWg6TntyimxRw7qDcYtLLEx_qxL646BoQ7r0uhn1j1xiMDSlLT8WMrFMOxgZEUbB_cMeV60m4Yl80cwXeLu5oi0g9XKyx0vBTialKVSrSC31mtYOuU01vsKV0k6RKa2lu3Sk_hyDKiK6bMAkjb8DQ-IuTRLmkgM0--b84wqjI_NHhxupPfvgvRwnrsore63OfZf4pCh-ts5xwzdiPvlwKNTbS9m18gSZ2SXFzTerKhy_yTl05RZKsMlx8RI">
+</div>
+<span class="px-space-2xs py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-md text-[10px]">
+              Custody
+            </span>
+</div>
+<div class="pt-space-2xs">
+<p class="font-label-md text-label-md text-on-surface-variant">Long-Term Escrow</p>
+<p class="font-title-md text-title-md text-on-surface font-mono font-bold">35,000.00 <span class="font-label-md text-on-surface-variant">ARTH</span></p>
+</div>
+</div>
+<div class="pt-space-xs flex items-center justify-between text-on-surface-variant font-label-md text-label-md">
+<span class="text-on-surface-variant">7.20% APY Tier</span>
+<span class="font-mono text-on-surface">#004-STHR</span>
+</div>
+</div>
+<!-- 5. VAYU Bank -->
+<div class="bg-surface-container rounded-DEFAULT p-space-md shadow-sm flex flex-col justify-between space-y-space-md relative overflow-hidden hover:shadow-md transition-all">
+<div class="space-y-space-xs">
+<div class="flex items-center justify-between">
+<div class="h-8 w-24 flex items-center overflow-hidden opacity-80">
+<img alt="VAYU Bank" class="h-full w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCp9x4HZIzKK_9gnZRcf99wKAT8qhEWSOZTb025qCEpvFuWIAz8g0oc08wK0qrNv_Ciipsz_SnWYSTjk0t9l8Sal4o6Ua0iusmcvZw3U9GOg52j09MVBYwQIkwBaRsMKNKdLKddqp_pLPRIOJipdkK_p2llMmM7oDKJwBhwxFS8o18hSHIS72h8Fa0PwaCWzf5HCnDGkiYa49eUOHL9EA_FISoo4Gbeve-T-CBn777RMJl7XCe0a8qpv7nJLCl937BynFs">
+</div>
+<span class="px-space-2xs py-0.5 rounded-full bg-surface-container-highest text-on-surface-variant font-label-md text-[10px]">
+              Zero Balance
+            </span>
+</div>
+<div class="pt-space-2xs">
+<p class="font-label-md text-label-md text-on-surface-variant">Instant Daily Liquidity</p>
+<p class="font-title-md text-title-md text-on-surface font-mono font-bold">0.00 <span class="font-label-md text-on-surface-variant">ARTH</span></p>
+</div>
+</div>
+<div class="pt-space-xs flex items-center justify-between text-on-surface-variant font-label-md text-label-md">
+<button class="text-primary font-semibold hover:underline flex items-center gap-space-2xs" type="button">
+<span class="material-symbols-outlined text-[14px]">add_circle</span> Link Account
+          </button>
+<span class="font-mono text-on-surface-variant">#005-VAYU</span>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 3: TWO-COLUMN OPERATIONAL COCKPIT -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg">
+<!-- LEFT COLUMN: Operations & Transaction Streams (7 cols) -->
+<div class="lg:col-span-7 space-y-space-lg">
+<!-- Panel A: Sensitive Dual-Auth Transfer Terminal -->
+<div class="bg-surface-container-lowest rounded-DEFAULT p-space-lg shadow-sm space-y-space-md">
+<div class="flex items-start justify-between">
+<div class="space-y-space-2xs">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[20px]">swap_horiz</span>
+<h2 class="font-title-lg text-title-lg text-primary">DvP &amp; Inter-Bank Clearing Terminal</h2>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">
+              High-value real-time gross settlement backed by sovereign CLS protocol.
+            </p>
+</div>
+<span class="px-space-xs py-space-2xs bg-secondary-container text-on-secondary-container rounded-full font-label-md text-label-md font-semibold flex items-center gap-space-2xs">
+<span class="material-symbols-outlined text-[14px]">enhanced_encryption</span>
+            pacs.008 Core
+          </span>
+</div>
+<form class="space-y-space-md" onsubmit="event.preventDefault();">
+<!-- Source Account Row -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md">
+<div class="space-y-space-2xs">
+<label class="font-label-md text-label-md text-on-surface-variant">Source Institutional Account</label>
+<div class="flex items-center justify-between bg-surface-container-low px-space-md py-space-sm rounded-DEFAULT">
+<div class="flex items-center gap-space-xs">
+<div class="w-6 h-6 rounded-full bg-primary flex items-center justify-center text-on-primary text-[10px] font-bold">N</div>
+<span class="font-title-md text-title-md text-on-surface">NAVA Bank Primary</span>
+</div>
+<span class="font-mono text-label-md text-on-surface-variant">Avail: 185,420 ARTH</span>
+</div>
+</div>
+<!-- Recipient Input -->
+<div class="space-y-space-2xs">
+<div class="flex items-center justify-between">
+<label class="font-label-md text-label-md text-on-surface-variant">Recipient Resident Citizen / GOV ID</label>
+<span class="font-label-md text-label-md text-success flex items-center gap-space-2xs font-semibold">
+<span class="material-symbols-outlined text-[14px]">check_circle</span> Verified Citizen
+                </span>
+</div>
+<div class="flex items-center bg-surface-container-low px-space-md py-space-sm rounded-DEFAULT gap-space-xs">
+<span class="material-symbols-outlined text-outline text-[18px]">badge</span>
+<input class="w-full bg-transparent font-title-md text-title-md text-on-surface focus:outline-none" readonly="" type="text" value="#7102-491-VA (Aurelius Vane)">
+</div>
+</div>
+</div>
+<!-- Transfer Amount and Quick Multipliers -->
+<div class="space-y-space-xs">
+<label class="font-label-md text-label-md text-on-surface-variant">Transfer Amount (ARTH)</label>
+<div class="flex items-center bg-surface-container-low px-space-md py-space-sm rounded-DEFAULT justify-between">
+<div class="flex items-center gap-space-xs w-full">
+<span class="font-headline-md text-headline-md text-primary font-mono">₳</span>
+<input class="w-full bg-transparent font-headline-md text-headline-md text-on-surface font-mono focus:outline-none" type="text" value="12,500.00">
+</div>
+<div class="flex items-center gap-space-2xs">
+<button class="px-space-xs py-space-2xs rounded-full bg-surface-container-high text-on-surface font-label-md text-label-md hover:bg-surface-container-highest" type="button">25%</button>
+<button class="px-space-xs py-space-2xs rounded-full bg-surface-container-high text-on-surface font-label-md text-label-md hover:bg-surface-container-highest" type="button">50%</button>
+<button class="px-space-xs py-space-2xs rounded-full bg-surface-container-high text-on-surface font-label-md text-label-md hover:bg-surface-container-highest" type="button">Max</button>
+</div>
+</div>
+</div>
+<!-- Step-Up Dual Auth Box (M3 Elevation Tier 1) -->
+<div class="bg-surface-container-low rounded-DEFAULT p-space-md space-y-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-error text-[18px]">security</span>
+<span class="font-title-md text-title-md text-on-surface">Step-Up Financial Authorization</span>
+</div>
+<span class="px-space-xs py-space-2xs rounded-full bg-surface-container-highest text-on-surface-variant font-label-md text-label-md font-mono">
+                FIPS 140-3 Level 4 HSM
+              </span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">
+              Enter citizen enclave PIN to sign zero-divergence DvP execution packet.
+            </p>
+<div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-space-sm pt-space-2xs">
+<div class="flex items-center justify-center bg-surface-container-highest px-space-md py-space-sm rounded-full gap-space-xs tracking-widest text-title-lg font-mono text-on-surface">
+<span class="">•</span><span class="">•</span><span class="">•</span><span class="">•</span><span class="">•</span><span class="">•</span>
+</div>
+<button class="h-12 flex-1 px-space-lg bg-primary text-on-primary rounded-full font-label-lg text-label-lg font-semibold flex items-center justify-center gap-space-xs hover:opacity-95 shadow-sm transition-all" type="submit">
+<span class="material-symbols-outlined text-[20px]">fingerprint</span>
+                Sign &amp; Broadcast via CLS Rail
+              </button>
+</div>
+</div>
+</form>
+</div>
+<!-- Panel B: Recent Audit Transactions Stream -->
+<div class="bg-surface-container-lowest rounded-DEFAULT p-space-lg shadow-sm space-y-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[20px]">receipt_long</span>
+<h2 class="font-title-lg text-title-lg text-on-surface">Audit Ledger Stream</h2>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant">Immutable Chain Receipt</span>
+</div>
+<div class="space-y-space-xs">
+<!-- Row 1 -->
+<div class="flex items-center justify-between p-space-sm rounded-DEFAULT hover:bg-surface-container transition-all">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded-full bg-secondary-container flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[18px]">north_east</span>
+</div>
+<div class="flex flex-col">
+<span class="font-title-md text-title-md text-on-surface">Inter-bank DvP transfer to Samaya Term</span>
+<span class="font-label-md text-label-md text-on-surface-variant">pacs.008.001.09 • Block #28,102,488 • Today 11:24 IST</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm text-right">
+<div class="flex flex-col">
+<span class="font-title-md text-title-md text-on-surface font-mono font-bold">-12,450.00 ARTH</span>
+<span class="font-label-md text-label-md text-success flex items-center justify-end gap-space-2xs">
+                  CLS Settled
+                </span>
+</div>
+<img alt="Completed" class="w-5 h-5 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKGrIRZ6_Q3TIBQheXz9GL41lIHa-jVQK6QMTcRXay1nK97fNIur2H-YMkFa3JIv5ExWqZxN56NKARMV1C1PbBD0BzRX1xqRNtE8BlV9vNQ0ppWzuCW21y8RknYRZzJQdPIK6HW8uOA5MMwmaxNSu6yPjD8fmkhTp4gIPGa8I9KM223oxooHY1Y4h4yCiqMVYIUwKS7qVue5DmKmDfo1XA4Kp0YoaIUhuPjlz5d6lXd88FDEGDCsmIrXgPe1uI2a9xYjI">
+</div>
+</div>
+<!-- Row 2 -->
+<div class="flex items-center justify-between p-space-sm rounded-DEFAULT hover:bg-surface-container transition-all">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded-full bg-success-container flex items-center justify-center text-success shrink-0">
+<span class="material-symbols-outlined text-[18px]">south_west</span>
+</div>
+<div class="flex flex-col">
+<span class="font-title-md text-title-md text-on-surface">Central Bank Quarterly Staking Yield</span>
+<span class="font-label-md text-label-md text-on-surface-variant">Automated Distribution • Epoch #941 • Today 06:00 IST</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm text-right">
+<div class="flex flex-col">
+<span class="font-title-md text-title-md text-success font-mono font-bold">+124.80 ARTH</span>
+<span class="font-label-md text-label-md text-success">Accrued</span>
+</div>
+<img alt="Completed" class="w-5 h-5 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA1I518S-cPFVDC8d76yYdwcusVFUVzAl56wnYBZfK1rntjmyplSr4Mu9nhyyAgq1bSxp8jeTEOohY9oZghgEA6b5beF_lPGxQ8qNO0ExAIkaVq3065HxgFrahUNYlvVoYmv8nNNAkABNi8fqrbdXQO8Jym_AjzRbsQmLI96CpArGESZBMQjrwSU8z7SWR9myuyZd-imRZ8UIw7ZbMJo62FSmyHYLwcu5mrXI8m_UMM9YkwWyvuAj8tGP3Q6pub7BjHAmQ">
+</div>
+</div>
+<!-- Row 3 -->
+<div class="flex items-center justify-between p-space-sm rounded-DEFAULT hover:bg-surface-container transition-all">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded-full bg-surface-container-high flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[18px]">show_chart</span>
+</div>
+<div class="flex flex-col">
+<span class="font-title-md text-title-md text-on-surface">Stock Equity Acquisition (NILA Systems 40 Shs)</span>
+<span class="font-label-md text-label-md text-on-surface-variant">Exchange Fill @ 205.00 • Order ID #NX-88219</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm text-right">
+<div class="flex flex-col">
+<span class="font-title-md text-title-md text-on-surface font-mono font-bold">-8,200.00 ARTH</span>
+<span class="font-label-md text-label-md text-on-surface-variant">Settled T+0</span>
+</div>
+<span class="material-symbols-outlined text-success text-[20px]">check_circle</span>
+</div>
+</div>
+<!-- Row 4 -->
+<div class="flex items-center justify-between p-space-sm rounded-DEFAULT hover:bg-surface-container transition-all">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded-full bg-tertiary-container flex items-center justify-center text-on-tertiary-container shrink-0">
+<span class="material-symbols-outlined text-[18px]">token</span>
+</div>
+<div class="flex flex-col">
+<span class="font-title-md text-title-md text-on-surface">Shop Relic Acquisition (The Yield Griffin Companion)</span>
+<span class="font-label-md text-label-md text-on-surface-variant">Citizen Vault Inventory Item #RELIC-04</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm text-right">
+<div class="flex flex-col">
+<span class="font-title-md text-title-md text-on-surface font-mono font-bold">-500.00 ARTH</span>
+<span class="font-label-md text-label-md text-on-surface-variant">Verified</span>
+</div>
+<span class="material-symbols-outlined text-success text-[20px]">check_circle</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- RIGHT COLUMN: Investment & Asset Term Portfolios (5 cols) -->
+<div class="lg:col-span-5 space-y-space-lg">
+<!-- Panel C: Fixed Deposits (FD) Highlight & Maturity Schedule -->
+<div class="bg-surface-container-lowest rounded-DEFAULT p-space-lg shadow-sm space-y-space-md">
+<div class="flex items-center justify-between">
+<div class="space-y-space-2xs">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Term Deposits</span>
+<h2 class="font-title-lg text-title-lg text-primary">Fixed Deposits (FD) Vaults</h2>
+</div>
+<div class="text-right">
+<span class="font-label-md text-label-md text-on-surface-variant">Locked Value</span>
+<p class="font-title-md text-title-md text-on-surface font-mono font-bold">280,520.45 <span class="text-label-md font-sans text-on-surface-variant">ARTH</span></p>
+</div>
+</div>
+<div class="space-y-space-sm">
+<!-- FD Card 1 -->
+<div class="bg-surface-container-low rounded-DEFAULT p-space-md space-y-space-xs hover:bg-surface-container transition-all">
+<div class="flex items-center justify-between">
+<span class="font-title-md text-title-md text-on-surface font-semibold">Samaya Sovereign FD #04</span>
+<span class="px-space-xs py-space-2xs rounded-full bg-success-container text-on-success-container font-label-md text-label-md font-bold">
+                6.85% APY
+              </span>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant font-label-md text-label-md pt-space-2xs">
+<span class="">Principal: 150,000.00 ARTH</span>
+<span class="font-mono text-on-surface font-semibold">Maturing in 42 days</span>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-1.5 overflow-hidden mt-space-2xs">
+<div class="bg-primary h-full" style="width: 76%;"></div>
+</div>
+<div class="flex items-center justify-between font-label-md text-label-md pt-space-2xs">
+<span class="text-on-surface-variant">Accrued to date</span>
+<span class="font-mono text-success font-semibold">+3,710.20 ARTH</span>
+</div>
+</div>
+<!-- FD Card 2 -->
+<div class="bg-surface-container-low rounded-DEFAULT p-space-md space-y-space-xs hover:bg-surface-container transition-all">
+<div class="flex items-center justify-between">
+<span class="font-title-md text-title-md text-on-surface font-semibold">Sthira Institutional Term #12</span>
+<span class="px-space-xs py-space-2xs rounded-full bg-success-container text-on-success-container font-label-md text-label-md font-bold">
+                7.20% APY
+              </span>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant font-label-md text-label-md pt-space-2xs">
+<span class="">Principal: 130,520.45 ARTH</span>
+<span class="font-mono text-on-surface font-semibold">Maturing in 180 days</span>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-1.5 overflow-hidden mt-space-2xs">
+<div class="bg-secondary h-full" style="width: 32%;"></div>
+</div>
+<div class="flex items-center justify-between font-label-md text-label-md pt-space-2xs">
+<span class="text-on-surface-variant">Accrued to date</span>
+<span class="font-mono text-success font-semibold">+2,110.80 ARTH</span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between pt-space-2xs">
+<button class="text-primary font-label-lg text-label-lg font-semibold hover:underline flex items-center gap-space-2xs" type="button">
+<span class="material-symbols-outlined text-[16px]">stacked_bar_chart</span> Compare Bank Rates
+          </button>
+<button class="px-space-md py-space-2xs bg-primary text-on-primary rounded-full font-label-lg text-label-lg hover:opacity-95 transition-all" type="button">
+            + Create Fixed Deposit
+          </button>
+</div>
+</div>
+<!-- Panel D: Stock Portfolio Entry & Holdings Preview -->
+<div class="bg-surface-container-lowest rounded-DEFAULT p-space-lg shadow-sm space-y-space-md">
+<div class="flex items-center justify-between">
+<div>
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Equity Portal</span>
+<h2 class="font-title-lg text-title-lg text-primary">Sovereign Stock Holdings</h2>
+</div>
+<div class="text-right">
+<span class="font-label-md text-label-md text-on-surface-variant">Unrealized P/L</span>
+<p class="font-title-md text-title-md text-success font-mono font-bold">+23,480 ARTH (+14.45%)</p>
+</div>
+</div>
+<!-- Metric strip -->
+<div class="grid grid-cols-2 gap-space-sm bg-surface-container-low p-space-sm rounded-DEFAULT">
+<div>
+<span class="font-label-md text-label-md text-on-surface-variant">Invested Capital</span>
+<p class="font-title-md text-title-md text-on-surface font-mono">162,400.00 ARTH</p>
+</div>
+<div>
+<span class="font-label-md text-label-md text-on-surface-variant">Market Valuation</span>
+<p class="font-title-md text-title-md text-on-surface font-mono font-bold">185,880.00 ARTH</p>
+</div>
+</div>
+<!-- 3 Stock Holdings Preview Cards -->
+<div class="space-y-space-xs">
+<!-- 1. NILA Systems -->
+<div class="flex items-center justify-between p-space-xs rounded-DEFAULT hover:bg-surface-container transition-all">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-7 rounded bg-surface-container overflow-hidden shrink-0 flex items-center justify-center">
+<img alt="NILA Systems" class="h-full w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDr_sRoKV85YwL0Dh_cxzO3ZBvCbFyF1Nou3IunE9eCzsQZiyIt73kwPlvRPBOcGL6WQncj7-KUNGzOMWwmespntZklDeqNQXNhn8P3uh85ikDKYvhEl654hcCUAhbLL_8u7QcZrkROcdkBtaqSygCPK3p_oxHZzqoU2ga-Q2aU0YssYdmsRYW7xc71Igtl_Fb5i--OwbvR-ce0hYZqju-LWclVA2ybzMPBXh_8T-YAr60Sj6LoT4JEjz7hb9My7C72_u8">
+</div>
+<div class="flex flex-col">
+<span class="font-title-md text-title-md text-on-surface">NILA Systems</span>
+<span class="font-label-md text-label-md text-on-surface-variant">120 Shares Held</span>
+</div>
+</div>
+<div class="text-right">
+<span class="font-title-md text-title-md text-on-surface font-mono">61,500.00 ARTH</span>
+<span class="font-label-md text-label-md text-success block font-semibold">+18.2%</span>
+</div>
+</div>
+<!-- 2. Meru Capital -->
+<div class="flex items-center justify-between p-space-xs rounded-DEFAULT hover:bg-surface-container transition-all">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-7 rounded bg-surface-container overflow-hidden shrink-0 flex items-center justify-center">
+<img alt="Meru Capital" class="h-full w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCNWh59nXuvEAu0TFNJ7lVZ7BPzB1i9rwMiKSerRKTBCBVSXU_gbvru3tlbtGW6HN-gzUmfs4B6eqAp4T3g1hF9S1ivA0yI_GKovz8pZTUFws8TgYPCKPJ9DmfgSmBILzYzsB_z8cdtN7HPmScLmpgpHJ6AJ1_0OzDTui-bDVmuAf5Rw6W7i5E-zhb7WgkjOe8fa2cCfOqiDpi9NgO3U4WHA7HCfLgbaICAw_DZ93ZRbilBdeXPRzh6heBs7aVoz6jmkyg">
+</div>
+<div class="flex flex-col">
+<span class="font-title-md text-title-md text-on-surface">Meru Capital</span>
+<span class="font-label-md text-label-md text-on-surface-variant">80 Shares Held</span>
+</div>
+</div>
+<div class="text-right">
+<span class="font-title-md text-title-md text-on-surface font-mono">72,400.00 ARTH</span>
+<span class="font-label-md text-label-md text-success block font-semibold">+9.4%</span>
+</div>
+</div>
+<!-- 3. Arka Energy -->
+<div class="flex items-center justify-between p-space-xs rounded-DEFAULT hover:bg-surface-container transition-all">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-7 rounded bg-surface-container overflow-hidden shrink-0 flex items-center justify-center">
+<img alt="Arka Energy" class="h-full w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDC0VA1HMy_x_UUmdl75kVOadjaRO8MwZcS0CwNa2Vl290NqvBooEw5NZDAlmr0UceLb9QBDThq0fuMceLaMq2SuDL220Om4jpzLGH-evu52ghMA2NejQ-AIYrLlYrdQP2ek94ZK5j0plGBQ8n7zzyr7jI_KyZpTsgaOGJcsjOKb0tzcT6UN2_sHojlPTZ0hfux-qYf2Y9U9gQ2r0maSqh0IeWTk3aT9wlJ8oFj7dOpnhwNIs9WIH8W5fxJTvItQsWf-tk">
+</div>
+<div class="flex flex-col">
+<span class="font-title-md text-title-md text-on-surface">Arka Energy</span>
+<span class="font-label-md text-label-md text-on-surface-variant">150 Shares Held</span>
+</div>
+</div>
+<div class="text-right">
+<span class="font-title-md text-title-md text-on-surface font-mono">51,980.00 ARTH</span>
+<span class="font-label-md text-label-md text-success block font-semibold">+4.1%</span>
+</div>
+</div>
+</div>
+<!-- Action to Gateway -->
+<a class="w-full py-space-sm px-space-md rounded-full bg-secondary-container text-on-secondary-container font-label-lg text-label-lg font-semibold flex items-center justify-center gap-space-xs hover:bg-secondary-fixed-dim transition-all" href="#">
+<span class="">Launch Full Stock Portal Trading Terminal</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+<!-- SECTION 4: REWARDS, SHOP & CENTRALIZED MAILBOX TRAY -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-md">
+<!-- Col 1: Gamified Rewards & Milestones -->
+<div class="bg-surface-container-lowest rounded-DEFAULT p-space-md shadow-sm flex flex-col justify-between space-y-space-md">
+<div class="space-y-space-xs">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-tertiary-fixed-variant text-[20px]">military_tech</span>
+<h3 class="font-title-md text-title-md text-on-surface font-headline-md">Citizen Milestones</h3>
+</div>
+<span class="px-space-xs py-space-2xs rounded-full bg-tertiary-container text-on-tertiary-container font-label-md text-label-md font-semibold">
+            14d Streak 🔥
+          </span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Complete daily sovereign operations to earn liquidity multiplier chips.</p>
+<div class="space-y-space-xs pt-space-xs">
+<div class="p-space-xs bg-surface-container-low rounded-DEFAULT flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg text-on-surface font-semibold">3 DvP Transfers Completed</span>
+<span class="font-label-md text-label-md text-on-surface-variant">Daily Tier-1 Quest</span>
+</div>
+<button class="px-space-sm py-space-2xs bg-success text-on-success rounded-full font-label-md text-label-md font-semibold hover:opacity-90" type="button">
+              Claim +50 ARTH
+            </button>
+</div>
+<div class="p-space-xs bg-surface-container-low rounded-DEFAULT flex items-center justify-between opacity-80">
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg text-on-surface font-semibold">Open a 90-Day Fixed Deposit</span>
+<span class="font-label-md text-label-md text-on-surface-variant">Progress: 1 / 1 Complete</span>
+</div>
+<span class="material-symbols-outlined text-success text-[20px]">check_circle</span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between pt-space-xs font-label-md text-label-md text-on-surface-variant">
+<span class="">Sovereign Tier XP: 4,820 / 5,000</span>
+<span class="font-semibold text-primary">Level 8 Sovereign</span>
+</div>
+</div>
+<!-- Col 2: Shop & Inventory Snapshot -->
+<div class="bg-surface-container-lowest rounded-DEFAULT p-space-md shadow-sm flex flex-col justify-between space-y-space-md">
+<div class="space-y-space-xs">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[20px]">inventory_2</span>
+<h3 class="font-title-md text-title-md text-on-surface font-headline-md">Vault &amp; Inventory</h3>
+</div>
+<span class="font-mono font-label-md text-label-md text-on-surface-variant">31,000 ARTH Val</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Equipped avatar artifacts grant passive APY modifiers to connected accounts.</p>
+<div class="p-space-xs bg-surface-container-low rounded-DEFAULT flex items-center gap-space-md">
+<div class="w-14 h-14 rounded-DEFAULT bg-surface-container-high overflow-hidden shrink-0 flex items-center justify-center">
+<img alt="Equipped Companion" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFKDK3r0JcifN3x7Cc4FfBBgoU3R3P_8uJuyiNByYdnO5nbZwgw7kjWn-ZXfnjejKSOXWX-Yf4EfUcV6etk1Da6O1WYozX4tvA1FVt6GSU0XIdoXRVja4Juqi-pFKiIRaK7-cYXZfzcYEx_F45L8NUwmHVcrf7RXhGfgWl_oEtOu1_sTzxTppDjdpXlnAqclwv1kr6u0UXCDACXvp2MUWa-jcecKh8lgeXiKVo6c8L4Vk5Cirkjs32MO0e5G_5eLKpmBA">
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-2xs">
+<span class="font-title-md text-title-md text-on-surface font-semibold">Fox Sentinel</span>
+<span class="px-space-2xs py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed font-label-md text-[10px] font-bold">LEGENDARY</span>
+</div>
+<span class="font-label-md text-label-md text-success font-semibold flex items-center gap-space-2xs">
+<span class="material-symbols-outlined text-[14px]">auto_awesome</span> Active: +0.85% APY Modifier
+            </span>
+<span class="font-label-md text-label-md text-on-surface-variant">Equipped on Samaya Vault #04</span>
+</div>
+</div>
+</div>
+<div class="pt-space-xs">
+<a class="w-full py-space-2xs px-space-md rounded-full bg-surface-container text-on-surface font-label-md text-label-md flex items-center justify-between hover:bg-surface-container-high transition-all" href="#">
+<span class="">Open Sovereign Shop &amp; Vault Items</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</a>
+</div>
+</div>
+<!-- Col 3: Centralized Mailbox & Alert Center -->
+<div class="bg-surface-container-lowest rounded-DEFAULT p-space-md shadow-sm flex flex-col justify-between space-y-space-md">
+<div class="space-y-space-xs">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[20px]">mark_email_unread</span>
+<h3 class="font-title-md text-title-md text-on-surface font-headline-md">Sovereign Mailbox</h3>
+</div>
+<span class="px-space-xs py-space-2xs rounded-full bg-error-container text-on-error-container font-label-md text-label-md font-semibold">
+            3 Unread
+          </span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Official institutional dispatches and settlement alerts.</p>
+<div class="space-y-space-2xs pt-space-2xs">
+<!-- Notice 1 -->
+<div class="p-space-xs bg-surface-container-low rounded-DEFAULT flex items-start gap-space-xs">
+<span class="w-2 h-2 rounded-full bg-primary mt-1.5 shrink-0"></span>
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg text-on-surface font-semibold leading-tight">Central Bank Monetary Policy Directive</span>
+<span class="font-label-md text-label-md text-on-surface-variant">Base corridor rate maintained @ 6.25%</span>
+</div>
+</div>
+<!-- Notice 2 -->
+<div class="p-space-xs bg-surface-container-low rounded-DEFAULT flex items-start gap-space-xs">
+<span class="w-2 h-2 rounded-full bg-primary mt-1.5 shrink-0"></span>
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg text-on-surface font-semibold leading-tight">FD Maturity Warning: Samaya #04</span>
+<span class="font-label-md text-label-md text-on-surface-variant">Auto-renewal scheduled in 42 calendar days</span>
+</div>
+</div>
+<!-- Notice 3 -->
+<div class="p-space-xs bg-surface-container-low rounded-DEFAULT flex items-start gap-space-xs">
+<span class="w-2 h-2 rounded-full bg-primary mt-1.5 shrink-0"></span>
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg text-on-surface font-semibold leading-tight">CLS Settlement Batch Confirmation</span>
+<span class="font-label-md text-label-md text-on-surface-variant">Zero divergence reported for Batch #9921-IN</span>
+</div>
+</div>
+</div>
+</div>
+<div class="pt-space-xs">
+<a class="w-full py-space-2xs px-space-md rounded-full bg-surface-container text-on-surface font-label-md text-label-md flex items-center justify-between hover:bg-surface-container-high transition-all" href="#">
+<span class="">View All Dispatches &amp; Regulatory Mails</span>
+<span class="material-symbols-outlined text-[16px]">open_in_new</span>
+</a>
+</div>
+</div>
+</div>
+</div></div></main><footer class="w-full bg-surface-container-low mt-space-3xl"><div class="max-w-7xl mx-auto px-margin-mobile md:px-margin-tablet lg:px-margin-desktop py-space-xl"><div class="grid grid-cols-1 md:grid-cols-3 gap-space-lg mb-space-xl"><div class="space-y-space-xs"><div class="flex items-center gap-space-2xs"><span class="material-symbols-outlined text-primary text-[20px]">verified</span><span class="font-title-md text-title-md text-on-surface">Core Ledger Integrity</span></div><p class="font-body-md text-body-md text-on-surface-variant">Authenticated against block height #28,102,510. Zero divergence recorded across domestic settlement nodes.</p></div><div class="space-y-space-xs"><div class="flex items-center gap-space-2xs"><span class="material-symbols-outlined text-primary text-[20px]">account_balance</span><span class="font-title-md text-title-md text-on-surface">ISO 20022 Clearing</span></div><p class="font-body-md text-body-md text-on-surface-variant">Transactions resolved via pacs.008 real-time institutional rails with deterministic delivery vs. payment finality.</p></div><div class="space-y-space-xs"><div class="flex items-center gap-space-2xs"><span class="material-symbols-outlined text-primary text-[20px]">shield</span><span class="font-title-md text-title-md text-on-surface">Encrypted Resident Session</span></div><p class="font-body-md text-body-md text-on-surface-variant">Hardware Security Module (HSM) enclave authenticated. Session isolated under Sovereign Citizen Protection Act.</p></div></div><div class="pt-space-md flex flex-col md:flex-row items-center justify-between gap-space-sm font-label-md text-label-md text-on-surface-variant"><p class="">© 2025 ARTHAX Sovereign Monetary Authority. Personal Citizen Finance Cockpit.</p><div class="flex items-center gap-space-md"><span class="">TLS 1.3 Active</span><span class="">Enclave Node: IN-WEST-04</span><span class="">Audited by CERT-IN</span></div></div></div></footer>
+
+</body></html>

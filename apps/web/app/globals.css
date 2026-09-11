@@ -1,0 +1,304 @@
+@import '@arthax/tokens/css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Local Font Definitions */
+@font-face {
+  font-family: 'Fraunces';
+  src: url('/fonts/Fraunces/Fraunces-VariableFont_SOFT,WONK,opsz,wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Fraunces';
+  src: url('/fonts/Fraunces/Fraunces-Italic-VariableFont_SOFT,WONK,opsz,wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Cantarell';
+  src: url('/fonts/Cantarell/Cantarell-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Cantarell';
+  src: url('/fonts/Cantarell/Cantarell-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Cantarell';
+  src: url('/fonts/Cantarell/Cantarell-Italic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Amarante';
+  src: url('/fonts/Amarante/Amarante-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/JetBrains_Mono/JetBrainsMono-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Base Styles */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    background-color: var(--color-off-white, #F2EFE7);
+    color: var(--color-ink, #262320);
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  body {
+    background-color: var(--color-off-white, #F2EFE7);
+    color: var(--color-ink, #262320);
+    font-family: var(--font-body, 'Cantarell', sans-serif);
+    min-height: 100vh;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display, 'Fraunces', serif);
+  }
+}
+
+/* Custom Interactive Animations & Micro-Interactions */
+.m3-interactive {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
+  will-change: transform, box-shadow;
+}
+
+.m3-interactive:hover {
+  transform: translateY(-4px);
+  box-shadow: 0px 14px 34px -4px rgba(51, 104, 160, 0.12), 0px 4px 12px rgba(168, 116, 42, 0.08);
+  border-color: rgba(168, 116, 42, 0.4);
+}
+
+.m3-interactive:active {
+  transform: translateY(-1px) scale(0.99);
+}
+
+/* Smooth Accordion Transitions */
+.accordion-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+  opacity: 0;
+}
+
+.accordion-open .accordion-content {
+  max-height: 400px;
+  opacity: 1;
+}
+
+.accordion-open .accordion-icon {
+  transform: rotate(180deg);
+}
+
+/* Ticker Gentle Pulse */
+@keyframes subtlePulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.65; }
+}
+
+.ticker-pulse {
+  animation: subtlePulse 3s ease-in-out infinite;
+}
+
+/* ARTHAX Bespoke Animated Scrollbars & Smooth Flow */
+@keyframes scrollbarGlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes scrollIndicatorPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.85;
+  }
+  50% {
+    transform: scale(1.18);
+    opacity: 1;
+  }
+}
+
+/* Progress Bar Live Telemetry Shimmer Stream */
+@keyframes progressStream {
+  0% {
+    transform: translateX(-150%);
+  }
+  100% {
+    transform: translateX(250%);
+  }
+}
+
+.animate-progress-stream {
+  animation: progressStream 2.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@keyframes progressPulseBead {
+  0%, 100% {
+    transform: translateY(-50%) scale(0.85);
+    opacity: 0.75;
+  }
+  50% {
+    transform: translateY(-50%) scale(1.25);
+    opacity: 1;
+  }
+}
+
+.animate-pulse-bead {
+  animation: progressPulseBead 2s ease-in-out infinite;
+}
+
+/* Hide native browser scrollbar while retaining full keyboard/touch/wheel scrollability */
+.no-scrollbar::-webkit-scrollbar,
+.scrollbar-none::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+.no-scrollbar,
+.scrollbar-none {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
+
+/* Canonical ARTHAX Horizontal Scrollbar Styling */
+.arthax-scrollbar-horizontal {
+  scrollbar-width: thin;
+  scrollbar-color: #3368A0 rgba(200, 223, 219, 0.3);
+}
+
+.arthax-scrollbar-horizontal::-webkit-scrollbar {
+  height: 6px;
+}
+
+.arthax-scrollbar-horizontal::-webkit-scrollbar-button {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+.arthax-scrollbar-horizontal::-webkit-scrollbar-track {
+  background: rgba(200, 223, 219, 0.25);
+  border-radius: 9999px;
+  margin: 0 6px;
+}
+
+.arthax-scrollbar-horizontal::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, #1E3A5F 0%, #3368A0 40%, #A8742A 75%, #1E3A5F 100%);
+  background-size: 250% 100%;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.arthax-scrollbar-horizontal::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(90deg, #022448 0%, #1E3A5F 50%, #A8742A 100%);
+  box-shadow: 0 0 10px rgba(168, 116, 42, 0.4);
+}
+
+/* Central Bank Sovereign Animated Scrollbars & Scroll Line */
+@keyframes centralBankScrollbarGlow {
+  0% {
+    background-position: 50% 0%;
+  }
+  50% {
+    background-position: 50% 100%;
+  }
+  100% {
+    background-position: 50% 0%;
+  }
+}
+
+.central-bank-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #946726 rgba(168, 116, 42, 0.08);
+}
+
+.central-bank-scrollbar::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+.central-bank-scrollbar::-webkit-scrollbar-track {
+  background: rgba(168, 116, 42, 0.05);
+  border-radius: 9999px;
+}
+
+.central-bank-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #946726 0%, #B88B38 35%, #DFB87A 70%, #946726 100%);
+  background-size: 100% 250%;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  animation: centralBankScrollbarGlow 5s ease-in-out infinite;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.central-bank-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #7A5217 0%, #946726 50%, #DFB87A 100%);
+  box-shadow: 0 0 12px rgba(168, 116, 42, 0.5);
+}
+
+@keyframes centralBankScrollLineFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.central-bank-scroll-progress {
+  background: linear-gradient(90deg, #7A5217 0%, #B88B38 25%, #F5E1B2 55%, #DFB87A 75%, #7A5217 100%);
+  background-size: 250% 100%;
+  animation: centralBankScrollLineFlow 3.5s linear infinite;
+}
+
+/* Reduced Motion Override */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .m3-interactive, .pipeline-step {
+    transform: none !important;
+  }
+}
+
