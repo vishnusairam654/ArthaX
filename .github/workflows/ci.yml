@@ -110,7 +110,7 @@ jobs:
       - name: Instantiate Database Schema & Generate Prisma Client
         run: |
           npx prisma generate --schema=config/database/schema.prisma
-          npx prisma db push --schema=config/database/schema.prisma --accept-data-loss
+          npx prisma migrate deploy --schema=config/database/schema.prisma
           pnpm --filter @arthax/types run build
           pnpm --filter @arthax/validation run build
 

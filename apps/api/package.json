@@ -11,6 +11,7 @@
     "typecheck": "tsc --noEmit",
     "prisma:generate": "prisma generate --schema=../../config/database/schema.prisma",
     "prisma:migrate": "prisma migrate dev --schema=../../config/database/schema.prisma",
+    "prisma:migrate:deploy": "prisma migrate deploy --schema=../../config/database/schema.prisma",
     "prisma:seed": "ts-node --transpile-only -P tsconfig.json ../../config/database/seeds/seed.ts",
     "test": "ts-node -r reflect-metadata"
   },
