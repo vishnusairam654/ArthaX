@@ -86,7 +86,7 @@ export class IdentityService {
     return {
       message: `Sovereign identity verification code dispatched to ${input.email}`,
       expirySeconds: 300,
-      code: process.env.NODE_ENV === 'development' ? rawCode : undefined,
+      code: process.env.NODE_ENV === 'production' ? undefined : rawCode,
     };
   }
 
