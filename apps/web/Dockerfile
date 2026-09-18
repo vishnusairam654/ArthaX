@@ -34,10 +34,12 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/apps/web/node_modules ./apps/web/node_modules
 COPY . .
 
-# Environment variables for build time
+# Environment variables and build arguments for build time
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
 ENV BUILD_STANDALONE=true
+ARG NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
 
 # Compile shared packages and Next.js static / server pages
 RUN pnpm --filter @arthax/types build || true

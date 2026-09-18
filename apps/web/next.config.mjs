@@ -6,6 +6,16 @@ const nextConfig = {
   images: {
     unoptimized: true
   },
+  async rewrites() {
+    const apiTarget = process.env.API_INTERNAL_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api/v1';
+    const cleanTarget = apiTarget.replace(/\/api\/v1\/?$/, '');
+    return [
+      {
+        source: '/api/v1/:path*',
+        destination: `${cleanTarget}/api/v1/:path*`,
+      },
+    ];
+  },
   async headers() {
     return [
       {

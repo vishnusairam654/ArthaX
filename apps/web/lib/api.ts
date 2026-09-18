@@ -89,7 +89,14 @@ import { ARTHAX_BANKS, MOCK_ACCOUNTS } from '@/components/bank/BankMockData';
 import { MOCK_CLS_QUEUE, MOCK_INTERBANK_FLOW_MATRIX } from '@/components/central-bank/CentralBankMockData';
 import { LISTED_COMPANIES } from '@/components/stocks/StockData';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api/v1';
+const API_BASE_URL =
+  typeof window !== 'undefined'
+    ? process.env.NEXT_PUBLIC_API_URL && !process.env.NEXT_PUBLIC_API_URL.includes('localhost')
+      ? process.env.NEXT_PUBLIC_API_URL
+      : window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1'
+        ? '/api/v1'
+        : 'http://localhost:3001/api/v1'
+    : process.env.API_INTERNAL_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api/v1';
 
 function getAuthHeader(): Record<string, string> {
   if (typeof window === 'undefined') return {};

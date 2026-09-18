@@ -77,17 +77,21 @@ Under the `api` service **Variables** tab, configure:
 | `SEED_DATABASE` | `true` (first run, then `false`) | Triggers deterministic baseline seed |
 | `CORS_ORIGIN` | `https://${{web.RAILWAY_PUBLIC_DOMAIN}}` | Enforces browser CORS origin isolation |
 
-### Step 6: Execute Prisma Staging Migration
-The pre-deploy command configured in Step 4 automatically executes:
+### Step 6: Execute Prisma Staging Migration (Automatic on Every Deploy)
+The pre-deploy command configured in Step 4 automatically executes on every deployment before traffic shifts:
 ```bash
 npx prisma migrate deploy --schema=config/database/schema.prisma
 ```
-This applies `config/database/migrations/20260918000000_init/migration.sql` to the managed PostgreSQL database, creating all 44 physical tables and the `_prisma_migrations` tracking table before the API service begins accepting live traffic.
+This applies `config/database/migrations/20260918000000_init/migration.sql` to the managed PostgreSQL database, ensuring all 44 physical tables and the `_prisma_migrations` ledger are up to date before the API service starts.
 
-### Step 7: Deterministic Staging Seed
-When `SEED_DATABASE=true` is set, `config/staging/pre-deploy.sh` invokes:
+### Step 7: Deterministic Staging Seed (Run Once During Initial Setup)
+To protect persistent staging data from being overwritten on future deploys, seeding is decoupled from the deployment lifecycle. Run the seed **once** after your initial deployment:
 ```bash
-npx ts-node --transpile-only -P tsconfig.json config/database/seeds/seed.ts
+# Option A: Via Railway CLI
+railway run sh config/staging/seed-staging.sh
+
+# Option B: Via Railway Console -> api service -> Settings -> Run Command
+sh config/staging/seed-staging.sh
 ```
 This populates:
 - 5 Canonical Banks (NAVA, SAMAYA, SETU, STHIRA, VAYU)
@@ -115,7 +119,11 @@ Under the `web` service **Variables** tab, configure:
 | `NODE_ENV` | `production` | Next.js production optimization |
 | `PORT` | `3000` | Web server listening port |
 | `NEXT_PUBLIC_API_URL` | `https://${{api.RAILWAY_PUBLIC_DOMAIN}}/api/v1` | Public API endpoint for browser calls |
-| `API_INTERNAL_URL` | `http://${{api.RAILWAY_PRIVATE_DOMAIN}}:3001/api/v1` | Internal SSR route resolution |
+| `API_INTERNAL_URL` | `http://${{api.RAILWAY_PRIVATE_DOMAIN}}:3001/api/v1` | Internal SSR route resolution & runtime proxy target |
+
+> [!NOTE]
+> **Zero-CORS Runtime Proxy Architecture:**
+> Because Next.js inlines `NEXT_PUBLIC_*` variables at build time, `apps/web/next.config.mjs` incorporates a dynamic runtime `rewrites()` gateway targeting `API_INTERNAL_URL`. Client-side requests in `lib/api.ts` automatically route through `/api/v1/:path*` to the same origin, while Next.js proxies traffic over Railway's private service mesh without requiring build-time URL baking or complex CORS headers. Additionally, `apps/web/Dockerfile` provides `ARG NEXT_PUBLIC_API_URL` for build-time compilation.
 
 ### Step 10: Configure Public Domains & TLS
 1. Under `web` $\rightarrow$ **Settings** $\rightarrow$ **Networking**:
