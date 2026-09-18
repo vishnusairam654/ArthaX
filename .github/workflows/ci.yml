@@ -32,6 +32,9 @@ jobs:
           node-version: 20
           cache: 'pnpm'
 
+      - name: Prepare Local Environment
+        run: cp .env.example .env
+
       - name: Install Monorepo Dependencies
         run: pnpm install --frozen-lockfile
 
@@ -54,6 +57,12 @@ jobs:
     name: Non-Skippable Financial Invariant Gate
     runs-on: ubuntu-latest
     needs: [code-quality]
+    env:
+      DATABASE_URL: postgresql://arthax:arthax_dev@localhost:5432/arthax_dev?schema=public
+      REDIS_URL: redis://localhost:6379
+      NODE_ENV: test
+      JWT_SECRET: ci_test_jwt_secret_token_at_least_64_characters_long_for_security_2026
+      FINANCIAL_PEPPER: ci_test_financial_pepper_secret_token_at_least_64_characters_long
     services:
       postgres:
         image: postgres:16-alpine
@@ -92,28 +101,24 @@ jobs:
           node-version: 20
           cache: 'pnpm'
 
+      - name: Prepare Local Environment
+        run: cp .env.example .env
+
       - name: Install Monorepo Dependencies
         run: pnpm install --frozen-lockfile
 
       - name: Instantiate Database Schema & Generate Prisma Client
         run: |
+          npx prisma generate --schema=config/database/schema.prisma
           npx prisma db push --schema=config/database/schema.prisma --accept-data-loss
           pnpm --filter @arthax/types build || true
           pnpm --filter @arthax/validation build || true
 
       - name: Seed Sovereign Database
         run: pnpm --filter @arthax/api run prisma:seed
-        env:
-          DATABASE_URL: postgresql://arthax:arthax_dev@localhost:5432/arthax_dev?schema=public
 
       - name: Execute Master Regression Matrix (All 17 Invariant Suites — 664 Tests)
         run: pnpm test:all
-        env:
-          NODE_ENV: test
-          DATABASE_URL: postgresql://arthax:arthax_dev@localhost:5432/arthax_dev?schema=public
-          REDIS_URL: redis://localhost:6379
-          JWT_SECRET: ci_test_jwt_secret_token_at_least_64_characters_long_for_security_2026
-          FINANCIAL_PEPPER: ci_test_financial_pepper_secret_token_at_least_64_characters_long
 
   # ----------------------------------------------------------------------------
   # Job 3: Production Build & Route Compilation
@@ -122,6 +127,11 @@ jobs:
     name: Next.js 47-Route Compilation & API Bundle
     runs-on: ubuntu-latest
     needs: [financial-invariant-gate]
+    env:
+      DATABASE_URL: postgresql://arthax:arthax_dev@localhost:5432/arthax_dev?schema=public
+      NEXT_TELEMETRY_DISABLED: 1
+      NODE_ENV: production
+      BUILD_STANDALONE: "true"
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -136,6 +146,9 @@ jobs:
         with:
           node-version: 20
           cache: 'pnpm'
+
+      - name: Prepare Local Environment
+        run: cp .env.example .env
 
       - name: Install Monorepo Dependencies
         run: pnpm install --frozen-lockfile
@@ -154,10 +167,6 @@ jobs:
 
       - name: Build Next.js 47-Route Standalone Web Portals
         run: pnpm --filter web build
-        env:
-          NEXT_TELEMETRY_DISABLED: 1
-          NODE_ENV: production
-          BUILD_STANDALONE: "true"
 
   # ----------------------------------------------------------------------------
   # Job 4: Multi-Stage Container Validation
