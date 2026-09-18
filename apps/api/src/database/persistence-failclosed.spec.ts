@@ -36,11 +36,13 @@ export async function runPersistenceAndFailClosedTests() {
 
   assert('PostgreSQL Connection Active', prisma.isConnected === true);
 
-  // 2. Verify 44 Physical Tables in PostgreSQL
+  // 2. Verify 44 Physical Tables in PostgreSQL (excluding Prisma migration ledger)
   const tableRows: Array<{ table_name: string }> = await prisma.$queryRaw`
     SELECT table_name 
     FROM information_schema.tables 
-    WHERE table_schema = 'public' AND table_type = 'BASE TABLE'
+    WHERE table_schema = 'public' 
+      AND table_type = 'BASE TABLE'
+      AND table_name != '_prisma_migrations'
     ORDER BY table_name;
   `;
   assert('PostgreSQL Schema Table Count (44 tables)', tableRows.length === 44, `Found: ${tableRows.length}`);
