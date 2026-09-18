@@ -12,6 +12,7 @@ import {
   HelpCircle,
   Shield,
 } from 'lucide-react';
+import { apiLogin } from '@/lib/api';
 
 interface GovLoginStepProps {
   onBack: () => void;
@@ -28,7 +29,7 @@ export const GovLoginStep: React.FC<GovLoginStepProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!identifier.trim()) {
@@ -43,17 +44,17 @@ export const GovLoginStep: React.FC<GovLoginStepProps> = ({
     setError(null);
     setIsLoading(true);
 
-    // Simulated login verification
-    setTimeout(() => {
+    try {
+      const authRes = await apiLogin({
+        govIdOrEmail: identifier.trim(),
+        govPassword: password,
+      });
+      onLoginSuccess(authRes.user.govIdNumber, authRes.user.email);
+    } catch (err: any) {
+      setError(err.message || 'Authentication failed. Please check your credentials.');
+    } finally {
       setIsLoading(false);
-      const demoGovId = identifier.toUpperCase().includes('GOV-')
-        ? identifier.toUpperCase()
-        : 'GOV-4829-7316';
-      const demoEmail = identifier.includes('@')
-        ? identifier
-        : 'citizen@domain.com';
-      onLoginSuccess(demoGovId, demoEmail);
-    }, 900);
+    }
   };
 
   return (

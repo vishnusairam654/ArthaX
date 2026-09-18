@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
   ArrowRightLeft, 
   ShieldAlert, 
@@ -9,9 +9,12 @@ import {
   Fingerprint, 
   Lock, 
   RefreshCw,
-  Sparkles
+  Sparkles,
+  AlertCircle
 } from 'lucide-react';
 import { AnimatedMaskedValue } from './AnimatedMaskedValue';
+import { apiFetchUserAccounts, apiExecuteTransfer, dispatchPortalDataInvalidation } from '@/lib/api';
+import { BankAccountDto } from '@arthax/types';
 
 interface DvpTransferTerminalProps {
   isMasked: boolean;
@@ -22,35 +25,95 @@ export const DvpTransferTerminal: React.FC<DvpTransferTerminalProps> = ({
   isMasked,
   onSuccessfulTransfer 
 }) => {
-  const [transferAmount, setTransferAmount] = useState<string>('12,500.00');
+  const [accounts, setAccounts] = useState<BankAccountDto[]>([]);
+  const [selectedAccountId, setSelectedAccountId] = useState<string>('');
+  const [destinationAccountNumber, setDestinationAccountNumber] = useState<string>('ARTH-NAVA-002');
+  const [transferAmount, setTransferAmount] = useState<string>('500.00');
   const [finPin, setFinPin] = useState<string>('');
   const [status, setStatus] = useState<'idle' | 'signing' | 'settled'>('idle');
   const [txReceipt, setTxReceipt] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  const availableBalance = 185420.00;
+  const loadAccounts = useCallback(async () => {
+    try {
+      const data = await apiFetchUserAccounts();
+      setAccounts(data);
+      if (data.length > 0 && !selectedAccountId) {
+        setSelectedAccountId(data[0].id);
+      }
+    } catch {
+      // Fallback
+    }
+  }, [selectedAccountId]);
+
+  useEffect(() => {
+    loadAccounts();
+    const handleInvalidation = () => {
+      loadAccounts();
+    };
+    window.addEventListener('arthax_portal_data_invalidated', handleInvalidation);
+    return () => {
+      window.removeEventListener('arthax_portal_data_invalidated', handleInvalidation);
+    };
+  }, [loadAccounts]);
+
+  const activeAccount = accounts.find((a) => a.id === selectedAccountId) || accounts[0];
+  const availableBalanceMinor = activeAccount ? BigInt(activeAccount.balanceMinor) : 0n;
+  const availableBalance = Number(availableBalanceMinor) / 100;
 
   const handlePercentage = (pct: number) => {
     const val = (availableBalance * pct).toFixed(2);
     setTransferAmount(val);
   };
 
-  const handleBroadcast = (e: React.FormEvent) => {
+  const handleBroadcast = async (e: React.FormEvent) => {
     e.preventDefault();
     if (status === 'signing') return;
+    if (!activeAccount) {
+      setError('No active source account found.');
+      return;
+    }
+    if (!finPin) {
+      setError('Please enter your Financial Password for step-up authorization.');
+      return;
+    }
 
+    const cleanAmount = parseFloat(transferAmount.replace(/,/g, ''));
+    if (isNaN(cleanAmount) || cleanAmount <= 0) {
+      setError('Please enter a valid transfer amount.');
+      return;
+    }
+
+    const amountMinor = (BigInt(Math.round(cleanAmount * 100))).toString();
+
+    setError(null);
     setStatus('signing');
-    setTimeout(() => {
+
+    try {
+      const res = await apiExecuteTransfer({
+        sourceAccountId: activeAccount.id,
+        destinationAccountNumber: destinationAccountNumber.trim(),
+        amountMinor,
+        financialPassword: finPin,
+        memo: 'DvP Real-time Gross Settlement',
+      });
+
       setStatus('settled');
-      const hash = `0x${Math.random().toString(16).substring(2, 8).toUpperCase()}...${Math.random().toString(16).substring(2, 6).toUpperCase()}`;
-      setTxReceipt(hash);
-      if (onSuccessfulTransfer) {
-        onSuccessfulTransfer(parseFloat(transferAmount.replace(/,/g, '')) || 12500);
-      }
+      setTxReceipt(res.transaction.id);
       setFinPin('');
+      dispatchPortalDataInvalidation();
+
+      if (onSuccessfulTransfer) {
+        onSuccessfulTransfer(cleanAmount);
+      }
+
       setTimeout(() => {
         setStatus('idle');
-      }, 6000);
-    }, 1200);
+      }, 7000);
+    } catch (err: any) {
+      setError(err.message || 'Transfer failed. Check credentials and balance.');
+      setStatus('idle');
+    }
   };
 
   return (
@@ -75,6 +138,14 @@ export const DvpTransferTerminal: React.FC<DvpTransferTerminalProps> = ({
         </span>
       </div>
 
+      {/* Error Alert */}
+      {error && (
+        <div className="p-3.5 rounded-2xl bg-[#B5482E]/10 border border-[#B5482E]/25 text-[#B5482E] text-xs flex items-center gap-2.5">
+          <AlertCircle className="w-4 h-4 shrink-0" />
+          <span>{error}</span>
+        </div>
+      )}
+
       {/* Interactive Form */}
       <form onSubmit={handleBroadcast} className="space-y-5">
         {/* Source & Recipient Row */}
@@ -87,19 +158,19 @@ export const DvpTransferTerminal: React.FC<DvpTransferTerminalProps> = ({
             <div className="flex items-center justify-between bg-[#F8F9FF] border border-[#74777F]/20 px-4 py-3 rounded-xl">
               <div className="flex items-center gap-2.5">
                 <div className="w-7 h-7 rounded-full bg-[#022448] flex items-center justify-center text-white text-xs font-bold font-mono shadow-xs">
-                  N
+                  {activeAccount?.bankId ? activeAccount.bankId.charAt(0).toUpperCase() : 'N'}
                 </div>
                 <div>
                   <span className="font-sans text-xs font-semibold text-[#121C28] block leading-tight">
-                    NAVA Bank Primary
+                    {activeAccount?.bankId ? `${activeAccount.bankId.toUpperCase()} Bank` : 'NAVA Bank Primary'}
                   </span>
                   <span className="font-mono text-[10px] text-[#74777F]">
-                    #001-NAVA-9904
+                    {activeAccount ? activeAccount.accountNumber : '#001-NAVA-9904'}
                   </span>
                 </div>
               </div>
               <span className="font-mono text-xs text-[#43474E] inline-flex items-baseline gap-1">
-                Avail: <AnimatedMaskedValue value="185,420" isMasked={isMasked} maskString="••••••" /> ARTH
+                Avail: <AnimatedMaskedValue value={availableBalance.toLocaleString(undefined, { minimumFractionDigits: 2 })} isMasked={isMasked} maskString="••••••" /> ARTH
               </span>
             </div>
           </div>
@@ -108,19 +179,20 @@ export const DvpTransferTerminal: React.FC<DvpTransferTerminalProps> = ({
           <div className="space-y-1.5">
             <div className="flex items-center justify-between">
               <label className="font-sans text-xs font-medium text-[#43474E]">
-                Recipient Resident Citizen / GOV ID
+                Recipient ARTH Account Number
               </label>
               <span className="font-sans text-[11px] text-[#10B981] flex items-center gap-1 font-semibold">
                 <CheckCircle2 className="w-3.5 h-3.5" />
-                Verified Citizen
+                Verified Protocol Target
               </span>
             </div>
             <div className="flex items-center bg-[#F8F9FF] border border-[#74777F]/20 px-4 py-3 rounded-xl gap-2.5">
               <BadgeCheck className="w-4 h-4 text-[#A8742A]" />
               <input
                 type="text"
-                readOnly
-                value="#7102-491-VA (Aurelius Vane)"
+                value={destinationAccountNumber}
+                onChange={(e) => setDestinationAccountNumber(e.target.value)}
+                placeholder="ARTH-NAVA-002"
                 className="w-full bg-transparent font-mono text-xs text-[#121C28] font-medium focus:outline-none"
               />
             </div>
@@ -181,25 +253,27 @@ export const DvpTransferTerminal: React.FC<DvpTransferTerminalProps> = ({
               </span>
             </div>
             <span className="px-2.5 py-0.5 rounded-full bg-white border border-[#DFB87A]/60 text-[#A8742A] font-mono text-[10px] font-semibold">
-              FIPS 140-3 Level 4 HSM
+              Argon2id Enclave
             </span>
           </div>
 
           <p className="font-sans text-xs text-[#533300]/80">
-            Enter citizen enclave PIN to sign zero-divergence DvP execution packet. Financial PIN values are zeroized in memory immediately after signature.
+            Enter your Financial Password to authorize double-entry ledger execution. Financial credentials are never logged and use autocomplete="off".
           </p>
 
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-1">
-            {/* 6-dot secure input */}
+            {/* Secure Financial Password Input */}
             <div className="relative flex items-center justify-center bg-white border border-[#DFB87A] px-4 py-2.5 rounded-full">
               <input
                 type="password"
-                maxLength={6}
                 autoComplete="off"
                 value={finPin}
-                onChange={(e) => setFinPin(e.target.value)}
-                placeholder="••••••"
-                className="w-28 text-center tracking-[0.4em] font-mono text-base text-[#361F00] bg-transparent focus:outline-none placeholder-[#DFB87A]"
+                onChange={(e) => {
+                  setFinPin(e.target.value);
+                  if (error) setError(null);
+                }}
+                placeholder="Financial Passkey"
+                className="w-48 text-center font-sans text-sm text-[#361F00] bg-transparent focus:outline-none placeholder-[#DFB87A]"
               />
             </div>
 
@@ -212,12 +286,12 @@ export const DvpTransferTerminal: React.FC<DvpTransferTerminalProps> = ({
               {status === 'signing' ? (
                 <>
                   <RefreshCw className="w-4 h-4 animate-spin text-[#A8742A]" />
-                  <span>Signing &amp; Clearing DvP Epoch...</span>
+                  <span>Posting Ledger Transaction to PostgreSQL…</span>
                 </>
               ) : (
                 <>
                   <Fingerprint className="w-4 h-4 text-[#A8742A]" />
-                  <span>Sign &amp; Broadcast via CLS Rail</span>
+                  <span>Authorize &amp; Commit to Ledger</span>
                 </>
               )}
             </button>
@@ -230,7 +304,7 @@ export const DvpTransferTerminal: React.FC<DvpTransferTerminalProps> = ({
                 <CheckCircle2 className="w-4 h-4 text-[#10B981]" />
                 ATOMIC DVP CLEARED: {transferAmount} ARTH
               </span>
-              <span className="text-[#10B981]">{txReceipt} (T+0 Final)</span>
+              <span className="text-[#10B981] truncate max-w-[200px]">ID: {txReceipt}</span>
             </div>
           )}
         </div>

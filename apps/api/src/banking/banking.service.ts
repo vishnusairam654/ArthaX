@@ -13,6 +13,7 @@ import { AuditService } from '../audit/audit.service';
 import { ClsService } from '../cls/cls.service';
 import { NotificationsService } from '../notifications/notifications.service';
 import { NotificationTemplates } from '../notifications/notification-templates';
+import { CentralBankService } from '../central-bank/central-bank.service';
 import {
   TransferRequestInput,
   OpenAccountInput,
@@ -39,7 +40,12 @@ export class BankingService {
     private readonly auditService: AuditService,
     @Optional() private readonly clsService?: ClsService,
     @Optional() private readonly notificationsService?: NotificationsService,
+    @Optional() private readonly centralBankService?: CentralBankService,
   ) {}
+
+  setCentralBankService(cb: any): void {
+    (this as any).centralBankService = cb;
+  }
 
   // ===========================================================================
   // 1. BANK MANAGEMENT & 5 CANONICAL BANKS
@@ -574,6 +580,18 @@ export class BankingService {
       throw new ForbiddenException('Unauthorized: You do not own the source account');
     }
 
+    // Source account status & freeze enforcement
+    if (
+      sourceAccount.status === 'FROZEN' ||
+      (this.centralBankService &&
+        (this.centralBankService.isAccountFrozen(sourceAccount.id) ||
+          this.centralBankService.isAccountFrozen(sourceAccount.accountNumber)))
+    ) {
+      throw new ForbiddenException(
+        `Source account [${sourceAccount.accountNumber}] is administratively FROZEN by Central Bank directive; debits and outgoing transfers are prohibited.`,
+      );
+    }
+
     if (sourceAccount.status !== 'ACTIVE') {
       throw new BadRequestException(
         `Source account is currently ${sourceAccount.status}; transfers are prohibited.`,
@@ -608,7 +626,12 @@ export class BankingService {
       throw new BadRequestException('Cannot transfer funds to the same account.');
     }
 
-    if (destAccount.status !== 'ACTIVE') {
+    // Destination account status check: FROZEN accounts can receive funds (inward recovery permitted), but CLOSED/SUSPENDED/DORMANT cannot
+    if (
+      destAccount.status === 'SUSPENDED' ||
+      destAccount.status === 'CLOSED' ||
+      destAccount.status === 'DORMANT'
+    ) {
       throw new BadRequestException(
         `Destination account is currently ${destAccount.status}; cannot receive funds.`,
       );

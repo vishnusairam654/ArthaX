@@ -289,16 +289,61 @@
   animation: centralBankScrollLineFlow 3.5s linear infinite;
 }
 
+/* Accessible Focus Indicators (WCAG 2.1 AA Compliant) */
+:focus-visible {
+  outline: 2px solid var(--color-primary, #022448) !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 4px rgba(30, 58, 95, 0.2) !important;
+}
+
+/* Skip Navigation Link for Keyboard & Screen Reader Users */
+.skip-to-content {
+  position: fixed;
+  top: -100px;
+  left: 1rem;
+  z-index: 9999;
+  padding: 0.75rem 1.5rem;
+  background-color: #022448;
+  color: #ffffff;
+  font-weight: 600;
+  border-radius: 0.375rem;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+  transition: top 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none;
+}
+
+.skip-to-content:focus {
+  top: 1rem;
+  outline: 2px solid #dfb87a !important;
+  outline-offset: 2px !important;
+}
+
+/* Accessible Screen Reader Only Utility */
+.sr-only-focusable:not(:focus):not(:focus-within) {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border-width: 0 !important;
+}
+
 /* Reduced Motion Override */
 @media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+    transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
   }
   .m3-interactive, .pipeline-step {
     transform: none !important;
   }
 }
+
 

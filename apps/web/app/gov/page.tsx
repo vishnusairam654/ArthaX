@@ -7,6 +7,7 @@ import { GovLanding } from '@/components/gov/GovLanding';
 import { GovEmailStep } from '@/components/gov/GovEmailStep';
 import { GovOtpStep } from '@/components/gov/GovOtpStep';
 import { GovPasswordStep } from '@/components/gov/GovPasswordStep';
+import { GovFinancialPasswordStep } from '@/components/gov/GovFinancialPasswordStep';
 import { GovResultStep } from '@/components/gov/GovResultStep';
 import { GovLoginStep } from '@/components/gov/GovLoginStep';
 import { GovPassportPreviewCard } from '@/components/gov/GovPassportPreviewCard';
@@ -16,39 +17,60 @@ import { GovEcosystemSection } from '@/components/gov/GovEcosystemSection';
 import { GovFaqSection } from '@/components/gov/GovFaqSection';
 import { GovFooter } from '@/components/gov/GovFooter';
 import { ShieldCheck, Sparkles, Fingerprint } from 'lucide-react';
+import {
+  apiSendEmailOtp,
+  apiVerifyEmailOtp,
+  apiCreateGovId,
+  apiSetFinancialPassword,
+} from '@/lib/api';
 
-export type GovStep = 'landing' | 'email' | 'otp' | 'password' | 'result' | 'login';
-
-function generateGovId(): string {
-  const a = Math.floor(1000 + Math.random() * 9000);
-  const b = Math.floor(1000 + Math.random() * 9000);
-  return `GOV-${a}-${b}`;
-}
+export type GovStep = 'landing' | 'email' | 'otp' | 'password' | 'financial-password' | 'result' | 'login';
 
 export default function GovPage() {
   const [step, setStep] = useState<GovStep>('landing');
-  const [email, setEmail] = useState('citizen@arthax.gov');
+  const [email, setEmail] = useState('');
+  const [devCode, setDevCode] = useState<string | undefined>(undefined);
+  const [verifiedOtpCode, setVerifiedOtpCode] = useState('');
   const [govId, setGovId] = useState('');
+  const [setupToken, setSetupToken] = useState('');
 
   // Creation flow handlers
   const handleCreateGovId = useCallback(() => {
     setStep('email');
   }, []);
 
-  const handleSendOtp = useCallback((submittedEmail: string) => {
+  const handleSendOtp = useCallback(async (submittedEmail: string) => {
     setEmail(submittedEmail);
+    const res = await apiSendEmailOtp(submittedEmail);
+    if (res.code) {
+      setDevCode(res.code);
+    }
     setStep('otp');
   }, []);
 
-  const handleOtpVerified = useCallback(() => {
+  const handleOtpVerified = useCallback(async (code: string) => {
+    await apiVerifyEmailOtp(email, code);
+    setVerifiedOtpCode(code);
     setStep('password');
-  }, []);
+  }, [email]);
 
-  const handlePasswordCreated = useCallback(() => {
-    const newId = generateGovId();
-    setGovId(newId);
-    setStep('result');
-  }, []);
+  const handlePasswordCreated = useCallback(
+    async (govPassword: string) => {
+      const res = await apiCreateGovId(email, verifiedOtpCode, govPassword);
+      setGovId(res.govIdNumber);
+      setSetupToken(res.setupToken);
+      setStep('financial-password');
+    },
+    [email, verifiedOtpCode]
+  );
+
+  const handleFinancialPasswordCreated = useCallback(
+    async (finPassword: string, displayName?: string) => {
+      await apiSetFinancialPassword(setupToken, finPassword, displayName);
+      setStep('result');
+    },
+    [setupToken]
+  );
 
   // Login flow handler
   const handleSignIn = useCallback(() => {
@@ -75,6 +97,10 @@ export default function GovPage() {
 
   const handleBackToOtp = useCallback(() => {
     setStep('otp');
+  }, []);
+
+  const handleBackToPassword = useCallback(() => {
+    setStep('password');
   }, []);
 
   return (
@@ -151,6 +177,7 @@ export default function GovPage() {
                 {step === 'otp' && (
                   <GovOtpStep
                     email={email}
+                    devCode={devCode}
                     onVerify={handleOtpVerified}
                     onBack={handleBackToEmail}
                   />
@@ -160,6 +187,14 @@ export default function GovPage() {
                   <GovPasswordStep
                     onCreatePassword={handlePasswordCreated}
                     onBack={handleBackToOtp}
+                  />
+                )}
+
+                {step === 'financial-password' && (
+                  <GovFinancialPasswordStep
+                    onSubmit={handleFinancialPasswordCreated}
+                    onBack={handleBackToPassword}
+                    defaultDisplayName={email.split('@')[0]}
                   />
                 )}
 

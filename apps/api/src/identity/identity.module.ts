@@ -6,6 +6,7 @@ import { IdentityService } from './identity.service';
 @Module({
   imports: [
     JwtModule.register({
+      global: true,
       secret: process.env.JWT_SECRET || 'arthax_dev_jwt_secret_change_in_production_sovereign_key_9841',
       signOptions: { expiresIn: '24h' },
     }),

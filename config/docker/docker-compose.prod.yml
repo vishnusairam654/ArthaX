@@ -1,0 +1,181 @@
+version: '3.8'
+
+# ==============================================================================
+# ARTHAX SOVEREIGN FINANCIAL ECOSYSTEM — PRODUCTION DOCKER COMPOSE
+# Complete High-Availability Stack: Postgres, Redis, API, Web & Nginx Proxy
+# ==============================================================================
+
+services:
+  # ----------------------------------------------------------------------------
+  # Sovereign PostgreSQL 16 ACID Database
+  # ----------------------------------------------------------------------------
+  postgres:
+    image: postgres:16-alpine
+    container_name: arthax-prod-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-arthax_sovereign}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ChangeThisSovereignPasswordInProduction!}
+      POSTGRES_DB: ${POSTGRES_DB:-arthax_production}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    command: >
+      postgres
+        -c max_connections=200
+        -c shared_buffers=512MB
+        -c effective_cache_size=1536MB
+        -c maintenance_work_mem=128MB
+        -c checkpoint_completion_target=0.9
+        -c wal_buffers=16MB
+        -c default_statistics_target=100
+        -c random_page_cost=1.1
+        -c effective_io_concurrency=200
+        -c work_mem=2621kB
+        -c min_wal_size=1GB
+        -c max_wal_size=4GB
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_prod_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-arthax_sovereign} -d ${POSTGRES_DB:-arthax_production}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          memory: 2048M
+    networks:
+      - arthax-prod-net
+
+  # ----------------------------------------------------------------------------
+  # Redis 7 In-Memory Cache & Lock Store
+  # ----------------------------------------------------------------------------
+  redis:
+    image: redis:7-alpine
+    container_name: arthax-prod-redis
+    restart: unless-stopped
+    command: >
+      redis-server
+        --appendonly yes
+        --appendfsync everysec
+        --maxmemory 512mb
+        --maxmemory-policy allkeys-lru
+        --requirepass ${REDIS_PASSWORD:-ChangeThisRedisAuthTokenInProduction!}
+    ports:
+      - "127.0.0.1:${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_prod_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD:-ChangeThisRedisAuthTokenInProduction!}", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+    networks:
+      - arthax-prod-net
+
+  # ----------------------------------------------------------------------------
+  # ARTHAX Sovereign API Engine (NestJS)
+  # ----------------------------------------------------------------------------
+  api:
+    build:
+      context: ../..
+      dockerfile: apps/api/Dockerfile
+    container_name: arthax-prod-api
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      API_PORT: 3001
+      DATABASE_URL: postgresql://${POSTGRES_USER:-arthax_sovereign}:${POSTGRES_PASSWORD:-ChangeThisSovereignPasswordInProduction!}@postgres:5432/${POSTGRES_DB:-arthax_production}?schema=public
+      REDIS_URL: redis://:${REDIS_PASSWORD:-ChangeThisRedisAuthTokenInProduction!}@redis:6379/0
+      JWT_SECRET: ${JWT_SECRET:-SovereignSecretKeyForProductionJwtSigning2026!}
+      FINANCIAL_PEPPER: ${FINANCIAL_PEPPER:-SovereignArgon2PepperProductionSecretKey!}
+      CORS_ORIGIN: ${CORS_ORIGIN:-https://arthax.internal,http://localhost:3000}
+    deploy:
+      resources:
+        limits:
+          memory: 1024M
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001/api/v1/health/liveness"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    networks:
+      - arthax-prod-net
+
+  # ----------------------------------------------------------------------------
+  # ARTHAX Sovereign Web Portals (Next.js Standalone)
+  # ----------------------------------------------------------------------------
+  web:
+    build:
+      context: ../..
+      dockerfile: apps/web/Dockerfile
+    container_name: arthax-prod-web
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-/api/v1}
+    deploy:
+      resources:
+        limits:
+          memory: 1024M
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    networks:
+      - arthax-prod-net
+
+  # ----------------------------------------------------------------------------
+  # Production Nginx Gateway & Reverse Proxy
+  # ----------------------------------------------------------------------------
+  nginx:
+    image: nginx:alpine
+    container_name: arthax-prod-nginx
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
+      web:
+        condition: service_healthy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - nginx_ssl:/etc/nginx/ssl:ro
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+    networks:
+      - arthax-prod-net
+
+volumes:
+  postgres_prod_data:
+    driver: local
+  redis_prod_data:
+    driver: local
+  nginx_ssl:
+    driver: local
+
+networks:
+  arthax-prod-net:
+    driver: bridge

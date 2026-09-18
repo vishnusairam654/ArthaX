@@ -3,28 +3,29 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import {
   KeyRound,
-  ArrowLeft,
   ShieldCheck,
   RefreshCw,
   AlertCircle,
-  CheckCircle2,
-  Copy,
+  ArrowLeft,
 } from 'lucide-react';
 
 interface GovOtpStepProps {
   email: string;
-  onVerify: () => void;
+  onVerify: (code: string) => Promise<void> | void;
+  onResendOtp?: () => Promise<void> | void;
   onBack: () => void;
+  devCode?: string;
 }
 
-const SIMULATED_OTP = '482916';
 const OTP_LENGTH = 6;
 const RESEND_COOLDOWN = 30;
 
 export const GovOtpStep: React.FC<GovOtpStepProps> = ({
   email,
   onVerify,
+  onResendOtp,
   onBack,
+  devCode,
 }) => {
   const [digits, setDigits] = useState<string[]>(Array(OTP_LENGTH).fill(''));
   const [isLoading, setIsLoading] = useState(false);
@@ -87,36 +88,43 @@ export const GovOtpStep: React.FC<GovOtpStepProps> = ({
     [digits]
   );
 
-  const autoFillDemo = () => {
-    const chars = SIMULATED_OTP.split('');
+  const autoFillCode = () => {
+    if (!devCode) return;
+    const chars = devCode.split('');
     setDigits(chars);
     setError(null);
     setCopiedDemo(true);
     setTimeout(() => setCopiedDemo(false), 1500);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const code = digits.join('');
     if (code.length < OTP_LENGTH) {
       setError('Please input all 6 verification digits.');
       return;
     }
-    if (code !== SIMULATED_OTP) {
-      setError('Invalid security code. Please verify and retry.');
-      return;
-    }
     setError(null);
     setIsLoading(true);
-    setTimeout(() => {
+    try {
+      await onVerify(code);
+    } catch (err: any) {
+      setError(err.message || 'Invalid or expired verification code');
+    } finally {
       setIsLoading(false);
-      onVerify();
-    }, 800);
+    }
   };
 
-  const handleResend = () => {
+  const handleResend = async () => {
     setResendCooldown(RESEND_COOLDOWN);
     setDigits(Array(OTP_LENGTH).fill(''));
+    if (onResendOtp) {
+      try {
+        await onResendOtp();
+      } catch (err: any) {
+        setError(err.message || 'Failed to resend code');
+      }
+    }
     inputRefs.current[0]?.focus();
   };
 
@@ -181,31 +189,32 @@ export const GovOtpStep: React.FC<GovOtpStepProps> = ({
               value={digit}
               onChange={(e) => handleChange(idx, e.target.value)}
               onKeyDown={(e) => handleKeyDown(idx, e)}
-              onPaste={idx === 0 ? handlePaste : undefined}
+              onPaste={handlePaste}
+              className="w-11 h-13 sm:w-12 sm:h-14 text-center font-mono text-xl sm:text-2xl font-bold text-[#1E3A5F] bg-white rounded-xl border border-[#3368A0]/25 focus:border-[#1E3A5F] focus:ring-2 focus:ring-[#1E3A5F]/15 outline-none transition-all shadow-2xs"
+              autoComplete="one-time-code"
               aria-label={`Digit ${idx + 1}`}
-              className="w-11 h-14 sm:w-12 sm:h-15 text-center text-xl font-mono font-bold rounded-2xl bg-white text-[#1E3A5F] border border-[#3368A0]/20 focus:border-[#3368A0] focus:ring-3 focus:ring-[#3368A0]/15 focus:outline-none transition-all shadow-inner"
-              style={{
-                borderColor: digit ? '#3368A0' : undefined,
-                backgroundColor: digit ? '#F4F8FC' : '#FFFFFF',
-              }}
             />
           ))}
         </div>
 
-        {/* Demo Token Simulator Quick-Fill */}
-        <div className="flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-[#C8DFDB]/30 border border-[#3368A0]/15 text-xs font-mono">
-          <div className="flex items-center gap-2">
-            <span className="text-[#5C574F]">Simulator Token:</span>
-            <span className="font-bold tracking-widest text-[#1E3A5F]">{SIMULATED_OTP}</span>
+        {/* Dev OTP Box if available */}
+        {devCode && (
+          <div className="p-3 rounded-xl bg-[#A8742A]/10 border border-[#A8742A]/20 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-[#A8742A] animate-pulse" />
+              <span className="text-xs font-mono text-[#5C574F]">
+                Verification Code: <strong className="text-[#1E3A5F]">{devCode}</strong>
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={autoFillCode}
+              className="text-[11px] font-mono text-[#3368A0] hover:text-[#1E3A5F] bg-white px-2 py-1 rounded-md border border-[#3368A0]/20 active:scale-95 transition-all"
+            >
+              {copiedDemo ? 'Filled ✓' : 'Auto-fill'}
+            </button>
           </div>
-          <button
-            type="button"
-            onClick={autoFillDemo}
-            className="text-[11px] font-mono text-[#3368A0] hover:text-[#1E3A5F] bg-white px-2 py-1 rounded-md border border-[#3368A0]/20 active:scale-95 transition-all"
-          >
-            {copiedDemo ? 'Filled ✓' : 'Auto-fill'}
-          </button>
-        </div>
+        )}
 
         {/* Error Banner */}
         {error && (

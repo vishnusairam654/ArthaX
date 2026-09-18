@@ -9,6 +9,8 @@ export const metadata: Metadata = {
   },
 };
 
+import { SkipToContent } from '@/components/common/SkipToContent';
+
 export default function RootLayout({
   children,
 }: {
@@ -23,7 +25,10 @@ export default function RootLayout({
         />
       </head>
       <body className="bg-off-white font-body text-ink antialiased selection:bg-arth-gold selection:text-white min-h-screen">
-        {children}
+        <SkipToContent />
+        <main id="main-content" tabIndex={-1} className="outline-none">
+          {children}
+        </main>
       </body>
     </html>
   );

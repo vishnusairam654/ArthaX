@@ -1037,3 +1037,109 @@ model SecurityEvent {
 
   @@index([eventType, timestamp])
 }
+
+// =============================================================================
+// STEP 11: COMMERCIAL LENDING & CREDIT FACILITIES (PHASE 12A)
+// =============================================================================
+
+model LoanProduct {
+  id                        String   @id @db.VarChar(50) // "prod_nava_personal"
+  bankId                    String   @db.VarChar(20)
+  name                      String   @db.VarChar(100)
+  category                  String   @db.VarChar(30) // "PERSONAL", "BUSINESS", "EDUCATION", "HOUSING", "VEHICLE", "COLLATERAL_CREDIT"
+  description               String   @db.Text
+  baseInterestRate          Float    // e.g. 8.50
+  minPrincipalMinor         BigInt
+  maxPrincipalMinor         BigInt
+  minTenureMonths           Int
+  maxTenureMonths           Int
+  processingFeePercent      Float    @default(0.5)
+  collateralRequired        Boolean  @default(false)
+  minCollateralRatioPercent Float?   // e.g. 120.0
+  status                    String   @default("ACTIVE") @db.VarChar(20)
+  createdAt                 DateTime @default(now())
+  updatedAt                 DateTime @updatedAt
+
+  loans                     UserLoan[]
+
+  @@index([bankId, status])
+  @@index([category])
+}
+
+model UserLoan {
+  id                         String   @id @default(uuid())
+  contractNumber             String   @unique @db.VarChar(50) // "LN-NAVA-2026-XXXXXX"
+  userId                     String
+  bankId                     String   @db.VarChar(20)
+  productId                  String   @db.VarChar(50)
+  disbursementAccountId      String
+  repaymentAccountId         String
+  loanType                   String   @db.VarChar(30)
+  status                     String   @default("SUBMITTED") @db.VarChar(25) // "DRAFT", "SUBMITTED", "UNDER_REVIEW", "APPROVED", "DISBURSED", "ACTIVE", "PAYMENT_DUE", "OVERDUE", "DELINQUENT", "FORECLOSING", "CLOSED", "REJECTED", "CANCELLED"
+  principalMinor             BigInt
+  interestRate               Float
+  tenureMonths               Int
+  monthlyEmiMinor            BigInt
+  outstandingPrincipalMinor  BigInt
+  totalRepaidPrincipalMinor  BigInt   @default(0)
+  totalRepaidInterestMinor   BigInt   @default(0)
+  purpose                    String?  @db.VarChar(255)
+  appliedAt                  DateTime @default(now())
+  approvedAt                 DateTime?
+  disbursedAt                DateTime?
+  closedAt                   DateTime?
+  rejectionReason            String?  @db.Text
+  approvedByStaffId          String?  @db.VarChar(100)
+  notes                      String?  @db.Text
+  idempotencyKey             String?  @unique @db.VarChar(100)
+  createdAt                  DateTime @default(now())
+  updatedAt                  DateTime @updatedAt
+
+  product                    LoanProduct        @relation(fields: [productId], references: [id])
+  installments               LoanInstallment[]
+  collaterals                LoanCollateral[]
+
+  @@index([userId, status])
+  @@index([bankId, status])
+  @@index([contractNumber])
+}
+
+model LoanInstallment {
+  id                      String   @id @default(uuid())
+  loanId                  String
+  installmentNumber       Int
+  dueDate                 DateTime @db.Date
+  principalMinor          BigInt
+  interestMinor           BigInt
+  totalAmountMinor        BigInt
+  remainingPrincipalMinor BigInt
+  status                  String   @default("PENDING") @db.VarChar(20) // "PENDING", "PAID", "OVERDUE", "WAIVED"
+  paidAt                  DateTime?
+  transactionId           String?
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+
+  loan                    UserLoan @relation(fields: [loanId], references: [id], onDelete: Cascade)
+
+  @@unique([loanId, installmentNumber])
+  @@index([loanId, status])
+  @@index([dueDate, status])
+}
+
+model LoanCollateral {
+  id                  String    @id @default(uuid())
+  loanId              String
+  collateralType      String    @db.VarChar(30) // "FIXED_DEPOSIT", "STOCK_HOLDINGS", "SOVEREIGN_GUARANTEE"
+  assetReferenceId    String    @db.VarChar(100)
+  appraisedValueMinor BigInt
+  lienStatus          String    @default("ACTIVE") @db.VarChar(20) // "ACTIVE", "RELEASED", "INVOKED"
+  lockedAt            DateTime  @default(now())
+  releasedAt          DateTime?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  loan                UserLoan  @relation(fields: [loanId], references: [id], onDelete: Cascade)
+
+  @@index([loanId, lienStatus])
+  @@index([assetReferenceId])
+}

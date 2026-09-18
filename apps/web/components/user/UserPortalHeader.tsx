@@ -24,7 +24,8 @@ import {
   User,
   LogOut,
   Sparkles,
-  Layers
+  Layers,
+  HandCoins,
 } from 'lucide-react';
 import { CitizenProfileDrawer } from './profile/CitizenProfileDrawer';
 import { UniversalPortalSwitcherModal } from '../common/UniversalPortalSwitcherModal';
@@ -98,6 +99,7 @@ export const UserPortalHeader: React.FC<UserPortalHeaderProps> = ({
       if (pathname.startsWith('/user/shop')) return 'shop';
       if (pathname.startsWith('/user/rewards')) return 'rewards';
       if (pathname.startsWith('/user/stocks')) return 'stocks';
+      if (pathname.startsWith('/user/loans')) return 'loans';
       if (pathname.startsWith('/user/fixed-deposits')) return 'fixed-deposits';
       if (pathname.startsWith('/user/transfers')) return 'transfers-and-dvp';
       if (pathname.startsWith('/user/banks')) return 'my-banks-and-accounts';
@@ -330,6 +332,18 @@ export const UserPortalHeader: React.FC<UserPortalHeaderProps> = ({
             >
               <Coins className="w-3.5 h-3.5" />
               <span>Fixed Deposits</span>
+            </Link>
+            <Link 
+              href="/user/loans" 
+              data-active={currentTab === 'loans'}
+              className={`px-3 py-1.5 rounded-full font-medium transition shrink-0 flex items-center gap-1.5 cursor-pointer ${
+                currentTab === 'loans'
+                  ? 'bg-[#1E3A5F] text-white shadow-xs ring-1 ring-[#1E3A5F]'
+                  : 'text-[#43474E] hover:bg-[#E5EFFF] hover:text-[#121C28]'
+              }`}
+            >
+              <HandCoins className="w-3.5 h-3.5" />
+              <span>Credit &amp; Loans</span>
             </Link>
             <Link 
               href="/user/stocks" 

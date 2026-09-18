@@ -1,5 +1,6 @@
-import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
+import { Injectable, BadRequestException, NotFoundException, Optional } from '@nestjs/common';
 import { PrismaService } from '../database/prisma.service';
+import { CentralBankService } from '../central-bank/central-bank.service';
 import { BankId } from '@arthax/types';
 
 export const CANONICAL_BANK_IDS: BankId[] = ['nava', 'samaya', 'setu', 'sthira', 'vayu'];
@@ -13,7 +14,14 @@ export interface InterbankRoute {
 
 @Injectable()
 export class ClsRoutingService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    @Optional() private readonly centralBankService?: CentralBankService,
+  ) {}
+
+  setCentralBankService(cb: any): void {
+    (this as any).centralBankService = cb;
+  }
 
   /**
    * Validates inter-bank eligibility and resolves the routing path between two distinct bank nodes.
@@ -21,6 +29,20 @@ export class ClsRoutingService {
   async resolveRoute(sourceBankId: string, destinationBankId: string): Promise<InterbankRoute> {
     const srcId = sourceBankId.toLowerCase();
     const destId = destinationBankId.toLowerCase();
+
+    // Central Bank Regulatory Moratorium Invariant
+    if (this.centralBankService) {
+      if (this.centralBankService.isBankUnderMoratorium(srcId)) {
+        throw new BadRequestException(
+          `Source bank node [${srcId.toUpperCase()}] is under Central Bank regulatory MORATORIUM; outbound clearing suspended.`,
+        );
+      }
+      if (this.centralBankService.isBankUnderMoratorium(destId)) {
+        throw new BadRequestException(
+          `Destination bank node [${destId.toUpperCase()}] is under Central Bank regulatory MORATORIUM; inbound clearing suspended.`,
+        );
+      }
+    }
 
     if (srcId === destId) {
       throw new BadRequestException(

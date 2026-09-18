@@ -4,6 +4,7 @@ import {
   OnModuleDestroy,
   Logger,
   ForbiddenException,
+  ServiceUnavailableException,
 } from '@nestjs/common';
 import { PrismaClient } from '@arthax/database';
 
@@ -27,16 +28,38 @@ export class PrismaService
           : [{ emit: 'stdout', level: 'error' }],
     });
 
-    // Enforce immutable append-only invariant at runtime if middleware hook is active
+    // Enforce immutable append-only invariant and fail-closed financial writes at runtime
     if (typeof (this as any).$use === 'function') {
       (this as any).$use(async (params: any, next: any) => {
-        const appendOnlyModels = ['TransactionEntry', 'AuditLog', 'SystemLog', 'SecurityEvent'];
+        const appendOnlyModels = ['TransactionEntry', 'SystemLog', 'SecurityEvent'];
         const forbiddenActions = ['update', 'updateMany', 'delete', 'deleteMany', 'upsert'];
 
         if (params.model && appendOnlyModels.includes(params.model)) {
           if (forbiddenActions.includes(params.action)) {
             throw new ForbiddenException(
               `[SOVEREIGN INVARIANT VIOLATION] Model '${params.model}' is strictly append-only. Operation '${params.action}' is rejected by sovereign decree.`,
+            );
+          }
+        }
+
+        const financialModels = [
+          'Transaction',
+          'TransactionEntry',
+          'BankAccount',
+          'LedgerAccount',
+          'Settlement',
+          'UserFd',
+          'Loan',
+          'UserLoan',
+          'Trade',
+          'Order',
+        ];
+        const writeActions = ['create', 'createMany', 'update', 'updateMany', 'delete', 'deleteMany', 'upsert'];
+
+        if (params.model && financialModels.includes(params.model) && writeActions.includes(params.action)) {
+          if (!this.isConnected) {
+            throw new ServiceUnavailableException(
+              `[FAIL CLOSED] Financial write on '${params.model}.${params.action}' rejected: Sovereign PostgreSQL database is unavailable. Ledger transactions require durable ACID persistence.`,
             );
           }
         }
@@ -62,6 +85,19 @@ export class PrismaService
   async onModuleDestroy() {
     await this.$disconnect();
     this.isConnected = false;
+  }
+
+  /**
+   * Asserts that database is online for any financial write.
+   * INVARIANT: ALL financial writes MUST fail closed when PostgreSQL is unavailable.
+   */
+  assertFinancialWriteSafe(operationName: string) {
+    if (!this.isConnected) {
+      this.logger.error(`[FAIL CLOSED] Financial write '${operationName}' rejected: PostgreSQL database is offline.`);
+      throw new ServiceUnavailableException(
+        `Financial write '${operationName}' rejected: Sovereign PostgreSQL database is unavailable. Ledger transactions require durable ACID persistence and cannot be executed in transient memory.`,
+      );
+    }
   }
 
   /**

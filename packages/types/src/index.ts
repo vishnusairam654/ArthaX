@@ -489,31 +489,6 @@ export interface InterestPayoutLogDto {
   payoutType: 'MATURITY' | 'PERIODIC' | 'PRE_CLOSURE';
 }
 
-export type LoanStatus =
-  | 'APPLIED'
-  | 'UNDER_REVIEW'
-  | 'APPROVED'
-  | 'DISBURSED'
-  | 'REPAID'
-  | 'DEFAULTED'
-  | 'REJECTED';
-
-export interface LoanDto {
-  id: string;
-  userId: string;
-  bankId: string;
-  loanType: 'PERSONAL' | 'BUSINESS' | 'AGRI' | 'CLEAN_TECH' | 'EMERGENCY';
-  principalMinor: string;
-  interestRateApy: number;
-  tenureMonths: number;
-  monthlyEmiMinor: string;
-  outstandingBalanceMinor: string;
-  status: LoanStatus;
-  appliedDate: string;
-  disbursedDate?: string;
-  purpose: string;
-}
-
 // =============================================================================
 // 6. Equities & Stock Market
 // =============================================================================
@@ -794,6 +769,168 @@ export interface AuditLogDto {
   afterState?: Record<string, unknown>;
 }
 
+export interface MonetarySupplyDto {
+  m0SupplyMinor: string;
+  m1SupplyMinor: string;
+  inCirculationMinor: string;
+  centralTreasuryMinor: string;
+  centralBankReservesMinor: string;
+  commercialBankReservesMinor: string;
+  vaultRestrictedMinor: string;
+  activeEpoch: string;
+  ledgerInvariantSatisfied: boolean;
+  supplyInvariantSatisfied: boolean;
+}
+
+export type SovereignIssuanceStatus = 'PROPOSED' | 'APPROVED' | 'REJECTED' | 'EXECUTED';
+export type SovereignOperationType = 'MINT' | 'BURN';
+
+export interface SovereignIssuanceDto {
+  issuanceId: string;
+  operation: SovereignOperationType;
+  amountMinor: string;
+  reason: string;
+  authorizedBy: string; // Maker
+  checkerBy?: string | null; // Checker
+  ruleVersion: string;
+  timestamp: string;
+  idempotencyKey: string;
+  status: SovereignIssuanceStatus;
+  executedTransactionId?: string | null;
+  executedAt?: string | null;
+}
+
+export type BankPrudentialStatus = 'COMPLIANT' | 'WATCHLIST' | 'DEFICIENT' | 'NON_COMPLIANT' | 'MORATORIUM';
+
+export interface BankPrudentialMetricsDto {
+  bankId: string;
+  bankName: string;
+  ndtlMinor: string; // Net Demand and Time Liabilities
+  crrRequiredMinor: string;
+  crrMaintainedMinor: string;
+  crrRatioPercent: number;
+  crrBenchmarkPercent: number;
+  slrRatioPercent: number;
+  slrBenchmarkPercent: number;
+  carRatioPercent: number;
+  carBenchmarkPercent: number;
+  complianceStatus: BankPrudentialStatus;
+  penaltyAssessedMinor: string;
+  lastAuditedAt: string;
+}
+
+export type EmergencyActionType = 'MARKET_HALT' | 'BANK_MORATORIUM' | 'ACCOUNT_FREEZE' | 'LIQUIDITY_INJECTION';
+export type EmergencyActionStatus = 'REQUESTED' | 'AUTHORIZED' | 'ACTIVE' | 'EXPIRED' | 'REVOKED';
+
+export interface EmergencyActionDto {
+  actionId: string;
+  actionType: EmergencyActionType;
+  target: string; // e.g. "MARKET:ALL" or "BANK:vayu" or "ACCOUNT:ARTH-NAVA-001"
+  reason: string;
+  authorizedBy: string;
+  createdAt: string;
+  expiresAt: string;
+  revokedAt?: string | null;
+  revokedBy?: string | null;
+  status: EmergencyActionStatus;
+}
+
+export type ElaFacilityStatus = 'ACTIVE' | 'SETTLED' | 'DEFAULTED';
+
+export interface ElaFacilityDto {
+  facilityId: string;
+  bankId: string;
+  amountMinor: string;
+  collateralAssetId: string;
+  collateralAppraisedMinor: string;
+  haircutPercent: number; // e.g. 20.0
+  effectiveLtvPercent: number; // e.g. 80.0
+  interestRateApy: number; // e.g. 6.25 (base 4.25 + 200 bps penalty spread)
+  tenureDays: number;
+  maturityDate: string;
+  repaidMinor: string;
+  status: ElaFacilityStatus;
+  disbursedTransactionId: string;
+  createdAt: string;
+}
+
+export interface CentralBankOverviewDto {
+  m0SupplyMinor: string;
+  m1SupplyMinor: string;
+  activeCommercialBanks: number;
+  clsSettlementHealthPercent: number;
+  avgClearingLatencyMs: number;
+  statutoryReserveRatioPercent: number;
+  basePolicyRateApy: number;
+  ledgerInvariantSatisfied: boolean;
+  supplyInvariantSatisfied: boolean;
+  activeEmergencyActionsCount: number;
+}
+
+export interface ProposeSovereignIssuanceInput {
+  operation: 'MINT' | 'BURN';
+  amountMinor: string;
+  reason: string;
+  ruleVersion?: string;
+  financialPassword: string;
+}
+
+export interface ApproveSovereignIssuanceInput {
+  issuanceId: string;
+  financialPassword: string;
+}
+
+export interface RequestElaFacilityInput {
+  bankId: string;
+  amountMinor: string;
+  collateralAssetId: string;
+  collateralAppraisedMinor: string;
+  tenureDays?: number;
+  financialPassword: string;
+}
+
+export interface RepayElaFacilityInput {
+  facilityId: string;
+  amountMinor: string;
+  sourceAccountId: string;
+  financialPassword: string;
+}
+
+export interface CreateEmergencyActionInput {
+  actionType: EmergencyActionType;
+  target: string;
+  reason: string;
+  durationMinutes?: number;
+  financialPassword: string;
+}
+
+export interface RevokeEmergencyActionInput {
+  actionId: string;
+  reason: string;
+  financialPassword: string;
+}
+
+export interface CreateFinancialRuleInput {
+  key: string;
+  title: string;
+  currentValue: number;
+  unit: string;
+  category: 'Monetary Policy' | 'Prudential Requirements' | 'Transaction Limits' | 'System Controls';
+  description: string;
+  statutoryBasis: string;
+  effectiveDate?: string;
+  financialPassword: string;
+}
+
+export interface UpdateFinancialRuleInput {
+  currentValue?: number;
+  status?: 'ACTIVE' | 'PENDING' | 'DEPRECATED' | 'REPLACED';
+  effectiveDate?: string;
+  statutoryBasis?: string;
+  reason: string;
+  financialPassword: string;
+}
+
 // =============================================================================
 // 9. Mailbox & Notifications (Phase 9)
 // =============================================================================
@@ -888,5 +1025,172 @@ export interface DemoPersonaDto {
   bankId?: string;
   title: string;
   badge: string;
+}
+
+// =============================================================================
+// 10. Commercial Lending & Credit Facilities (Phase 12A)
+// =============================================================================
+
+export type LoanType =
+  | 'PERSONAL'
+  | 'BUSINESS'
+  | 'EDUCATION'
+  | 'HOUSING'
+  | 'VEHICLE'
+  | 'COLLATERAL_CREDIT';
+
+export type LoanStatus =
+  | 'DRAFT'
+  | 'SUBMITTED'
+  | 'UNDER_REVIEW'
+  | 'APPROVED'
+  | 'DISBURSED'
+  | 'ACTIVE'
+  | 'PAYMENT_DUE'
+  | 'OVERDUE'
+  | 'DELINQUENT'
+  | 'FORECLOSING'
+  | 'CLOSED'
+  | 'REJECTED'
+  | 'CANCELLED';
+
+export type CollateralType = 'FIXED_DEPOSIT' | 'STOCK_HOLDINGS' | 'SOVEREIGN_GUARANTEE';
+
+export interface LoanProductDto {
+  id: string;
+  bankId: string;
+  name: string;
+  category: LoanType;
+  description: string;
+  baseInterestRate: number; // e.g. 8.50%
+  minPrincipalMinor: string;
+  maxPrincipalMinor: string;
+  minTenureMonths: number;
+  maxTenureMonths: number;
+  processingFeePercent: number; // e.g. 0.5%
+  collateralRequired: boolean;
+  minCollateralRatioPercent?: number; // e.g. 120%
+  status: 'ACTIVE' | 'SUSPENDED';
+}
+
+export interface LoanRepaymentInstallmentDto {
+  installmentNumber: number;
+  dueDate: string;
+  principalMinor: string;
+  interestMinor: string;
+  totalAmountMinor: string;
+  totalDueMinor?: string;
+  remainingPrincipalMinor: string;
+  status: 'PENDING' | 'PAID' | 'OVERDUE' | 'WAIVED';
+  paidAt?: string | null;
+  transactionId?: string | null;
+}
+
+export interface LoanCollateralDto {
+  id: string;
+  loanId: string;
+  collateralType: CollateralType;
+  assetReferenceId: string; // e.g. FD certificate number or stock symbol
+  appraisedValueMinor: string;
+  lienStatus: 'ACTIVE' | 'RELEASED' | 'INVOKED';
+  lockedAt: string;
+  releasedAt?: string | null;
+}
+
+export interface UserLoanDto {
+  id: string;
+  contractNumber: string; // e.g. LN-NAVA-2026-XXXXXX
+  userId: string;
+  bankId: string;
+  productId: string;
+  productName: string;
+  disbursementAccountId: string;
+  repaymentAccountId: string;
+  loanType: LoanType;
+  status: LoanStatus;
+  principalMinor: string;
+  interestRate: number;
+  tenureMonths: number;
+  monthlyEmiMinor: string;
+  outstandingPrincipalMinor: string;
+  totalRepaidPrincipalMinor: string;
+  totalRepaidInterestMinor: string;
+  nextPaymentDueDate?: string | null;
+  installments: LoanRepaymentInstallmentDto[];
+  collaterals: LoanCollateralDto[];
+  appliedAt: string;
+  approvedAt?: string | null;
+  disbursedAt?: string | null;
+  closedAt?: string | null;
+  rejectionReason?: string | null;
+  approvedByStaffId?: string | null;
+  overdueDays?: number;
+  latePenaltyInterestMinor?: string;
+}
+
+export interface CreditAssessmentDto {
+  creditScore: number; // 300 - 850
+  tier: 'TIER_1_EXCELLENT' | 'TIER_2_GOOD' | 'TIER_3_FAIR' | 'SUBPRIME';
+  maxSanctionAmountMinor: string;
+  debtToIncomeRatio: number;
+  activeDebtCount: number;
+  recommendedRate: number;
+  collateralRequired: boolean;
+  eligible: boolean;
+  reasons: string[];
+}
+
+export interface LoanSimulationResultDto {
+  requestedPrincipalMinor: string;
+  annualInterestRate: number;
+  tenureMonths: number;
+  monthlyEmiMinor: string;
+  totalInterestMinor: string;
+  totalRepaymentMinor: string;
+  processingFeeMinor: string;
+  schedule: LoanRepaymentInstallmentDto[];
+}
+
+export interface LoanSimulationInput {
+  productId: string;
+  principalMinor: string;
+  tenureMonths: number;
+}
+
+export interface ApplyLoanInput {
+  bankId: string;
+  productId: string;
+  requestedPrincipalMinor: string;
+  tenureMonths: number;
+  purpose: string;
+  disbursementAccountId: string;
+  repaymentAccountId: string;
+  collateralType?: CollateralType;
+  collateralAssetId?: string;
+  collateralPledgedValueMinor?: string;
+}
+
+export interface ReviewLoanInput {
+  action: 'APPROVE' | 'REJECT';
+  sanctionedPrincipalMinor?: string;
+  interestRateApy?: number;
+  rejectionReason?: string;
+  underwriterNotes?: string;
+}
+
+export interface DisburseLoanInput {
+  financialPassword: string;
+  disbursementAccountId?: string;
+}
+
+export interface PayLoanEmiInput {
+  financialPassword: string;
+  installmentNumber: number;
+  sourceAccountId?: string;
+}
+
+export interface ForecloseLoanInput {
+  financialPassword: string;
+  sourceAccountId?: string;
 }
 

@@ -1,4 +1,4 @@
-import { PrismaClient } from '../client';
+import { PrismaClient } from '../client/index.js';
 import * as argon2 from 'argon2';
 
 const prisma = new PrismaClient();
@@ -564,7 +564,7 @@ async function main() {
     {
       id: 'pet-gaja',
       name: 'Wealth Elephant ("Gaja")',
-      category: 'pet' as const,
+      category: 'pets' as const,
       rarity: 'gold' as const,
       price: 920000n,
       image: '/assets/shop/pets/Wealth Elephant/main_image.png',
@@ -576,7 +576,7 @@ async function main() {
     {
       id: 'pet-vrishabha',
       name: 'Market Bull ("Vrishabha")',
-      category: 'pet' as const,
+      category: 'pets' as const,
       rarity: 'gold' as const,
       price: 850000n,
       image: '/assets/shop/pets/Market Bull/main_image.png',
@@ -588,7 +588,7 @@ async function main() {
     {
       id: 'pet-lopamudra',
       name: 'Saver Fox ("Lopamudra")',
-      category: 'pet' as const,
+      category: 'pets' as const,
       rarity: 'epic' as const,
       price: 420000n,
       image: '/assets/shop/pets/Saver Fox/main_image.png',
@@ -600,7 +600,7 @@ async function main() {
     {
       id: 'pet-vidya',
       name: 'Ledger Owl ("Vidya")',
-      category: 'pet' as const,
+      category: 'pets' as const,
       rarity: 'epic' as const,
       price: 340000n,
       image: '/assets/shop/pets/Ledger Owl/main_image.png',
@@ -612,7 +612,7 @@ async function main() {
     {
       id: 'pet-baka',
       name: 'Settlement Crane ("Baka")',
-      category: 'pet' as const,
+      category: 'pets' as const,
       rarity: 'rare' as const,
       price: 380000n,
       image: '/assets/shop/pets/Settlement Crane/main_image.png',
@@ -624,7 +624,7 @@ async function main() {
     {
       id: 'pet-jala',
       name: 'Flow Otter ("Jala")',
-      category: 'pet' as const,
+      category: 'pets' as const,
       rarity: 'rare' as const,
       price: 280000n,
       image: '/assets/shop/pets/Flow Otter/main_image.png',
@@ -636,7 +636,7 @@ async function main() {
     {
       id: 'pet-kurma',
       name: 'Tax Tortoise ("Kurma")',
-      category: 'pet' as const,
+      category: 'pets' as const,
       rarity: 'normal' as const,
       price: 240000n,
       image: '/assets/shop/pets/Tax Tortoise/main_image.png',
@@ -648,7 +648,7 @@ async function main() {
     {
       id: 'pet-marjara',
       name: 'Archive Cat ("Marjara")',
-      category: 'pet' as const,
+      category: 'pets' as const,
       rarity: 'normal' as const,
       price: 190000n,
       image: '/assets/shop/pets/Archive Cat/main_image.png',
@@ -697,7 +697,7 @@ async function main() {
       create: {
         id: f.id,
         name: f.name,
-        category: 'frame',
+        category: 'frames',
         rarity: f.rarity,
         priceMinor: f.price,
         image: f.img,

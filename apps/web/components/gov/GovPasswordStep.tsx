@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 
 interface GovPasswordStepProps {
-  onCreatePassword: (password: string) => void;
+  onCreatePassword: (password: string) => Promise<void> | void;
   onBack: () => void;
 }
 
@@ -24,7 +24,7 @@ interface PasswordRequirement {
 }
 
 const REQUIREMENTS: PasswordRequirement[] = [
-  { label: 'Minimum 8 characters', test: (pw) => pw.length >= 8 },
+  { label: 'Minimum 10 characters', test: (pw) => pw.length >= 10 },
   { label: 'One uppercase letter (A-Z)', test: (pw) => /[A-Z]/.test(pw) },
   { label: 'One lowercase letter (a-z)', test: (pw) => /[a-z]/.test(pw) },
   { label: 'One numeric digit (0-9)', test: (pw) => /\d/.test(pw) },
@@ -51,7 +51,7 @@ export const GovPasswordStep: React.FC<GovPasswordStepProps> = ({
   const passwordsMatch =
     password === confirmPassword && confirmPassword.length > 0;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!allMet) {
       setError('Please satisfy all password security requirements.');
@@ -63,10 +63,13 @@ export const GovPasswordStep: React.FC<GovPasswordStepProps> = ({
     }
     setError(null);
     setIsLoading(true);
-    setTimeout(() => {
+    try {
+      await onCreatePassword(password);
+    } catch (err: any) {
+      setError(err.message || 'Failed to establish sovereign password.');
+    } finally {
       setIsLoading(false);
-      onCreatePassword(password);
-    }, 900);
+    }
   };
 
   return (

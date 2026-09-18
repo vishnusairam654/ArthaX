@@ -53,6 +53,37 @@ import {
   CreateGovIdInput,
   SetFinancialPasswordInput,
   StepUpAuthInput,
+  LoanProductDto,
+  UserLoanDto,
+  LoanRepaymentInstallmentDto,
+  LoanCollateralDto,
+  CreditAssessmentDto,
+  LoanSimulationResultDto,
+  LoanSimulationInput,
+  ApplyLoanInput,
+  ReviewLoanInput,
+  DisburseLoanInput,
+  PayLoanEmiInput,
+  ForecloseLoanInput,
+  LoanType,
+  LoanStatus,
+  CollateralType,
+  MonetarySupplyDto,
+  SovereignIssuanceDto,
+  BankPrudentialMetricsDto,
+  EmergencyActionDto,
+  ElaFacilityDto,
+  CentralBankOverviewDto,
+  FinancialRuleDto,
+  TaxRuleDto,
+  ProposeSovereignIssuanceInput,
+  ApproveSovereignIssuanceInput,
+  RequestElaFacilityInput,
+  RepayElaFacilityInput,
+  CreateEmergencyActionInput,
+  RevokeEmergencyActionInput,
+  CreateFinancialRuleInput,
+  UpdateFinancialRuleInput,
 } from '@arthax/types';
 import { ARTHAX_BANKS, MOCK_ACCOUNTS } from '@/components/bank/BankMockData';
 import { MOCK_CLS_QUEUE, MOCK_INTERBANK_FLOW_MATRIX } from '@/components/central-bank/CentralBankMockData';
@@ -1442,53 +1473,130 @@ export function apiSetMaskPreference(masked: boolean): void {
 }
 
 /**
+ * Sends a 6-digit email verification OTP via NestJS /auth/register/email.
+ */
+export async function apiSendEmailOtp(email: string): Promise<{ message: string; expirySeconds: number; code?: string }> {
+  const res = await fetch(`${API_BASE_URL}/auth/register/email`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email }),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ message: 'Failed to dispatch verification code' }));
+    throw new Error(err.message || 'Failed to dispatch verification code');
+  }
+  return await res.json();
+}
+
+/**
+ * Verifies email OTP code via NestJS /auth/register/verify-otp.
+ */
+export async function apiVerifyEmailOtp(email: string, code: string): Promise<{ verified: boolean; registrationTicket: string }> {
+  const res = await fetch(`${API_BASE_URL}/auth/register/verify-otp`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, code }),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ message: 'Invalid or expired verification code' }));
+    throw new Error(err.message || 'Invalid or expired verification code');
+  }
+  return await res.json();
+}
+
+/**
+ * Creates GOV ID with GOV Password via NestJS /auth/register/create-gov-id.
+ */
+export async function apiCreateGovId(email: string, otpCode: string, govPassword: string): Promise<GovIdDto & { setupToken: string }> {
+  const res = await fetch(`${API_BASE_URL}/auth/register/create-gov-id`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, otpCode, govPassword }),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ message: 'Failed to create sovereign GOV ID' }));
+    throw new Error(err.message || 'Failed to create sovereign GOV ID');
+  }
+  return await res.json();
+}
+
+/**
+ * Establishes isolated Financial Password via NestJS /auth/register/set-financial-password.
+ */
+export async function apiSetFinancialPassword(
+  setupToken: string,
+  financialPassword: string,
+  displayName?: string,
+): Promise<AuthResultDto> {
+  const res = await fetch(`${API_BASE_URL}/auth/register/set-financial-password`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${setupToken}`,
+    },
+    body: JSON.stringify({ financialPassword, displayName }),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ message: 'Failed to establish financial credential' }));
+    throw new Error(err.message || 'Failed to establish financial credential');
+  }
+  const data: AuthResultDto = await res.json();
+  if (typeof window !== 'undefined') {
+    localStorage.setItem('arthax_token', data.token);
+    localStorage.setItem('arthax_user', JSON.stringify(data.user));
+    localStorage.setItem(
+      'arthax_persona',
+      JSON.stringify({
+        id: data.user.id,
+        name: data.user.displayName,
+        displayName: data.user.displayName,
+        role: data.user.role,
+        govIdNumber: data.user.govIdNumber,
+        email: data.user.email,
+        description: 'Sovereign Citizen Account',
+      }),
+    );
+  }
+  dispatchPortalDataInvalidation();
+  return data;
+}
+
+/**
  * Authenticates user credentials via the sovereign NestJS auth endpoint (/auth/login).
- * The backend remains the sole authorization authority.
+ * The backend PostgreSQL and Redis infrastructure remains the sole authority.
  */
 export async function apiLogin(input: LoginInput): Promise<AuthResultDto> {
-  try {
-    const res = await fetch(`${API_BASE_URL}/auth/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(input),
-    });
-    if (res.ok) {
-      const data: AuthResultDto = await res.json();
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('arthax_token', data.token);
-      }
-      return data;
-    }
-  } catch {
-    // Resilient fallback for local dev when backend is offline
+  const res = await fetch(`${API_BASE_URL}/auth/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(input),
+  });
+
+  if (!res.ok) {
+    const errData = await res.json().catch(() => ({ message: 'Authentication challenge failed' }));
+    throw new Error(errData.message || 'Invalid sovereign credentials');
   }
 
-  // Determine fallback persona role
-  const isGov = input.govIdOrEmail.toLowerCase().includes('governor');
-  const isOfficer = input.govIdOrEmail.toLowerCase().includes('officer') || input.govIdOrEmail.toLowerCase().includes('nava');
-  const role: UserRole = isGov ? 'CENTRAL_BANK_ADMIN' : isOfficer ? 'BANK_ADMIN' : 'USER';
-  const persona = isGov ? DEMO_PERSONAS.governor : isOfficer ? DEMO_PERSONAS.bank_officer : DEMO_PERSONAS.citizen;
-
-  // Synthesize dev token with matching header structure
-  const devToken = `dev_jwt_${btoa(JSON.stringify({ sub: persona.id, govId: persona.govIdNumber, email: persona.email, role, bankId: persona.bankId }))}`;
+  const data: AuthResultDto = await res.json();
   if (typeof window !== 'undefined') {
-    localStorage.setItem('arthax_token', devToken);
+    localStorage.setItem('arthax_token', data.token);
+    localStorage.setItem('arthax_user', JSON.stringify(data.user));
+    localStorage.setItem(
+      'arthax_persona',
+      JSON.stringify({
+        id: data.user.id,
+        name: data.user.displayName,
+        displayName: data.user.displayName,
+        role: data.user.role,
+        govIdNumber: data.user.govIdNumber,
+        email: data.user.email,
+        description: data.user.role === 'CENTRAL_BANK_ADMIN' ? 'Central Monetary Authority' : data.user.role === 'BANK_ADMIN' ? 'Commercial Bank Node' : 'Sovereign Citizen Account',
+      }),
+    );
+    dispatchPortalDataInvalidation();
   }
 
-  return {
-    token: devToken,
-    user: {
-      id: persona.id,
-      govId: `gid_${persona.id}`,
-      govIdNumber: persona.govIdNumber,
-      email: persona.email,
-      displayName: persona.displayName,
-      role,
-      status: 'ACTIVE',
-      createdAt: new Date().toISOString(),
-    },
-    sessionExpiresAt: new Date(Date.now() + 86400000).toISOString(),
-  };
+  return data;
 }
 
 /**
@@ -1624,5 +1732,644 @@ export async function apiEmergencyKillswitch(): Promise<{ success: boolean; mess
   return { success: true, message: 'All active sessions invalidated.' };
 }
 
+// =============================================================================
+// 12. Sovereign Commercial Loans & Credit Engine API Bridge
+// =============================================================================
 
+const MOCK_LOAN_PRODUCTS: LoanProductDto[] = [
+  {
+    id: 'prod_nava_personal',
+    bankId: 'nava',
+    name: 'Nava Express Citizen Credit',
+    category: 'PERSONAL',
+    description: 'Instant unsecured revolving credit facility for certified sovereign citizens.',
+    baseInterestRate: 9.5,
+    minPrincipalMinor: '1000000', // 10,000 ARTH
+    maxPrincipalMinor: '20000000', // 200,000 ARTH
+    minTenureMonths: 6,
+    maxTenureMonths: 60,
+    processingFeePercent: 0.5,
+    collateralRequired: false,
+    status: 'ACTIVE',
+  },
+  {
+    id: 'prod_samaya_sme',
+    bankId: 'samaya',
+    name: 'Samaya SME Working Capital Term Loan',
+    category: 'BUSINESS',
+    description: 'Medium-term working capital facility for sovereign guild enterprises and merchants.',
+    baseInterestRate: 8.25,
+    minPrincipalMinor: '5000000', // 50,000 ARTH
+    maxPrincipalMinor: '100000000', // 1,000,000 ARTH
+    minTenureMonths: 12,
+    maxTenureMonths: 84,
+    processingFeePercent: 0.75,
+    collateralRequired: true,
+    minCollateralRatioPercent: 120,
+    status: 'ACTIVE',
+  },
+  {
+    id: 'prod_sthira_mortgage',
+    bankId: 'sthira',
+    name: 'Sthira Sovereign Mortgage & Real Estate Facility',
+    category: 'HOUSING',
+    description: 'Long-tenure residential and commercial real estate acquisition financing.',
+    baseInterestRate: 6.85,
+    minPrincipalMinor: '10000000', // 100,000 ARTH
+    maxPrincipalMinor: '500000000', // 5,000,000 ARTH
+    minTenureMonths: 24,
+    maxTenureMonths: 240,
+    processingFeePercent: 0.25,
+    collateralRequired: true,
+    minCollateralRatioPercent: 120,
+    status: 'ACTIVE',
+  },
+  {
+    id: 'prod_setu_transit',
+    bankId: 'setu',
+    name: 'Setu Commercial Transit & Trade Finance',
+    category: 'BUSINESS',
+    description: 'Short-term trade receivables and cross-border logistics clearing facility.',
+    baseInterestRate: 7.9,
+    minPrincipalMinor: '2000000', // 20,000 ARTH
+    maxPrincipalMinor: '50000000', // 500,000 ARTH
+    minTenureMonths: 3,
+    maxTenureMonths: 36,
+    processingFeePercent: 0.4,
+    collateralRequired: false,
+    status: 'ACTIVE',
+  },
+  {
+    id: 'prod_vayu_clean_energy',
+    bankId: 'vayu',
+    name: 'Vayu Clean Tech & Aerodynamics Innovation Grant-Loan',
+    category: 'COLLATERAL_CREDIT',
+    description: 'Concessionary green transition credit facility backed by fixed deposits or clean bonds.',
+    baseInterestRate: 5.5,
+    minPrincipalMinor: '5000000', // 50,000 ARTH
+    maxPrincipalMinor: '150000000', // 1,500,000 ARTH
+    minTenureMonths: 12,
+    maxTenureMonths: 120,
+    processingFeePercent: 0.1,
+    collateralRequired: true,
+    minCollateralRatioPercent: 100,
+    status: 'ACTIVE',
+  },
+];
+
+/**
+ * Discovers available loan products across banks.
+ */
+export async function apiFetchLoanProducts(bankId?: string): Promise<LoanProductDto[]> {
+  try {
+    const url = bankId ? `${API_BASE_URL}/loans/products?bankId=${encodeURIComponent(bankId)}` : `${API_BASE_URL}/loans/products`;
+    const res = await fetch(url, {
+      headers: { ...getAuthHeader() },
+    });
+    if (res.ok) {
+      return await res.json();
+    }
+  } catch {
+    // Fallback to static catalog
+  }
+
+  return bankId ? MOCK_LOAN_PRODUCTS.filter((p) => p.bankId === bankId) : MOCK_LOAN_PRODUCTS;
+}
+
+/**
+ * Simulates loan EMI schedule and repayment breakdown.
+ */
+export async function apiSimulateLoan(input: LoanSimulationInput): Promise<LoanSimulationResultDto> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/loans/simulate`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...getAuthHeader(),
+      },
+      body: JSON.stringify(input),
+    });
+    if (res.ok) {
+      return await res.json();
+    }
+  } catch {
+    // Fallback offline simulation math
+  }
+
+  const p = BigInt(input.principalMinor);
+  const n = input.tenureMonths;
+  const product = MOCK_LOAN_PRODUCTS.find((pr) => pr.id === input.productId) || MOCK_LOAN_PRODUCTS[0];
+  const rate = product.baseInterestRate;
+  const monthlyRate = rate / (12 * 100);
+  const factor = Math.pow(1 + monthlyRate, n);
+  const emiFloat = Number(p) * ((monthlyRate * factor) / (factor - 1));
+  const emiMinor = BigInt(Math.round(emiFloat));
+
+  const schedule: LoanRepaymentInstallmentDto[] = [];
+  let bal = p;
+  const startDate = new Date();
+
+  for (let k = 1; k <= n; k++) {
+    const d = new Date(startDate.getTime());
+    d.setMonth(d.getMonth() + k);
+    const interestPart = BigInt(Math.round(Number(bal) * monthlyRate));
+    let principalPart = emiMinor > interestPart ? emiMinor - interestPart : 0n;
+    if (k === n) {
+      principalPart = bal;
+      bal = 0n;
+    } else {
+      bal = bal > principalPart ? bal - principalPart : 0n;
+    }
+
+    schedule.push({
+      installmentNumber: k,
+      dueDate: d.toISOString().split('T')[0],
+      totalAmountMinor: (principalPart + interestPart).toString(),
+      totalDueMinor: (principalPart + interestPart).toString(),
+      principalMinor: principalPart.toString(),
+      interestMinor: interestPart.toString(),
+      remainingPrincipalMinor: bal.toString(),
+      status: 'PENDING',
+    });
+  }
+
+  const totalRepayment = schedule.reduce((acc, curr) => acc + BigInt(curr.totalAmountMinor || curr.totalDueMinor || '0'), 0n);
+  const totalInterest = totalRepayment > p ? totalRepayment - p : 0n;
+  const processingFee = (p * BigInt(Math.round(product.processingFeePercent * 100))) / 10000n;
+
+  return {
+    requestedPrincipalMinor: input.principalMinor,
+    annualInterestRate: rate,
+    tenureMonths: n,
+    monthlyEmiMinor: emiMinor.toString(),
+    totalInterestMinor: totalInterest.toString(),
+    totalRepaymentMinor: totalRepayment.toString(),
+    processingFeeMinor: processingFee.toString(),
+    schedule,
+  };
+}
+
+/**
+ * Applies for a new sovereign loan facility.
+ */
+export async function apiApplyLoan(input: ApplyLoanInput, idempotencyKey?: string): Promise<UserLoanDto> {
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    ...getAuthHeader(),
+  };
+  if (idempotencyKey) {
+    headers['x-idempotency-key'] = idempotencyKey;
+  }
+
+  const res = await fetch(`${API_BASE_URL}/loans/apply`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(input),
+  });
+
+  if (!res.ok) {
+    const errorBody = await res.json().catch(() => ({ message: 'Loan application failed' }));
+    throw new Error(errorBody.message || 'Loan application failed');
+  }
+
+  return await res.json();
+}
+
+/**
+ * Retrieves all loan facilities for the authenticated citizen.
+ */
+export async function apiFetchMyLoans(): Promise<UserLoanDto[]> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/loans/my-loans`, {
+      headers: { ...getAuthHeader() },
+    });
+    if (res.ok) {
+      return await res.json();
+    }
+  } catch {
+    // Return empty list
+  }
+  return [];
+}
+
+/**
+ * Fetches a single loan facility by ID.
+ */
+export async function apiGetLoanDetails(loanId: string): Promise<UserLoanDto> {
+  const res = await fetch(`${API_BASE_URL}/loans/${encodeURIComponent(loanId)}`, {
+    headers: { ...getAuthHeader() },
+  });
+  if (!res.ok) {
+    const errorBody = await res.json().catch(() => ({ message: 'Failed to load loan facility' }));
+    throw new Error(errorBody.message || 'Failed to load loan facility');
+  }
+  return await res.json();
+}
+
+/**
+ * Citizen disburses an APPROVED loan facility with Financial Password step-up.
+ */
+export async function apiDisburseLoan(
+  loanId: string,
+  input: DisburseLoanInput,
+  idempotencyKey?: string,
+): Promise<UserLoanDto> {
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    ...getAuthHeader(),
+  };
+  if (idempotencyKey) {
+    headers['x-idempotency-key'] = idempotencyKey;
+  }
+
+  const res = await fetch(`${API_BASE_URL}/loans/${encodeURIComponent(loanId)}/disburse`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(input),
+  });
+
+  if (!res.ok) {
+    const errorBody = await res.json().catch(() => ({ message: 'Disbursement failed' }));
+    throw new Error(errorBody.message || 'Disbursement failed');
+  }
+
+  return await res.json();
+}
+
+/**
+ * Citizen pays an installment with Financial Password step-up.
+ */
+export async function apiPayLoanEmi(
+  loanId: string,
+  input: PayLoanEmiInput,
+  idempotencyKey?: string,
+): Promise<UserLoanDto> {
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    ...getAuthHeader(),
+  };
+  if (idempotencyKey) {
+    headers['x-idempotency-key'] = idempotencyKey;
+  }
+
+  const res = await fetch(`${API_BASE_URL}/loans/${encodeURIComponent(loanId)}/repay-emi`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(input),
+  });
+
+  if (!res.ok) {
+    const errorBody = await res.json().catch(() => ({ message: 'EMI payment failed' }));
+    throw new Error(errorBody.message || 'EMI payment failed');
+  }
+
+  return await res.json();
+}
+
+/**
+ * Citizen forecloses / prepays a loan with Financial Password step-up.
+ */
+export async function apiForecloseLoan(
+  loanId: string,
+  input: ForecloseLoanInput,
+  idempotencyKey?: string,
+): Promise<UserLoanDto> {
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    ...getAuthHeader(),
+  };
+  if (idempotencyKey) {
+    headers['x-idempotency-key'] = idempotencyKey;
+  }
+
+  const res = await fetch(`${API_BASE_URL}/loans/${encodeURIComponent(loanId)}/foreclose`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(input),
+  });
+
+  if (!res.ok) {
+    const errorBody = await res.json().catch(() => ({ message: 'Foreclosure failed' }));
+    throw new Error(errorBody.message || 'Foreclosure failed');
+  }
+
+  return await res.json();
+}
+
+/**
+ * Bank Officer fetches the underwriter queue for their assigned bank.
+ */
+export async function apiFetchBankLoanQueue(bankId: string): Promise<UserLoanDto[]> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/bank/${encodeURIComponent(bankId)}/loans/queue`, {
+      headers: { ...getAuthHeader() },
+    });
+    if (res.ok) {
+      return await res.json();
+    }
+  } catch {
+    // Return empty list
+  }
+  return [];
+}
+
+/**
+ * Bank Officer reviews (APPROVE / REJECT) a loan application.
+ */
+export async function apiReviewLoan(
+  bankId: string,
+  loanId: string,
+  input: ReviewLoanInput,
+): Promise<UserLoanDto> {
+  const res = await fetch(`${API_BASE_URL}/bank/${encodeURIComponent(bankId)}/loans/${encodeURIComponent(loanId)}/review`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...getAuthHeader(),
+    },
+    body: JSON.stringify(input),
+  });
+
+  if (!res.ok) {
+    const errorBody = await res.json().catch(() => ({ message: 'Loan review failed' }));
+    throw new Error(errorBody.message || 'Loan review failed');
+  }
+
+  return await res.json();
+}
+
+// =============================================================================
+// CENTRAL BANK GOVERNANCE & MONETARY POLICY API BRIDGE (PHASE 12B)
+// =============================================================================
+
+export async function apiFetchCentralBankOverview(): Promise<CentralBankOverviewDto> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/central-bank/overview`, {
+      headers: { ...getAuthHeader() },
+    });
+    if (res.ok) return await res.json();
+  } catch {
+    // Fallback
+  }
+  return {
+    m0SupplyMinor: '5000000000000',
+    m1SupplyMinor: '8240000000000',
+    activeCommercialBanks: 5,
+    clsSettlementHealthPercent: 99.98,
+    avgClearingLatencyMs: 142,
+    statutoryReserveRatioPercent: 12.0,
+    basePolicyRateApy: 4.25,
+    ledgerInvariantSatisfied: true,
+    supplyInvariantSatisfied: true,
+    activeEmergencyActionsCount: 0,
+  };
+}
+
+export async function apiFetchMonetarySupply(): Promise<MonetarySupplyDto> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/central-bank/monetary/supply`, {
+      headers: { ...getAuthHeader() },
+    });
+    if (res.ok) return await res.json();
+  } catch {
+    // Fallback
+  }
+  return {
+    m0SupplyMinor: '5000000000000',
+    m1SupplyMinor: '8240000000000',
+    inCirculationMinor: '1300000000000',
+    centralTreasuryMinor: '1000000000000',
+    centralBankReservesMinor: '1500000000000',
+    commercialBankReservesMinor: '1200000000000',
+    vaultRestrictedMinor: '0',
+    activeEpoch: 'EPOCH-2026-Q3-SOVEREIGN',
+    ledgerInvariantSatisfied: true,
+    supplyInvariantSatisfied: true,
+  };
+}
+
+export async function apiProposeSovereignIssuance(
+  input: ProposeSovereignIssuanceInput,
+  idempotencyKey?: string,
+): Promise<SovereignIssuanceDto> {
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    ...getAuthHeader(),
+  };
+  if (idempotencyKey) headers['x-idempotency-key'] = idempotencyKey;
+
+  const res = await fetch(`${API_BASE_URL}/central-bank/monetary/issuance/propose`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(input),
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ message: 'Sovereign issuance proposal failed' }));
+    throw new Error(err.message || 'Sovereign issuance proposal failed');
+  }
+
+  return await res.json();
+}
+
+export async function apiApproveSovereignIssuance(
+  input: ApproveSovereignIssuanceInput,
+  idempotencyKey?: string,
+): Promise<SovereignIssuanceDto> {
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    ...getAuthHeader(),
+  };
+  if (idempotencyKey) headers['x-idempotency-key'] = idempotencyKey;
+
+  const res = await fetch(`${API_BASE_URL}/central-bank/monetary/issuance/approve`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(input),
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ message: 'Sovereign issuance approval failed' }));
+    throw new Error(err.message || 'Sovereign issuance approval failed');
+  }
+
+  return await res.json();
+}
+
+export async function apiFetchBankPrudentialMetrics(): Promise<BankPrudentialMetricsDto[]> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/central-bank/prudential/banks`, {
+      headers: { ...getAuthHeader() },
+    });
+    if (res.ok) return await res.json();
+  } catch {
+    // Fallback
+  }
+  return [];
+}
+
+export async function apiFetchCentralBankRules(): Promise<FinancialRuleDto[]> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/central-bank/financial-rules`, {
+      headers: { ...getAuthHeader() },
+    });
+    if (res.ok) return await res.json();
+  } catch {
+    // Fallback
+  }
+  return [];
+}
+
+export async function apiCreateCentralBankRule(input: CreateFinancialRuleInput): Promise<FinancialRuleDto> {
+  const res = await fetch(`${API_BASE_URL}/central-bank/financial-rules`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...getAuthHeader(),
+    },
+    body: JSON.stringify(input),
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ message: 'Rule creation failed' }));
+    throw new Error(err.message || 'Rule creation failed');
+  }
+
+  return await res.json();
+}
+
+export async function apiUpdateCentralBankRule(input: UpdateFinancialRuleInput) {
+  const res = await fetch(`${API_BASE_URL}/central-bank/financial-rules`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      ...getAuthHeader(),
+    },
+    body: JSON.stringify(input),
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ message: 'Rule update failed' }));
+    throw new Error(err.message || 'Rule update failed');
+  }
+
+  return await res.json();
+}
+
+export async function apiFetchCentralBankTaxRules(): Promise<TaxRuleDto[]> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/central-bank/tax-rules`, {
+      headers: { ...getAuthHeader() },
+    });
+    if (res.ok) return await res.json();
+  } catch {
+    // Fallback
+  }
+  return [];
+}
+
+export async function apiRequestElaFacility(
+  input: RequestElaFacilityInput,
+  idempotencyKey?: string,
+): Promise<ElaFacilityDto> {
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    ...getAuthHeader(),
+  };
+  if (idempotencyKey) headers['x-idempotency-key'] = idempotencyKey;
+
+  const res = await fetch(`${API_BASE_URL}/central-bank/emergency/ela/request`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(input),
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ message: 'ELA request failed' }));
+    throw new Error(err.message || 'ELA request failed');
+  }
+
+  return await res.json();
+}
+
+export async function apiRepayElaFacility(
+  input: RepayElaFacilityInput,
+  idempotencyKey?: string,
+): Promise<ElaFacilityDto> {
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    ...getAuthHeader(),
+  };
+  if (idempotencyKey) headers['x-idempotency-key'] = idempotencyKey;
+
+  const res = await fetch(`${API_BASE_URL}/central-bank/emergency/ela/repay`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(input),
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ message: 'ELA repayment failed' }));
+    throw new Error(err.message || 'ELA repayment failed');
+  }
+
+  return await res.json();
+}
+
+export async function apiCreateEmergencyAction(
+  input: CreateEmergencyActionInput,
+  idempotencyKey?: string,
+): Promise<EmergencyActionDto> {
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    ...getAuthHeader(),
+  };
+  if (idempotencyKey) headers['x-idempotency-key'] = idempotencyKey;
+
+  const res = await fetch(`${API_BASE_URL}/central-bank/emergency/action`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(input),
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ message: 'Emergency action creation failed' }));
+    throw new Error(err.message || 'Emergency action creation failed');
+  }
+
+  return await res.json();
+}
+
+export async function apiRevokeEmergencyAction(
+  actionId: string,
+  input: RevokeEmergencyActionInput,
+): Promise<EmergencyActionDto> {
+  const res = await fetch(`${API_BASE_URL}/central-bank/emergency/action/${encodeURIComponent(actionId)}/revoke`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...getAuthHeader(),
+    },
+    body: JSON.stringify(input),
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ message: 'Emergency action revocation failed' }));
+    throw new Error(err.message || 'Emergency action revocation failed');
+  }
+
+  return await res.json();
+}
+
+export async function apiFetchEmergencyStatus(): Promise<{ marketHalted: boolean; activeActions: EmergencyActionDto[] }> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/central-bank/emergency/status`, {
+      headers: { ...getAuthHeader() },
+    });
+    if (res.ok) return await res.json();
+  } catch {
+    // Fallback
+  }
+  return { marketHalted: false, activeActions: [] };
+}
 

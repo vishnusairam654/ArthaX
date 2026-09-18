@@ -26,6 +26,8 @@ import {
   OrderStatus,
 } from '@arthax/types';
 
+import { CentralBankService } from '../central-bank/central-bank.service';
+
 export interface InternalOrder {
   id: string;
   userId: string;
@@ -81,7 +83,12 @@ export class OrderMatchingService {
     private readonly reservationService: ReservationService,
     private readonly taxEngineService: TaxEngineService,
     private readonly marketEngineService: MarketEngineService,
+    @Optional() private readonly centralBankService?: CentralBankService,
   ) {}
+
+  setCentralBankService(cb: any): void {
+    (this as any).centralBankService = cb;
+  }
 
   /**
    * Helper to seed/credit an account balance in mock/test storage.
@@ -152,6 +159,21 @@ export class OrderMatchingService {
   ): Promise<{ order: StockOrderDto; trades: TradeExecutionDto[]; isIdempotentReplay?: boolean }> {
     const sym = orderInput.symbol.toUpperCase();
     const company = this.marketEngineService.getCompanyState(sym);
+
+    // 0. Sovereign Emergency Controls Enforcement (Central Bank Directive)
+    if (this.centralBankService) {
+      if (this.centralBankService.isMarketHalted()) {
+        throw new BadRequestException(
+          'Market trading halted by Central Bank emergency directive. Stock order rejected.',
+        );
+      }
+      const sourceAcctId = orderInput.sourceAccountId || `acct_user_${userId}`;
+      if (this.centralBankService.isAccountFrozen(sourceAcctId)) {
+        throw new ForbiddenException(
+          `Account [${sourceAcctId}] is administratively FROZEN by Central Bank directive. Stock order debits are blocked.`,
+        );
+      }
+    }
 
     // 1. Idempotency verification
     if (idempotencyKey) {

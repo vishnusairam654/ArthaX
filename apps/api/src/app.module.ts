@@ -13,6 +13,7 @@ import { RewardsModule } from './rewards/rewards.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { ClsModule } from './cls/cls.module';
 import { FixedDepositsModule } from './fixed-deposits/fixed-deposits.module';
+import { ObservabilityModule } from './observability/observability.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { FixedDepositsModule } from './fixed-deposits/fixed-deposits.module';
     RewardsModule,
     NotificationsModule,
     FixedDepositsModule,
+    ObservabilityModule,
   ],
 })
 export class AppModule {}

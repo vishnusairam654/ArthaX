@@ -676,6 +676,84 @@ exports.Prisma.SecurityEventScalarFieldEnum = {
   timestamp: 'timestamp'
 };
 
+exports.Prisma.LoanProductScalarFieldEnum = {
+  id: 'id',
+  bankId: 'bankId',
+  name: 'name',
+  category: 'category',
+  description: 'description',
+  baseInterestRate: 'baseInterestRate',
+  minPrincipalMinor: 'minPrincipalMinor',
+  maxPrincipalMinor: 'maxPrincipalMinor',
+  minTenureMonths: 'minTenureMonths',
+  maxTenureMonths: 'maxTenureMonths',
+  processingFeePercent: 'processingFeePercent',
+  collateralRequired: 'collateralRequired',
+  minCollateralRatioPercent: 'minCollateralRatioPercent',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.UserLoanScalarFieldEnum = {
+  id: 'id',
+  contractNumber: 'contractNumber',
+  userId: 'userId',
+  bankId: 'bankId',
+  productId: 'productId',
+  disbursementAccountId: 'disbursementAccountId',
+  repaymentAccountId: 'repaymentAccountId',
+  loanType: 'loanType',
+  status: 'status',
+  principalMinor: 'principalMinor',
+  interestRate: 'interestRate',
+  tenureMonths: 'tenureMonths',
+  monthlyEmiMinor: 'monthlyEmiMinor',
+  outstandingPrincipalMinor: 'outstandingPrincipalMinor',
+  totalRepaidPrincipalMinor: 'totalRepaidPrincipalMinor',
+  totalRepaidInterestMinor: 'totalRepaidInterestMinor',
+  purpose: 'purpose',
+  appliedAt: 'appliedAt',
+  approvedAt: 'approvedAt',
+  disbursedAt: 'disbursedAt',
+  closedAt: 'closedAt',
+  rejectionReason: 'rejectionReason',
+  approvedByStaffId: 'approvedByStaffId',
+  notes: 'notes',
+  idempotencyKey: 'idempotencyKey',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.LoanInstallmentScalarFieldEnum = {
+  id: 'id',
+  loanId: 'loanId',
+  installmentNumber: 'installmentNumber',
+  dueDate: 'dueDate',
+  principalMinor: 'principalMinor',
+  interestMinor: 'interestMinor',
+  totalAmountMinor: 'totalAmountMinor',
+  remainingPrincipalMinor: 'remainingPrincipalMinor',
+  status: 'status',
+  paidAt: 'paidAt',
+  transactionId: 'transactionId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.LoanCollateralScalarFieldEnum = {
+  id: 'id',
+  loanId: 'loanId',
+  collateralType: 'collateralType',
+  assetReferenceId: 'assetReferenceId',
+  appraisedValueMinor: 'appraisedValueMinor',
+  lienStatus: 'lienStatus',
+  lockedAt: 'lockedAt',
+  releasedAt: 'releasedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -937,7 +1015,11 @@ exports.Prisma.ModelName = {
   TaxRule: 'TaxRule',
   MonetaryEvent: 'MonetaryEvent',
   SystemLog: 'SystemLog',
-  SecurityEvent: 'SecurityEvent'
+  SecurityEvent: 'SecurityEvent',
+  LoanProduct: 'LoanProduct',
+  UserLoan: 'UserLoan',
+  LoanInstallment: 'LoanInstallment',
+  LoanCollateral: 'LoanCollateral'
 };
 
 /**

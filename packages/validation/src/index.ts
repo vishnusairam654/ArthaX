@@ -239,6 +239,20 @@ export const UpdateFinancialRuleSchema = z.object({
 
 export type UpdateFinancialRuleInput = z.infer<typeof UpdateFinancialRuleSchema>;
 
+export const CreateFinancialRuleSchema = z.object({
+  key: z.string().min(3).regex(/^[A-Z0-9_-]+$/, 'Rule key must be uppercase identifier (e.g. POL-BASE-RATE)'),
+  title: z.string().min(5).max(150),
+  currentValue: z.number(),
+  unit: z.string().min(1).max(30),
+  category: z.enum(['Monetary Policy', 'Prudential Requirements', 'Transaction Limits', 'System Controls']),
+  description: z.string().min(10).max(500),
+  statutoryBasis: z.string().min(5).max(150),
+  effectiveDate: z.string().datetime().optional(),
+  financialPassword: z.string().min(1, 'Financial password required to create sovereign policy rule'),
+});
+
+export type CreateFinancialRuleInput = z.infer<typeof CreateFinancialRuleSchema>;
+
 export const CircuitBreakerToggleSchema = z.object({
   symbol: z.string().min(2).max(10).toUpperCase(),
   halt: z.boolean(),
@@ -247,6 +261,61 @@ export const CircuitBreakerToggleSchema = z.object({
 });
 
 export type CircuitBreakerToggleInput = z.infer<typeof CircuitBreakerToggleSchema>;
+
+export const ProposeSovereignIssuanceSchema = z.object({
+  operation: z.enum(['MINT', 'BURN']),
+  amountMinor: z.string().regex(/^\d+$/, 'Amount must be positive integer minor units'),
+  reason: z.string().min(10, 'Statutory justification must be at least 10 characters'),
+  ruleVersion: z.string().default('v1.0.0'),
+  financialPassword: z.string().min(1, 'Financial password required for sovereign proposal'),
+});
+
+export type ProposeSovereignIssuanceInput = z.infer<typeof ProposeSovereignIssuanceSchema>;
+
+export const ApproveSovereignIssuanceSchema = z.object({
+  issuanceId: z.string().min(1, 'Issuance ID is required'),
+  financialPassword: z.string().min(1, 'Financial password required for checker authorization'),
+});
+
+export type ApproveSovereignIssuanceInput = z.infer<typeof ApproveSovereignIssuanceSchema>;
+
+export const RequestElaFacilitySchema = z.object({
+  bankId: z.string().min(1, 'Commercial bank ID is required'),
+  amountMinor: z.string().regex(/^\d+$/, 'ELA amount must be positive integer minor units'),
+  collateralAssetId: z.string().min(1, 'Verified collateral asset reference ID is required'),
+  collateralAppraisedMinor: z.string().regex(/^\d+$/, 'Appraised collateral value is required'),
+  tenureDays: z.number().int().min(7).max(180).default(30),
+  financialPassword: z.string().min(1, 'Financial password required for ELA authorization'),
+});
+
+export type RequestElaFacilityInput = z.infer<typeof RequestElaFacilitySchema>;
+
+export const RepayElaFacilitySchema = z.object({
+  facilityId: z.string().min(1, 'ELA Facility ID is required'),
+  amountMinor: z.string().regex(/^\d+$/, 'Repayment amount must be positive integer minor units'),
+  sourceAccountId: z.string().min(1, 'Source repayment account ID is required'),
+  financialPassword: z.string().min(1, 'Financial password required for ELA repayment'),
+});
+
+export type RepayElaFacilityInput = z.infer<typeof RepayElaFacilitySchema>;
+
+export const CreateEmergencyActionSchema = z.object({
+  actionType: z.enum(['MARKET_HALT', 'BANK_MORATORIUM', 'ACCOUNT_FREEZE', 'LIQUIDITY_INJECTION']),
+  target: z.string().min(1, 'Target identifier required (e.g. MARKET:ALL, BANK:vayu, ACCOUNT:ARTH-NAVA-001)'),
+  reason: z.string().min(10, 'Statutory justification must be at least 10 characters'),
+  durationMinutes: z.number().int().min(1).max(10080).default(60), // Default 1 hour, max 7 days
+  financialPassword: z.string().min(1, 'Financial password required for emergency action'),
+});
+
+export type CreateEmergencyActionInput = z.infer<typeof CreateEmergencyActionSchema>;
+
+export const RevokeEmergencyActionSchema = z.object({
+  actionId: z.string().min(1, 'Action ID is required'),
+  reason: z.string().min(5, 'Revocation justification required'),
+  financialPassword: z.string().min(1, 'Financial password required for emergency revocation'),
+});
+
+export type RevokeEmergencyActionInput = z.infer<typeof RevokeEmergencyActionSchema>;
 
 // -----------------------------------------------------------------------------
 // 8. Central Settlement Layer (CLS) Schemas
@@ -364,4 +433,64 @@ export const ToggleFdAutoRenewSchema = z.object({
 });
 
 export type ToggleFdAutoRenewSchemaInput = z.infer<typeof ToggleFdAutoRenewSchema>;
+
+// -----------------------------------------------------------------------------
+// 11. Commercial Lending & Credit Facilities Schemas (Phase 12A)
+// -----------------------------------------------------------------------------
+
+export const LoanSimulationSchema = z.object({
+  bankId: z.string().min(1, 'Bank ID is required'),
+  productId: z.string().min(1, 'Product ID is required'),
+  principalMinor: z.string().regex(/^\d+$/, 'Principal must be a positive integer minor units string'),
+  tenureMonths: z.number().int().min(1).max(360),
+});
+
+export type LoanSimulationInput = z.infer<typeof LoanSimulationSchema>;
+
+export const ApplyLoanSchema = z.object({
+  bankId: z.string().min(1, 'Bank ID is required'),
+  productId: z.string().min(1, 'Product ID is required'),
+  requestedPrincipalMinor: z.string().regex(/^\d+$/, 'Principal must be positive integer minor units'),
+  tenureMonths: z.number().int().min(1).max(360),
+  purpose: z.string().min(3).max(255),
+  disbursementAccountId: z.string().min(1, 'Disbursement account ID is required'),
+  repaymentAccountId: z.string().min(1, 'Repayment account ID is required'),
+  collateralType: z.enum(['FIXED_DEPOSIT', 'STOCK_HOLDINGS', 'SOVEREIGN_GUARANTEE']).optional(),
+  collateralAssetId: z.string().optional(),
+});
+
+export type ApplyLoanInput = z.infer<typeof ApplyLoanSchema>;
+
+export const ReviewLoanSchema = z.object({
+  action: z.enum(['APPROVE', 'REJECT', 'REQUEST_CHANGES']),
+  approvedPrincipalMinor: z.string().regex(/^\d+$/).optional(),
+  approvedInterestRate: z.number().min(0).max(100).optional(),
+  notes: z.string().max(500).optional(),
+  rejectionReason: z.string().max(500).optional(),
+});
+
+export type ReviewLoanInput = z.infer<typeof ReviewLoanSchema>;
+
+export const DisburseLoanSchema = z.object({
+  financialPassword: z.string().min(1, 'Financial password required for disbursement acceptance'),
+  disbursementAccountId: z.string().min(1, 'Target account required for credit disbursement'),
+});
+
+export type DisburseLoanInput = z.infer<typeof DisburseLoanSchema>;
+
+export const PayLoanEmiSchema = z.object({
+  installmentNumber: z.number().int().positive(),
+  amountMinor: z.string().regex(/^\d+$/, 'Repayment amount must be positive integer minor units'),
+  sourceAccountId: z.string().min(1, 'Source repayment account ID required'),
+  financialPassword: z.string().min(1, 'Financial password required for step-up verification'),
+});
+
+export type PayLoanEmiInput = z.infer<typeof PayLoanEmiSchema>;
+
+export const ForecloseLoanSchema = z.object({
+  sourceAccountId: z.string().min(1, 'Source account required for loan payoff'),
+  financialPassword: z.string().min(1, 'Financial password required for early foreclosure'),
+});
+
+export type ForecloseLoanInput = z.infer<typeof ForecloseLoanSchema>;
 

@@ -17,6 +17,11 @@ export const SOVEREIGN_SYSTEM_ACCOUNTS = {
   REWARD_POOL: 'sys_reward_pool',
   CLS_CLEARING: 'sys_cls_clearing',
   FD_POOL: 'sys_fd_pool',
+  LOAN_POOL: 'sys_loan_pool',
+  BANK_INTEREST_INCOME: 'sys_bank_interest_income',
+  MINT_AUTHORITY: 'sys_mint_authority',
+  DEMURRAGE_BURN: 'sys_demurrage_burn',
+  CENTRAL_RESERVES: 'sys_central_bank_reserves',
 } as const;
 
 /**

@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Mail, ArrowRight, RefreshCw, AlertCircle, ArrowLeft, Shield } from 'lucide-react';
 
 interface GovEmailStepProps {
-  onSendOtp: (email: string) => void;
+  onSendOtp: (email: string) => Promise<void> | void;
   onBack: () => void;
 }
 
@@ -16,7 +16,7 @@ export const GovEmailStep: React.FC<GovEmailStepProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const trimmed = email.trim();
@@ -28,10 +28,13 @@ export const GovEmailStep: React.FC<GovEmailStepProps> = ({
     setError(null);
     setIsLoading(true);
 
-    setTimeout(() => {
+    try {
+      await onSendOtp(trimmed);
+    } catch (err: any) {
+      setError(err.message || 'Failed to dispatch verification code');
+    } finally {
       setIsLoading(false);
-      onSendOtp(trimmed);
-    }, 700);
+    }
   };
 
   return (

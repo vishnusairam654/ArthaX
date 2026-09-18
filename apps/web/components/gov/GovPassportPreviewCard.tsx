@@ -18,7 +18,7 @@ import {
 interface GovPassportPreviewCardProps {
   email: string;
   govId: string;
-  currentStep: 'landing' | 'email' | 'otp' | 'password' | 'result' | 'login';
+  currentStep: 'landing' | 'email' | 'otp' | 'password' | 'financial-password' | 'result' | 'login';
 }
 
 export const GovPassportPreviewCard: React.FC<GovPassportPreviewCardProps> = ({
@@ -52,6 +52,8 @@ export const GovPassportPreviewCard: React.FC<GovPassportPreviewCardProps> = ({
         return { text: 'ATTESTING SECURITY TOKEN', color: '#A8742A', bg: 'bg-[#A8742A]/10' };
       case 'password':
         return { text: 'ENCRYPTING IDENTITY PASSKEY', color: '#3368A0', bg: 'bg-[#3368A0]/10' };
+      case 'financial-password':
+        return { text: 'SETTING FINANCIAL AUTHORITY', color: '#A8742A', bg: 'bg-[#A8742A]/15' };
       case 'result':
         return { text: 'SOVEREIGN CREDENTIAL ACTIVE', color: '#287A55', bg: 'bg-[#287A55]/15' };
       case 'login':

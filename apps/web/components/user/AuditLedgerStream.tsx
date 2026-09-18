@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import { 
   Receipt, 
@@ -11,12 +11,14 @@ import {
   CheckCircle2,
   ExternalLink
 } from 'lucide-react';
+import { apiFetchUserAccounts, apiFetchAccountTransactions } from '@/lib/api';
+import { TransactionDto } from '@arthax/types';
 
 interface AuditLedgerStreamProps {
   isMasked: boolean;
 }
 
-interface TransactionItem {
+interface TransactionDisplayItem {
   id: string;
   title: string;
   meta: string;
@@ -27,7 +29,7 @@ interface TransactionItem {
   iconAsset?: string;
 }
 
-const transactions: TransactionItem[] = [
+const DEFAULT_TRANSACTIONS: TransactionDisplayItem[] = [
   {
     id: 'tx-1',
     title: 'Inter-bank DvP transfer to Samaya Term',
@@ -69,6 +71,62 @@ const transactions: TransactionItem[] = [
 ];
 
 export const AuditLedgerStream: React.FC<AuditLedgerStreamProps> = ({ isMasked }) => {
+  const [realTransactions, setRealTransactions] = useState<TransactionDisplayItem[]>([]);
+
+  const fetchTransactions = useCallback(async () => {
+    try {
+      const accounts = await apiFetchUserAccounts();
+      if (!accounts || accounts.length === 0) return;
+
+      const allTxs: TransactionDto[] = [];
+      for (const acct of accounts.slice(0, 3)) {
+        try {
+          const txs = await apiFetchAccountTransactions(acct.id);
+          if (Array.isArray(txs)) {
+            allTxs.push(...txs);
+          }
+        } catch {
+          // ignore per-account errors
+        }
+      }
+
+      if (allTxs.length > 0) {
+        // Map to display items
+        const mapped: TransactionDisplayItem[] = allTxs.map((tx) => {
+          const amt = Number(BigInt(tx.amountMinor)) / 100;
+          return {
+            id: tx.id,
+            title: `${tx.type.replace(/_/g, ' ')} Transfer (${tx.referenceNumber})`,
+            meta: `Scope: ${tx.scope} • Status: ${tx.status} • ${new Date(tx.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`,
+            amount: `${amt.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
+            isPositive: false,
+            statusText: tx.status,
+            iconType: 'dvp',
+            iconAsset: '/assets/icons/completed.png',
+          };
+        });
+        setRealTransactions(mapped);
+      }
+    } catch {
+      // Fallback to default entries
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchTransactions();
+    const handleInvalidation = () => {
+      fetchTransactions();
+    };
+    window.addEventListener('arthax_portal_data_invalidated', handleInvalidation);
+    return () => {
+      window.removeEventListener('arthax_portal_data_invalidated', handleInvalidation);
+    };
+  }, [fetchTransactions]);
+
+  const displayList = realTransactions.length > 0
+    ? [...realTransactions, ...DEFAULT_TRANSACTIONS.slice(0, Math.max(0, 4 - realTransactions.length))]
+    : DEFAULT_TRANSACTIONS;
+
   return (
     <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-xs border border-[#74777F]/20 space-y-5" id="ledger">
       {/* Header */}
@@ -80,13 +138,13 @@ export const AuditLedgerStream: React.FC<AuditLedgerStreamProps> = ({ isMasked }
           </h2>
         </div>
         <span className="font-mono text-xs text-[#74777F]">
-          Immutable Chain Receipt
+          {realTransactions.length > 0 ? 'Live PostgreSQL Stream' : 'Immutable Chain Receipt'}
         </span>
       </div>
 
       {/* Transactions List */}
       <div className="space-y-2">
-        {transactions.map((tx) => (
+        {displayList.map((tx) => (
           <div
             key={tx.id}
             className="flex items-center justify-between p-3.5 rounded-2xl bg-[#F8F9FF] border border-[#74777F]/15 hover:bg-[#EEF4FF] hover:border-[#1E3A5F]/30 transition-all duration-200"
@@ -120,7 +178,7 @@ export const AuditLedgerStream: React.FC<AuditLedgerStreamProps> = ({ isMasked }
                 <span className={`font-mono text-xs font-bold ${
                   tx.isPositive ? 'text-[#10B981]' : 'text-[#121C28]'
                 }`}>
-                  {isMasked ? '••••••' : tx.amount} ARTH
+                  {isMasked ? '••••••' : `${tx.isPositive ? '+' : '-'}${tx.amount}`} ARTH
                 </span>
                 <span className="font-mono text-[10px] text-[#10B981] font-semibold flex items-center justify-end gap-1">
                   {tx.statusText}
@@ -147,7 +205,7 @@ export const AuditLedgerStream: React.FC<AuditLedgerStreamProps> = ({ isMasked }
 
       {/* Footer Link */}
       <div className="pt-2 border-t border-[#74777F]/15 flex items-center justify-between text-xs font-mono text-[#43474E]">
-        <span>Showing 4 of 1,289 Recorded DvP Entries</span>
+        <span>Showing {displayList.length} Recorded Entries</span>
         <a href="#full-ledger" className="text-[#1E3A5F] hover:underline flex items-center gap-1 font-semibold">
           <span>Explore Complete Ledger</span>
           <ExternalLink className="w-3 h-3" />
