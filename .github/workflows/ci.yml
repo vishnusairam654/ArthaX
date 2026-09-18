@@ -21,20 +21,22 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 12.3.4
+
       - name: Setup Node.js 20 LTS
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'pnpm'
 
-      - name: Install pnpm Package Manager
-        run: corepack enable && corepack prepare pnpm@12.3.4 --activate
-
       - name: Install Monorepo Dependencies
         run: pnpm install --frozen-lockfile
 
       - name: Generate Sovereign Prisma Client
-        run: cd config/database && npx prisma generate --schema=schema.prisma || true
+        run: cd config/database && npx prisma generate --schema=schema.prisma
 
       - name: Verify Web Linting Rules
         run: pnpm --filter web lint
@@ -52,9 +54,37 @@ jobs:
     name: Non-Skippable Financial Invariant Gate
     runs-on: ubuntu-latest
     needs: [code-quality]
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: arthax
+          POSTGRES_PASSWORD: arthax_dev
+          POSTGRES_DB: arthax_dev
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 5
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 5
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 12.3.4
 
       - name: Setup Node.js 20 LTS
         uses: actions/setup-node@v4
@@ -62,22 +92,26 @@ jobs:
           node-version: 20
           cache: 'pnpm'
 
-      - name: Install pnpm Package Manager
-        run: corepack enable && corepack prepare pnpm@12.3.4 --activate
-
       - name: Install Monorepo Dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Compile Database & Types
+      - name: Instantiate Database Schema & Generate Prisma Client
         run: |
-          cd config/database && npx prisma generate --schema=schema.prisma || true
+          npx prisma db push --schema=config/database/schema.prisma --accept-data-loss
           pnpm --filter @arthax/types build || true
           pnpm --filter @arthax/validation build || true
+
+      - name: Seed Sovereign Database
+        run: pnpm --filter @arthax/api run prisma:seed
+        env:
+          DATABASE_URL: postgresql://arthax:arthax_dev@localhost:5432/arthax_dev?schema=public
 
       - name: Execute Master Regression Matrix (All 17 Invariant Suites — 664 Tests)
         run: pnpm test:all
         env:
           NODE_ENV: test
+          DATABASE_URL: postgresql://arthax:arthax_dev@localhost:5432/arthax_dev?schema=public
+          REDIS_URL: redis://localhost:6379
           JWT_SECRET: ci_test_jwt_secret_token_at_least_64_characters_long_for_security_2026
           FINANCIAL_PEPPER: ci_test_financial_pepper_secret_token_at_least_64_characters_long
 
@@ -92,17 +126,22 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 12.3.4
+
       - name: Setup Node.js 20 LTS
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'pnpm'
 
-      - name: Install pnpm Package Manager
-        run: corepack enable && corepack prepare pnpm@12.3.4 --activate
-
       - name: Install Monorepo Dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Generate Sovereign Prisma Client
+        run: cd config/database && npx prisma generate --schema=schema.prisma
 
       - name: Build Shared Packages
         run: |
@@ -118,6 +157,7 @@ jobs:
         env:
           NEXT_TELEMETRY_DISABLED: 1
           NODE_ENV: production
+          BUILD_STANDALONE: "true"
 
   # ----------------------------------------------------------------------------
   # Job 4: Multi-Stage Container Validation

@@ -19,7 +19,7 @@ COPY apps/api/package.json ./apps/api/
 COPY packages/types/package.json ./packages/types/
 COPY packages/tokens/package.json ./packages/tokens/
 COPY packages/validation/package.json ./packages/validation/
-COPY packages/database/package.json ./packages/database/
+COPY config/database/package.json ./config/database/
 
 RUN pnpm install --frozen-lockfile
 
