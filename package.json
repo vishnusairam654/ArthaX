@@ -12,8 +12,8 @@
     "docker:up": "docker compose -f config/docker/docker-compose.yml up -d",
     "docker:down": "docker compose -f config/docker/docker-compose.yml down",
     "lint": "pnpm --filter web lint",
-    "test": "pnpm --filter @arthax/api exec ts-node -r reflect-metadata ../../tests/master-test-runner.ts",
-    "test:all": "pnpm --filter @arthax/api exec ts-node -r reflect-metadata ../../tests/master-test-runner.ts"
+    "test": "pnpm --filter @arthax/api exec ts-node --transpile-only -P tsconfig.json -r reflect-metadata ../../tests/master-test-runner.ts",
+    "test:all": "pnpm --filter @arthax/api exec ts-node --transpile-only -P tsconfig.json -r reflect-metadata ../../tests/master-test-runner.ts"
   },
   "packageManager": "pnpm@12.3.4",
   "dependencies": {

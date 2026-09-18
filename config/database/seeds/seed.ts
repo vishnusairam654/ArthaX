@@ -1,4 +1,4 @@
-import { PrismaClient } from '../client/index.js';
+import { PrismaClient } from '../client';
 import * as argon2 from 'argon2';
 
 const prisma = new PrismaClient();

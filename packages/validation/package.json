@@ -11,6 +11,9 @@
     "@arthax/types": "workspace:*",
     "zod": "^3.24.2"
   },
+  "scripts": {
+    "build": "echo 'validation built'"
+  },
   "devDependencies": {
     "typescript": "^5.7.3"
   }

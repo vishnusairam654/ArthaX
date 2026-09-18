@@ -136,7 +136,7 @@ async function main() {
     const suiteStart = Date.now();
     try {
       const output = execSync(
-        `pnpm exec ts-node -r reflect-metadata ${suite.specPath}`,
+        `pnpm exec ts-node --transpile-only -P tsconfig.json -r reflect-metadata ${suite.specPath}`,
         { cwd: apiDir, stdio: ['pipe', 'pipe', 'pipe'], encoding: 'utf8' }
       );
 
