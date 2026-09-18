@@ -47,7 +47,7 @@ export const BankNodeModal: React.FC<BankNodeModalProps> = ({
           bankId: selectedTarget,
           accountType: 'SAVINGS',
           purpose: mandate,
-          financialPassword: financialPassword || 'FinSecret#2026',
+          financialPassword: financialPassword || '',
         });
       } else {
         await apiJoinBank(selectedTarget);

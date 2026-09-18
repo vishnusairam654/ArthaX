@@ -118,12 +118,21 @@ Under the `web` service **Variables** tab, configure:
 |---|---|---|
 | `NODE_ENV` | `production` | Next.js production optimization |
 | `PORT` | `3000` | Web server listening port |
-| `NEXT_PUBLIC_API_URL` | `https://${{api.RAILWAY_PUBLIC_DOMAIN}}/api/v1` | Public API endpoint for browser calls |
-| `API_INTERNAL_URL` | `http://${{api.RAILWAY_PRIVATE_DOMAIN}}:3001/api/v1` | Internal SSR route resolution & runtime proxy target |
+| `API_INTERNAL_URL` | `http://${{api.RAILWAY_PRIVATE_DOMAIN}}:3001/api/v1` | Internal SSR route resolution & runtime proxy target across Railway private VPC |
+| `NEXT_PUBLIC_API_URL` | *(Leave completely empty)* | Enforces same-origin `/api/v1` browser routing through Next.js proxy |
 
-> [!NOTE]
-> **Zero-CORS Runtime Proxy Architecture:**
-> Because Next.js inlines `NEXT_PUBLIC_*` variables at build time, `apps/web/next.config.mjs` incorporates a dynamic runtime `rewrites()` gateway targeting `API_INTERNAL_URL`. Client-side requests in `lib/api.ts` automatically route through `/api/v1/:path*` to the same origin, while Next.js proxies traffic over Railway's private service mesh without requiring build-time URL baking or complex CORS headers. Additionally, `apps/web/Dockerfile` provides `ARG NEXT_PUBLIC_API_URL` for build-time compilation.
+> [!IMPORTANT]
+> **Clean Same-Origin Reverse Proxy Architecture:**
+> Do **not** bake or set the public API URL into `NEXT_PUBLIC_API_URL`. Setting `NEXT_PUBLIC_API_URL` causes browser requests to bypass the Next.js proxy and hit the public API directly.
+> Leaving `NEXT_PUBLIC_API_URL` empty instructs the browser to use the same-origin `/api/v1/...` route. Next.js (`apps/web/next.config.mjs`) then proxies requests over Railway's private service mesh directly to `API_INTERNAL_URL`:
+> ```text
+> https://web-domain/api/v1/...
+>         ↓
+> Next.js (apps/web)
+>         ↓ (Railway Private VPC)
+> NestJS API (apps/api:3001)
+> ```
+> This gives you the cleanest zero-CORS deployment, isolates backend services, and avoids public URL baking.
 
 ### Step 10: Configure Public Domains & TLS
 1. Under `web` $\rightarrow$ **Settings** $\rightarrow$ **Networking**:
@@ -131,44 +140,88 @@ Under the `web` service **Variables** tab, configure:
    - Railway automatically provisions an edge TLS certificate (Let's Encrypt).
 2. Under `api` $\rightarrow$ **Settings** $\rightarrow$ **Networking**:
    - Click **Generate Domain** (e.g., `api-staging.arthax.gov` or `*.up.railway.app`).
-   - Copy the domain into `CORS_ORIGIN` and `NEXT_PUBLIC_API_URL`.
+   - Copy the Web domain into `api` service's `CORS_ORIGIN` (e.g., `https://${{web.RAILWAY_PUBLIC_DOMAIN}}`).
+   - Ensure `NEXT_PUBLIC_API_URL` on `web` remains empty.
 
-### Step 11: Real Staging Verification & Health Checks
-Verify all healthcheck probes:
-1. **API Liveness Probe:**
-   ```bash
-   curl -i https://[YOUR_API_DOMAIN]/api/v1/health/liveness
-   # HTTP 200 OK: {"status":"healthy","uptime":...}
-   ```
-2. **API Readiness Probe (Verifies PostgreSQL + Redis connectivity):**
-   ```bash
-   curl -i https://[YOUR_API_DOMAIN]/api/v1/health/readiness
-   # HTTP 200 OK: {"status":"ready","database":"connected","redis":"connected"}
-   ```
-3. **API Detailed Ledger Integrity Probe:**
-   ```bash
-   curl -i https://[YOUR_API_DOMAIN]/api/v1/health/detailed
-   # HTTP 200 OK: {"ledgerStatus":"BALANCED","imbalanceMinor":0}
-   ```
+### Step 11: Execute Staging Verification Harness
+Run the standalone verification harness against the newly deployed staging services:
+```bash
+# Pass staging citizen credentials as temporary environment variables (never commit to git!)
+STAGING_GOV_ID="GOV-8419-2041" \
+STAGING_GOV_PASSWORD="[ONE_TIME_STAGING_PASSWORD]" \
+STAGING_FINANCIAL_PASSWORD="[ONE_TIME_FINANCIAL_PASSWORD]" \
+node config/staging/verify-staging.js https://[YOUR_API_DOMAIN] https://[YOUR_WEB_DOMAIN]
+```
 
-### Step 12: Real Staging E2E & Persistence Drills
-1. **Persistence Cycle:**
-   - Register a new citizen via `https://[YOUR_WEB_DOMAIN]/register`.
-   - Submit OTP code and configure GOV password.
-   - Set separate Financial Password.
-   - Transfer 100.00 ARTH from NAVA to SETU.
-   - Restart the Railway `api` service.
-   - Log back in: verify the user, ledger balances, and transaction history remain intact.
-2. **Fail-Closed Verification:**
-   - Temporarily pause the `Postgres` service in Railway.
-   - Attempt a financial transfer.
-   - Verify the request fails closed with an HTTP 503 error, and no partial or corrupt ledger entries are created.
-   - Resume `Postgres`.
+The verification harness executes 7 sequential verification stages:
+1. **Liveness & Readiness:** Confirms API, PostgreSQL 16, and Redis 7 health probes.
+2. **Double-Entry Invariant:** Probes `/api/v1/health/detailed` to confirm global balance (`imbalanceMinor = 0`).
+3. **Database Seed Check:** Confirms 5 banks (NAVA, SAMAYA, SETU, STHIRA, VAYU) and 10 exchange companies.
+4. **Citizen Authentication:** Verifies Argon2id login, session issuance, and active status with credentials/tokens strictly redacted.
+5. **Live Inter-Bank Transfer:** Executes a real CLS transfer of 100.00 ARTH from NAVA to SETU.
+6. **Explicit Idempotency Verification:** Replays the transfer with the exact same `Idempotency-Key` and asserts:
+   - Request #1 $\rightarrow$ transfer succeeds $\rightarrow$ returns transaction ID.
+   - Request #2 $\rightarrow$ returns identical transaction ID $\rightarrow$ **NO second debit**, **NO second credit**.
+   - Exactly 1 transaction record exists in the ledger (zero duplicate rows).
+7. **Same-Origin Proxy Check:** Verifies Next.js SSR routes (`/`, `/bank`) and same-origin `/api/v1` reverse proxy.
+
+### Step 12: Controlled Persistence & Fail-Closed Drills
+
+#### 1. API Restart Persistence Drill
+- Record citizen balances in NAVA and SETU.
+- Restart the Railway `api` service.
+- Re-run verification / login: verify the user, ledger balances, and transaction history remain intact.
+
+#### 2. PostgreSQL Fail-Closed Integrity Drill
+> [!CAUTION]
+> **Drill Precondition:**
+> Only perform this drill when **no other staging workloads or tests depend on that database**.
+
+The critical assertion is that a database failure must fail closed with zero corruption:
+```text
+PostgreSQL unavailable
+        ↓
+Financial write rejected
+        ↓
+HTTP 503 Service Unavailable
+        ↓
+PostgreSQL restored
+        ↓
+NO transaction created
+NO ledger entries created
+NO balance mutation
+NO partial transfer state
+```
+
+**Step-by-step drill procedure:**
+1. Record baseline source and destination account balances via `/api/v1/banks/user/accounts`.
+2. In Railway Console, temporarily pause/stop the `Postgres` service.
+3. Attempt a transfer:
+   ```bash
+   curl -i -X POST https://[YOUR_API_DOMAIN]/api/v1/banks/transfers \
+     -H "Authorization: Bearer $TOKEN" \
+     -H "idempotency-key: $(uuidgen)" \
+     -H "Content-Type: application/json" \
+     -d '{"sourceAccountId":"...","destinationAccountNumber":"...","amountMinor":"10000","financialPassword":"..."}'
+   ```
+4. **Assert HTTP 503:** The API immediately rejects the financial write with HTTP 503 Service Unavailable.
+5. In Railway Console, resume the `Postgres` service.
+6. Run the post-drill integrity check:
+   ```bash
+   node config/staging/verify-staging.js https://[YOUR_API_DOMAIN] --failclosed-verify
+   ```
+7. Re-query account balances and verify all 4 invariants:
+   - **NO transaction created:** Querying `/api/v1/banks/accounts/:id/transactions` shows no new transaction record.
+   - **NO ledger entries created:** Journal entry count remains unchanged.
+   - **NO balance mutation:** Source and destination balances match baseline down to the exact minor unit.
+   - **NO partial transfer state:** `/api/v1/health/detailed` confirms `imbalanceMinor: 0` and status `BALANCED`.
 
 ---
 
-## Staging Security Guidelines
+## Staging Security & Secret Management
 
-1. **Zero Public Exposure for Databases:** PostgreSQL and Redis must NEVER have public domains generated in Railway. All access occurs over Railway's private service mesh.
+1. **Zero Public Exposure for Databases:** PostgreSQL and Redis must NEVER have public domains generated in Railway. All access occurs strictly over Railway's private service mesh.
 2. **Secret Management:** Secrets (`JWT_SECRET`, `FINANCIAL_PEPPER`) must only be entered via Railway's encrypted environment variable dashboard and NEVER checked into git.
-3. **No Production Reuse:** Staging passwords and test seeds must never be reused in production environments.
+3. **Staging Credential Hygiene & Rotation:** Staging passwords and test seeds must be treated as staging secrets. Never commit them into repository files or use them as reusable credentials. Rotate staging credentials immediately after completing validation.
+4. **Log Sanitization:** Verification scripts and CI pipelines must never print passwords, session tokens, JWTs, or financial passwords into CI logs or stdout.
+

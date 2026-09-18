@@ -39,6 +39,8 @@ PORT=3000
 HOSTNAME=0.0.0.0
 NEXT_TELEMETRY_DISABLED=1
 
-# Backend Connectivity (Public or Private Railway Service Mesh URL)
-NEXT_PUBLIC_API_URL=https://${{api.RAILWAY_PUBLIC_DOMAIN}}/api/v1
+# Backend Connectivity
+# For clean same-origin proxying: leave NEXT_PUBLIC_API_URL empty so the browser calls /api/v1
+# Next.js rewrites proxy /api/v1 directly to API_INTERNAL_URL over Railway's private network
 API_INTERNAL_URL=http://${{api.RAILWAY_PRIVATE_DOMAIN}}:3001/api/v1
+NEXT_PUBLIC_API_URL=
