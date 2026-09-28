@@ -61,7 +61,7 @@ export default function TaxInvestmentPage() {
       version: 'v1.0.0-DRAFT',
       status: 'Draft',
       effectiveDate,
-      changedBy: 'Sovereign Revenue Taskforce',
+      changedBy: 'Tax Taskforce',
       changeRationale: rationale || 'Preliminary tax policy proposal.',
       rateDescription: `${rateDesc} [Provisional Demo Value]`,
       thresholdOrRate: rateDesc,
@@ -97,19 +97,11 @@ export default function TaxInvestmentPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-6 rounded-3xl border border-[#946726]/15 shadow-xs">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-md bg-[#946726]/10 text-[#946726] font-mono text-[10px] font-bold uppercase tracking-wider border border-[#946726]/20">
-              FISCAL &amp; INVESTMENT CODE
-            </span>
-            <span className="text-[11px] text-[#A8742A] font-mono font-medium">
-              [PROVISIONAL DEMO BENCHMARKS]
-            </span>
-          </div>
           <h1 className="font-serif font-bold text-2xl text-[#2A2012] mt-1">
-            System-Wide Tax &amp; Investment Policy
+            Tax & Investment Rules
           </h1>
-          <p className="text-xs sm:text-sm text-[#5C574F] mt-0.5 max-w-2xl leading-relaxed">
-            Centralized governance of transactional levies, equities capital gains taxation, dividend withholding mandates, and market-wide investment circuit limits.
+          <p className="text-xs sm:text-sm text-[#5C574F] mt-0.5">
+            Tax rates, capital gains, and investment limits.
           </p>
         </div>
 
@@ -119,7 +111,7 @@ export default function TaxInvestmentPage() {
           className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#946726] hover:bg-[#2A2012] text-white text-xs font-bold shadow-xs transition cursor-pointer shrink-0"
         >
           <Plus className="w-3.5 h-3.5" />
-          <span>Stage Tax Proposal</span>
+          <span>Add Tax Rule</span>
         </button>
       </div>
 
@@ -136,23 +128,23 @@ export default function TaxInvestmentPage() {
           <span className="text-[10px] text-[#74777F] uppercase block">Profit-Only Realization</span>
           <strong className="text-sm font-bold text-[#2A2012] block">15.00% Net Trade Profit</strong>
           <p className="text-[11px] font-sans text-[#5C574F] leading-snug">
-            Taxes strictly net realized capital gains. Zero tax on holding duration or loss-making exits.
+            Tax on net realized profits only. No tax on losses.
           </p>
         </div>
 
         <div className="p-4 bg-white rounded-2xl border border-[#946726]/15 shadow-xs space-y-1">
-          <span className="text-[10px] text-[#74777F] uppercase block">CLS Settlement Friction Fee</span>
+          <span className="text-[10px] text-[#74777F] uppercase block">Settlement Fee</span>
           <strong className="text-sm font-bold text-[#2A2012] block">0.05% Inter-Bank Wire</strong>
           <p className="text-[11px] font-sans text-[#5C574F] leading-snug">
-            Sub-basis-point levy allocated to immutable ledger infrastructure and cryptographic HSM operations.
+            Small fee on inter-bank transfers for ledger operations.
           </p>
         </div>
 
         <div className="p-4 bg-white rounded-2xl border border-[#946726]/15 shadow-xs space-y-1">
-          <span className="text-[10px] text-[#74777F] uppercase block">Long-Term Patient Horizon</span>
+          <span className="text-[10px] text-[#74777F] uppercase block">Long-Term Holding</span>
           <strong className="text-sm font-bold text-[#2A2012] block">365-Day Threshold</strong>
           <p className="text-[11px] font-sans text-[#5C574F] leading-snug">
-            Positions held beyond 1 full calendar year enjoy a 66% tax concession (rate collapses to 5.0%).
+            Hold 365+ days for 66% tax reduction (rate drops to 5.0%).
           </p>
         </div>
       </div>
@@ -171,7 +163,7 @@ export default function TaxInvestmentPage() {
                   : 'text-[#5C574F] hover:text-[#946726] bg-[#F6F8F7]'
               }`}
             >
-              {st === 'all' ? 'All Rules' : st}
+              {st === 'all' ? 'All' : st}
             </button>
           ))}
         </div>
@@ -225,7 +217,7 @@ export default function TaxInvestmentPage() {
 
               <div className="p-3.5 bg-[#F6F8F7] rounded-2xl border border-[#946726]/10 font-mono">
                 <span className="text-[9px] uppercase tracking-wider text-[#74777F] block">
-                  Mandated Rate / Formula
+                  Mandated Rate
                 </span>
                 <div className="text-sm font-bold text-[#2A2012] mt-0.5">
                   {rule.rateDescription}
@@ -237,7 +229,7 @@ export default function TaxInvestmentPage() {
               </p>
 
               <div className="p-2.5 bg-gray-50 rounded-xl text-[11px] text-[#5C574F] font-mono leading-tight">
-                <strong>Statutory Note:</strong> {rule.notes}
+                <strong>Note:</strong> {rule.notes}
               </div>
 
               <div className="pt-2 border-t border-gray-100 flex flex-wrap items-center justify-between gap-2 font-mono text-[11px] text-[#74777F]">
@@ -258,12 +250,10 @@ export default function TaxInvestmentPage() {
                 className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-[#946726]/10 hover:bg-[#946726] text-[#946726] hover:text-white transition text-xs font-bold cursor-pointer"
               >
                 <History className="w-3.5 h-3.5" />
-                <span>Audit Trail &amp; Predecessor</span>
+                <span>View Details</span>
               </button>
 
-              <span className="text-[10px] font-mono text-[#A8742A]">
-                Immature Gains Exempt
-              </span>
+
             </div>
           </div>
         ))}
@@ -276,7 +266,7 @@ export default function TaxInvestmentPage() {
             <div className="p-5 bg-[#946726] text-white flex items-center justify-between">
               <div>
                 <span className="font-mono text-[10px] uppercase text-white/70 block">
-                  STATUTORY TAX RULE AUDIT
+                  TAX RULE DETAILS
                 </span>
                 <h3 className="font-serif font-bold text-base text-white">
                   {selectedRule.code} ({selectedRule.version})
@@ -293,15 +283,15 @@ export default function TaxInvestmentPage() {
 
             <div className="p-6 space-y-4 text-xs font-sans bg-[#FDFBF7]">
               <div className="p-3.5 bg-white rounded-xl border border-[#946726]/15 space-y-1.5 font-mono text-[11px]">
-                <div>Rule Code: <strong>{selectedRule.code}</strong></div>
+                <div>Code: <strong>{selectedRule.code}</strong></div>
                 <div>Status: <strong>{selectedRule.status}</strong></div>
-                <div>Enacted Date: <strong>{selectedRule.effectiveDate}</strong></div>
-                <div>Legislative Origin: <strong>{selectedRule.changedBy}</strong></div>
+                <div>Effective: <strong>{selectedRule.effectiveDate}</strong></div>
+                <div>Changed By: <strong>{selectedRule.changedBy}</strong></div>
               </div>
 
               <div className="space-y-2">
                 <h4 className="font-serif font-bold text-sm text-[#2A2012]">
-                  Regulatory Compliance Details
+                  Notes
                 </h4>
                 <p className="text-xs text-[#5C574F] leading-relaxed">
                   {selectedRule.notes}
@@ -314,7 +304,7 @@ export default function TaxInvestmentPage() {
                   onClick={() => setSelectedRule(null)}
                   className="px-4 py-2 rounded-xl bg-[#946726] text-white text-xs font-bold cursor-pointer"
                 >
-                  Close Audit File
+                  Close
                 </button>
               </div>
             </div>
@@ -329,10 +319,10 @@ export default function TaxInvestmentPage() {
             <div className="p-5 bg-[#946726] text-white flex items-center justify-between">
               <div>
                 <span className="font-mono text-[10px] uppercase text-white/70 block">
-                  LEGISLATIVE REVENUE AMENDMENT
+                  NEW TAX RULE
                 </span>
                 <h3 className="font-serif font-bold text-base text-white">
-                  Stage Draft Tax Directive
+                  Draft Tax Rule
                 </h3>
               </div>
               <button
@@ -354,7 +344,7 @@ export default function TaxInvestmentPage() {
                   required
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  placeholder="e.g. Sovereign Bond Coupon Withholding Exemption"
+                  placeholder="e.g. Bond Coupon Withholding Exemption"
                   className="w-full p-2.5 bg-white border border-[#946726]/20 rounded-xl outline-none"
                 />
               </div>
@@ -431,7 +421,7 @@ export default function TaxInvestmentPage() {
                   type="submit"
                   className="px-5 py-2.5 bg-[#946726] hover:bg-[#2A2012] text-white font-bold rounded-xl shadow-xs cursor-pointer"
                 >
-                  Stage Draft Directive
+                  Stage Draft
                 </button>
               </div>
             </form>

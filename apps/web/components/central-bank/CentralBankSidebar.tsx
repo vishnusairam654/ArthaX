@@ -42,18 +42,18 @@ interface NavSection {
 
 const NAV_GROUPS: NavSection[] = [
   {
-    title: 'Macro Governance',
+    title: 'Banks',
     items: [
       { label: 'Overview', href: '/central-bank', icon: LayoutDashboard, exact: true },
-      { label: 'Bank Registry', href: '/central-bank/banks', icon: Building2 },
-      { label: 'Bank Monitoring', href: '/central-bank/monitoring', icon: Activity },
+      { label: 'Banks', href: '/central-bank/banks', icon: Building2 },
+      { label: 'Monitoring', href: '/central-bank/monitoring', icon: Activity },
     ],
   },
   {
-    title: 'Monetary & Settlement',
+    title: 'Money & Markets',
     items: [
       {
-        label: 'CLS / Settlement',
+        label: 'Settlement',
         href: '/central-bank/settlement',
         icon: ArrowLeftRight,
         badge: 'Live',
@@ -61,23 +61,23 @@ const NAV_GROUPS: NavSection[] = [
       },
       { label: 'Financial Rules', href: '/central-bank/financial-rules', icon: Scale },
       { label: 'Tax & Investment', href: '/central-bank/tax-investment', icon: ReceiptText },
-      { label: 'ARTH / Currency', href: '/central-bank/currency', icon: Coins },
-      { label: 'Market Oversight', href: '/central-bank/market', icon: TrendingUp },
+      { label: 'Currency', href: '/central-bank/currency', icon: Coins },
+      { label: 'Stock Market', href: '/central-bank/market', icon: TrendingUp },
     ],
   },
   {
-    title: 'Oversight & Admin',
+    title: 'Admin',
     items: [
       { label: 'Reports', href: '/central-bank/reports', icon: FileSpreadsheet },
       { label: 'Announcements', href: '/central-bank/announcements', icon: Megaphone },
       {
-        label: 'Audit & Compliance',
+        label: 'Audit Log',
         href: '/central-bank/audit',
         icon: ShieldAlert,
         badge: 'Log',
         badgeColor: 'bg-[#946726]/10 text-[#946726] border-[#946726]/20',
       },
-      { label: 'System / Security', href: '/central-bank/security', icon: ServerCog },
+      { label: 'Security', href: '/central-bank/security', icon: ServerCog },
       { label: 'Settings', href: '/central-bank/settings', icon: Settings },
     ],
   },
@@ -118,7 +118,7 @@ export const CentralBankSidebar: React.FC<CentralBankSidebarProps> = ({
       transition={{ duration: 0.25, ease: [0.2, 0, 0, 1] }}
       className="shrink-0 h-full bg-[#FFFFFF] border border-[#D8C7A5] rounded-3xl shadow-sm shadow-[#946726]/5 flex flex-col justify-between z-30 relative select-none overflow-hidden"
     >
-      {/* Top Section: Sovereign Seal & Title */}
+      {/* Top Section */}
       <div className="flex flex-col flex-1 min-h-0">
         <div className="px-3.5 pt-4 pb-3 border-b border-[#D8C7A5]/70 shrink-0 bg-[#FAF7EE]">
           <div className="flex items-center justify-between">
@@ -150,7 +150,7 @@ export const CentralBankSidebar: React.FC<CentralBankSidebarProps> = ({
                       Central Bank
                     </span>
                     <span className="font-mono text-[9px] uppercase tracking-wider text-[#946726] font-extrabold truncate mt-0.5">
-                      SOVEREIGN AUTHORITY
+                      Admin Portal
                     </span>
                   </motion.div>
                 )}
@@ -183,7 +183,7 @@ export const CentralBankSidebar: React.FC<CentralBankSidebarProps> = ({
           )}
         </div>
 
-        {/* Navigation Groupings (13 Items) with Central Bank Animated Scrollbar */}
+        {/* Navigation */}
         <nav className="p-2.5 space-y-4 overflow-y-auto flex-1 min-h-0 central-bank-scrollbar bg-white">
           {NAV_GROUPS.map((group) => (
             <div key={group.title} className="space-y-1">
@@ -216,7 +216,7 @@ export const CentralBankSidebar: React.FC<CentralBankSidebarProps> = ({
                         : 'text-[#4A3D2A] hover:text-[#7A5217] hover:bg-[#946726]/8'
                     } ${isCollapsed ? 'justify-center px-2' : ''}`}
                   >
-                    {/* Material 3 Active Pill Container with Fluid Framer-Motion Layout Animation */}
+                    {/* Active Indicator */}
                     {active && (
                       <motion.div
                         layoutId="cb-active-nav-indicator"
@@ -256,7 +256,7 @@ export const CentralBankSidebar: React.FC<CentralBankSidebarProps> = ({
         </nav>
       </div>
 
-      {/* Bottom Profile & Institutional Status */}
+      {/* Bottom Profile */}
       <div className="p-3 border-t border-[#D8C7A5]/70 bg-[#FAF7EE]">
         <AnimatePresence initial={false} mode="wait">
           {!isCollapsed ? (
@@ -278,21 +278,21 @@ export const CentralBankSidebar: React.FC<CentralBankSidebarProps> = ({
                       Dr. Alistair Vance
                     </span>
                     <span className="font-mono text-[9px] text-[#74777F] block truncate">
-                      Sovereign Governor
+                      Governor
                     </span>
                   </div>
                 </div>
               </div>
 
               <div className="flex items-center justify-between text-[10px] text-[#615749] font-mono px-1">
-                <span>Security: Level 4</span>
+                <span>Security: Active</span>
                 <button
                   type="button"
                   onClick={() => setIsSwitcherModalOpen(true)}
                   className="text-[#946726] hover:underline flex items-center gap-1 font-semibold cursor-pointer"
-                  title="Open Universal Cross-Portal Switchboard (Alt+P)"
+                  title="Switch Portal (Alt+P)"
                 >
-                  <span>Switchboard</span>
+                  <span>Switch Portal</span>
                   <ExternalLink className="w-2.5 h-2.5" />
                 </button>
               </div>
@@ -309,7 +309,7 @@ export const CentralBankSidebar: React.FC<CentralBankSidebarProps> = ({
               <button
                 type="button"
                 onClick={() => setIsSwitcherModalOpen(true)}
-                title="Dr. Alistair Vance, Sovereign Governor — Switchboard"
+                title="Dr. Alistair Vance, Governor — Switch Portal"
                 className="w-9 h-9 rounded-xl bg-[#946726]/15 flex items-center justify-center text-[#946726] hover:bg-[#946726]/25 transition-colors cursor-pointer"
               >
                 <Lock className="w-4 h-4 text-[#946726]" />
@@ -319,7 +319,7 @@ export const CentralBankSidebar: React.FC<CentralBankSidebarProps> = ({
         </AnimatePresence>
       </div>
 
-      {/* Universal Cross-Portal Switchboard Modal */}
+      {/* Portal Switcher Modal */}
       <UniversalPortalSwitcherModal
         isOpen={isSwitcherModalOpen}
         onClose={() => setIsSwitcherModalOpen(false)}

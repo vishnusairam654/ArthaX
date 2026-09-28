@@ -37,19 +37,11 @@ export default function CurrencyArthPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-6 rounded-3xl border border-[#946726]/15 shadow-xs">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-md bg-[#946726]/10 text-[#946726] font-mono text-[10px] font-bold uppercase tracking-wider border border-[#946726]/20">
-              MONETARY SUPPLY COMMAND
-            </span>
-            <span className="text-[11px] text-[#A8742A] font-mono font-medium">
-              [PROVISIONAL DEMO BENCHMARKS]
-            </span>
-          </div>
           <h1 className="font-serif font-bold text-2xl text-[#2A2012] mt-1">
-            ARTH Sovereign Monetary Authority
+            ARTH Currency
           </h1>
-          <p className="text-xs sm:text-sm text-[#5C574F] mt-0.5 max-w-2xl leading-relaxed">
-            Central issuance control, monetary velocity telemetry, vault reserve allocations, and deflationary fee burn accounting. Single double-entry ledger invariant: Σ Debits == Σ Credits.
+          <p className="text-xs sm:text-sm text-[#5C574F] mt-0.5">
+            Total supply, distribution, and mint/burn log.
           </p>
         </div>
 
@@ -60,7 +52,7 @@ export default function CurrencyArthPage() {
             className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#946726] hover:bg-[#2A2012] text-white text-xs font-bold shadow-xs transition cursor-pointer"
           >
             <Lock className="w-3.5 h-3.5 text-[#DFB87A]" />
-            <span>Mint / Burn Authority</span>
+            <span>Mint / Burn</span>
           </button>
         </div>
       </div>
@@ -70,13 +62,13 @@ export default function CurrencyArthPage() {
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pb-4 border-b border-[#946726]/10">
           <div>
             <span className="text-xs text-[#5C574F] font-medium block">
-              M0 Sovereign Currency In Circulation
+              M0 Total Supply
             </span>
             <div className="text-3xl sm:text-4xl font-serif font-bold text-[#2A2012] mt-1 flex items-center gap-2">
               <CentralBankMaskedValue value={supply.totalIssuedM0} suffix=" ARTH" />
             </div>
             <span className="text-xs text-[#A8742A] font-mono font-semibold block mt-1">
-              Fixed Demonstration Supply Cap • 1 ARTH = 1.0000 Unit Invariant
+              Fixed Demo Supply • 1 ARTH = 1 Unit
             </span>
           </div>
 
@@ -86,7 +78,7 @@ export default function CurrencyArthPage() {
               <strong className="text-sm text-[#2A2012]">{supply.velocityOfMoneyM1}x p.a.</strong>
             </div>
             <div className="p-3 bg-[#FAF9F6] rounded-xl border border-[#946726]/15 text-center">
-              <span className="text-[10px] text-[#74777F] uppercase block">Deflationary Burn YTD</span>
+              <span className="text-[10px] text-[#74777F] uppercase block">Burn YTD</span>
               <strong className="text-sm text-[#B5482E]">{supply.burnedOrRetiredYTD.toLocaleString('en-US')} ARTH</strong>
             </div>
           </div>
@@ -95,7 +87,7 @@ export default function CurrencyArthPage() {
         {/* Currency Distribution Breakdown Strip */}
         <div className="space-y-2">
           <h3 className="font-serif font-bold text-sm text-[#2A2012]">
-            Macro Distribution Across the ARTHAX Ecosystem
+            Distribution
           </h3>
           
           <div className="w-full h-4 bg-gray-100 rounded-full overflow-hidden flex">
@@ -131,7 +123,7 @@ export default function CurrencyArthPage() {
               <strong className="text-sm text-[#2A2012] block">
                 <CentralBankMaskedValue value={supply.bankStatutoryReserves} suffix=" ARTH" />
               </strong>
-              <span className="text-[10px] text-[#74777F]">32.1% • Mandated Safety Buffer</span>
+              <span className="text-[10px] text-[#74777F]">32.1%</span>
             </div>
 
             <div className="p-3 rounded-xl bg-[#F6F8F7] border border-emerald-300/40 space-y-0.5">
@@ -142,7 +134,7 @@ export default function CurrencyArthPage() {
               <strong className="text-sm text-[#2A2012] block">
                 <CentralBankMaskedValue value={supply.citizenLiquidWallets} suffix=" ARTH" />
               </strong>
-              <span className="text-[10px] text-[#74777F]">28.4% • 12,346 Active Accounts</span>
+              <span className="text-[10px] text-[#74777F]">28.4%</span>
             </div>
 
             <div className="p-3 rounded-xl bg-[#F6F8F7] border border-[#946726]/15 space-y-0.5">
@@ -153,7 +145,7 @@ export default function CurrencyArthPage() {
               <strong className="text-sm text-[#2A2012] block">
                 <CentralBankMaskedValue value={supply.bankOperationalLiquidity} suffix=" ARTH" />
               </strong>
-              <span className="text-[10px] text-[#74777F]">26.6% • Commercial Clearing Pool</span>
+              <span className="text-[10px] text-[#74777F]">26.6%</span>
             </div>
 
             <div className="p-3 rounded-xl bg-[#F6F8F7] border border-[#A8742A]/30 space-y-0.5">
@@ -164,7 +156,7 @@ export default function CurrencyArthPage() {
               <strong className="text-sm text-[#2A2012] block">
                 <CentralBankMaskedValue value={supply.sovereignTreasuryVault} suffix=" ARTH" />
               </strong>
-              <span className="text-[10px] text-[#74777F]">12.9% • Central Reserve Facility</span>
+              <span className="text-[10px] text-[#74777F]">12.9%</span>
             </div>
 
           </div>
@@ -177,14 +169,14 @@ export default function CurrencyArthPage() {
           <div>
             <h3 className="font-serif font-bold text-base text-[#2A2012] flex items-center gap-2">
               <History className="w-4 h-4 text-[#946726]" />
-              <span>Sovereign Monetary Ledger Transactions</span>
+              <span>Mint & Burn Log</span>
             </h3>
             <span className="text-xs text-[#5C574F]">
-              Cryptographically ratified minting, retirement, and reserve expansion actions
+              All mint and burn actions
             </span>
           </div>
           <span className="text-[11px] font-mono text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200">
-            Append-Only Verified
+            Verified
           </span>
         </div>
 
@@ -235,7 +227,7 @@ export default function CurrencyArthPage() {
                     {evt.amount.toLocaleString('en-US')} ARTH
                   </span>
                   <span className="block text-[10px] text-[#74777F]">
-                    Ledger State Synchronized
+                    Synced
                   </span>
                 </div>
               </div>
@@ -252,7 +244,7 @@ export default function CurrencyArthPage() {
               <div className="flex items-center gap-2">
                 <Lock className="w-5 h-5 text-[#A8742A]" />
                 <h3 className="font-serif font-bold text-base text-[#2A2012]">
-                  Sovereign Minting Quorum Protected
+                  Mint / Burn (Protected)
                 </h3>
               </div>
               <button
@@ -264,11 +256,11 @@ export default function CurrencyArthPage() {
             </div>
 
             <p className="text-xs text-[#5C574F] leading-relaxed">
-              Currency expansion and retirement directives require a <strong>5 of 7 Governor Board Quorum</strong> with air-gapped cryptographic HSM hardware keys.
+              Minting and burning requires a <strong>5 of 7 Governor Board vote</strong> with secure hardware keys.
             </p>
 
             <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-[11px] text-amber-900 font-mono">
-              Quorum Status: <strong>Awaiting Formal Legislative Session</strong>. No pending issuance motions active.
+              Quorum Status: <strong>No pending actions</strong>.
             </div>
 
             <div className="pt-2 flex justify-end">
@@ -276,7 +268,7 @@ export default function CurrencyArthPage() {
                 onClick={() => setShowActionModal(false)}
                 className="px-4 py-2 rounded-xl bg-[#946726] text-white text-xs font-bold"
               >
-                Close Notice
+                Close
               </button>
             </div>
           </div>

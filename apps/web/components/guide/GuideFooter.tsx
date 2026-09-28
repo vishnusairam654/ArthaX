@@ -54,12 +54,12 @@ export const GuideFooter: React.FC = () => {
             </div>
 
             <p className="font-body text-xs leading-relaxed text-[#262320]/70">
-              Sovereign Digital Fiscal Network and Central Ledger Protocol. Governed by multi-signatory monetary stabilization covenants and tier-one reserve anchoring under Charter 409-C.
+              The unified financial network and central banking platform. Connect to 5 licensed commercial banks, trade on the central exchange, and manage your wealth under one account.
             </p>
 
             <div className="inline-flex items-center gap-2 font-mono text-[11px] text-[#262320]/70 bg-[#F2EFE7] px-3.5 py-1.5 rounded-full border border-[#3368A0]/15">
-              <ShieldCheck className="w-4 h-4 text-[#A8742A]" />
-              <span>Root Node Trust Cert #8491-X</span>
+              <ShieldCheck className="w-4 h-4 text-emerald-700" />
+              <span>Verified Sovereign Ledger</span>
             </div>
           </div>
 
@@ -67,42 +67,32 @@ export const GuideFooter: React.FC = () => {
           <div className="md:col-span-8 grid grid-cols-2 sm:grid-cols-3 gap-8">
             <div className="space-y-3">
               <span className="font-mono text-[11px] uppercase tracking-wider text-[#262320]/50 font-semibold block">
-                Public Documentation
+                Guide Navigation
               </span>
               <ul className="space-y-2 font-body text-xs">
                 <li>
                   <a href="#hero" className="hover:text-[#3368A0] transition-colors">
-                    Manifesto &amp; Invariants
+                    Home
+                  </a>
+                </li>
+                <li>
+                  <a href="#how-it-works" className="hover:text-[#3368A0] transition-colors">
+                    How It Works
                   </a>
                 </li>
                 <li>
                   <a href="#switchboard" className="hover:text-[#3368A0] transition-colors">
-                    Public Switchboard
-                  </a>
-                </li>
-                <li>
-                  <a href="#ledger-engine" className="hover:text-[#3368A0] transition-colors">
-                    Monetary Treaty
-                  </a>
-                </li>
-                <li>
-                  <a href="#cls-pipeline" className="hover:text-[#3368A0] transition-colors">
-                    CLS Settlement Engine
+                    Explore Portals
                   </a>
                 </li>
                 <li>
                   <a href="#banks" className="hover:text-[#3368A0] transition-colors">
-                    Licensed Commercial Banks
-                  </a>
-                </li>
-                <li>
-                  <a href="#guides" className="hover:text-[#3368A0] transition-colors">
-                    Financial Educational Guides
+                    Partner Banks
                   </a>
                 </li>
                 <li>
                   <a href="#faq" className="hover:text-[#3368A0] transition-colors">
-                    Architectural FAQs
+                    Help &amp; FAQs
                   </a>
                 </li>
               </ul>
@@ -133,15 +123,15 @@ export const GuideFooter: React.FC = () => {
 
             <div className="space-y-3">
               <span className="font-mono text-[11px] uppercase tracking-wider text-[#262320]/50 font-semibold block">
-                Regulatory Compliance
+                System Status
               </span>
               <p className="font-body text-xs leading-relaxed text-[#262320]/70">
-                All transactions executed via atomic delivery-versus-payment (DvP) adhering to Basel III liquidity accords and ISO 20022 messaging standards.
+                All systems operational. Transactions settle instantly with balanced double-entry accounting.
               </p>
               <div className="pt-2">
-                <span className="inline-flex items-center gap-1.5 text-[11px] font-mono text-[#3368A0]">
+                <span className="inline-flex items-center gap-1.5 text-[11px] font-mono text-emerald-700">
                   <Globe className="w-3.5 h-3.5" />
-                  <span>Epoch #4,819 Active</span>
+                  <span>Network Status: Online</span>
                 </span>
               </div>
             </div>
@@ -151,12 +141,12 @@ export const GuideFooter: React.FC = () => {
         {/* Legal & Status Bar */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-[11px] text-[#262320]/60">
           <div>
-            © 2025 ARTHAX Sovereign Financial System. Immutable Double-Entry Archival Ledger.
+            © 2025 ARTHAX Sovereign Financial System.
           </div>
           <div className="flex items-center gap-4">
             <span className="inline-flex items-center gap-1.5 text-[#262320]/80">
               <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse" />
-              BLOCK HEIGHT <span className="font-semibold text-[#3368A0]" suppressHydrationWarning>{blockHeight.toLocaleString('en-US')}</span>
+              BLOCK HEIGHT <span className="font-semibold text-[#022448]" suppressHydrationWarning>{blockHeight.toLocaleString('en-US')}</span>
             </span>
             <span>•</span>
             <span className="font-semibold text-[#A8742A]" suppressHydrationWarning>{utcTime}</span>

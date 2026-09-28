@@ -32,25 +32,17 @@ export default function BankMonitoringPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-6 rounded-3xl border border-[#946726]/15 shadow-xs">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-md bg-[#946726]/10 text-[#946726] font-mono text-[10px] font-bold uppercase tracking-wider border border-[#946726]/20">
-              ANALYTICAL SURVEILLANCE
-            </span>
-            <span className="text-[11px] text-[#A8742A] font-mono font-medium">
-              [PROVISIONAL DEMO BENCHMARKS]
-            </span>
-          </div>
           <h1 className="font-serif font-bold text-2xl text-[#2A2012] mt-1">
-            Commercial Bank Monitoring &amp; Risk Analytics
+            Bank Monitoring
           </h1>
-          <p className="text-xs sm:text-sm text-[#5C574F] mt-0.5 max-w-2xl leading-relaxed">
-            Continuous prudential surveillance across liquidity reserves, settlement failure ratios, risk-weighted capital buffers, and inter-institutional systemic exposure.
+          <p className="text-xs sm:text-sm text-[#5C574F] mt-0.5">
+            Track reserves, ratios, and risk across all banks.
           </p>
         </div>
 
         <div className="flex items-center gap-2">
           <span className="px-3 py-1.5 rounded-xl bg-emerald-100 text-emerald-800 border border-emerald-300 font-mono text-xs font-bold">
-            Systemic Risk: LOW (0.14)
+            Risk: Low
           </span>
         </div>
       </div>
@@ -75,7 +67,7 @@ export default function BankMonitoringPage() {
             12.48% <span className="text-xs font-normal text-emerald-700 font-sans">Avg System</span>
           </div>
           <div className="text-[10px] text-[#74777F] font-mono mt-1">
-            4 of 5 compliant • 1 on watchlist
+            4 of 5 compliant • 1 watchlist
           </div>
         </button>
 
@@ -96,7 +88,7 @@ export default function BankMonitoringPage() {
             18.94% <span className="text-xs font-normal text-emerald-700 font-sans">Avg System</span>
           </div>
           <div className="text-[10px] text-[#74777F] font-mono mt-1">
-            Strong sovereign bond coverage
+            Strong bond coverage
           </div>
         </button>
 
@@ -117,7 +109,7 @@ export default function BankMonitoringPage() {
             15.60% <span className="text-xs font-normal text-emerald-700 font-sans">Avg System</span>
           </div>
           <div className="text-[10px] text-[#74777F] font-mono mt-1">
-            Tier-1 capital headroom secure
+            Capital buffer secure
           </div>
         </button>
 
@@ -131,14 +123,14 @@ export default function BankMonitoringPage() {
           }`}
         >
           <div className="flex items-center justify-between text-xs text-[#5C574F]">
-            <span>24h Failed Settlement Rate</span>
+            <span>Failed Settlement Rate</span>
             <span className="text-[10px] font-mono font-bold text-[#A8742A]">Max 0.10%</span>
           </div>
           <div className="mt-2 font-mono text-xl font-bold text-emerald-800">
-            0.054% <span className="text-xs font-normal text-emerald-700 font-sans">Nominal</span>
+            0.054% <span className="text-xs font-normal text-emerald-700 font-sans">Normal</span>
           </div>
           <div className="text-[10px] text-[#74777F] font-mono mt-1">
-            No atomic rollbacks unhandled
+            All rollbacks handled
           </div>
         </button>
 
@@ -149,14 +141,14 @@ export default function BankMonitoringPage() {
         <div className="p-5 border-b border-[#946726]/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
           <div>
             <h3 className="font-serif font-bold text-base text-[#2A2012]">
-              Institutional Comparison &amp; Prudential Ratios
+              Bank Comparison
             </h3>
             <span className="text-xs text-[#74777F]">
-              Comparative telemetry across all 5 commercial banking licensees
+              All 5 banks side by side
             </span>
           </div>
           <span className="px-2.5 py-1 rounded-md bg-[#FAF9F6] border border-[#946726]/15 text-[11px] font-mono text-[#946726]">
-            Benchmark Cycle: T+0 Live
+            Live
           </span>
         </div>
 
@@ -265,7 +257,7 @@ export default function BankMonitoringPage() {
           <div className="flex items-center justify-between">
             <h3 className="font-serif font-bold text-base text-[#2A2012] flex items-center gap-2">
               <TrendingUp className="w-4 h-4 text-[#946726]" />
-              <span>30-Day Liquidity Buffer Stability</span>
+              <span>Liquidity (30-Day)</span>
             </h3>
             <span className="text-[10px] font-mono text-[#74777F]">
               Rolling 30-Day Mean
@@ -273,7 +265,7 @@ export default function BankMonitoringPage() {
           </div>
 
           <p className="text-xs text-[#5C574F] leading-relaxed">
-            Composite liquidity buffer reserves held at the Central Bank relative to gross settlement clearing obligations.
+            Reserve buffers held at the Central Bank.
           </p>
 
           {/* Graphical Representation Bar */}
@@ -307,32 +299,32 @@ export default function BankMonitoringPage() {
           <div className="flex items-center justify-between">
             <h3 className="font-serif font-bold text-base text-[#2A2012] flex items-center gap-2">
               <ShieldCheck className="w-4 h-4 text-[#946726]" />
-              <span>Supervisory Action Protocol</span>
+              <span>Action Levels</span>
             </h3>
             <span className="text-[10px] font-mono text-[#74777F]">
-              Standard Operating Matrix
+              What happens when banks fail requirements
             </span>
           </div>
 
           <div className="space-y-2.5 text-xs text-[#5C574F]">
             <div className="p-3 rounded-xl bg-[#F6F8F7] border border-[#946726]/10 space-y-1">
-              <strong className="text-[#2A2012] block font-sans">Level 1: Watchlist &amp; Enhanced Telemetry</strong>
+              <strong className="text-[#2A2012] block font-sans">Level 1: Watchlist</strong>
               <p className="text-[11px] leading-relaxed">
-                Triggered when CRR drops between 11.5% and 12.0%. Commercial bank must post intra-day liquidity report every 60 minutes until restored.
+                CRR drops between 11.5%–12.0%. Bank must report hourly until fixed.
               </p>
             </div>
 
             <div className="p-3 rounded-xl bg-amber-50 border border-amber-200 space-y-1">
-              <strong className="text-amber-900 block font-sans">Level 2: Mandatory Capital Escrow Injection</strong>
+              <strong className="text-amber-900 block font-sans">Level 2: Freeze Outgoing Transfers</strong>
               <p className="text-[11px] text-amber-800 leading-relaxed">
-                Triggered when CRR touches &lt; 11.5% for &gt; 4 consecutive hours. Central Bank freezes outward inter-bank wire authority until reserve buffer is topped up.
+                CRR below 11.5% for 4+ hours. Outgoing transfers frozen until reserves are topped up.
               </p>
             </div>
 
             <div className="p-3 rounded-xl bg-red-50 border border-red-200 space-y-1">
-              <strong className="text-[#B5482E] block font-sans">Level 3: Charter Suspension &amp; Conservatorship</strong>
+              <strong className="text-[#B5482E] block font-sans">Level 3: Suspend Charter</strong>
               <p className="text-[11px] text-red-800 leading-relaxed">
-                Triggered upon persistent insolvency or unhandled settlement shortfall. Central Bank assumes administrative control.
+                Persistent insolvency or unresolved settlement shortfall. Central Bank takes control.
               </p>
             </div>
           </div>

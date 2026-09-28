@@ -46,26 +46,18 @@ export default function CentralBankSecurityPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-6 rounded-3xl border border-[#946726]/15 shadow-xs">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-md bg-[#946726]/10 text-[#946726] font-mono text-[10px] font-bold uppercase tracking-wider border border-[#946726]/20">
-              INFRASTRUCTURE SURVEILLANCE
-            </span>
-            <span className="text-[11px] text-emerald-700 font-mono font-bold">
-              • HARDWARE SECURITY MODULE: ACTIVE
-            </span>
-          </div>
           <h1 className="font-serif font-bold text-2xl text-[#2A2012] mt-1">
-            System Infrastructure &amp; Cryptographic Security
+            System Security
           </h1>
-          <p className="text-xs sm:text-sm text-[#5C574F] mt-0.5 max-w-2xl leading-relaxed">
-            Continuous operational monitoring of Core Ledger sequencers, CLS clearing nodes, air-gapped HSM keyrings, and central sovereign circuit breakers.
+          <p className="text-xs sm:text-sm text-[#5C574F] mt-0.5">
+            Monitor system nodes, circuit breaker, and active admin sessions.
           </p>
         </div>
 
         <div className="flex items-center gap-2">
           <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-100 text-emerald-800 border border-emerald-300 font-mono text-xs font-bold">
             <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-            <span>FIPS-140-3 Level 4</span>
+            <span>Secure</span>
           </span>
         </div>
       </div>
@@ -101,17 +93,14 @@ export default function CentralBankSecurityPage() {
                     : 'bg-emerald-100 text-emerald-800 border border-emerald-300'
                 }`}
               >
-                {isBreakerActive ? 'EMERGENCY HALT ENGAGED' : 'NORMAL CLEARING OPERATION'}
-              </span>
-              <span className="text-[11px] font-mono text-[#74777F]">
-                Sovereign Charter Act 14 Protocol
+                {isBreakerActive ? 'CIRCUIT BREAKER ON' : 'NORMAL OPERATION'}
               </span>
             </div>
             <h2 className="font-serif font-bold text-xl text-[#2A2012]">
-              Network-Wide Emergency Circuit Breaker
+              Emergency Circuit Breaker
             </h2>
             <p className="text-xs text-[#5C574F] max-w-2xl leading-relaxed">
-              Instantly halts all non-critical inter-bank CLS settlements and equities trading across the sovereign domain. Requires mandatory statutory justification, Governor elevated PIN authorization, and synchronous audit logging.
+              Halts inter-bank settlements and trading across all banks in an emergency.
             </p>
           </div>
 
@@ -126,7 +115,7 @@ export default function CentralBankSecurityPage() {
           >
             <Lock className="w-4 h-4" />
             <span>
-              {isBreakerActive ? 'Rescind Circuit Breaker' : 'Engage Emergency Halt'}
+              {isBreakerActive ? 'Turn Off Breaker' : 'Turn On Breaker'}
             </span>
           </button>
         </div>
@@ -137,10 +126,10 @@ export default function CentralBankSecurityPage() {
         <div className="flex items-center justify-between">
           <h2 className="font-serif font-bold text-lg text-[#2A2012] flex items-center gap-2">
             <ServerCog className="w-4 h-4 text-[#946726]" />
-            <span>Sovereign Consensus &amp; Service Nodes</span>
+            <span>System Nodes</span>
           </h2>
           <span className="text-xs font-mono text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200">
-            5 / 5 Clusters Synchronized
+            5 of 5 Online
           </span>
         </div>
 
@@ -190,14 +179,14 @@ export default function CentralBankSecurityPage() {
           <div>
             <h3 className="font-serif font-bold text-base text-[#2A2012] flex items-center gap-2">
               <KeyRound className="w-4 h-4 text-[#946726]" />
-              <span>Active High-Privilege Administrative Sessions</span>
+              <span>Admin Sessions</span>
             </h3>
             <p className="text-xs text-[#5C574F]">
-              Authenticated Governor, Chief Auditor, and automated system nodes currently connected
+              Currently connected administrators.
             </p>
           </div>
           <span className="text-[11px] font-mono text-[#946726] bg-[#946726]/5 px-2.5 py-1 rounded-lg border border-[#946726]/15">
-            IP Whitelist Enforced
+            Protected
           </span>
         </div>
 

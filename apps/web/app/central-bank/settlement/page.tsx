@@ -148,19 +148,11 @@ export default function ClsSettlementPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-6 rounded-3xl border border-[#946726]/15 shadow-xs">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-md bg-[#946726]/10 text-[#946726] font-mono text-[10px] font-bold uppercase tracking-wider border border-[#946726]/20">
-              CENTRAL CLEARING PROTOCOL
-            </span>
-            <span className="text-[11px] text-emerald-700 font-mono font-bold">
-              • T+0 REAL-TIME ATOMIC NETTING
-            </span>
-          </div>
           <h1 className="font-serif font-bold text-2xl text-[#2A2012] mt-1">
-            Central Settlement Layer (CLS) Control Center
+            Settlement
           </h1>
-          <p className="text-xs sm:text-sm text-[#5C574F] mt-0.5 max-w-2xl leading-relaxed">
-            Multi-bank transaction routing, double-entry clearing records, liquidity reservation locks, and automated atomic rollback protection.
+          <p className="text-xs sm:text-sm text-[#5C574F] mt-0.5">
+            Route, clear, and settle transactions between banks.
           </p>
         </div>
 
@@ -181,7 +173,7 @@ export default function ClsSettlementPage() {
             className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#946726] hover:bg-[#2A2012] text-white text-xs font-bold transition shadow-xs cursor-pointer disabled:opacity-50"
           >
             <Zap className={`w-4 h-4 text-amber-300 ${batchSettling ? 'animate-spin' : ''}`} />
-            <span>{batchSettling ? 'Settling...' : 'Trigger Batch Netting'}</span>
+            <span>{batchSettling ? 'Settling...' : 'Run Batch'}</span>
           </button>
         </div>
       </div>
@@ -212,9 +204,9 @@ export default function ClsSettlementPage() {
       {/* CLS Queue KPI Summary Strip */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <div className="bg-white p-4 rounded-2xl border border-[#946726]/15 shadow-xs">
-          <span className="text-xs text-[#5C574F] font-medium block">Active Clearing Queue</span>
+          <span className="text-xs text-[#5C574F] font-medium block">Queue</span>
           <div className="font-mono text-xl font-bold text-[#2A2012] mt-1">
-            {loading ? '...' : `${(overview?.pendingCount ?? 0) + (overview?.processingCount ?? 0) + (overview?.settlingCount ?? 0)} In Flight`}
+            {loading ? '...' : `${(overview?.pendingCount ?? 0) + (overview?.processingCount ?? 0) + (overview?.settlingCount ?? 0)} Active`}
           </div>
           <span className="text-[10px] text-emerald-700 font-mono mt-0.5 block">
             Avg Latency: {overview?.avgClearingLatencyMs ?? 142}ms
@@ -222,7 +214,7 @@ export default function ClsSettlementPage() {
         </div>
 
         <div className="bg-white p-4 rounded-2xl border border-[#946726]/15 shadow-xs">
-          <span className="text-xs text-[#5C574F] font-medium block">24h Inter-Bank Volume</span>
+          <span className="text-xs text-[#5C574F] font-medium block">24h Volume</span>
           <div className="font-mono text-xl font-bold text-[#2A2012] mt-1">
             {loading ? '...' : (
               <CentralBankMaskedValue
@@ -239,17 +231,17 @@ export default function ClsSettlementPage() {
             {loading ? '...' : (overview?.completedCount24h ?? 0)} Settled
           </div>
           <span className="text-[10px] text-[#A8742A] font-mono mt-0.5 block font-semibold">
-            Zero-Sum Invariant Checked
+            Verified
           </span>
         </div>
 
         <div className="bg-white p-4 rounded-2xl border border-[#946726]/15 shadow-xs">
-          <span className="text-xs text-[#5C574F] font-medium block">Reconciliation Exceptions</span>
+          <span className="text-xs text-[#5C574F] font-medium block">Failed (24h)</span>
           <div className="font-mono text-xl font-bold text-[#B5482E] mt-1">
             {loading ? '...' : (overview?.failedCount24h ?? 0)}
           </div>
           <span className="text-[10px] text-emerald-700 font-mono mt-0.5 block">
-            100% Invariant Preserved
+            Ledger Intact
           </span>
         </div>
       </div>
@@ -260,14 +252,14 @@ export default function ClsSettlementPage() {
           <div>
             <h3 className="font-serif font-bold text-base text-[#2A2012] flex items-center gap-2">
               <ArrowRightLeft className="w-4 h-4 text-[#946726]" />
-              <span>Inter-Bank Bilateral Netting Matrix</span>
+              <span>Bank-to-Bank Flows</span>
             </h3>
             <p className="text-xs text-[#5C574F]">
-              Direct clearing obligations between commercial bank nodes
+              Settlement flows between banks
             </p>
           </div>
           <span className="font-mono text-[11px] text-[#946726] bg-[#946726]/5 px-2.5 py-1 rounded-lg border border-[#946726]/15">
-            Synchronized Real-Time
+            Live
           </span>
         </div>
 
@@ -327,7 +319,7 @@ export default function ClsSettlementPage() {
                     : 'text-[#5C574F] hover:text-[#946726] bg-[#F6F8F7]'
                 }`}
               >
-                {st === 'all' ? 'All Queue States' : st}
+                {st === 'all' ? 'All' : st}
               </button>
             ))}
           </div>
@@ -362,15 +354,15 @@ export default function ClsSettlementPage() {
                   <tr>
                     <td colSpan={5} className="py-8 text-center text-[#74777F]">
                       <RefreshCw className="w-5 h-5 animate-spin mx-auto mb-2 text-[#946726]" />
-                      <span>Reading active CLS settlement sequence...</span>
+                      <span>Loading...</span>
                     </td>
                   </tr>
                 ) : filteredQueue.length === 0 ? (
                   <tr>
                     <td colSpan={5} className="py-8 text-center text-[#74777F]">
                       <CheckCircle2 className="w-6 h-6 text-emerald-600 mx-auto mb-2" />
-                      <span className="font-serif font-bold text-xs text-[#2A2012] block">No Settlements in Queue</span>
-                      <span className="text-[11px] text-[#5C574F]">All interbank clearing obligations are fully settled.</span>
+                      <span className="font-serif font-bold text-xs text-[#2A2012] block">Queue Empty</span>
+                      <span className="text-[11px] text-[#5C574F]">All settlements are complete.</span>
                     </td>
                   </tr>
                 ) : (

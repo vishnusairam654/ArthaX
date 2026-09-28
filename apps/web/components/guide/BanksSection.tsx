@@ -90,14 +90,13 @@ export function BanksSection() {
         <div className="max-w-3xl mb-12">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#E0EBF4] text-[#3368A0] text-xs font-mono font-bold tracking-wider uppercase mb-4 border border-[#3368A0]/15">
             <Building2 className="w-3.5 h-3.5 text-[#3368A0]" />
-            <span>SECTION 05 • COMMERCIAL TIER-ONE REGISTRY</span>
+            <span>PARTNER COMMERCIAL BANKS</span>
           </div>
           <h2 className="font-display text-3xl sm:text-4xl lg:text-[42px] text-[#022448] font-normal leading-tight tracking-tight">
-            Five Licensed Commercial Banks. One Unified Citizen Account.
+            Five Partner Banks. One Unified Account.
           </h2>
           <p className="font-body text-base sm:text-lg text-[#5C574F] mt-3.5 leading-relaxed">
-            Citizens choose bank accounts based on purpose, not artificial brand segregation. One main session allows
-            seamless multi-bank switching without maintaining separate logins.
+            Choose bank accounts based on your daily needs. Your single account login allows seamless switching between all 5 banks without separate logins.
           </p>
         </div>
 

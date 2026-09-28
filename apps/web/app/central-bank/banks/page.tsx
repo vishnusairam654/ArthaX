@@ -108,19 +108,11 @@ export default function BankRegistryPage() {
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-6 rounded-3xl border border-[#946726]/15 shadow-xs">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-md bg-[#946726]/10 text-[#946726] font-mono text-[10px] font-bold uppercase tracking-wider border border-[#946726]/20">
-              PRUDENTIAL SUPERVISION
-            </span>
-            <span className="text-[11px] text-[#A8742A] font-mono font-medium">
-              [LIVE CENTRAL BANK REGISTRY]
-            </span>
-          </div>
           <h1 className="font-serif font-bold text-2xl text-[#2A2012] mt-1">
-            Commercial Bank Registry
+            Bank Registry
           </h1>
           <p className="text-xs sm:text-sm text-[#5C574F] mt-0.5">
-            Licensing, statutory charter maintenance, ownership validation, and operational status enforcement for licensed depository institutions.
+            View and manage all licensed banks.
           </p>
         </div>
 
@@ -136,7 +128,7 @@ export default function BankRegistryPage() {
           </button>
           <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-100 text-emerald-800 border border-emerald-300 text-xs font-mono font-bold">
             <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse" />
-            {banks.length || 5} Institutions Chartered
+            {banks.length || 5} Banks
           </span>
         </div>
       </div>
@@ -194,13 +186,13 @@ export default function BankRegistryPage() {
         {loading ? (
           <div className="col-span-3 py-16 text-center text-[#74777F]">
             <RefreshCw className="w-6 h-6 animate-spin mx-auto mb-2 text-[#946726]" />
-            <span>Loading commercial bank regulatory registry...</span>
+            <span>Loading...</span>
           </div>
         ) : filteredBanks.length === 0 ? (
           <div className="col-span-3 py-16 text-center text-[#74777F]">
             <Building2 className="w-8 h-8 text-[#946726] mx-auto mb-2 opacity-50" />
-            <span className="font-serif font-bold text-sm text-[#2A2012] block">No Institutions Found</span>
-            <span className="text-xs text-[#5C574F]">No commercial banks match current filter criteria.</span>
+            <span className="font-serif font-bold text-sm text-[#2A2012] block">No Banks Found</span>
+            <span className="text-xs text-[#5C574F]">No banks match your filter.</span>
           </div>
         ) : (
           filteredBanks.map((bank) => {
@@ -231,7 +223,7 @@ export default function BankRegistryPage() {
                           {bank.bankName}
                         </h3>
                         <span className="font-mono text-[10px] text-[#74777F] block">
-                          {licenseNo} • NODE: {bank.bankId.toUpperCase()}
+                          {bank.bankId.toUpperCase()}
                         </span>
                       </div>
                     </div>
@@ -285,7 +277,7 @@ export default function BankRegistryPage() {
                         Capital Adequacy (CAR)
                       </span>
                       <strong className="text-[#2A2012] text-xs">
-                        {(bank.carRatioPercent ?? 16.0).toFixed(1)}% CAR
+                        {(bank.carRatioPercent ?? 16.0).toFixed(1)}%
                       </strong>
                     </div>
                   </div>
@@ -299,7 +291,7 @@ export default function BankRegistryPage() {
                     className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-[#946726] hover:bg-[#2A2012] text-white text-xs font-bold transition cursor-pointer"
                   >
                     <Eye className="w-3.5 h-3.5" />
-                    <span>Inspect Dossier</span>
+                    <span>View Details</span>
                   </button>
                 </div>
               </div>
@@ -324,7 +316,7 @@ export default function BankRegistryPage() {
               <div>
                 <h3 className="font-serif font-bold text-lg">{selectedBank.bankName}</h3>
                 <span className="text-[11px] font-mono text-[#F5E1B2]">
-                  NODE ID: {selectedBank.bankId.toUpperCase()}
+                  {selectedBank.bankId.toUpperCase()}
                 </span>
               </div>
               <button
@@ -337,19 +329,19 @@ export default function BankRegistryPage() {
             </div>
             <div className="p-5 space-y-3 font-mono text-xs bg-[#FAF7EE]">
               <div className="p-3 bg-white rounded-xl border border-[#D8C7A5] flex justify-between">
-                <span className="text-[#74777F]">Net Demand & Time Liabilities (NDTL):</span>
+                <span className="text-[#74777F]">Total Deposits:</span>
                 <span className="font-bold text-[#2A2012]">
                   {formatMinorToArth(selectedBank.ndtlMinor)} ARTH
                 </span>
               </div>
               <div className="p-3 bg-white rounded-xl border border-[#D8C7A5] flex justify-between">
-                <span className="text-[#74777F]">Statutory CRR Required (12%):</span>
+                <span className="text-[#74777F]">CRR Required (12%):</span>
                 <span className="font-bold text-[#2A2012]">
                   {formatMinorToArth(selectedBank.crrRequiredMinor)} ARTH
                 </span>
               </div>
               <div className="p-3 bg-white rounded-xl border border-[#D8C7A5] flex justify-between">
-                <span className="text-[#74777F]">Cash Reserves Maintained:</span>
+                <span className="text-[#74777F]">CRR Held:</span>
                 <span className="font-bold text-emerald-700">
                   {formatMinorToArth(selectedBank.crrMaintainedMinor)} ARTH
                 </span>

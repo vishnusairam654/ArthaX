@@ -10,7 +10,6 @@ import {
   LogOut, 
   Menu, 
   X, 
-  BookOpen,
   ShieldCheck
 } from 'lucide-react';
 
@@ -18,14 +17,12 @@ interface GuideHeaderProps {
   onOpenGovModal: () => void;
   connectedGovId?: string | null;
   onDisconnect?: () => void;
-  onOpenGuidesModal?: (topic?: 'banking' | 'taxes' | 'trading') => void;
 }
 
 export function GuideHeader({ 
   onOpenGovModal, 
   connectedGovId, 
-  onDisconnect,
-  onOpenGuidesModal 
+  onDisconnect
 }: GuideHeaderProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -116,18 +113,12 @@ export function GuideHeader({
 
         {/* ================= RIGHT: GUIDES & USER PORTAL ACTIONS ================= */}
         <div className="flex-1 flex items-center justify-end gap-2 sm:gap-3 shrink-0">
-          {/* Financial Educational Guides */}
-          {onOpenGuidesModal && (
-            <button
-              onClick={() => onOpenGuidesModal('banking')}
-              id="btn-nav-guides"
-              className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-2 text-xs font-body font-semibold text-[#022448] bg-gradient-to-b from-white via-white to-[#F6F3EC] hover:to-white rounded-full border border-[#3368A0]/25 hover:border-[#3368A0]/50 shadow-[0_2px_4px_rgba(0,0,0,0.06),0_1px_1px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,0.95)] hover:shadow-[0_4px_8px_rgba(0,0,0,0.09),0_2px_3px_rgba(0,0,0,0.05),inset_0_1px_0_rgba(255,255,255,1)] hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-[0_1px_2px_rgba(0,0,0,0.06),inset_0_1px_2px_rgba(0,0,0,0.06)] transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3368A0] whitespace-nowrap cursor-pointer select-none"
-            >
-              <BookOpen className="w-3.5 h-3.5 text-[#3368A0] shrink-0" />
-              <span className="hidden lg:inline">Financial Guides</span>
-              <span className="lg:hidden">Guides</span>
-            </button>
-          )}
+          <a
+            href="#how-it-works"
+            className="hidden lg:inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-body font-semibold text-[#022448] bg-white/80 hover:bg-white rounded-full border border-[#3368A0]/20 hover:border-[#3368A0]/50 shadow-2xs transition-all select-none"
+          >
+            <span>How It Works</span>
+          </a>
 
           {/* Primary Ecosystem Entrance: Citizen Vault */}
           <Link
@@ -184,19 +175,16 @@ export function GuideHeader({
             )}
           </div>
 
-          {/* Mobile Educational Guides */}
-          {onOpenGuidesModal && (
-            <button
-              onClick={() => {
-                setIsMobileMenuOpen(false);
-                onOpenGuidesModal('banking');
-              }}
-              className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 text-xs font-body font-semibold text-[#022448] bg-gradient-to-b from-white to-[#F6F3EC] rounded-xl border border-[#3368A0]/25 shadow-[0_2px_4px_rgba(0,0,0,0.06),inset_0_1px_0_rgba(255,255,255,0.9)] active:translate-y-0.5 transition-all cursor-pointer"
+          {/* Mobile Navigation Links */}
+          <div className="space-y-2">
+            <a
+              href="#how-it-works"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 text-xs font-body font-semibold text-[#022448] bg-gradient-to-b from-white to-[#F6F3EC] rounded-xl border border-[#3368A0]/25 shadow-xs active:translate-y-0.5 transition-all"
             >
-              <BookOpen className="w-4 h-4 text-[#3368A0]" />
-              <span>Explore Financial Guides (Banking, Taxes, Trading)</span>
-            </button>
-          )}
+              <span>How It Works (3 Steps)</span>
+            </a>
+          </div>
 
           {/* Mobile Primary Actions */}
           <div className="pt-2 border-t border-[#3368A0]/10 flex flex-col gap-2">

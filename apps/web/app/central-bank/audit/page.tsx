@@ -62,26 +62,18 @@ export default function AuditCompliancePage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-6 rounded-3xl border border-[#946726]/15 shadow-xs">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-md bg-[#946726]/10 text-[#946726] font-mono text-[10px] font-bold uppercase tracking-wider border border-[#946726]/20">
-              APPEND-ONLY FORENSIC AUDIT
-            </span>
-            <span className="text-[11px] text-emerald-700 font-mono font-bold">
-              • ZERO MUTATION INVARIANT
-            </span>
-          </div>
           <h1 className="font-serif font-bold text-2xl text-[#2A2012] mt-1">
-            Audit &amp; Regulatory Compliance Register
+            Audit Log
           </h1>
-          <p className="text-xs sm:text-sm text-[#5C574F] mt-0.5 max-w-2xl leading-relaxed">
-            The sovereign system&apos;s ultimate authoritative record. Captures administrative state modifications, settlement overrides, policy activations, and security alerts with full before/after state diffs.
+          <p className="text-xs sm:text-sm text-[#5C574F] mt-0.5">
+            Track all changes, overrides, and security events.
           </p>
         </div>
 
         <div className="flex items-center gap-2">
           <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-100 text-emerald-800 border border-emerald-300 font-mono text-xs font-bold">
             <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-            <span>Audit Journal: Tamper-Evident</span>
+            <span>Verified</span>
           </span>
         </div>
       </div>
@@ -101,7 +93,7 @@ export default function AuditCompliancePage() {
                   : 'text-[#5C574F] hover:text-[#946726] bg-[#F6F8F7]'
               }`}
             >
-              {s === 'all' ? 'All Severities' : s}
+              {s === 'all' ? 'All' : s}
             </button>
           ))}
 
@@ -113,7 +105,7 @@ export default function AuditCompliancePage() {
             onChange={(e) => setEventTypeFilter(e.target.value)}
             className="px-3 py-1.5 bg-[#F6F8F7] border border-[#946726]/15 rounded-xl text-xs font-semibold text-[#2A2012] outline-none cursor-pointer"
           >
-            <option value="all">All Event Types</option>
+            <option value="all">All Events</option>
             <option value="POLICY_CHANGE">POLICY_CHANGE</option>
             <option value="BANK_ACTION">BANK_ACTION</option>
             <option value="SETTLEMENT_OVERRIDE">SETTLEMENT_OVERRIDE</option>
@@ -140,13 +132,13 @@ export default function AuditCompliancePage() {
           <table className="w-full text-left text-xs">
             <thead className="bg-[#F8F9FA] border-b border-[#946726]/10 font-mono text-[10px] text-[#5C574F] uppercase tracking-wider">
               <tr>
-                <th className="p-4">Entry / Timestamp</th>
-                <th className="p-4">Event Type</th>
-                <th className="p-4">Actor / Role</th>
-                <th className="p-4">Target Entity</th>
-                <th className="p-4">Action Summary</th>
+                <th className="p-4">Time</th>
+                <th className="p-4">Type</th>
+                <th className="p-4">User</th>
+                <th className="p-4">Target</th>
+                <th className="p-4">Action</th>
                 <th className="p-4">Severity</th>
-                <th className="p-4 text-right whitespace-nowrap min-w-[120px]">Diff Inspector</th>
+                <th className="p-4 text-right whitespace-nowrap min-w-[120px]">Diff</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 font-sans">
@@ -211,7 +203,7 @@ export default function AuditCompliancePage() {
             <div className="p-6 bg-[#946726] text-white flex items-center justify-between">
               <div>
                 <span className="font-mono text-[10px] uppercase text-white/70 block">
-                  FORENSIC STATE DIFF INSPECTOR
+                  CHANGE DETAILS
                 </span>
                 <h3 className="font-serif font-bold text-lg text-white">
                   Audit Entry: {selectedLog.id}
@@ -231,7 +223,7 @@ export default function AuditCompliancePage() {
               {/* Metadata strip */}
               <div className="p-3.5 bg-white rounded-2xl border border-[#946726]/15 font-mono text-[11px] grid grid-cols-2 gap-3 shadow-xs">
                 <div>
-                  <span className="text-[10px] text-[#74777F] uppercase block">Acting Administrator</span>
+                  <span className="text-[10px] text-[#74777F] uppercase block">Admin</span>
                   <strong className="text-[#2A2012]">{selectedLog.actorId} ({selectedLog.actorRole})</strong>
                 </div>
                 <div>
@@ -239,11 +231,11 @@ export default function AuditCompliancePage() {
                   <strong className="text-[#2A2012]">{selectedLog.targetEntity}</strong>
                 </div>
                 <div>
-                  <span className="text-[10px] text-[#74777F] uppercase block">Network Location / IP</span>
+                  <span className="text-[10px] text-[#74777F] uppercase block">IP</span>
                   <span className="text-[#5C574F]">{selectedLog.ipAddress}</span>
                 </div>
                 <div>
-                  <span className="text-[10px] text-[#74777F] uppercase block">Session Signature</span>
+                  <span className="text-[10px] text-[#74777F] uppercase block">Session</span>
                   <span className="text-[#5C574F] truncate block">{selectedLog.sessionHash}</span>
                 </div>
               </div>
@@ -251,7 +243,7 @@ export default function AuditCompliancePage() {
               {/* Action Description */}
               <div className="p-3.5 bg-[#FAF9F6] rounded-xl border border-gray-200">
                 <span className="font-mono text-[10px] uppercase text-[#74777F] block">
-                  Administrative Directive Description
+                  Action
                 </span>
                 <p className="text-xs text-[#262320] font-medium mt-0.5">
                   {selectedLog.action}
@@ -261,14 +253,14 @@ export default function AuditCompliancePage() {
               {/* Before vs After JSON Diffs */}
               <div className="space-y-2 font-mono">
                 <h4 className="font-serif font-bold text-sm text-[#2A2012]">
-                  State Modification Verification
+                  Changes
                 </h4>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {/* Before State */}
                   <div className="p-3 bg-red-50/70 border border-red-200 rounded-xl space-y-1">
                     <span className="text-[10px] font-bold text-[#B5482E] uppercase block">
-                      Prior State (Before)
+                      Before
                     </span>
                     <pre className="text-[10px] text-red-950 p-2 bg-white/80 rounded-lg overflow-x-auto leading-relaxed border border-red-100">
                       {selectedLog.beforeState
@@ -280,7 +272,7 @@ export default function AuditCompliancePage() {
                   {/* After State */}
                   <div className="p-3 bg-emerald-50/70 border border-emerald-200 rounded-xl space-y-1">
                     <span className="text-[10px] font-bold text-emerald-800 uppercase block">
-                      Committed State (After)
+                      After
                     </span>
                     <pre className="text-[10px] text-emerald-950 p-2 bg-white/80 rounded-lg overflow-x-auto leading-relaxed border border-emerald-100">
                       {selectedLog.afterState
@@ -297,7 +289,7 @@ export default function AuditCompliancePage() {
                   onClick={() => setSelectedLog(null)}
                   className="px-4 py-2 rounded-xl bg-[#946726] text-white text-xs font-bold cursor-pointer"
                 >
-                  Dismiss Inspector
+                  Dismiss
                 </button>
               </div>
 

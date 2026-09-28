@@ -90,19 +90,11 @@ export default function CentralBankAnnouncementsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-6 rounded-3xl border border-[#946726]/15 shadow-xs">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-md bg-[#946726]/10 text-[#946726] font-mono text-[10px] font-bold uppercase tracking-wider border border-[#946726]/20">
-              OFFICIAL REGULATORY BROADCAST
-            </span>
-            <span className="text-[11px] text-emerald-700 font-mono font-bold">
-              • CITIZEN MAILBOX INTERCONNECT
-            </span>
-          </div>
           <h1 className="font-serif font-bold text-2xl text-[#2A2012] mt-1">
-            Central Bank Announcements &amp; Gazettes
+            Announcements
           </h1>
-          <p className="text-xs sm:text-sm text-[#5C574F] mt-0.5 max-w-2xl leading-relaxed">
-            Statutory bulletins, emergency notices, monetary policy adjustments, and targeted circulars. Public announcements automatically synchronize with citizen mailboxes at <code className="text-[#946726] font-mono font-bold">/user/mailbox</code>.
+          <p className="text-xs sm:text-sm text-[#5C574F] mt-0.5">
+            Publish notices and bulletins. Public ones go to citizen mailboxes.
           </p>
         </div>
 
@@ -112,7 +104,7 @@ export default function CentralBankAnnouncementsPage() {
           className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#946726] hover:bg-[#2A2012] text-white text-xs font-bold shadow-xs transition cursor-pointer shrink-0"
         >
           <Plus className="w-3.5 h-3.5" />
-          <span>Broadcast Notice</span>
+          <span>New Post</span>
         </button>
       </div>
 
@@ -144,7 +136,7 @@ export default function CentralBankAnnouncementsPage() {
               }`}
             >
               {aud === 'all'
-                ? 'All Audiences'
+                ? 'All'
                 : aud === 'All Citizens (User Mailbox)'
                 ? 'Citizen Mailbox'
                 : aud}
@@ -158,7 +150,7 @@ export default function CentralBankAnnouncementsPage() {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search bulletins, titles..."
+            placeholder="Search announcements..."
             className="pl-9 pr-4 py-1.5 bg-[#F6F8F7] border border-[#946726]/15 rounded-xl text-xs outline-none focus:border-[#946726] focus:ring-2 focus:ring-[#946726]/15 w-full md:w-64"
           />
         </div>
@@ -224,7 +216,7 @@ export default function CentralBankAnnouncementsPage() {
                   onClick={() => setSelectedAnnouncement(item)}
                   className="px-3.5 py-1.5 rounded-xl bg-[#946726]/10 hover:bg-[#946726] text-[#946726] hover:text-white transition text-xs font-bold cursor-pointer"
                 >
-                  Read Bulletin
+                  Read Post
                 </button>
               </div>
             </div>
@@ -239,7 +231,7 @@ export default function CentralBankAnnouncementsPage() {
             <div className="p-6 bg-[#946726] text-white flex items-center justify-between">
               <div>
                 <span className="font-mono text-[10px] uppercase text-white/70 block">
-                  OFFICIAL GAZETTE DISPATCH
+                  ANNOUNCEMENT
                 </span>
                 <h3 className="font-serif font-bold text-lg text-white">
                   {selectedAnnouncement.id}
@@ -282,7 +274,7 @@ export default function CentralBankAnnouncementsPage() {
                   onClick={() => setSelectedAnnouncement(null)}
                   className="px-4 py-2 rounded-xl bg-[#946726] text-white text-xs font-bold cursor-pointer"
                 >
-                  Close Bulletin
+                  Close
                 </button>
               </div>
             </div>
@@ -297,10 +289,10 @@ export default function CentralBankAnnouncementsPage() {
             <div className="p-5 bg-[#946726] text-white flex items-center justify-between">
               <div>
                 <span className="font-mono text-[10px] uppercase text-white/70 block">
-                  OFFICIAL COMMUNICATIONS CONSOLE
+                  NEW ANNOUNCEMENT
                 </span>
                 <h3 className="font-serif font-bold text-base text-white">
-                  Compose Regulatory Announcement
+                  Write Announcement
                 </h3>
               </div>
               <button
@@ -370,19 +362,19 @@ export default function CentralBankAnnouncementsPage() {
 
               <div>
                 <label className="block font-bold text-[#946726] mb-1">
-                  Full Regulatory Body Text <span className="text-[#B5482E]">*</span>
+                  Full Text <span className="text-[#B5482E]">*</span>
                 </label>
                 <textarea
                   required
                   value={newBody}
                   onChange={(e) => setNewBody(e.target.value)}
-                  placeholder="Official decree text, terms, and statutory enforcement dates..."
+                  placeholder="Write the full announcement text..."
                   className="w-full h-28 p-2.5 bg-white border border-[#946726]/20 rounded-xl outline-none resize-none"
                 />
               </div>
 
               <div className="p-3 bg-purple-50 border border-purple-200 rounded-xl text-[11px] text-purple-900 leading-snug">
-                <strong>Citizen Mailbox Integration:</strong> Bulletins marked for citizens will immediately appear in citizen inboxes under <code>/user/mailbox</code> with statutory authentication badge.
+                <strong>Note:</strong> Citizen-targeted posts appear in <code>/user/mailbox</code>.
               </div>
 
               <div className="pt-2 flex items-center justify-end gap-3">
@@ -398,7 +390,7 @@ export default function CentralBankAnnouncementsPage() {
                   className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-[#946726] hover:bg-[#2A2012] text-white font-bold rounded-xl shadow-xs cursor-pointer"
                 >
                   <Send className="w-3.5 h-3.5" />
-                  <span>Dispatch Official Broadcast</span>
+                  <span>Publish</span>
                 </button>
               </div>
             </form>

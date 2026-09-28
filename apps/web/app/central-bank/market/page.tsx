@@ -43,7 +43,7 @@ export default function MarketOversightPage() {
           const isHalted = c.listingStatus === 'Trading Halted';
           const newStatus = isHalted ? 'Active' : 'Trading Halted';
           setActionNotice(
-            `Regulatory status for ${symbol} set to "${newStatus}". Surveillance bulletin broadcast to central order books.`
+            `Status for ${symbol} set to "${newStatus}". Order books updated.`
           );
           setTimeout(() => setActionNotice(null), 4000);
           return { ...c, listingStatus: newStatus };
@@ -62,26 +62,18 @@ export default function MarketOversightPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-6 rounded-3xl border border-[#946726]/15 shadow-xs">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-md bg-[#946726]/10 text-[#946726] font-mono text-[10px] font-bold uppercase tracking-wider border border-[#946726]/20">
-              EQUITIES SURVEILLANCE
-            </span>
-            <span className="text-[11px] text-[#A8742A] font-mono font-medium">
-              [PROVISIONAL DEMO BENCHMARKS]
-            </span>
-          </div>
           <h1 className="font-serif font-bold text-2xl text-[#2A2012] mt-1">
-            Sovereign Equities Market Oversight
+            Stock Market
           </h1>
-          <p className="text-xs sm:text-sm text-[#5C574F] mt-0.5 max-w-2xl leading-relaxed">
-            Central surveillance over listed sovereign enterprises, order-book volatility circuit limits, corporate regulatory disclosures, and realized profit-only tax compliance.
+          <p className="text-xs sm:text-sm text-[#5C574F] mt-0.5">
+            Monitor listed companies, prices, and trading status.
           </p>
         </div>
 
         <div className="flex items-center gap-2">
           <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-100 text-emerald-800 border border-emerald-300 font-mono text-xs font-bold">
             <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse" />
-            Trading Session: REGULAR (T+0)
+            Market Open
           </span>
         </div>
       </div>
@@ -97,42 +89,42 @@ export default function MarketOversightPage() {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 font-mono text-xs">
         <div className="p-4 bg-white rounded-2xl border border-[#946726]/15 shadow-xs">
           <span className="text-[10px] text-[#74777F] uppercase block font-medium">
-            Total Market Value
+            Market Cap
           </span>
           <div className="text-xl font-bold font-serif text-[#2A2012] mt-1">
             <CentralBankMaskedValue value={totalCap} suffix=" ARTH" />
           </div>
-          <span className="text-[10px] text-emerald-700 mt-0.5 block">6 Listed Equities</span>
+          <span className="text-[10px] text-emerald-700 mt-0.5 block">6 Stocks</span>
         </div>
 
         <div className="p-4 bg-white rounded-2xl border border-[#946726]/15 shadow-xs">
           <span className="text-[10px] text-[#74777F] uppercase block font-medium">
-            24h Equities Volume
+            24h Volume
           </span>
           <div className="text-xl font-bold font-serif text-[#2A2012] mt-1">
             <CentralBankMaskedValue value={totalVol} suffix=" ARTH" />
           </div>
-          <span className="text-[10px] text-[#5C574F] mt-0.5 block">Across Sovereign Tickers</span>
+          <span className="text-[10px] text-[#5C574F] mt-0.5 block">All Stocks</span>
         </div>
 
         <div className="p-4 bg-white rounded-2xl border border-[#946726]/15 shadow-xs">
           <span className="text-[10px] text-[#74777F] uppercase block font-medium">
-            Market Circuit Breaker
+            Circuit Breaker
           </span>
           <div className="text-xl font-bold font-serif text-emerald-700 mt-1">
-            READY (±5.0%)
+            Normal (±5%)
           </div>
-          <span className="text-[10px] text-[#74777F] mt-0.5 block">No intraday trip</span>
+          <span className="text-[10px] text-[#74777F] mt-0.5 block">No triggers</span>
         </div>
 
         <div className="p-4 bg-white rounded-2xl border border-[#946726]/15 shadow-xs">
           <span className="text-[10px] text-[#74777F] uppercase block font-medium">
-            Active Inquiries
+            Inquiries
           </span>
           <div className="text-xl font-bold font-serif text-amber-700 mt-1">
-            1 Under Review
+            1 Review
           </div>
-          <span className="text-[10px] text-amber-700 mt-0.5 block">JVA Biopharm Ticker</span>
+          <span className="text-[10px] text-amber-700 mt-0.5 block">JVA Biopharm</span>
         </div>
       </div>
 
@@ -141,10 +133,10 @@ export default function MarketOversightPage() {
         <div className="p-5 border-b border-[#946726]/10 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
           <div>
             <h3 className="font-serif font-bold text-base text-[#2A2012]">
-              Listed Enterprises &amp; Regulatory Standing
+              Listed Companies
             </h3>
             <p className="text-xs text-[#5C574F]">
-              Real-time ticker surveillance, regulatory status, and supervisory halt controls
+              Prices, status, and halt controls.
             </p>
           </div>
 
@@ -154,7 +146,7 @@ export default function MarketOversightPage() {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search symbol, enterprise name..."
+              placeholder="Search company or symbol..."
               className="pl-9 pr-4 py-1.5 bg-[#F6F8F7] border border-[#946726]/15 rounded-xl text-xs outline-none focus:border-[#946726] focus:ring-2 focus:ring-[#946726]/15 w-full sm:w-64"
             />
           </div>
@@ -164,12 +156,12 @@ export default function MarketOversightPage() {
           <table className="w-full text-left text-xs">
             <thead className="bg-[#F8F9FA] border-b border-[#946726]/10 font-mono text-[10px] text-[#5C574F] uppercase tracking-wider">
               <tr>
-                <th className="p-4">Symbol &amp; Enterprise</th>
-                <th className="p-4">Market Price</th>
-                <th className="p-4">24h Shift</th>
+                <th className="p-4">Company</th>
+                <th className="p-4">Price</th>
+                <th className="p-4">24h Change</th>
                 <th className="p-4">Market Cap</th>
-                <th className="p-4">Listing Status</th>
-                <th className="p-4">Regulatory Standing</th>
+                <th className="p-4">Status</th>
+                <th className="p-4">Compliance</th>
                 <th className="p-4 text-right">Actions</th>
               </tr>
             </thead>
@@ -249,7 +241,7 @@ export default function MarketOversightPage() {
                           onClick={() => setSelectedCompany(comp)}
                           className="px-2.5 py-1 rounded-lg bg-[#946726]/10 hover:bg-[#946726] text-[#946726] hover:text-white transition text-[11px] font-bold cursor-pointer"
                         >
-                          Surveillance File
+                          Details
                         </button>
                         <button
                           type="button"
@@ -279,7 +271,7 @@ export default function MarketOversightPage() {
             <div className="p-6 bg-[#946726] text-white flex items-center justify-between">
               <div>
                 <span className="font-mono text-[10px] uppercase text-white/70 block">
-                  EQUITIES REGULATORY AUDIT
+                  COMPANY DETAILS
                 </span>
                 <h3 className="font-serif font-bold text-lg text-white">
                   {selectedCompany.symbol} — {selectedCompany.name}
@@ -298,11 +290,11 @@ export default function MarketOversightPage() {
               
               <div className="p-4 bg-white rounded-2xl border border-[#946726]/15 space-y-2 font-mono text-[11px]">
                 <div className="flex justify-between">
-                  <span>Current Price:</span>
+                  <span>Price:</span>
                   <strong className="text-[#2A2012]">{selectedCompany.marketPrice} ARTH</strong>
                 </div>
                 <div className="flex justify-between">
-                  <span>Market Valuation:</span>
+                  <span>Market Cap:</span>
                   <strong className="text-[#2A2012]">{selectedCompany.marketCap.toLocaleString('en-US')} ARTH</strong>
                 </div>
                 <div className="flex justify-between">
@@ -310,11 +302,11 @@ export default function MarketOversightPage() {
                   <strong className="text-[#2A2012]">{selectedCompany.freeFloatPercent}%</strong>
                 </div>
                 <div className="flex justify-between">
-                  <span>Dividend Yield:</span>
+                  <span>Dividend:</span>
                   <strong className="text-emerald-700">{selectedCompany.dividendYield}% p.a.</strong>
                 </div>
                 <div className="flex justify-between">
-                  <span>Last Statutory Filing:</span>
+                  <span>Last Filing:</span>
                   <strong className="text-[#946726]">{selectedCompany.lastFilingDate}</strong>
                 </div>
               </div>
@@ -323,7 +315,7 @@ export default function MarketOversightPage() {
                 <div className="p-4 bg-red-50 border border-[#B5482E]/30 text-[#B5482E] rounded-2xl space-y-1">
                   <strong className="font-bold flex items-center gap-1.5">
                     <AlertTriangle className="w-4 h-4" />
-                    Active Surveillance Inquiry
+                    Active Inquiry
                   </strong>
                   <p className="text-[11px] leading-relaxed">
                     {selectedCompany.activeInquiryNote}
@@ -340,14 +332,14 @@ export default function MarketOversightPage() {
                   }}
                   className="px-4 py-2 rounded-xl bg-[#B5482E] hover:bg-[#9B3C25] text-white text-xs font-bold transition cursor-pointer"
                 >
-                  {selectedCompany.listingStatus === 'Trading Halted' ? 'Lift Trading Halt' : 'Execute Immediate Trading Halt'}
+                  {selectedCompany.listingStatus === 'Trading Halted' ? 'Resume Trading' : 'Halt Trading'}
                 </button>
                 <button
                   type="button"
                   onClick={() => setSelectedCompany(null)}
                   className="px-4 py-2 rounded-xl border border-gray-300 text-[#5C574F] text-xs font-semibold cursor-pointer"
                 >
-                  Close File
+                  Close
                 </button>
               </div>
 

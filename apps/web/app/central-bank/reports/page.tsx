@@ -3,19 +3,11 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import {
-  FileSpreadsheet,
-  Download,
-  Calendar,
-  Filter,
   Search,
   CheckCircle2,
-  FileText,
-  Clock,
   ArrowDownToLine,
   Eye,
-  ShieldCheck,
   X,
-  Share2,
 } from 'lucide-react';
 import {
   MOCK_REGULATORY_REPORTS,
@@ -68,27 +60,12 @@ export default function CentralBankReportsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-6 rounded-3xl border border-[#946726]/15 shadow-xs">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-md bg-[#946726]/10 text-[#946726] font-mono text-[10px] font-bold uppercase tracking-wider border border-[#946726]/20">
-              OFFICIAL REGULATORY ARCHIVE
-            </span>
-            <span className="text-[11px] text-[#A8742A] font-mono font-medium">
-              12 AUDITED CATEGORIES
-            </span>
-          </div>
           <h1 className="font-serif font-bold text-2xl text-[#2A2012] mt-1">
-            System-Wide Reports &amp; Gazettes
+            Reports
           </h1>
-          <p className="text-xs sm:text-sm text-[#5C574F] mt-0.5 max-w-2xl leading-relaxed">
-            Statutory macroeconomic datasets, money supply audits, inter-bank CLS clearing summaries, prudential stress tests, and tax yield assessments.
+          <p className="text-xs sm:text-sm text-[#5C574F] mt-0.5">
+            View and download financial reports.
           </p>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#946726]/10 text-[#946726] font-mono text-xs font-bold border border-[#946726]/20">
-            <FileSpreadsheet className="w-3.5 h-3.5" />
-            <span>Archive Synchronized</span>
-          </span>
         </div>
       </div>
 
@@ -103,7 +80,7 @@ export default function CentralBankReportsPage() {
       <div className="bg-white p-4 rounded-2xl border border-[#946726]/15 shadow-xs space-y-3">
         <div className="flex items-center justify-between">
           <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#946726]/70">
-            Filter by Supervisory Scope
+            Category
           </span>
           <div className="relative w-full sm:w-64">
             <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[#74777F]" />
@@ -129,7 +106,7 @@ export default function CentralBankReportsPage() {
                   : 'text-[#5C574F] hover:text-[#946726] bg-[#F6F8F7]'
               }`}
             >
-              {cat === 'all' ? 'All Gazettes' : cat}
+              {cat === 'all' ? 'All' : cat}
             </button>
           ))}
         </div>
@@ -141,10 +118,10 @@ export default function CentralBankReportsPage() {
           <table className="w-full text-left text-xs">
             <thead className="bg-[#F8F9FA] border-b border-[#946726]/10 font-mono text-[10px] text-[#5C574F] uppercase tracking-wider">
               <tr>
-                <th className="p-4">Report Identifier</th>
+                <th className="p-4">Report</th>
                 <th className="p-4">Category</th>
-                <th className="p-4">Accounting Period</th>
-                <th className="p-4">Security Clearance</th>
+                <th className="p-4">Period</th>
+                <th className="p-4">Access Level</th>
                 <th className="p-4">Format</th>
                 <th className="p-4 text-right">Actions</th>
               </tr>
@@ -195,7 +172,7 @@ export default function CentralBankReportsPage() {
                         type="button"
                         onClick={() => setSelectedReport(report)}
                         className="p-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-[#2A2012] transition cursor-pointer"
-                        title="Inspect Summary"
+                        title="View"
                       >
                         <Eye className="w-3.5 h-3.5" />
                       </button>
@@ -205,7 +182,7 @@ export default function CentralBankReportsPage() {
                         className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-[#946726] hover:bg-[#2A2012] text-white text-xs font-bold transition shadow-xs cursor-pointer"
                       >
                         <ArrowDownToLine className="w-3.5 h-3.5" />
-                        <span>Export</span>
+                        <span>Download</span>
                       </button>
                     </div>
                   </td>
@@ -223,7 +200,7 @@ export default function CentralBankReportsPage() {
             <div className="p-6 bg-[#946726] text-white flex items-center justify-between">
               <div>
                 <span className="font-mono text-[10px] uppercase text-white/70 block">
-                  REGULATORY REPORT DOSSIER
+                  REPORT DETAILS
                 </span>
                 <h3 className="font-serif font-bold text-lg text-white">
                   {selectedReport.id}
@@ -252,7 +229,7 @@ export default function CentralBankReportsPage() {
 
               <div className="p-4 bg-white rounded-2xl border border-[#946726]/15 space-y-2 shadow-xs">
                 <span className="font-mono text-[10px] uppercase tracking-wider text-[#74777F] block">
-                  Executive Abstract
+                  Summary
                 </span>
                 <p className="text-xs text-[#262320] leading-relaxed">
                   {selectedReport.summary}
@@ -280,7 +257,7 @@ export default function CentralBankReportsPage() {
                   className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#946726] hover:bg-[#2A2012] text-white text-xs font-bold transition shadow-xs cursor-pointer"
                 >
                   <ArrowDownToLine className="w-3.5 h-3.5" />
-                  <span>Download Signed {selectedReport.format}</span>
+                  <span>Download ({selectedReport.format})</span>
                 </button>
                 <button
                   type="button"

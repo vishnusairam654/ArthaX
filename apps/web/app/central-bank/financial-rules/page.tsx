@@ -59,7 +59,7 @@ export default function FinancialRulesPage() {
       setRules(Array.isArray(data) ? data : []);
     } catch (err: any) {
       console.error('Failed to load financial rules:', err);
-      setError(err?.message || 'Failed to query sovereign monetary policy statutes');
+      setError(err?.message || 'Failed to load financial rules');
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -91,7 +91,7 @@ export default function FinancialRulesPage() {
   const handleCreateRule = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newKey || !newTitle || !newFinancialPassword) {
-      setError('Please provide rule key, title, and your sovereign Financial Password.');
+      setError('Please provide rule key, title, and your Financial Password.');
       return;
     }
 
@@ -103,7 +103,7 @@ export default function FinancialRulesPage() {
         category: newCategory,
         currentValue: Number(newValue),
         unit: newUnit.trim(),
-        description: newDesc.trim() || 'Central sovereign economic parameter promulgated under statutory decree.',
+        description: newDesc.trim() || 'Economic parameter set by central bank.',
         statutoryBasis: newStatutoryBasis.trim() || 'Central Banking Act 2026, Section 14',
         financialPassword: newFinancialPassword,
       };
@@ -129,19 +129,11 @@ export default function FinancialRulesPage() {
       {/* Header Banner */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-6 rounded-3xl border border-[#946726]/15 shadow-xs">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-md bg-[#946726]/10 text-[#946726] font-mono text-[10px] font-bold uppercase tracking-wider border border-[#946726]/20">
-              MONETARY POLICY STATUTES
-            </span>
-            <span className="text-[11px] text-[#A8742A] font-mono font-medium">
-              [LIVE CENTRAL POLICY LEDGER]
-            </span>
-          </div>
           <h1 className="font-serif font-bold text-2xl text-[#2A2012] mt-1">
-            Financial Rules &amp; Macro-Prudential Directives
+            Financial Rules
           </h1>
-          <p className="text-xs sm:text-sm text-[#5C574F] mt-0.5 max-w-2xl leading-relaxed">
-            Statutory policy parameter thresholds, statutory reserve mandates, daily settlement limits, and capital adequacy ratio benchmarks across the sovereign network.
+          <p className="text-xs sm:text-sm text-[#5C574F] mt-0.5">
+            Set rates, limits, and reserve requirements.
           </p>
         </div>
 
@@ -161,7 +153,7 @@ export default function FinancialRulesPage() {
             className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#946726] hover:bg-[#2A2012] text-white text-xs font-bold transition shadow-xs cursor-pointer"
           >
             <Plus className="w-4 h-4" />
-            <span>Draft New Directive</span>
+            <span>Add Rule</span>
           </button>
         </div>
       </div>
@@ -203,7 +195,7 @@ export default function FinancialRulesPage() {
                   : 'text-[#5C574F] hover:text-[#946726] bg-[#F6F8F7]'
               }`}
             >
-              {cat === 'all' ? `All Statutes (${rules.length})` : cat}
+              {cat === 'all' ? `All Rules (${rules.length})` : cat}
             </button>
           ))}
         </div>
@@ -214,7 +206,7 @@ export default function FinancialRulesPage() {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search directives by key or title..."
+            placeholder="Search rules..."
             className="pl-9 pr-4 py-1.5 bg-[#F6F8F7] border border-[#946726]/15 rounded-xl text-xs outline-none focus:border-[#946726] focus:ring-2 focus:ring-[#946726]/15 w-full md:w-64"
           />
         </div>
@@ -225,13 +217,13 @@ export default function FinancialRulesPage() {
         {loading ? (
           <div className="col-span-3 py-16 text-center text-[#74777F]">
             <RefreshCw className="w-6 h-6 animate-spin mx-auto mb-2 text-[#946726]" />
-            <span>Querying active monetary policy statutes...</span>
+            <span>Loading...</span>
           </div>
         ) : filteredRules.length === 0 ? (
           <div className="col-span-3 py-16 text-center text-[#74777F]">
             <Scale className="w-8 h-8 text-[#946726] mx-auto mb-2 opacity-50" />
-            <span className="font-serif font-bold text-sm text-[#2A2012] block">No Statutes Match Filter</span>
-            <span className="text-xs text-[#5C574F]">No policy rules match your search query.</span>
+            <span className="font-serif font-bold text-sm text-[#2A2012] block">No Rules Found</span>
+            <span className="text-xs text-[#5C574F]">No rules match your search.</span>
           </div>
         ) : (
           filteredRules.map((rule) => (
@@ -260,7 +252,7 @@ export default function FinancialRulesPage() {
 
                 <div className="p-3.5 bg-[#F6F8F7] rounded-2xl border border-[#946726]/10 font-mono">
                   <span className="text-[9px] uppercase tracking-wider text-[#74777F] block">
-                    Statutory Parameter Value
+                    Current Value
                   </span>
                   <div className="text-base font-bold text-[#2A2012] mt-0.5">
                     {rule.currentValue} {rule.unit}
@@ -281,11 +273,9 @@ export default function FinancialRulesPage() {
                   className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-[#946726]/10 hover:bg-[#946726] text-[#946726] hover:text-white transition text-xs font-bold cursor-pointer"
                 >
                   <History className="w-3.5 h-3.5" />
-                  <span>Inspect Directive</span>
+                  <span>View Details</span>
                 </button>
-                <span className="text-[10px] font-mono text-[#A8742A]">
-                  Central Bank Directive
-                </span>
+
               </div>
             </div>
           ))
@@ -302,10 +292,10 @@ export default function FinancialRulesPage() {
             <div className="p-5 bg-gradient-to-br from-[#946726] via-[#B88B38] to-[#7A5217] text-white flex items-center justify-between">
               <div>
                 <span className="font-mono text-[10px] uppercase text-[#F5E1B2] block font-bold">
-                  CENTRAL BANK DIRECTIVE FORMULATION
+                  NEW RULE
                 </span>
                 <h3 className="font-serif font-bold text-base text-white">
-                  Gazette New Policy Statute
+                  Add Financial Rule
                 </h3>
               </div>
               <button
@@ -319,7 +309,7 @@ export default function FinancialRulesPage() {
 
             <form onSubmit={handleCreateRule} className="p-6 space-y-4 text-xs font-sans">
               <div>
-                <label className="block font-bold text-[#2A2012] mb-1">Statute Key Code</label>
+                <label className="block font-bold text-[#2A2012] mb-1">Rule Key</label>
                 <input
                   type="text"
                   required
@@ -382,7 +372,7 @@ export default function FinancialRulesPage() {
               </div>
 
               <div>
-                <label className="block font-bold text-[#2A2012] mb-1">Statutory Basis</label>
+                <label className="block font-bold text-[#2A2012] mb-1">Legal Basis</label>
                 <input
                   type="text"
                   required
@@ -401,18 +391,18 @@ export default function FinancialRulesPage() {
                   autoComplete="off"
                   value={newFinancialPassword}
                   onChange={(e) => setNewFinancialPassword(e.target.value)}
-                  placeholder="Enter sovereign financial password"
+                  placeholder="Enter financial password"
                   className="w-full p-2.5 rounded-xl border border-[#946726]/20 font-mono text-xs outline-none focus:border-[#946726]"
                 />
               </div>
 
               <div>
-                <label className="block font-bold text-[#2A2012] mb-1">Policy Description &amp; Rationale</label>
+                <label className="block font-bold text-[#2A2012] mb-1">Description</label>
                 <textarea
                   rows={3}
                   value={newDesc}
                   onChange={(e) => setNewDesc(e.target.value)}
-                  placeholder="Statutory objective, statutory threshold, and regulatory mandate..."
+                  placeholder="What does this rule do?"
                   className="w-full p-2.5 rounded-xl border border-[#946726]/20 text-xs outline-none focus:border-[#946726]"
                 />
               </div>
@@ -430,7 +420,7 @@ export default function FinancialRulesPage() {
                   disabled={submitting}
                   className="px-5 py-2 rounded-xl bg-[#946726] hover:bg-[#2A2012] text-white text-xs font-bold transition shadow-xs disabled:opacity-50"
                 >
-                  {submitting ? 'Gazetting...' : 'Gazette Directive'}
+                  {submitting ? 'Saving...' : 'Save Rule'}
                 </button>
               </div>
             </form>
@@ -453,7 +443,7 @@ export default function FinancialRulesPage() {
             <div className="p-5 bg-gradient-to-br from-[#946726] via-[#B88B38] to-[#7A5217] text-white flex items-center justify-between">
               <div>
                 <span className="font-mono text-[10px] uppercase text-[#F5E1B2] block font-bold">
-                  STATUTE AUDIT DOSSIER
+                  RULE DETAILS
                 </span>
                 <h3 className="font-serif font-bold text-base text-white">
                   {selectedRule.key || selectedRule.id} — {selectedRule.title}
@@ -470,16 +460,16 @@ export default function FinancialRulesPage() {
 
             <div className="p-6 space-y-4 text-xs font-sans bg-[#FDFBF7]">
               <div className="p-3 bg-white rounded-xl border border-[#946726]/15 space-y-1 font-mono text-[11px]">
-                <div>Statute Key: <strong>{selectedRule.key || selectedRule.id}</strong></div>
+                <div>Rule Key: <strong>{selectedRule.key || selectedRule.id}</strong></div>
                 <div>Category: <strong>{selectedRule.category}</strong></div>
-                <div>Current Benchmark: <strong>{selectedRule.currentValue} {selectedRule.unit}</strong></div>
-                <div>Promulgated: <strong>{selectedRule.effectiveDate || 'Current Sovereign Epoch'}</strong></div>
+                <div>Value: <strong>{selectedRule.currentValue} {selectedRule.unit}</strong></div>
+                <div>Effective: <strong>{selectedRule.effectiveDate || 'Current'}</strong></div>
               </div>
 
               {selectedRule.description && (
                 <div className="p-3 bg-white rounded-xl border border-[#946726]/15">
                   <span className="text-[10px] font-mono text-[#74777F] uppercase block mb-1">
-                    Regulatory Mandate
+                    Description
                   </span>
                   <p className="text-xs text-[#2A2012] leading-relaxed">
                     {selectedRule.description}
