@@ -4,6 +4,8 @@ import React from 'react';
 import Image from 'next/image';
 import { RefreshCw, Plus, CheckCircle2, Link2 } from 'lucide-react';
 import { AnimatedMaskedValue } from './AnimatedMaskedValue';
+import { apiFetchUserAccounts, subscribePortalDataInvalidation } from '@/lib/api';
+import { BankAccountDto } from '@arthax/types';
 
 interface ConnectedBanksSectionProps {
   isMasked: boolean;
@@ -32,8 +34,8 @@ const banks: BankItem[] = [
     tag: 'Primary Node',
     tagColor: 'bg-[#A8F5BF]/80 text-[#002110]',
     purpose: 'Salary & Operating',
-    balance: '185,420.00',
-    meta: 'CLS Synced',
+    balance: '0.00',
+    meta: 'Primary Sovereign Node',
     isPrimary: true,
     logo: '/assets/banks/nava_bank.png',
   },
@@ -44,8 +46,8 @@ const banks: BankItem[] = [
     tag: 'Term Vault',
     tagColor: 'bg-[#DBE1FF] text-[#031847]',
     purpose: 'Wealth & Term High APY',
-    balance: '82,100.00',
-    meta: '6.85% FD Rate',
+    balance: '0.00',
+    meta: 'Not Linked',
     logo: '/assets/banks/samaya_bank.png',
   },
   {
@@ -55,8 +57,8 @@ const banks: BankItem[] = [
     tag: 'Cross-Border',
     tagColor: 'bg-[#E5EFFF] text-[#121C28]',
     purpose: 'Inter-Bank Clearing',
-    balance: '42,600.00',
-    meta: 'FX Ready (ISO 20022)',
+    balance: '0.00',
+    meta: 'Not Linked',
     logo: '/assets/banks/setu_bank.png',
   },
   {
@@ -66,8 +68,8 @@ const banks: BankItem[] = [
     tag: 'Custody',
     tagColor: 'bg-[#E5EFFF] text-[#121C28]',
     purpose: 'Long-Term Escrow',
-    balance: '35,000.00',
-    meta: '7.20% APY Tier',
+    balance: '0.00',
+    meta: 'Not Linked',
     logo: '/assets/banks/sthira_bank.png',
   },
   {
@@ -78,7 +80,7 @@ const banks: BankItem[] = [
     tagColor: 'bg-[#E0E2EC] text-[#43474E]',
     purpose: 'Instant Daily Liquidity',
     balance: '0.00',
-    meta: 'Link Account',
+    meta: 'Not Linked',
     logo: '/assets/banks/vayu_bank.png',
   },
 ];
@@ -88,6 +90,51 @@ export const ConnectedBanksSection: React.FC<ConnectedBanksSectionProps> = ({
   selectedBank,
   onSelectBank,
 }) => {
+  const [userAccounts, setUserAccounts] = React.useState<BankAccountDto[]>([]);
+
+  React.useEffect(() => {
+    let isMounted = true;
+    const loadAccounts = () => {
+      apiFetchUserAccounts()
+        .then((accts) => {
+          if (isMounted) setUserAccounts(accts);
+        })
+        .catch(() => {});
+    };
+    loadAccounts();
+    const unsub = subscribePortalDataInvalidation(loadAccounts);
+    return () => {
+      isMounted = false;
+      unsub();
+    };
+  }, []);
+
+  const displayBanks = React.useMemo(() => {
+    return banks.map((b) => {
+      const acct = userAccounts.find((a) => a.bankId?.toLowerCase() === b.id.toLowerCase());
+      if (acct) {
+        const bal = (Number(acct.balanceMinor) / 100).toLocaleString('en-US', {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        });
+        return {
+          ...b,
+          balance: bal,
+          meta: acct.accountNumber,
+          tag: 'Connected',
+          tagColor: 'bg-[#A8F5BF]/80 text-[#002110]',
+        };
+      }
+      return {
+        ...b,
+        balance: '0.00',
+        meta: 'Not Linked',
+        tag: 'Not Linked',
+        tagColor: 'bg-[#E0E2EC] text-[#43474E]',
+      };
+    });
+  }, [userAccounts]);
+
   return (
     <section className="space-y-4" id="banks">
       {/* Section Header */}
@@ -97,7 +144,7 @@ export const ConnectedBanksSection: React.FC<ConnectedBanksSectionProps> = ({
             Connected Banking Nodes
           </h2>
           <span className="px-3 py-1 bg-[#DBE1FF] text-[#031847] rounded-full font-mono text-xs font-semibold">
-            5 Institutions Active
+            {userAccounts.length} Connected / 5 Total
           </span>
         </div>
 
@@ -121,7 +168,7 @@ export const ConnectedBanksSection: React.FC<ConnectedBanksSectionProps> = ({
 
       {/* Responsive Bank Grid (5 Cards) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-        {banks.map((bank) => {
+        {displayBanks.map((bank) => {
           const isSelected = selectedBank === bank.id;
 
           return (

@@ -163,8 +163,15 @@ export class ClsService {
         referenceNumber: `CLS-HOLD-${reference}`,
         amountMinor: params.amountMinor,
         initiatedBy: params.initiatedByUserId,
+        sourceAccountId: params.sourceAccountId,
+        settlementId: entity.id,
         scope: 'INTER_BANK',
         idempotencyKey: `idem_leg1_${reference}`,
+        metadata: {
+          clsSettlementId: entity.id,
+          clsReference: reference,
+          leg: 1,
+        },
         entries: [
           {
             ledgerAccountId: sourceAcct.ledgerAccountId,
@@ -222,11 +229,7 @@ export class ClsService {
       throw new NotFoundException(`Settlement [${settlementId}] not found.`);
     }
 
-    if (entity.stage === 'COMPLETED') {
-      return this.mapToDto(entity);
-    }
-
-    if (entity.stage === 'FAILED' || entity.stage === 'REVERSED') {
+    if (entity.stage !== 'PROCESSING') {
       throw new BadRequestException(
         `Cannot execute Leg 2: settlement [${entity.reference}] is in terminal state [${entity.stage}].`,
       );
@@ -267,9 +270,16 @@ export class ClsService {
         type: 'TRANSFER',
         referenceNumber: `CLS-SETTLE-${entity.reference}`,
         amountMinor: entity.amountMinor,
-        initiatedBy: 'sys_cls_clearing_engine',
+        initiatedBy: entity.initiatedByUserId,
+        destinationAccountId: entity.destinationAccountId,
+        settlementId: entity.id,
         scope: 'INTER_BANK',
         idempotencyKey: `idem_leg2_${entity.reference}`,
+        metadata: {
+          clsSettlementId: entity.id,
+          clsReference: entity.reference,
+          leg: 2,
+        },
         entries: [
           {
             ledgerAccountId: SOVEREIGN_SYSTEM_ACCOUNTS.CLS_CLEARING,

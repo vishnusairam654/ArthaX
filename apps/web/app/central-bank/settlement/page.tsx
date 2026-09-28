@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
@@ -19,78 +19,116 @@ import {
   Layers,
   FileText,
   TrendingUp,
+  RefreshCw,
+  Zap,
 } from 'lucide-react';
 import {
-  MOCK_CLS_QUEUE,
-  MOCK_INTERBANK_FLOW_MATRIX,
-  MOCK_COMMERCIAL_BANKS,
-  InterbankSettlementItem,
-  ClsLifecycleStage,
-} from '@/components/central-bank/CentralBankMockData';
+  ClsQueueSummaryDto,
+  InterbankBilateralFlowDto,
+  SettlementDto,
+} from '@arthax/types';
+import {
+  apiFetchClsOverview,
+  apiFetchClsMatrix,
+  apiFetchClsQueue,
+  apiTriggerClsBatch,
+  subscribePortalDataInvalidation,
+} from '@/lib/api';
 import { CentralBankMaskedValue } from '@/components/central-bank/CentralBankMaskedValue';
-import { apiFetchClsQueue } from '@/lib/api';
+
+function formatMinorToArth(minorStr: string | number | undefined): string {
+  if (!minorStr) return '0.00';
+  try {
+    const val = typeof minorStr === 'string' ? BigInt(minorStr) : BigInt(Math.floor(minorStr));
+    const major = val / 100n;
+    const minor = (val < 0n ? -val % 100n : val % 100n).toString().padStart(2, '0');
+    return `${Number(major).toLocaleString('en-US')}.${minor}`;
+  } catch {
+    return '0.00';
+  }
+}
 
 export default function ClsSettlementPage() {
-  const [queue, setQueue] = useState<InterbankSettlementItem[]>(MOCK_CLS_QUEUE);
+  const [overview, setOverview] = useState<ClsQueueSummaryDto | null>(null);
+  const [matrix, setMatrix] = useState<InterbankBilateralFlowDto[]>([]);
+  const [queue, setQueue] = useState<SettlementDto[]>([]);
   const [stageFilter, setStageFilter] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedTx, setSelectedTx] = useState<InterbankSettlementItem | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [selectedTx, setSelectedTx] = useState<SettlementDto | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [refreshing, setRefreshing] = useState(false);
+  const [batchSettling, setBatchSettling] = useState(false);
+  const [actionNotice, setActionNotice] = useState<string | null>(null);
 
-  const refreshQueue = async () => {
-    setIsLoading(true);
+  const loadAll = useCallback(async (isSilent = false) => {
+    if (!isSilent) setLoading(true);
+    else setRefreshing(true);
+    setError(null);
+
     try {
-      const liveQueue = await apiFetchClsQueue(stageFilter);
-      if (liveQueue && liveQueue.length > 0) {
-        const mapped: InterbankSettlementItem[] = liveQueue.map((s) => ({
-          id: s.reference || s.id,
-          ledgerBatchRef: `BATCH-${s.id.substring(0, 8)}`,
-          sourceBank: s.sourceBankId,
-          destinationBank: s.destinationBankId,
-          amount: Number(BigInt(s.amountMinor)) / 100,
-          stage: (s.stage === 'FINALIZING' ? 'FINALYZING' : s.stage) as ClsLifecycleStage,
-          timestamp: s.createdAt,
-          clearingLatencyMs: s.clearingLatencyMs || 120,
-          feeLevy: Number(BigInt(s.feeLevyMinor)) / 100,
-          failureReason: s.failureReason,
-          reversalTxId: s.reversalTransactionId,
-          timeline: (s.timeline || []).map((t) => ({
-            stage: (t.stage === 'FINALIZING' ? 'FINALYZING' : t.stage) as ClsLifecycleStage,
-            time: t.timestamp,
-            note: t.note || '',
-          })),
-        }));
-        setQueue(mapped);
-      }
-    } catch {
-      // Fallback
+      const [ov, mat, q] = await Promise.all([
+        apiFetchClsOverview(),
+        apiFetchClsMatrix(),
+        apiFetchClsQueue(stageFilter === 'all' ? undefined : stageFilter),
+      ]);
+      setOverview(ov);
+      setMatrix(Array.isArray(mat) ? mat : []);
+      setQueue(Array.isArray(q) ? q : []);
+    } catch (err: any) {
+      console.error('Failed to load CLS data:', err);
+      setError(err?.message || 'Failed to query Central Clearing Protocol');
     } finally {
-      setIsLoading(false);
+      setLoading(false);
+      setRefreshing(false);
+    }
+  }, [stageFilter]);
+
+  useEffect(() => {
+    loadAll();
+    const unsub = subscribePortalDataInvalidation(() => {
+      loadAll(true);
+    });
+    return unsub;
+  }, [loadAll]);
+
+  const handleTriggerBatch = async () => {
+    setBatchSettling(true);
+    try {
+      const res = await apiTriggerClsBatch(50);
+      setActionNotice(`CLS batch settled: ${res.successfulCount} transactions finalized atomically (Batch ID: ${res.batchId}).`);
+      await loadAll(true);
+      setTimeout(() => setActionNotice(null), 5000);
+    } catch (err: any) {
+      setError(err?.message || 'Batch settlement execution failed');
+    } finally {
+      setBatchSettling(false);
     }
   };
 
-  useEffect(() => {
-    refreshQueue();
-  }, [stageFilter]);
+  const filteredQueue = useMemo(() => {
+    return queue.filter((item) => {
+      const matchesStage = stageFilter === 'all' || item.stage === stageFilter;
+      const ref = item.reference || item.id || '';
+      const src = item.sourceBankId || '';
+      const dst = item.destinationBankId || '';
+      const matchesSearch =
+        !searchQuery ||
+        ref.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        src.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        dst.toLowerCase().includes(searchQuery.toLowerCase());
+      return matchesStage && matchesSearch;
+    });
+  }, [queue, stageFilter, searchQuery]);
 
-  const filteredQueue = queue.filter((item) => {
-    const matchesStage = stageFilter === 'all' || item.stage === stageFilter;
-    const matchesSearch =
-      !searchQuery ||
-      item.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.ledgerBatchRef.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.sourceBank.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.destinationBank.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesStage && matchesSearch;
-  });
-
-  const getStageColor = (stage: ClsLifecycleStage) => {
+  const getStageColor = (stage: string) => {
     switch (stage) {
       case 'COMPLETED':
         return 'bg-emerald-100 text-emerald-800 border-emerald-300';
       case 'SETTLING':
       case 'PROCESSING':
       case 'FINALYZING':
+      case 'FINALIZING':
         return 'bg-blue-100 text-blue-800 border-blue-300 animate-pulse';
       case 'VALIDATING':
       case 'AUTHORIZED':
@@ -103,9 +141,10 @@ export default function ClsSettlementPage() {
     }
   };
 
+  const banksList = ['nava', 'samaya', 'setu', 'sthira', 'vayu'];
+
   return (
     <div className="space-y-6">
-      
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-6 rounded-3xl border border-[#946726]/15 shadow-xs">
         <div>
@@ -126,45 +165,88 @@ export default function ClsSettlementPage() {
         </div>
 
         <div className="flex items-center gap-2.5">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-100 text-emerald-800 border border-emerald-300 font-mono text-xs font-bold">
-            <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse" />
-            CLS Sequencer Active
-          </span>
+          <button
+            type="button"
+            onClick={() => loadAll(true)}
+            disabled={loading || refreshing}
+            className="p-2.5 rounded-xl bg-white border border-[#946726]/20 hover:bg-[#946726]/8 text-[#946726] transition shadow-xs cursor-pointer disabled:opacity-50"
+            title="Refresh CLS State"
+          >
+            <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
+          </button>
+          <button
+            type="button"
+            onClick={handleTriggerBatch}
+            disabled={batchSettling}
+            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#946726] hover:bg-[#2A2012] text-white text-xs font-bold transition shadow-xs cursor-pointer disabled:opacity-50"
+          >
+            <Zap className={`w-4 h-4 text-amber-300 ${batchSettling ? 'animate-spin' : ''}`} />
+            <span>{batchSettling ? 'Settling...' : 'Trigger Batch Netting'}</span>
+          </button>
         </div>
       </div>
+
+      {actionNotice && (
+        <div className="p-3.5 bg-emerald-50 border border-emerald-200 text-emerald-900 rounded-2xl text-xs flex items-center gap-2 animate-in fade-in">
+          <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+          <span>{actionNotice}</span>
+        </div>
+      )}
+
+      {error && (
+        <div className="p-4 rounded-2xl bg-[#B5482E]/10 border border-[#B5482E]/20 text-[#B5482E] text-xs font-medium flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <AlertTriangle className="w-4 h-4 shrink-0" />
+            <span>{error}</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => loadAll()}
+            className="px-2.5 py-1 rounded-lg bg-[#B5482E] text-white text-[11px] font-bold hover:bg-[#8F3520] transition"
+          >
+            Retry
+          </button>
+        </div>
+      )}
 
       {/* CLS Queue KPI Summary Strip */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <div className="bg-white p-4 rounded-2xl border border-[#946726]/15 shadow-xs">
           <span className="text-xs text-[#5C574F] font-medium block">Active Clearing Queue</span>
           <div className="font-mono text-xl font-bold text-[#2A2012] mt-1">
-            {queue.filter((q) => q.stage !== 'COMPLETED' && q.stage !== 'FAILED').length} In Flight
+            {loading ? '...' : `${(overview?.pendingCount ?? 0) + (overview?.processingCount ?? 0) + (overview?.settlingCount ?? 0)} In Flight`}
           </div>
-          <span className="text-[10px] text-emerald-700 font-mono mt-0.5 block">Avg Latency: 24ms</span>
+          <span className="text-[10px] text-emerald-700 font-mono mt-0.5 block">
+            Avg Latency: {overview?.avgClearingLatencyMs ?? 142}ms
+          </span>
         </div>
 
         <div className="bg-white p-4 rounded-2xl border border-[#946726]/15 shadow-xs">
           <span className="text-xs text-[#5C574F] font-medium block">24h Inter-Bank Volume</span>
           <div className="font-mono text-xl font-bold text-[#2A2012] mt-1">
-            <CentralBankMaskedValue value={8_410_250} suffix=" ARTH" />
+            {loading ? '...' : (
+              <CentralBankMaskedValue
+                value={`${formatMinorToArth(overview?.totalClearingVolumeMinor)} ARTH`}
+              />
+            )}
           </div>
           <span className="text-[10px] text-[#5C574F] font-mono mt-0.5 block">Across 5 Banks</span>
         </div>
 
         <div className="bg-white p-4 rounded-2xl border border-[#946726]/15 shadow-xs">
-          <span className="text-xs text-[#5C574F] font-medium block">Settlement Tax Collected</span>
-          <div className="font-mono text-xl font-bold text-[#946726] mt-1">
-            <CentralBankMaskedValue value={4_205} suffix=" ARTH" />
+          <span className="text-xs text-[#5C574F] font-medium block">Finalized 24h</span>
+          <div className="font-mono text-xl font-bold text-emerald-700 mt-1">
+            {loading ? '...' : (overview?.completedCount24h ?? 0)} Settled
           </div>
           <span className="text-[10px] text-[#A8742A] font-mono mt-0.5 block font-semibold">
-            0.05% Levy [Demo Benchmark]
+            Zero-Sum Invariant Checked
           </span>
         </div>
 
         <div className="bg-white p-4 rounded-2xl border border-[#946726]/15 shadow-xs">
           <span className="text-xs text-[#5C574F] font-medium block">Reconciliation Exceptions</span>
           <div className="font-mono text-xl font-bold text-[#B5482E] mt-1">
-            {queue.filter((q) => q.stage === 'FAILED').length} Resolved
+            {loading ? '...' : (overview?.failedCount24h ?? 0)}
           </div>
           <span className="text-[10px] text-emerald-700 font-mono mt-0.5 block">
             100% Invariant Preserved
@@ -178,10 +260,10 @@ export default function ClsSettlementPage() {
           <div>
             <h3 className="font-serif font-bold text-base text-[#2A2012] flex items-center gap-2">
               <ArrowRightLeft className="w-4 h-4 text-[#946726]" />
-              <span>Inter-Bank Gross Settlement Flow Matrix (Thousands ARTH)</span>
+              <span>Inter-Bank Bilateral Netting Matrix</span>
             </h3>
             <p className="text-xs text-[#5C574F]">
-              Direct credit flow originating from row institutions toward column receiving institutions
+              Direct clearing obligations between commercial bank nodes
             </p>
           </div>
           <span className="font-mono text-[11px] text-[#946726] bg-[#946726]/5 px-2.5 py-1 rounded-lg border border-[#946726]/15">
@@ -194,44 +276,36 @@ export default function ClsSettlementPage() {
             <thead className="bg-[#F8F9FA] text-[10px] text-[#5C574F] uppercase tracking-wider border-b border-[#946726]/10">
               <tr>
                 <th className="p-3 text-left">From \ To</th>
-                <th className="p-3">NAVA</th>
-                <th className="p-3">SAMAYA</th>
-                <th className="p-3">SETU</th>
-                <th className="p-3">STHIRA</th>
-                <th className="p-3">VAYU</th>
-                <th className="p-3 text-right">Gross Out</th>
+                {banksList.map((b) => (
+                  <th key={b} className="p-3 uppercase">{b}</th>
+                ))}
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {Object.keys(MOCK_INTERBANK_FLOW_MATRIX).map((fromBank) => {
-                const row = MOCK_INTERBANK_FLOW_MATRIX[fromBank];
-                const totalOut = Object.values(row).reduce((a, b) => a + b, 0);
-
-                return (
-                  <tr key={fromBank} className="hover:bg-[#F6F8F7] transition">
-                    <td className="p-3 text-left font-bold text-[#2A2012] uppercase">
-                      {fromBank}
-                    </td>
-                    {['nava', 'samaya', 'setu', 'sthira', 'vayu'].map((toBank) => (
+              {banksList.map((fromBank) => (
+                <tr key={fromBank} className="hover:bg-[#F6F8F7] transition">
+                  <td className="p-3 text-left font-bold text-[#2A2012] uppercase">
+                    {fromBank}
+                  </td>
+                  {banksList.map((toBank) => {
+                    if (fromBank === toBank) {
+                      return <td key={toBank} className="p-3 text-gray-300">—</td>;
+                    }
+                    const flow = matrix.find(
+                      (m) => m.sourceBankId === fromBank && m.destinationBankId === toBank,
+                    );
+                    const amountStr = flow ? `${formatMinorToArth(flow.totalVolumeMinor)}` : '0.00';
+                    return (
                       <td
                         key={toBank}
-                        className={`p-3 ${
-                          fromBank === toBank
-                            ? 'text-gray-300 font-light'
-                            : row[toBank] > 1000
-                            ? 'text-[#946726] font-bold bg-[#946726]/5'
-                            : 'text-[#262320]'
-                        }`}
+                        className={`p-3 ${flow && BigInt(flow.totalVolumeMinor || '0') > 0n ? 'text-[#946726] font-bold bg-[#946726]/5' : 'text-[#74777F]'}`}
                       >
-                        {fromBank === toBank ? '—' : `${row[toBank]}k`}
+                        {amountStr}
                       </td>
-                    ))}
-                    <td className="p-3 text-right font-bold text-[#2A2012]">
-                      {totalOut.toLocaleString('en-US')}k
-                    </td>
-                  </tr>
-                );
-              })}
+                    );
+                  })}
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
@@ -239,11 +313,10 @@ export default function ClsSettlementPage() {
 
       {/* Live CLS Settlement Queue Table */}
       <div className="space-y-4">
-        
         {/* Table Controls */}
         <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 bg-white p-4 rounded-2xl border border-[#946726]/15 shadow-xs">
           <div className="flex flex-wrap items-center gap-2">
-            {['all', 'SETTLING', 'FINALYZING', 'COMPLETED', 'FAILED'].map((st) => (
+            {['all', 'SETTLING', 'PROCESSING', 'COMPLETED', 'FAILED'].map((st) => (
               <button
                 key={st}
                 type="button"
@@ -265,202 +338,77 @@ export default function ClsSettlementPage() {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search by CLS ID, Batch Ref, Bank..."
+              placeholder="Search reference, bank ID..."
               className="pl-9 pr-4 py-1.5 bg-[#F6F8F7] border border-[#946726]/15 rounded-xl text-xs outline-none focus:border-[#946726] focus:ring-2 focus:ring-[#946726]/15 w-full md:w-64"
             />
           </div>
         </div>
 
-        {/* Transaction Queue Table */}
+        {/* Table Body */}
         <div className="bg-white rounded-3xl border border-[#946726]/15 overflow-hidden shadow-xs">
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead className="bg-[#F8F9FA] border-b border-[#946726]/10 font-mono text-[10px] text-[#5C574F] uppercase tracking-wider">
+            <table className="w-full text-left text-xs font-mono">
+              <thead className="bg-[#FAF7EE] border-b border-[#D8C7A5] text-[10px] uppercase tracking-wider text-[#615749]">
                 <tr>
-                  <th className="p-4">Settlement ID</th>
-                  <th className="p-4">Route (Debtor → Creditor)</th>
-                  <th className="p-4">Principal Amount</th>
-                  <th className="p-4">Stage</th>
-                  <th className="p-4">Batch Reference</th>
-                  <th className="p-4">Latency</th>
-                  <th className="p-4 text-right whitespace-nowrap min-w-[120px]">Audit</th>
+                  <th className="p-3.5">CLS Ref</th>
+                  <th className="p-3.5">Routing (From → To)</th>
+                  <th className="p-3.5 text-right">Settlement Amount</th>
+                  <th className="p-3.5 text-center">Lifecycle Stage</th>
+                  <th className="p-3.5 text-right">Timestamp</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100 font-mono">
-                {filteredQueue.map((item) => (
-                  <tr key={item.id} className="hover:bg-[#F6F8F7] transition">
-                    <td className="p-4 font-bold text-[#946726]">
-                      {item.id}
-                      <span className="block text-[9px] text-[#74777F] font-normal">
-                        {item.timestamp}
-                      </span>
-                    </td>
-
-                    <td className="p-4 font-sans font-medium text-xs">
-                      <span className="uppercase font-bold text-[#2A2012] font-mono">
-                        {item.sourceBank}
-                      </span>{' '}
-                      →{' '}
-                      <span className="uppercase font-bold text-emerald-800 font-mono">
-                        {item.destinationBank}
-                      </span>
-                    </td>
-
-                    <td className="p-4 text-sm font-bold text-[#2A2012]">
-                      <CentralBankMaskedValue value={item.amount} suffix=" ARTH" />
-                    </td>
-
-                    <td className="p-4">
-                      <span
-                        className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${getStageColor(
-                          item.stage
-                        )}`}
-                      >
-                        {item.stage}
-                      </span>
-                    </td>
-
-                    <td className="p-4 text-[11px] text-[#74777F]">
-                      {item.ledgerBatchRef}
-                    </td>
-
-                    <td className="p-4 text-[11px] text-emerald-700">
-                      {item.clearingLatencyMs} ms
-                    </td>
-
-                    <td className="p-4 text-right font-sans whitespace-nowrap">
-                      <button
-                        type="button"
-                        onClick={() => setSelectedTx(item)}
-                        className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#FAF7EE] hover:bg-[#946726] text-[#7A5217] hover:text-white border border-[#D8C7A5] hover:border-[#946726] shadow-2xs hover:shadow-xs transition-all duration-150 font-mono text-[11px] font-bold whitespace-nowrap group cursor-pointer active:scale-95"
-                        title={`Inspect audit trail for ${item.id}`}
-                      >
-                        <Eye className="w-3.5 h-3.5 text-[#946726] group-hover:text-white transition-colors shrink-0" />
-                        <span>Inspect</span>
-                      </button>
+              <tbody className="divide-y divide-gray-100">
+                {loading ? (
+                  <tr>
+                    <td colSpan={5} className="py-8 text-center text-[#74777F]">
+                      <RefreshCw className="w-5 h-5 animate-spin mx-auto mb-2 text-[#946726]" />
+                      <span>Reading active CLS settlement sequence...</span>
                     </td>
                   </tr>
-                ))}
+                ) : filteredQueue.length === 0 ? (
+                  <tr>
+                    <td colSpan={5} className="py-8 text-center text-[#74777F]">
+                      <CheckCircle2 className="w-6 h-6 text-emerald-600 mx-auto mb-2" />
+                      <span className="font-serif font-bold text-xs text-[#2A2012] block">No Settlements in Queue</span>
+                      <span className="text-[11px] text-[#5C574F]">All interbank clearing obligations are fully settled.</span>
+                    </td>
+                  </tr>
+                ) : (
+                  filteredQueue.map((item) => (
+                    <tr key={item.id} className="hover:bg-[#FAF7EE]/50 transition">
+                      <td className="p-3.5 font-bold text-[#946726]">
+                        {item.reference || item.id.substring(0, 16)}
+                      </td>
+                      <td className="p-3.5 font-sans">
+                        <strong className="text-[#2A2012] font-mono uppercase">{item.sourceBankId}</strong>
+                        <span className="text-[#74777F] mx-2 font-mono">→</span>
+                        <strong className="text-[#2A2012] font-mono uppercase">{item.destinationBankId}</strong>
+                      </td>
+                      <td className="p-3.5 text-right font-bold text-[#2A2012]">
+                        <CentralBankMaskedValue
+                          value={`${formatMinorToArth(item.amountMinor)} ARTH`}
+                        />
+                      </td>
+                      <td className="p-3.5 text-center">
+                        <span
+                          className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${getStageColor(
+                            item.stage,
+                          )}`}
+                        >
+                          {item.stage}
+                        </span>
+                      </td>
+                      <td className="p-3.5 text-right text-[#74777F] text-[11px]">
+                        {item.createdAt ? new Date(item.createdAt).toLocaleTimeString() : '—'}
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
         </div>
-
       </div>
-
-      {/* Transaction Detail Drill-Down Modal */}
-      {selectedTx && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
-          <div className="relative w-full max-w-xl bg-white rounded-3xl border border-[#946726]/20 shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
-            
-            <div className="p-6 bg-[#946726] text-white flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center border border-white/20">
-                  <ArrowRightLeft className="w-5 h-5 text-emerald-300" />
-                </div>
-                <div>
-                  <span className="font-mono text-[10px] uppercase text-white/70 block">
-                    CLS SETTLEMENT RECORD
-                  </span>
-                  <h3 className="font-serif font-bold text-lg text-white">
-                    {selectedTx.id}
-                  </h3>
-                </div>
-              </div>
-              <button
-                type="button"
-                onClick={() => setSelectedTx(null)}
-                className="p-1 rounded-full text-white/70 hover:text-white hover:bg-white/10 transition cursor-pointer"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <div className="p-6 space-y-5 overflow-y-auto text-xs font-sans bg-[#FDFBF7]">
-              
-              {/* Routing Breakdown */}
-              <div className="p-4 bg-white rounded-2xl border border-[#946726]/15 grid grid-cols-2 gap-4 font-mono shadow-xs">
-                <div>
-                  <span className="text-[10px] uppercase text-[#74777F] block">Sending Debtor Bank</span>
-                  <strong className="text-[#2A2012] text-sm uppercase block mt-0.5">
-                    {selectedTx.sourceBank} Bank
-                  </strong>
-                </div>
-                <div>
-                  <span className="text-[10px] uppercase text-[#74777F] block">Receiving Creditor Bank</span>
-                  <strong className="text-emerald-800 text-sm uppercase block mt-0.5">
-                    {selectedTx.destinationBank} Bank
-                  </strong>
-                </div>
-                <div>
-                  <span className="text-[10px] uppercase text-[#74777F] block">Principal Cleared</span>
-                  <strong className="text-[#2A2012] text-sm block mt-0.5">
-                    {selectedTx.amount.toLocaleString('en-US')} ARTH
-                  </strong>
-                </div>
-                <div>
-                  <span className="text-[10px] uppercase text-[#74777F] block">Settlement Tax Levy</span>
-                  <strong className="text-[#946726] text-sm block mt-0.5">
-                    {selectedTx.feeLevy} ARTH (0.05%)
-                  </strong>
-                </div>
-              </div>
-
-              {/* Failure / Reversal Alert if Applicable */}
-              {selectedTx.failureReason && (
-                <div className="p-4 bg-red-50 border border-[#B5482E]/30 text-[#B5482E] rounded-2xl space-y-1">
-                  <div className="font-bold flex items-center gap-1.5">
-                    <AlertTriangle className="w-4 h-4" />
-                    Settlement Exception Reason
-                  </div>
-                  <p className="text-[11px] leading-relaxed">
-                    {selectedTx.failureReason}
-                  </p>
-                  {selectedTx.reversalTxId && (
-                    <div className="font-mono text-[10px] text-[#262320] pt-1">
-                      Atomic Reversal TX: <strong>{selectedTx.reversalTxId}</strong>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* Atomic State Timeline */}
-              <div className="p-4 bg-white rounded-2xl border border-[#946726]/15 space-y-3 shadow-xs">
-                <h4 className="font-serif font-bold text-sm text-[#2A2012]">
-                  Clearing Lifecycle Timeline
-                </h4>
-                <div className="space-y-3 font-mono text-xs pl-2 border-l-2 border-[#946726]/20">
-                  {selectedTx.timeline.map((step, idx) => (
-                    <div key={idx} className="relative pl-4">
-                      <div className="absolute -left-[21px] top-1 w-2.5 h-2.5 rounded-full bg-[#946726] border-2 border-white" />
-                      <div className="flex items-center justify-between text-[10px] text-[#74777F]">
-                        <strong className="text-[#946726]">{step.stage}</strong>
-                        <span>{step.time}</span>
-                      </div>
-                      <p className="font-sans text-[11px] text-[#262320] mt-0.5">
-                        {step.note}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="pt-2 flex justify-end">
-                <button
-                  type="button"
-                  onClick={() => setSelectedTx(null)}
-                  className="px-5 py-2 rounded-xl bg-[#946726] text-white text-xs font-bold transition shadow-xs hover:bg-[#2A2012] cursor-pointer"
-                >
-                  Dismiss
-                </button>
-              </div>
-
-            </div>
-
-          </div>
-        </div>
-      )}
-
     </div>
   );
 }

@@ -8,6 +8,7 @@ interface CentralBankMaskedValueProps {
   prefix?: string;
   suffix?: string;
   className?: string;
+  valueClassName?: string;
   maskPlaceholder?: string;
 }
 
@@ -16,6 +17,7 @@ export const CentralBankMaskedValue: React.FC<CentralBankMaskedValueProps> = ({
   prefix = '',
   suffix = '',
   className = '',
+  valueClassName = '',
   maskPlaceholder = '••••••••',
 }) => {
   const [isRevealed, setIsRevealed] = useState(false);
@@ -27,7 +29,7 @@ export const CentralBankMaskedValue: React.FC<CentralBankMaskedValueProps> = ({
 
   return (
     <span className={`inline-flex items-center gap-1.5 group select-none ${className}`}>
-      <span className="font-mono">
+      <span className={`font-mono ${valueClassName}`}>
         {isRevealed ? (
           <>
             {prefix}

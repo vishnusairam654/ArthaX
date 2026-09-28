@@ -32,6 +32,7 @@ export interface PostTransactionRequest {
   initiatedBy?: string;
   sourceAccountId?: string;
   destinationAccountId?: string;
+  settlementId?: string;
   metadata?: Record<string, unknown>;
   entries: PostEntryInstruction[];
 }
@@ -105,6 +106,18 @@ export class LedgerService {
 
     // 3. Atomic execution inside a single database transaction
     return await this.prisma.$transaction(async (tx) => {
+      // Validate initiatedBy foreign key against User table
+      let validInitiatorId: string | null = null;
+      if (request.initiatedBy) {
+        const userExists = await tx.user.findUnique({
+          where: { id: request.initiatedBy },
+          select: { id: true },
+        });
+        if (userExists) {
+          validInitiatorId = userExists.id;
+        }
+      }
+
       // Step A: PENDING state creation
       const createdTx = await tx.transaction.create({
         data: {
@@ -115,9 +128,10 @@ export class LedgerService {
           amountMinor: amountMinor,
           feesMinor: request.feesMinor || 0n,
           taxMinor: request.taxMinor || 0n,
-          initiatedBy: request.initiatedBy,
+          initiatedBy: validInitiatorId,
           sourceAccountId: request.sourceAccountId,
           destinationAccountId: request.destinationAccountId,
+          settlementId: request.settlementId || null,
           metadata: (request.metadata as any) || null,
         },
       });
@@ -130,26 +144,40 @@ export class LedgerService {
       });
 
       // Validate accounts and non-negative balance constraints
-      const accountDeltas = new Map<string, bigint>();
+      // Support referencing ledger accounts by either primary UUID or system ownerEntityId
+      const resolvedAccountMap = new Map<string, any>(); // inputId -> ledgerAccount
+      const accountDeltas = new Map<string, bigint>(); // resolved realId -> delta
+
       for (const entry of entries) {
-        const currentDelta = accountDeltas.get(entry.ledgerAccountId) || 0n;
-        const entryDelta = entry.entryType === 'CREDIT' ? entry.amountMinor : -entry.amountMinor;
-        accountDeltas.set(entry.ledgerAccountId, currentDelta + entryDelta);
-      }
-
-      for (const [acctId, delta] of accountDeltas.entries()) {
-        const ledgerAcct = await tx.ledgerAccount.findUnique({
-          where: { id: acctId },
-        });
-
+        let ledgerAcct = resolvedAccountMap.get(entry.ledgerAccountId);
         if (!ledgerAcct) {
-          throw new NotFoundException(`Referenced ledger account [${acctId}] does not exist.`);
+          ledgerAcct = await tx.ledgerAccount.findFirst({
+            where: {
+              OR: [
+                { id: entry.ledgerAccountId },
+                { ownerEntityId: entry.ledgerAccountId },
+              ],
+            },
+          });
+
+          if (!ledgerAcct) {
+            throw new NotFoundException(`Referenced ledger account [${entry.ledgerAccountId}] does not exist.`);
+          }
+          resolvedAccountMap.set(entry.ledgerAccountId, ledgerAcct);
         }
 
+        const realId = ledgerAcct.id;
+        const currentDelta = accountDeltas.get(realId) || 0n;
+        const entryDelta = entry.entryType === 'CREDIT' ? entry.amountMinor : -entry.amountMinor;
+        accountDeltas.set(realId, currentDelta + entryDelta);
+      }
+
+      for (const [realId, delta] of accountDeltas.entries()) {
+        const ledgerAcct = Array.from(resolvedAccountMap.values()).find((a) => a.id === realId)!;
         // If delta is negative, verify account has sufficient balance
         if (delta < 0n) {
           const requiredDebit = -delta;
-          assertNonNegativeBalance(ledgerAcct.balanceSnapshot, requiredDebit, acctId);
+          assertNonNegativeBalance(ledgerAcct.balanceSnapshot, requiredDebit, realId);
         }
       }
 
@@ -169,10 +197,11 @@ export class LedgerService {
 
       const createdEntries = [];
       for (const entry of entries) {
+        const ledgerAcct = resolvedAccountMap.get(entry.ledgerAccountId)!;
         const createdEntry = await tx.transactionEntry.create({
           data: {
             transactionId: createdTx.id,
-            ledgerAccountId: entry.ledgerAccountId,
+            ledgerAccountId: ledgerAcct.id,
             entryType: entry.entryType,
             amountMinor: entry.amountMinor,
           },
@@ -187,9 +216,9 @@ export class LedgerService {
         data: { status: 'SETTLING' },
       });
 
-      for (const [acctId, delta] of accountDeltas.entries()) {
+      for (const [realId, delta] of accountDeltas.entries()) {
         await tx.ledgerAccount.update({
-          where: { id: acctId },
+          where: { id: realId },
           data: {
             balanceSnapshot: { increment: delta },
             snapshotAt: new Date(),
@@ -281,13 +310,14 @@ export class LedgerService {
           amountMinor: originalTx.amountMinor,
           feesMinor: 0n,
           taxMinor: 0n,
-          initiatedBy: 'REVERSAL_SYSTEM',
+          initiatedBy: originalTx.initiatedBy || null,
           sourceAccountId: originalTx.destinationAccountId,
           destinationAccountId: originalTx.sourceAccountId,
           failureReason: null,
           metadata: {
             reversedTransactionId: originalTx.id,
             reversalReason: reason,
+            systemInitiator: 'REVERSAL_SYSTEM',
           },
         },
       });
@@ -373,19 +403,24 @@ export class LedgerService {
   }> {
     this.assertDatabasePersistence();
 
-    const account = await this.prisma.ledgerAccount.findUnique({
-      where: { id: ledgerAccountId },
+    const account = await this.prisma.ledgerAccount.findFirst({
+      where: {
+        OR: [
+          { id: ledgerAccountId },
+          { ownerEntityId: ledgerAccountId },
+        ],
+      },
     });
 
     if (!account) {
       throw new NotFoundException(`Ledger account [${ledgerAccountId}] not found`);
     }
 
-    const rawBalance = await this.balanceEngine.calculateRawBalance(ledgerAccountId);
+    const rawBalance = await this.balanceEngine.calculateRawBalance(account.id);
     const isReconciled = rawBalance === account.balanceSnapshot;
 
     return {
-      ledgerAccountId,
+      ledgerAccountId: account.id,
       balanceSnapshotMinor: account.balanceSnapshot.toString(),
       rawBalanceMinor: rawBalance.toString(),
       isReconciled,

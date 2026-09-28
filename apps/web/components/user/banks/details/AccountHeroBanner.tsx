@@ -15,10 +15,12 @@ import {
   ArrowUpRight,
 } from 'lucide-react';
 import { AnimatedMaskedValue } from '@/components/user/AnimatedMaskedValue';
+import { BankAccountDto } from '@arthax/types';
 
 interface AccountHeroBannerProps {
   accountId: string;
   isMasked: boolean;
+  account?: BankAccountDto;
   onOpenTransfer: () => void;
   onOpenQr: () => void;
 }
@@ -26,13 +28,23 @@ interface AccountHeroBannerProps {
 export const AccountHeroBanner: React.FC<AccountHeroBannerProps> = ({
   accountId,
   isMasked,
+  account,
   onOpenTransfer,
   onOpenQr,
 }) => {
   const [copiedIban, setCopiedIban] = useState(false);
 
+  const balance = (Number(BigInt(account?.balanceMinor || '0')) / 100).toLocaleString('en-US', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+  const bankName = account?.bankId ? `${account.bankId.toUpperCase()}` : 'NAVA';
+  const iban = account
+    ? `arthax.${account.bankId.toLowerCase()}.cls.${account.accountNumber.toLowerCase()}`
+    : `arthax.nava.cls.${accountId.toLowerCase()}`;
+
   const handleCopyIban = () => {
-    navigator.clipboard.writeText('arthax.nava.cls.8491-904-in.001');
+    navigator.clipboard.writeText(iban);
     setCopiedIban(true);
     setTimeout(() => setCopiedIban(false), 2000);
   };
@@ -57,7 +69,7 @@ export const AccountHeroBanner: React.FC<AccountHeroBannerProps> = ({
                   className="object-contain"
                 />
               </div>
-              <span className="font-serif font-bold text-sm tracking-tight text-[#022448]">NAVA</span>
+              <span className="font-serif font-bold text-sm tracking-tight text-[#022448]">{bankName}</span>
               <span className="text-[10px] font-mono text-[#74777F] tracking-wider uppercase font-semibold">
                 Chartered Node
               </span>
@@ -69,7 +81,7 @@ export const AccountHeroBanner: React.FC<AccountHeroBannerProps> = ({
             </span>
 
             <span className="px-2.5 py-1 rounded-full bg-[#E5EFFF] text-[#1E3A5F] font-sans text-xs">
-              Salary &amp; Direct Institutional Inflow
+              {account?.purpose || 'Sovereign Treasury & Direct Inflow Rail'}
             </span>
           </div>
 
@@ -80,10 +92,10 @@ export const AccountHeroBanner: React.FC<AccountHeroBannerProps> = ({
             </span>
             <div className="flex items-baseline gap-2 flex-wrap">
               <h1 className="font-serif text-3xl md:text-5xl font-normal text-[#022448] tracking-tight">
-                <AnimatedMaskedValue value="142,500.00" isMasked={isMasked} currency="ARTH" />
+                <AnimatedMaskedValue value={balance} isMasked={isMasked} currency="ARTH" />
               </h1>
               <span className="font-mono text-xs text-emerald-700 bg-emerald-100 px-2.5 py-1 rounded-full font-semibold ml-2">
-                +4.85% APY Staking Tier
+                100% Sovereign Backed
               </span>
             </div>
           </div>
@@ -93,13 +105,13 @@ export const AccountHeroBanner: React.FC<AccountHeroBannerProps> = ({
             <div className="p-3.5 rounded-xl bg-[#F8F9FF] border border-[#74777F]/15">
               <div className="flex items-center justify-between text-[#74777F] text-xs mb-1">
                 <span>Total Ledger Balance</span>
-                <span className="font-mono text-[10px]">INCL. ESCROW</span>
+                <span className="font-mono text-[10px]">CLS SETTLED</span>
               </div>
               <p className="font-mono text-sm font-bold text-[#121C28]">
-                <AnimatedMaskedValue value="147,500.00" isMasked={isMasked} currency="ARTH" />
+                <AnimatedMaskedValue value={balance} isMasked={isMasked} currency="ARTH" />
               </p>
               <p className="font-sans text-[11px] text-[#74777F] mt-0.5">
-                Includes 5,000.00 ARTH locked statutory reserve
+                Statutory reserve balance synchronized
               </p>
             </div>
 
@@ -120,7 +132,7 @@ export const AccountHeroBanner: React.FC<AccountHeroBannerProps> = ({
                 </button>
               </div>
               <p className="font-mono text-xs text-[#022448] font-semibold truncate select-all">
-                arthax.nava.cls.8491-904-in.001
+                {iban}
               </p>
               <p className="font-mono text-[10px] text-[#74777F] mt-0.5">
                 Sub-ledger Path: SHA256/Node-IN01

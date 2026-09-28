@@ -29,57 +29,21 @@ interface TransactionDisplayItem {
   iconAsset?: string;
 }
 
-const DEFAULT_TRANSACTIONS: TransactionDisplayItem[] = [
-  {
-    id: 'tx-1',
-    title: 'Inter-bank DvP transfer to Samaya Term',
-    meta: 'pacs.008.001.09 • Block #28,102,488 • Today 11:24 IST',
-    amount: '-12,450.00',
-    isPositive: false,
-    statusText: 'CLS Settled',
-    iconType: 'dvp',
-    iconAsset: '/assets/icons/completed.png',
-  },
-  {
-    id: 'tx-2',
-    title: 'Central Bank Quarterly Staking Yield',
-    meta: 'Automated Distribution • Epoch #941 • Today 06:00 IST',
-    amount: '+124.80',
-    isPositive: true,
-    statusText: 'Accrued',
-    iconType: 'yield',
-    iconAsset: '/assets/icons/completed.png',
-  },
-  {
-    id: 'tx-3',
-    title: 'Stock Equity Acquisition (NILA Systems 40 Shs)',
-    meta: 'Exchange Fill @ 205.00 • Order ID #NX-88219',
-    amount: '-8,200.00',
-    isPositive: false,
-    statusText: 'Settled T+0',
-    iconType: 'stock',
-  },
-  {
-    id: 'tx-4',
-    title: 'Shop Relic Acquisition (The Yield Griffin Companion)',
-    meta: 'Citizen Vault Inventory Item #RELIC-04',
-    amount: '-500.00',
-    isPositive: false,
-    statusText: 'Verified',
-    iconType: 'shop',
-  },
-];
-
 export const AuditLedgerStream: React.FC<AuditLedgerStreamProps> = ({ isMasked }) => {
   const [realTransactions, setRealTransactions] = useState<TransactionDisplayItem[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const fetchTransactions = useCallback(async () => {
+    setIsLoading(true);
     try {
       const accounts = await apiFetchUserAccounts();
-      if (!accounts || accounts.length === 0) return;
+      if (!accounts || accounts.length === 0) {
+        setRealTransactions([]);
+        return;
+      }
 
       const allTxs: TransactionDto[] = [];
-      for (const acct of accounts.slice(0, 3)) {
+      for (const acct of accounts.slice(0, 5)) {
         try {
           const txs = await apiFetchAccountTransactions(acct.id);
           if (Array.isArray(txs)) {
@@ -91,24 +55,30 @@ export const AuditLedgerStream: React.FC<AuditLedgerStreamProps> = ({ isMasked }
       }
 
       if (allTxs.length > 0) {
-        // Map to display items
+        // Sort descending by date
+        const userAccountIds = new Set(accounts.map((a) => a.id));
         const mapped: TransactionDisplayItem[] = allTxs.map((tx) => {
           const amt = Number(BigInt(tx.amountMinor)) / 100;
+          const isPositive = tx.type === 'REWARD' || (tx.destinationAccountId ? userAccountIds.has(tx.destinationAccountId) : false);
           return {
             id: tx.id,
-            title: `${tx.type.replace(/_/g, ' ')} Transfer (${tx.referenceNumber})`,
+            title: tx.type === 'REWARD' ? `Sovereign Creation Bonus (${tx.referenceNumber})` : `${tx.type.replace(/_/g, ' ')} Transfer (${tx.referenceNumber})`,
             meta: `Scope: ${tx.scope} • Status: ${tx.status} • ${new Date(tx.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`,
             amount: `${amt.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
-            isPositive: false,
+            isPositive,
             statusText: tx.status,
             iconType: 'dvp',
             iconAsset: '/assets/icons/completed.png',
           };
         });
         setRealTransactions(mapped);
+      } else {
+        setRealTransactions([]);
       }
     } catch {
-      // Fallback to default entries
+      setRealTransactions([]);
+    } finally {
+      setIsLoading(false);
     }
   }, []);
 
@@ -123,9 +93,7 @@ export const AuditLedgerStream: React.FC<AuditLedgerStreamProps> = ({ isMasked }
     };
   }, [fetchTransactions]);
 
-  const displayList = realTransactions.length > 0
-    ? [...realTransactions, ...DEFAULT_TRANSACTIONS.slice(0, Math.max(0, 4 - realTransactions.length))]
-    : DEFAULT_TRANSACTIONS;
+  const displayList = realTransactions;
 
   return (
     <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-xs border border-[#74777F]/20 space-y-5" id="ledger">
@@ -138,12 +106,25 @@ export const AuditLedgerStream: React.FC<AuditLedgerStreamProps> = ({ isMasked }
           </h2>
         </div>
         <span className="font-mono text-xs text-[#74777F]">
-          {realTransactions.length > 0 ? 'Live PostgreSQL Stream' : 'Immutable Chain Receipt'}
+          {realTransactions.length > 0 ? 'Live PostgreSQL Stream' : 'Zero-Divergence Ledger'}
         </span>
       </div>
 
-      {/* Transactions List */}
-      <div className="space-y-2">
+      {/* Transactions List or Real Empty State */}
+      {isLoading ? (
+        <div className="py-8 text-center font-mono text-xs text-[#74777F]">
+          Streaming immutable transactions from ledger...
+        </div>
+      ) : displayList.length === 0 ? (
+        <div className="py-10 px-6 rounded-2xl bg-[#F8F9FF] border border-[#74777F]/15 text-center space-y-2">
+          <Receipt className="w-8 h-8 text-[#74777F]/40 mx-auto" />
+          <p className="font-sans text-sm font-semibold text-[#121C28]">No Recorded Transactions</p>
+          <p className="font-mono text-xs text-[#74777F] max-w-sm mx-auto">
+            Your ledger activity is fresh. Completed DvP transfers, deposit settlements, and interest distributions will stream here in real time.
+          </p>
+        </div>
+      ) : (
+        <div className="space-y-2">
         {displayList.map((tx) => (
           <div
             key={tx.id}
@@ -201,7 +182,8 @@ export const AuditLedgerStream: React.FC<AuditLedgerStreamProps> = ({ isMasked }
             </div>
           </div>
         ))}
-      </div>
+        </div>
+      )}
 
       {/* Footer Link */}
       <div className="pt-2 border-t border-[#74777F]/15 flex items-center justify-between text-xs font-mono text-[#43474E]">

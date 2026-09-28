@@ -20,8 +20,11 @@ import {
   ShieldAlert, 
   Award, 
   Sparkles,
-  Fingerprint
+  Fingerprint,
+  LogOut,
 } from 'lucide-react';
+import { apiLogout, apiGetActivePersona, apiFetchUserAccounts, apiGetMe } from '@/lib/api';
+import { BankAccountDto } from '@arthax/types';
 
 interface CitizenProfileDrawerProps {
   isOpen: boolean;
@@ -33,9 +36,13 @@ interface CitizenProfileDrawerProps {
 export function CitizenProfileDrawer({
   isOpen,
   onClose,
-  isMasked = true,
+  isMasked,
   onToggleMask
 }: CitizenProfileDrawerProps) {
+  const [activePersona, setActivePersona] = React.useState(apiGetActivePersona());
+  const [userAccounts, setUserAccounts] = React.useState<BankAccountDto[]>([]);
+  const [isLoggingOut, setIsLoggingOut] = React.useState(false);
+
   // Handle ESC key to close
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -44,12 +51,37 @@ export function CitizenProfileDrawer({
     if (isOpen) {
       document.addEventListener('keydown', handleKeyDown);
       document.body.style.overflow = 'hidden';
+      setActivePersona(apiGetActivePersona());
+      apiGetMe()
+        .then((claims: any) => {
+          setActivePersona((prev) => ({
+            ...prev,
+            id: (claims.role === 'CENTRAL_BANK_ADMIN' ? 'governor' : claims.role === 'BANK_ADMIN' ? 'bank_officer' : 'citizen') as 'citizen' | 'bank_officer' | 'governor',
+            displayName: claims.displayName || claims.email?.split('@')[0] || prev.displayName,
+            govIdNumber: claims.govId,
+            email: claims.email,
+            role: claims.role,
+          }));
+        })
+        .catch(() => {});
+      apiFetchUserAccounts().then(setUserAccounts).catch(() => {});
     }
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
       document.body.style.overflow = 'unset';
     };
   }, [isOpen, onClose]);
+
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    try {
+      await apiLogout();
+      onClose();
+      window.location.href = '/gov';
+    } finally {
+      setIsLoggingOut(false);
+    }
+  };
 
   if (!isOpen) return null;
 
@@ -117,12 +149,12 @@ export function CitizenProfileDrawer({
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-2">
                 <h2 className="font-serif text-lg font-bold text-white truncate">
-                  Ananya Sharma
+                  {activePersona.displayName || 'Sovereign Citizen'}
                 </h2>
                 <CheckCircle2 className="w-4 h-4 text-[#10B981] shrink-0" />
               </div>
               <p className="font-mono text-xs text-[#C8DFDB] truncate">
-                GOV ID: #8491-904-IN
+                GOV ID: {activePersona.govIdNumber || 'GOV-PENDING'}
               </p>
 
               <div className="flex items-center gap-2 mt-2 flex-wrap">
@@ -212,41 +244,44 @@ export function CitizenProfileDrawer({
             </div>
 
             <div className="space-y-2 text-xs">
-              <div className="flex items-center justify-between p-2.5 rounded-xl bg-[#FAF8F5] border border-slate-200 hover:border-[#1E3A5F]/30 transition-colors">
-                <div>
-                  <span className="font-semibold text-slate-900 block">NAVA Commercial Bank</span>
-                  <span className="font-mono text-[10px] text-slate-500">
-                    {isMasked ? '•••••••• 8821' : '8491-0024-8821'}
+              {userAccounts.length > 0 ? (
+                userAccounts.map((acct) => {
+                  const bal = (Number(acct.balanceMinor) / 100).toLocaleString('en-US', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  });
+                  return (
+                    <div
+                      key={acct.id}
+                      className="flex items-center justify-between p-2.5 rounded-xl bg-[#FAF8F5] border border-slate-200 hover:border-[#1E3A5F]/30 transition-colors"
+                    >
+                      <div>
+                        <span className="font-semibold text-slate-900 block">
+                          {acct.bankId ? acct.bankId.toUpperCase() + ' Bank' : 'ARTHAX Core'}
+                        </span>
+                        <span className="font-mono text-[10px] text-slate-500">
+                          {isMasked ? '•••••••• ' + (acct.accountNumber.slice(-4) || '0000') : acct.accountNumber}
+                        </span>
+                      </div>
+                      <span className="font-mono font-bold text-[#022448] text-right">
+                        {isMasked ? '•••••••• ARTH' : `${bal} ARTH`}
+                      </span>
+                    </div>
+                  );
+                })
+              ) : (
+                <div className="flex items-center justify-between p-2.5 rounded-xl bg-[#FAF8F5] border border-slate-200">
+                  <div>
+                    <span className="font-semibold text-slate-900 block">NAVA Commercial Bank</span>
+                    <span className="font-mono text-[10px] text-slate-500">
+                      {isMasked ? '•••••••• 0001' : 'ARTH-NAVA-PRIMARY'}
+                    </span>
+                  </div>
+                  <span className="font-mono font-bold text-[#022448] text-right">
+                    {isMasked ? '•••••••• ARTH' : '0.00 ARTH'}
                   </span>
                 </div>
-                <span className="font-mono font-bold text-[#022448] text-right">
-                  {isMasked ? '•••••••• ARTH' : '52,480.00 ARTH'}
-                </span>
-              </div>
-
-              <div className="flex items-center justify-between p-2.5 rounded-xl bg-[#FAF8F5] border border-slate-200 hover:border-[#1E3A5F]/30 transition-colors">
-                <div>
-                  <span className="font-semibold text-slate-900 block">SAMAYA Term Deposits</span>
-                  <span className="font-mono text-[10px] text-slate-500">
-                    {isMasked ? '•••••••• 4410' : '8491-9931-4410'}
-                  </span>
-                </div>
-                <span className="font-mono font-bold text-[#022448] text-right">
-                  {isMasked ? '•••••••• ARTH' : '120,000.00 ARTH'}
-                </span>
-              </div>
-
-              <div className="flex items-center justify-between p-2.5 rounded-xl bg-[#FAF8F5] border border-slate-200 hover:border-[#1E3A5F]/30 transition-colors">
-                <div>
-                  <span className="font-semibold text-slate-900 block">TARANG Velocity Clearing</span>
-                  <span className="font-mono text-[10px] text-slate-500">
-                    {isMasked ? '•••••••• 1928' : '8491-5502-1928'}
-                  </span>
-                </div>
-                <span className="font-mono font-bold text-[#022448] text-right">
-                  {isMasked ? '•••••••• ARTH' : '12,940.00 ARTH'}
-                </span>
-              </div>
+              )}
             </div>
           </div>
 
@@ -342,6 +377,20 @@ export function CitizenProfileDrawer({
                 <span>Commercial Bank Accounts</span>
               </Link>
             </div>
+          </div>
+
+          {/* Section 5: Sovereign Session Control */}
+          <div className="pt-2">
+            <button
+              type="button"
+              onClick={handleLogout}
+              disabled={isLoggingOut}
+              className="w-full bg-[#B5482E]/10 hover:bg-[#B5482E]/20 text-[#B5482E] font-semibold py-3 px-4 rounded-2xl flex items-center justify-center gap-2.5 transition-all border border-[#B5482E]/30 cursor-pointer text-xs active:scale-98 disabled:opacity-50"
+              id="citizen-drawer-logout-btn"
+            >
+              <LogOut className="w-4 h-4 text-[#B5482E]" />
+              <span>{isLoggingOut ? 'Revoking Sovereign Session…' : 'Sovereign Logout (Revoke Session)'}</span>
+            </button>
           </div>
         </div>
 

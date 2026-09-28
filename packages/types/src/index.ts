@@ -120,16 +120,32 @@ export interface VerifyOtpInput {
 export interface CreateGovIdInput {
   email: string;
   govPassword: string;
+  otpCode?: string;
+  registrationTicket?: string;
+  displayName?: string;
+  profession?: string;
+  primaryPurpose?: string;
+  preferredBankId?: string;
+  financialPassword?: string;
 }
 
 export interface SetFinancialPasswordInput {
   financialPassword: string;
   displayName?: string;
+  profession?: string;
+  primaryPurpose?: string;
+  preferredBankId?: string;
+}
+
+export interface LoginWithOtpInput {
+  email: string;
+  code: string;
 }
 
 export interface StepUpAuthInput {
   financialPassword: string;
 }
+
 
 
 // =============================================================================

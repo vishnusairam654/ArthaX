@@ -29,7 +29,13 @@ import {
 } from 'lucide-react';
 import { CitizenProfileDrawer } from './profile/CitizenProfileDrawer';
 import { UniversalPortalSwitcherModal } from '../common/UniversalPortalSwitcherModal';
-import { apiFetchUnreadNoticeCount, apiGetActivePersona, subscribePortalDataInvalidation } from '@/lib/api';
+import { 
+  apiFetchUnreadNoticeCount, 
+  apiGetActivePersona, 
+  apiGetMe,
+  apiLogout,
+  subscribePortalDataInvalidation 
+} from '@/lib/api';
 
 interface UserPortalHeaderProps {
   isMasked: boolean;
@@ -50,9 +56,30 @@ export const UserPortalHeader: React.FC<UserPortalHeaderProps> = ({
   const [unreadCount, setUnreadCount] = useState<number>(3);
   const profileMenuRef = useRef<HTMLDivElement>(null);
 
-  // Dynamic unread notices count & invalidation listener
+  // Dynamic unread notices count, session verification & invalidation listener
   useEffect(() => {
     let isMounted = true;
+    const token = typeof window !== 'undefined' ? localStorage.getItem('arthax_token') : null;
+    if (token) {
+      apiGetMe()
+        .then((claims) => {
+          if (isMounted) {
+            setActivePersona((prev) => ({
+              ...prev,
+              id: (claims.role === 'CENTRAL_BANK_ADMIN' ? 'governor' : claims.role === 'BANK_ADMIN' ? 'bank_officer' : 'citizen') as 'citizen' | 'bank_officer' | 'governor',
+              govIdNumber: claims.govId,
+              email: claims.email,
+              role: claims.role,
+            }));
+          }
+        })
+        .catch(() => {
+          if (isMounted) {
+            apiLogout();
+          }
+        });
+    }
+
     apiFetchUnreadNoticeCount().then((count) => {
       if (isMounted) setUnreadCount(count);
     });
@@ -250,7 +277,7 @@ export const UserPortalHeader: React.FC<UserPortalHeaderProps> = ({
                     ? 'bg-[#E5EFFF] ring-2 ring-[#1E3A5F]'
                     : 'hover:bg-[#E5EFFF]'
                 }`}
-                title="Open Citizen Profile Panel (Ananya Sharma)"
+                title={`Open Citizen Profile Panel (${activePersona.displayName})`}
                 aria-expanded={isProfileMenuOpen}
               >
                 <div className="w-9 h-9 rounded-full overflow-hidden border-2 border-[#A8742A] shadow-xs relative bg-[#FAF8F5]">

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Fingerprint, 
   CheckCircle2, 
@@ -8,47 +8,68 @@ import {
   Check, 
   ShieldCheck, 
   ArrowDown, 
-  ArrowUp,
-  Lock,
-  ExternalLink
+  ArrowUp, 
+  Lock, 
+  ExternalLink,
+  Receipt
 } from 'lucide-react';
+import { apiGetActivePersona, apiFetchAccountTransactions } from '@/lib/api';
+import { BankAccountDto, TransactionDto } from '@arthax/types';
 
 interface AccountInspectorPanelProps {
   selectedAccount: string;
   selectedBank: string;
   isMasked: boolean;
+  accounts?: BankAccountDto[];
 }
 
 export const AccountInspectorPanel: React.FC<AccountInspectorPanelProps> = ({
   selectedAccount,
   selectedBank,
   isMasked,
+  accounts = [],
 }) => {
   const [copied, setCopied] = useState<boolean>(false);
+  const [activePersona, setActivePersona] = useState(apiGetActivePersona());
+  const [transactions, setTransactions] = useState<TransactionDto[]>([]);
+  const [loadingTxs, setLoadingTxs] = useState<boolean>(false);
 
-  // Dynamic Inspector Data
-  const getIban = () => {
-    if (selectedAccount === 'ARTH-9021-001') return 'arthax.nava.cls.8491-904-in.001';
-    if (selectedAccount === 'ARTH-9021-002') return 'arthax.nava.cls.8491-904-in.002';
-    if (selectedAccount === 'ARTH-4412-001') return 'arthax.samaya.yield.8491-904-in.001';
-    if (selectedAccount === 'ARTH-8831-001') return 'arthax.setu.dvp.8491-904-in.001';
-    if (selectedAccount === 'ARTH-1190-001') return 'arthax.sthira.vault.8491-904-in.001';
-    if (selectedAccount === 'ARTH-7740-001') return 'arthax.vayu.instant.8491-904-in.001';
-    return `arthax.${selectedBank}.cls.8491-904-in.001`;
-  };
+  const currentAccount = accounts.find((a) => a.accountNumber === selectedAccount);
 
-  const getPurpose = () => {
-    if (selectedAccount === 'ARTH-9021-001') return 'Sovereign Salary Deposit';
-    if (selectedAccount === 'ARTH-9021-002') return 'Daily Merchant Spending Float';
-    if (selectedAccount === 'ARTH-4412-001') return 'Term Wealth Reserve (6.85% APY)';
-    if (selectedAccount === 'ARTH-8831-001') return 'DvP Cross-Bank Settlement Rail';
-    if (selectedAccount === 'ARTH-1190-001') return 'HSM Multi-Sig Escrow Custody';
-    if (selectedAccount === 'ARTH-7740-001') return 'Instant Micro-Transfer Transit';
-    return 'Operating Account';
-  };
+  useEffect(() => {
+    setActivePersona(apiGetActivePersona());
+  }, [selectedAccount]);
 
-  const iban = getIban();
-  const purpose = getPurpose();
+  useEffect(() => {
+    let isMounted = true;
+    if (currentAccount?.id) {
+      setLoadingTxs(true);
+      apiFetchAccountTransactions(currentAccount.id)
+        .then((txs) => {
+          if (isMounted) {
+            setTransactions(Array.isArray(txs) ? txs.slice(0, 3) : []);
+          }
+        })
+        .catch(() => {
+          if (isMounted) setTransactions([]);
+        })
+        .finally(() => {
+          if (isMounted) setLoadingTxs(false);
+        });
+    } else {
+      setTransactions([]);
+    }
+
+    return () => {
+      isMounted = false;
+    };
+  }, [currentAccount?.id]);
+
+  const iban = currentAccount
+    ? `arthax.${(currentAccount.bankId || selectedBank).toLowerCase()}.cls.${currentAccount.accountNumber.toLowerCase()}`
+    : `arthax.${selectedBank.toLowerCase()}.cls.unlinked`;
+
+  const purpose = currentAccount?.purpose || 'General Sovereign Operating Liquidity';
 
   const handleCopy = () => {
     navigator.clipboard.writeText(iban);
@@ -101,15 +122,19 @@ export const AccountInspectorPanel: React.FC<AccountInspectorPanelProps> = ({
         <div className="flex flex-col gap-2.5 text-xs font-sans">
           <div className="flex items-center justify-between pb-2 border-b border-[#74777F]/15">
             <span className="text-[#43474E]">Purpose Designation</span>
-            <span className="font-semibold text-[#121C28]">{purpose}</span>
+            <span className="font-semibold text-[#121C28] truncate max-w-[200px]" title={purpose}>
+              {purpose}
+            </span>
           </div>
           <div className="flex items-center justify-between pb-2 border-b border-[#74777F]/15">
             <span className="text-[#43474E]">Beneficiary</span>
-            <span className="font-semibold text-[#121C28]">Ananya Sharma (#8491-904-IN)</span>
+            <span className="font-semibold text-[#121C28] truncate max-w-[200px]">
+              {activePersona.displayName || 'Sovereign Citizen'} ({activePersona.govIdNumber || 'GOV-ID'})
+            </span>
           </div>
           <div className="flex items-center justify-between pb-2 border-b border-[#74777F]/15">
-            <span className="text-[#43474E]">Assigned Officer</span>
-            <span className="font-semibold text-[#121C28]">R. Sen (Node Custodian)</span>
+            <span className="text-[#43474E]">Assigned Custodian</span>
+            <span className="font-semibold text-[#121C28]">Institutional Node Custodian</span>
           </div>
           <div className="flex items-center justify-between pb-2 border-b border-[#74777F]/15">
             <span className="text-[#43474E]">Cryptographic Enclave</span>
@@ -138,79 +163,63 @@ export const AccountInspectorPanel: React.FC<AccountInspectorPanelProps> = ({
           </div>
 
           <div className="flex flex-col gap-2">
-            {/* Tx 1 */}
-            <div className="p-2.5 rounded-xl bg-[#F8F9FF] border border-[#74777F]/15 flex items-center justify-between text-xs">
-              <div className="flex items-center gap-2">
-                <div className="w-6 h-6 rounded-md bg-[#A8F5BF]/60 text-[#002110] flex items-center justify-center shrink-0">
-                  <ArrowDown className="w-3.5 h-3.5 text-[#10B981]" />
-                </div>
-                <div className="flex flex-col">
-                  <span className="font-semibold text-[#121C28]">Gov Sovereign Payroll</span>
-                  <span className="font-mono text-[10px] text-[#74777F]">TX-98402 • CLS Final</span>
-                </div>
+            {loadingTxs ? (
+              <div className="p-3 text-center text-xs text-[#74777F] font-mono">
+                Syncing ledger events...
               </div>
-              <div className="text-right">
-                <span className="font-mono font-bold text-[#10B981]">
-                  {isMasked ? '••••••' : '+45,000.00'}
-                </span>
-                <div className="font-mono text-[10px] text-[#74777F]">
-                  {isMasked ? '••••' : '142,500.00'} ARTH
-                </div>
-              </div>
-            </div>
+            ) : transactions.length > 0 ? (
+              transactions.map((tx) => {
+                const amt = Number(BigInt(tx.amountMinor)) / 100;
+                const isIncoming = tx.type === 'REWARD' || tx.destinationAccountId === currentAccount?.id;
 
-            {/* Tx 2 */}
-            <div className="p-2.5 rounded-xl bg-[#F8F9FF] border border-[#74777F]/15 flex items-center justify-between text-xs">
-              <div className="flex items-center gap-2">
-                <div className="w-6 h-6 rounded-md bg-[#FFDAD6] text-[#93000A] flex items-center justify-center shrink-0">
-                  <ArrowUp className="w-3.5 h-3.5 text-[#BA1A1A]" />
-                </div>
-                <div className="flex flex-col">
-                  <span className="font-semibold text-[#121C28]">DvP Settlement SETU</span>
-                  <span className="font-mono text-[10px] text-[#74777F]">TX-98319 • Interbank</span>
-                </div>
+                return (
+                  <div key={tx.id} className="p-2.5 rounded-xl bg-[#F8F9FF] border border-[#74777F]/15 flex items-center justify-between text-xs">
+                    <div className="flex items-center gap-2">
+                      <div className={`w-6 h-6 rounded-md flex items-center justify-center shrink-0 ${
+                        isIncoming ? 'bg-[#A8F5BF]/60 text-[#002110]' : 'bg-[#FFDAD6] text-[#93000A]'
+                      }`}>
+                        {isIncoming ? <ArrowDown className="w-3.5 h-3.5 text-[#10B981]" /> : <ArrowUp className="w-3.5 h-3.5 text-[#BA1A1A]" />}
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="font-semibold text-[#121C28] capitalize">
+                          {tx.type.toLowerCase().replace(/_/g, ' ')}
+                        </span>
+                        <span className="font-mono text-[10px] text-[#74777F]">
+                          {tx.referenceNumber} • {tx.status}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <span className={`font-mono font-bold ${isIncoming ? 'text-[#10B981]' : 'text-[#121C28]'}`}>
+                        {isIncoming ? '+' : '-'}{isMasked ? '••••••' : amt.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      </span>
+                      <div className="font-mono text-[10px] text-[#74777F]">
+                        ARTH
+                      </div>
+                    </div>
+                  </div>
+                );
+              })
+            ) : (
+              <div className="p-4 rounded-xl bg-[#F8F9FF] border border-dashed border-[#74777F]/20 text-center flex flex-col items-center gap-1.5 text-xs text-[#74777F]">
+                <Receipt className="w-4 h-4 text-[#74777F]" />
+                <span>Ledger Initialized • Double-Entry Valid</span>
+                <span className="font-mono text-[10px] text-[#10B981]">CLS Synchronized</span>
               </div>
-              <div className="text-right">
-                <span className="font-mono font-bold text-[#121C28]">
-                  {isMasked ? '••••••' : '-6,500.00'}
-                </span>
-                <div className="font-mono text-[10px] text-[#74777F]">
-                  {isMasked ? '••••' : '97,500.00'} ARTH
-                </div>
-              </div>
-            </div>
-
-            {/* Tx 3 */}
-            <div className="p-2.5 rounded-xl bg-[#F8F9FF] border border-[#74777F]/15 flex items-center justify-between text-xs">
-              <div className="flex items-center gap-2">
-                <div className="w-6 h-6 rounded-md bg-[#FFDAD6] text-[#93000A] flex items-center justify-center shrink-0">
-                  <ArrowUp className="w-3.5 h-3.5 text-[#BA1A1A]" />
-                </div>
-                <div className="flex flex-col">
-                  <span className="font-semibold text-[#121C28]">SAMAYA Term Allocation</span>
-                  <span className="font-mono text-[10px] text-[#74777F]">TX-97992 • Auto-Yield</span>
-                </div>
-              </div>
-              <div className="text-right">
-                <span className="font-mono font-bold text-[#121C28]">
-                  {isMasked ? '••••••' : '-2,500.00'}
-                </span>
-                <div className="font-mono text-[10px] text-[#74777F]">
-                  {isMasked ? '••••' : '104,000.00'} ARTH
-                </div>
-              </div>
-            </div>
+            )}
           </div>
         </div>
 
         {/* Deep Dive Link */}
-        <a
-          href={`/user/banks/${selectedAccount}`}
-          className="w-full py-2.5 px-3 rounded-xl bg-[#022448] hover:bg-[#1E3A5F] text-white font-sans text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors shadow-2xs"
-        >
-          <span>Open Full Account Ledger</span>
-          <ExternalLink className="w-3.5 h-3.5" />
-        </a>
+        {selectedAccount && currentAccount && (
+          <a
+            href={`/user/banks/${selectedAccount}`}
+            className="w-full py-2.5 px-3 rounded-xl bg-[#022448] hover:bg-[#1E3A5F] text-white font-sans text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors shadow-2xs"
+          >
+            <span>Open Full Account Ledger</span>
+            <ExternalLink className="w-3.5 h-3.5" />
+          </a>
+        )}
 
         {/* Node Verification Footprint */}
         <div className="bg-[#EEF4FF] rounded-xl p-3 flex items-center justify-between text-[#43474E] font-mono text-xs border border-[#74777F]/20">
@@ -218,7 +227,7 @@ export const AccountInspectorPanel: React.FC<AccountInspectorPanelProps> = ({
             <Lock className="w-3.5 h-3.5 text-[#10B981]" />
             <span>Cryptographic Proof Valid</span>
           </div>
-          <span className="text-[11px] text-[#74777F]">BLOCK: 28,102,510</span>
+          <span className="text-[11px] text-[#74777F]">CLS VERIFIED</span>
         </div>
       </div>
     </div>

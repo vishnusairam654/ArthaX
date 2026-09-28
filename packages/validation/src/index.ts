@@ -28,7 +28,17 @@ export type VerifyOtpInput = z.infer<typeof VerifyOtpSchema>;
 
 export const CreateGovIdSchema = z.object({
   email: z.string().email().max(255),
-  otpCode: z.string().regex(/^\d{6}$/),
+  otpCode: z.string().regex(/^\d{6}$/).optional(),
+  registrationTicket: z.string().optional(),
+  displayName: z.string().min(2).max(100).optional(),
+  profession: z.string().max(100).optional(),
+  primaryPurpose: z.string().max(100).optional(),
+  preferredBankId: z.string().max(30).optional(),
+  financialPassword: z
+    .string()
+    .min(8, 'Financial Password must be at least 8 characters')
+    .max(128)
+    .optional(),
   govPassword: z
     .string()
     .min(10, 'GOV Password must be at least 10 characters')
@@ -49,6 +59,9 @@ export const SetFinancialPasswordSchema = z.object({
     .regex(/[0-9]/, 'Must contain at least one digit')
     .regex(/[^A-Za-z0-9]/, 'Must contain at least one special symbol'),
   displayName: z.string().min(2).max(100).optional(),
+  profession: z.string().max(100).optional(),
+  primaryPurpose: z.string().max(100).optional(),
+  preferredBankId: z.string().max(30).optional(),
 });
 
 export type SetFinancialPasswordInput = z.infer<typeof SetFinancialPasswordSchema>;
@@ -59,6 +72,14 @@ export const LoginSchema = z.object({
 });
 
 export type LoginInput = z.infer<typeof LoginSchema>;
+
+export const LoginWithOtpSchema = z.object({
+  email: z.string().email().max(255),
+  code: z.string().regex(/^\d{6}$/, 'OTP must be a 6-digit numeric verification code'),
+});
+
+export type LoginWithOtpInput = z.infer<typeof LoginWithOtpSchema>;
+
 
 export const StepUpAuthSchema = z.object({
   financialPassword: z.string().min(1, 'Financial password is required for verification'),

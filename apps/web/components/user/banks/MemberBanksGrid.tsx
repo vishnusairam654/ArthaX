@@ -2,40 +2,32 @@
 
 import React from 'react';
 import { AnimatedMaskedValue } from '../AnimatedMaskedValue';
+import { BankAccountDto } from '@arthax/types';
 
 interface MemberBanksGridProps {
   isMasked: boolean;
   selectedBank: string;
   onSelectBank: (bankId: string) => void;
+  accounts?: BankAccountDto[];
 }
 
-interface MemberBankData {
+interface MemberBankMeta {
   id: string;
   name: string;
   code: string;
-  tag: string;
-  tagColor: string;
   subtitle: string;
   label: string;
-  balance: string;
-  statusText: string;
-  accountCount: string;
   logo: string;
   isPrimary?: boolean;
 }
 
-export const memberBanks: MemberBankData[] = [
+export const memberBanksMeta: MemberBankMeta[] = [
   {
     id: 'nava',
     name: 'NAVA Bank',
     code: '#001-NAVA',
-    tag: 'Primary Node',
-    tagColor: 'bg-[#022448] text-white',
     subtitle: 'Master Operating Rail',
     label: 'Available Liquidity',
-    balance: '185,420.00',
-    statusText: 'CLS Synced',
-    accountCount: '2 Accts',
     logo: '/assets/banks/nava_bank.png',
     isPrimary: true,
   },
@@ -43,52 +35,32 @@ export const memberBanks: MemberBankData[] = [
     id: 'samaya',
     name: 'SAMAYA Bank',
     code: '#002-SAMY',
-    tag: '6.85% APY',
-    tagColor: 'bg-[#FFDDB6] text-[#2A1800]',
     subtitle: 'Wealth Term Reserve',
     label: 'Term Capital',
-    balance: '82,100.00',
-    statusText: 'Yield Active',
-    accountCount: '1 Acct',
     logo: '/assets/banks/samaya_bank.png',
   },
   {
     id: 'setu',
     name: 'SETU Bank',
     code: '#003-SETU',
-    tag: 'DvP Clearing',
-    tagColor: 'bg-[#DBE1FF] text-[#031847]',
     subtitle: 'Cross-Border Gateway',
     label: 'Transit Buffer',
-    balance: '42,600.00',
-    statusText: 'RTGS Standby',
-    accountCount: '1 Acct',
     logo: '/assets/banks/setu_bank.png',
   },
   {
     id: 'sthira',
     name: 'STHIRA Bank',
     code: '#004-STHR',
-    tag: 'Escrow Vault',
-    tagColor: 'bg-[#DFE9FA] text-[#121C28]',
     subtitle: 'Sovereign Custody',
     label: 'Vault Balance',
-    balance: '35,000.00',
-    statusText: 'HSM Locked',
-    accountCount: '1 Acct',
     logo: '/assets/banks/sthira_bank.png',
   },
   {
     id: 'vayu',
     name: 'VAYU Bank',
     code: '#005-VAYU',
-    tag: 'High Freq',
-    tagColor: 'bg-[#E0E2EC] text-[#43474E]',
     subtitle: 'Instant Micro-Transfers',
     label: 'Standby Float',
-    balance: '0.00',
-    statusText: 'Zero-Balance',
-    accountCount: '1 Acct',
     logo: '/assets/banks/vayu_bank.png',
   },
 ];
@@ -97,12 +69,17 @@ export const MemberBanksGrid: React.FC<MemberBanksGridProps> = ({
   isMasked,
   selectedBank,
   onSelectBank,
+  accounts = [],
 }) => {
+  const connectedCount = memberBanksMeta.filter((bank) =>
+    accounts.some((a) => a.bankId?.toLowerCase() === bank.id.toLowerCase()),
+  ).length;
+
   return (
     <section className="flex flex-col gap-3 mb-8">
       <div className="flex items-center justify-between px-1">
         <span className="font-mono text-xs font-semibold text-[#022448] uppercase tracking-wider">
-          Connected Member Banks (5 Nodes Active)
+          Connected Member Banks ({connectedCount} of 5 Nodes Active)
         </span>
         <span className="font-sans text-xs text-[#74777F]">
           Click any institution to isolate ledgers &amp; clearing controls
@@ -110,8 +87,34 @@ export const MemberBanksGrid: React.FC<MemberBanksGridProps> = ({
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3" id="bank-switcher-container">
-        {memberBanks.map((bank) => {
+        {memberBanksMeta.map((bank) => {
           const isSelected = selectedBank === bank.id;
+          const bankAccounts = accounts.filter(
+            (a) => a.bankId?.toLowerCase() === bank.id.toLowerCase(),
+          );
+          const isConnected = bankAccounts.length > 0;
+          const totalMinor = bankAccounts.reduce(
+            (sum, a) => sum + BigInt(a.balanceMinor || '0'),
+            0n,
+          );
+          const balance = (Number(totalMinor) / 100).toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          });
+          const tag = isConnected
+            ? bank.isPrimary
+              ? 'Primary Node'
+              : 'Connected'
+            : 'Available';
+          const tagColor = isConnected
+            ? bank.isPrimary
+              ? 'bg-[#022448] text-white'
+              : 'bg-[#A8F5BF]/80 text-[#002110]'
+            : 'bg-[#E0E2EC] text-[#43474E]';
+          const statusText = isConnected ? 'CLS Synced' : 'Not Linked';
+          const accountCount = isConnected
+            ? `${bankAccounts.length} Acct${bankAccounts.length > 1 ? 's' : ''}`
+            : '0 Accts';
 
           return (
             <button
@@ -134,8 +137,8 @@ export const MemberBanksGrid: React.FC<MemberBanksGridProps> = ({
                     className="h-7 w-auto object-contain group-hover:scale-105 transition-transform"
                   />
                 </div>
-                <span className={`px-2 py-0.5 rounded-full font-mono text-[10px] font-bold uppercase tracking-wider ${bank.tagColor}`}>
-                  {bank.tag}
+                <span className={`px-2 py-0.5 rounded-full font-mono text-[10px] font-bold uppercase tracking-wider ${tagColor}`}>
+                  {tag}
                 </span>
               </div>
 
@@ -154,7 +157,7 @@ export const MemberBanksGrid: React.FC<MemberBanksGridProps> = ({
                     {bank.label}
                   </div>
                   <div className="font-mono text-sm text-[#121C28] font-bold flex items-baseline gap-1">
-                    <AnimatedMaskedValue value={bank.balance} isMasked={isMasked} maskString="••••••••" />{' '}
+                    <AnimatedMaskedValue value={balance} isMasked={isMasked} maskString="••••••••" />{' '}
                     <span className="font-sans text-[10px] font-normal text-[#74777F]">ARTH</span>
                   </div>
                 </div>
@@ -162,11 +165,11 @@ export const MemberBanksGrid: React.FC<MemberBanksGridProps> = ({
 
               {/* Bottom Meta */}
               <div className="mt-3 flex items-center justify-between font-mono text-xs text-[#43474E]">
-                <span className="flex items-center gap-1.5 text-[#10B981] font-medium text-[11px]">
-                  <span className={`w-1.5 h-1.5 rounded-full ${bank.id === 'vayu' ? 'bg-[#74777F]' : 'bg-[#10B981]'}`}></span>
-                  {bank.statusText}
+                <span className={`flex items-center gap-1.5 font-medium text-[11px] ${isConnected ? 'text-[#10B981]' : 'text-[#74777F]'}`}>
+                  <span className={`w-1.5 h-1.5 rounded-full ${isConnected ? 'bg-[#10B981]' : 'bg-[#74777F]'}`}></span>
+                  {statusText}
                 </span>
-                <span className="text-[#74777F] text-[11px]">{bank.accountCount}</span>
+                <span className="text-[#74777F] text-[11px]">{accountCount}</span>
               </div>
             </button>
           );

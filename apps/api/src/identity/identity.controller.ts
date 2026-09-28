@@ -24,6 +24,8 @@ import {
   SetFinancialPasswordInput,
   LoginSchema,
   LoginInput,
+  LoginWithOtpSchema,
+  LoginWithOtpInput,
   StepUpAuthSchema,
   StepUpAuthInput,
 } from '@arthax/validation';
@@ -81,6 +83,33 @@ export class IdentityController {
     return this.identityService.login(body, ip, userAgent);
   }
 
+  @Post('login/otp/request')
+  @HttpCode(HttpStatus.OK)
+  @UsePipes(new ZodValidationPipe(RegisterEmailSchema))
+  async sendLoginOtp(@Body() body: RegisterEmailInput, @Req() req: Request) {
+    const ip = req.ip || req.socket.remoteAddress;
+    return this.identityService.sendLoginOtp(body.email, ip);
+  }
+
+  @Post('login/otp/verify')
+  @HttpCode(HttpStatus.OK)
+  @UsePipes(new ZodValidationPipe(LoginWithOtpSchema))
+  async loginWithOtp(@Body() body: LoginWithOtpInput, @Req() req: Request) {
+    const ip = req.ip || req.socket.remoteAddress || '127.0.0.1';
+    const userAgent = req.headers['user-agent'] || 'Unknown-Client';
+    return this.identityService.loginWithOtp(body, ip, userAgent);
+  }
+
+  @Post('logout')
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  async logout(@CurrentUser() user: AuthSessionPayload & { jti?: string }) {
+    if (user?.jti) {
+      await this.identityService.revokeSession(user.sub, user.jti);
+    }
+    return { success: true, message: 'Sovereign session revoked successfully' };
+  }
+
   @Post('step-up')
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
@@ -119,5 +148,20 @@ export class IdentityController {
   @UseGuards(JwtAuthGuard)
   async emergencyKillswitch(@CurrentUser('sub') userId: string) {
     return this.identityService.emergencyKillswitch(userId);
+  }
+
+  @Get('supabase/status')
+  async getSupabaseStatus() {
+    return this.identityService.getSupabaseAuthStatus();
+  }
+
+  @Post('supabase/sync-all')
+  async syncAllToSupabase() {
+    return this.identityService.syncAllExistingUsersToSupabase();
+  }
+
+  @Post('supabase/purge-and-sync')
+  async purgeLocalAndSyncSupabase() {
+    return this.identityService.purgeLocalUsersAndSyncWithSupabase();
   }
 }

@@ -1,7 +1,8 @@
 'use client';
 
 import React from 'react';
-import { Terminal } from 'lucide-react';
+import Link from 'next/link';
+import { Terminal, ShieldCheck } from 'lucide-react';
 
 interface InstitutionalCtaSectionProps {
   onOpenGovModal?: () => void;
@@ -26,16 +27,24 @@ export const InstitutionalCtaSection: React.FC<InstitutionalCtaSectionProps> = (
           </p>
         </div>
 
-        <div className="flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto relative z-10 shrink-0">
+        <div className="flex flex-col sm:flex-row items-center gap-3.5 w-full lg:w-auto relative z-10 shrink-0">
+          <Link
+            href="/gov"
+            id="cta-btn-gov-portal"
+            className="w-full sm:w-auto text-center px-6 py-3.5 bg-white/10 hover:bg-white/20 text-white font-body font-medium text-xs rounded-full border border-white/20 transition active:scale-95 flex items-center justify-center gap-2 shadow-xs"
+          >
+            <ShieldCheck className="w-3.5 h-3.5 text-[#A8742A]" />
+            <span>Sovereign GOV</span>
+          </Link>
           <a
             href="/user"
-            className="w-full sm:w-auto text-center px-7 py-3.5 bg-[#A8742A] hover:bg-[#936421] text-white font-body font-medium text-xs rounded-full shadow-xs transition active:scale-95"
+            className="w-full sm:w-auto text-center px-6 py-3.5 bg-[#A8742A] hover:bg-[#936421] text-white font-body font-medium text-xs rounded-full shadow-xs transition active:scale-95"
           >
             Open User Account
           </a>
           <button
             onClick={onOpenGovModal}
-            className="w-full sm:w-auto text-center px-7 py-3.5 bg-white hover:bg-[#F2EFE7] text-[#022448] font-body font-medium text-xs rounded-full transition active:scale-95 shadow-sm"
+            className="w-full sm:w-auto text-center px-6 py-3.5 bg-white hover:bg-[#F2EFE7] text-[#022448] font-body font-medium text-xs rounded-full transition active:scale-95 shadow-sm"
           >
             Charter Node Access
           </button>

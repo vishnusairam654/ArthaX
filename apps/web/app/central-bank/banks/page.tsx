@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
@@ -21,52 +21,90 @@ import {
   ChevronRight,
   X,
   AlertOctagon,
+  RefreshCw,
 } from 'lucide-react';
-import {
-  MOCK_COMMERCIAL_BANKS,
-  CommercialBankRecord,
-  BankRegulatoryStatus,
-  DEMO_POLICY_NOTICE,
-} from '@/components/central-bank/CentralBankMockData';
+import { BankPrudentialMetricsDto } from '@arthax/types';
+import { apiFetchBankPrudentialMetrics, subscribePortalDataInvalidation } from '@/lib/api';
 import { CentralBankMaskedValue } from '@/components/central-bank/CentralBankMaskedValue';
 
+function formatMinorToArth(minorStr: string | number | undefined): string {
+  if (!minorStr) return '0.00';
+  try {
+    const val = typeof minorStr === 'string' ? BigInt(minorStr) : BigInt(Math.floor(minorStr));
+    const major = val / 100n;
+    const minor = (val < 0n ? -val % 100n : val % 100n).toString().padStart(2, '0');
+    return `${Number(major).toLocaleString('en-US')}.${minor}`;
+  } catch {
+    return '0.00';
+  }
+}
+
+const BANK_LOGOS: Record<string, string> = {
+  nava: '/assets/banks/nava_bank.png',
+  samaya: '/assets/banks/samaya_bank.png',
+  setu: '/assets/banks/setu_bank.png',
+  sthira: '/assets/banks/sthira_bank.png',
+  vayu: '/assets/banks/vayu_bank.png',
+};
+
+const BANK_LICENSES: Record<string, string> = {
+  nava: 'CB-LIC-2024-001',
+  samaya: 'CB-LIC-2024-002',
+  setu: 'CB-LIC-2024-003',
+  sthira: 'CB-LIC-2024-004',
+  vayu: 'CB-LIC-2024-005',
+};
+
 export default function BankRegistryPage() {
-  const [banks, setBanks] = useState<CommercialBankRecord[]>(MOCK_COMMERCIAL_BANKS);
+  const [banks, setBanks] = useState<BankPrudentialMetricsDto[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [refreshing, setRefreshing] = useState(false);
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedBank, setSelectedBank] = useState<CommercialBankRecord | null>(null);
+  const [selectedBank, setSelectedBank] = useState<BankPrudentialMetricsDto | null>(null);
   const [actionNotice, setActionNotice] = useState<string | null>(null);
 
-  const filteredBanks = banks.filter((b) => {
-    const matchesStatus = statusFilter === 'all' || b.status === statusFilter;
-    const matchesSearch =
-      !searchQuery ||
-      b.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      b.shortName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      b.licenseNumber.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesStatus && matchesSearch;
-  });
+  const loadBanks = useCallback(async (isSilent = false) => {
+    if (!isSilent) setLoading(true);
+    else setRefreshing(true);
+    setError(null);
 
-  const handleBankAction = (
-    bankId: string,
-    newStatus: BankRegulatoryStatus,
-    actionLabel: string
-  ) => {
-    setBanks((prev) =>
-      prev.map((b) => (b.id === bankId ? { ...b, status: newStatus } : b))
-    );
-    if (selectedBank && selectedBank.id === bankId) {
-      setSelectedBank({ ...selectedBank, status: newStatus });
+    try {
+      const data = await apiFetchBankPrudentialMetrics();
+      setBanks(Array.isArray(data) ? data : []);
+    } catch (err: any) {
+      console.error('Failed to load bank prudential metrics:', err);
+      setError(err?.message || 'Failed to retrieve commercial bank prudential supervision data');
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
     }
-    setActionNotice(
-      `Bank ${bankId.toUpperCase()} status updated to "${newStatus}" (${actionLabel}). Logged in append-only audit register.`
-    );
-    setTimeout(() => setActionNotice(null), 4500);
-  };
+  }, []);
+
+  useEffect(() => {
+    loadBanks();
+    const unsub = subscribePortalDataInvalidation(() => {
+      loadBanks(true);
+    });
+    return unsub;
+  }, [loadBanks]);
+
+  const filteredBanks = useMemo(() => {
+    return banks.filter((b) => {
+      const matchesStatus =
+        statusFilter === 'all' ||
+        b.complianceStatus?.toLowerCase() === statusFilter.toLowerCase();
+      const matchesSearch =
+        !searchQuery ||
+        b.bankName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        b.bankId.toLowerCase().includes(searchQuery.toLowerCase());
+      return matchesStatus && matchesSearch;
+    });
+  }, [banks, statusFilter, searchQuery]);
 
   return (
     <div className="space-y-6">
-      
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-6 rounded-3xl border border-[#946726]/15 shadow-xs">
         <div>
@@ -75,47 +113,66 @@ export default function BankRegistryPage() {
               PRUDENTIAL SUPERVISION
             </span>
             <span className="text-[11px] text-[#A8742A] font-mono font-medium">
-              [PROVISIONAL DEMO BENCHMARKS]
+              [LIVE CENTRAL BANK REGISTRY]
             </span>
           </div>
           <h1 className="font-serif font-bold text-2xl text-[#2A2012] mt-1">
             Commercial Bank Registry
           </h1>
           <p className="text-xs sm:text-sm text-[#5C574F] mt-0.5">
-            Licensing, statutory charter maintenance, ownership validation, and operational status enforcement for all five licensed depository institutions.
+            Licensing, statutory charter maintenance, ownership validation, and operational status enforcement for licensed depository institutions.
           </p>
         </div>
 
         <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => loadBanks(true)}
+            disabled={loading || refreshing}
+            className="p-2.5 rounded-xl bg-white border border-[#946726]/20 hover:bg-[#946726]/8 text-[#946726] transition shadow-xs cursor-pointer disabled:opacity-50"
+            title="Refresh Bank Registry"
+          >
+            <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
+          </button>
           <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-100 text-emerald-800 border border-emerald-300 text-xs font-mono font-bold">
             <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse" />
-            5 Institutions Chartered
+            {banks.length || 5} Institutions Chartered
           </span>
         </div>
       </div>
 
-      {actionNotice && (
-        <div className="p-3.5 bg-emerald-50 border border-emerald-200 text-emerald-900 rounded-2xl text-xs flex items-center gap-2 animate-in fade-in">
-          <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-          <span>{actionNotice}</span>
+      {/* Error Banner */}
+      {error && (
+        <div className="p-4 rounded-2xl bg-[#B5482E]/10 border border-[#B5482E]/20 text-[#B5482E] text-xs font-medium flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <AlertTriangle className="w-4 h-4 shrink-0" />
+            <span>{error}</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => loadBanks()}
+            className="px-2.5 py-1 rounded-lg bg-[#B5482E] text-white text-[11px] font-bold hover:bg-[#8F3520] transition"
+          >
+            Retry
+          </button>
         </div>
       )}
 
       {/* Filter & Search Toolbar */}
       <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 bg-white p-4 rounded-2xl border border-[#946726]/15 shadow-xs">
         <div className="flex flex-wrap items-center gap-2">
-          {['all', 'Active', 'Pending', 'Suspended', 'Closed'].map((st) => (
+          {['all', 'COMPLIANT', 'DEFICIT'].map((st) => (
             <button
               key={st}
               type="button"
               onClick={() => setStatusFilter(st)}
               className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition cursor-pointer ${
-                statusFilter === st
+                statusFilter.toLowerCase() === st.toLowerCase()
                   ? 'bg-[#946726] text-white shadow-xs'
                   : 'text-[#5C574F] hover:text-[#946726] bg-[#F6F8F7]'
               }`}
             >
-              {st === 'all' ? 'All Banks (5)' : st}
+              {st === 'all' ? `All Banks (${banks.length})` : st}
             </button>
           ))}
         </div>
@@ -126,7 +183,7 @@ export default function BankRegistryPage() {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search by bank name, short code, license #..."
+            placeholder="Search by bank name or ID..."
             className="pl-9 pr-4 py-1.5 bg-[#F6F8F7] border border-[#946726]/15 rounded-xl text-xs outline-none focus:border-[#946726] focus:ring-2 focus:ring-[#946726]/15 w-full md:w-72"
           />
         </div>
@@ -134,299 +191,188 @@ export default function BankRegistryPage() {
 
       {/* Commercial Bank Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredBanks.map((bank) => {
-          const isSuspended = bank.status === 'Suspended';
-          const isWatchlist = bank.reserveCompliance === 'Watchlist';
+        {loading ? (
+          <div className="col-span-3 py-16 text-center text-[#74777F]">
+            <RefreshCw className="w-6 h-6 animate-spin mx-auto mb-2 text-[#946726]" />
+            <span>Loading commercial bank regulatory registry...</span>
+          </div>
+        ) : filteredBanks.length === 0 ? (
+          <div className="col-span-3 py-16 text-center text-[#74777F]">
+            <Building2 className="w-8 h-8 text-[#946726] mx-auto mb-2 opacity-50" />
+            <span className="font-serif font-bold text-sm text-[#2A2012] block">No Institutions Found</span>
+            <span className="text-xs text-[#5C574F]">No commercial banks match current filter criteria.</span>
+          </div>
+        ) : (
+          filteredBanks.map((bank) => {
+            const isCompliant = bank.complianceStatus === 'COMPLIANT';
+            const logoUrl = BANK_LOGOS[bank.bankId] || '/assets/banks/nava_bank.png';
+            const licenseNo = BANK_LICENSES[bank.bankId] || `CB-LIC-2024-${bank.bankId.toUpperCase()}`;
 
-          return (
-            <div
-              key={bank.id}
-              className={`bg-white rounded-3xl border p-6 shadow-xs hover:shadow-md transition-all flex flex-col justify-between group ${
-                isSuspended
-                  ? 'border-[#B5482E]/40'
-                  : isWatchlist
-                  ? 'border-amber-300'
-                  : 'border-[#946726]/15'
-              }`}
-            >
-              <div className="space-y-4">
-                {/* Header Card Row */}
-                <div className="flex items-start justify-between gap-3">
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-2xl bg-white border border-[#946726]/15 p-1 flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform">
-                      <Image
-                        src={bank.logo}
-                        alt={bank.name}
-                        width={36}
-                        height={36}
-                        className="object-contain"
-                      />
+            return (
+              <div
+                key={bank.bankId}
+                className="bg-white rounded-3xl border border-[#946726]/15 p-6 shadow-xs hover:shadow-md transition-all flex flex-col justify-between group"
+              >
+                <div className="space-y-4">
+                  {/* Header Card Row */}
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-2xl bg-white border border-[#946726]/15 p-1 flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform">
+                        <Image
+                          src={logoUrl}
+                          alt={bank.bankName}
+                          width={36}
+                          height={36}
+                          className="object-contain"
+                        />
+                      </div>
+                      <div>
+                        <h3 className="font-serif font-bold text-base text-[#2A2012]">
+                          {bank.bankName}
+                        </h3>
+                        <span className="font-mono text-[10px] text-[#74777F] block">
+                          {licenseNo} • NODE: {bank.bankId.toUpperCase()}
+                        </span>
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="font-serif font-bold text-base text-[#2A2012]">
-                        {bank.name}
-                      </h3>
-                      <span className="font-mono text-[10px] text-[#74777F] block">
-                        {bank.licenseNumber} • Est. {bank.establishedDate}
+
+                    <span
+                      className={`px-2 py-0.5 rounded-full text-[10px] font-mono font-bold border ${
+                        isCompliant
+                          ? 'bg-emerald-100 text-emerald-800 border-emerald-300'
+                          : 'bg-red-100 text-[#B5482E] border-red-300'
+                      }`}
+                    >
+                      {bank.complianceStatus}
+                    </span>
+                  </div>
+
+                  {/* Key Metrics Breakdown */}
+                  <div className="grid grid-cols-2 gap-2 font-mono text-xs pt-1">
+                    <div className="p-2.5 rounded-xl bg-[#F6F8F7] border border-[#946726]/10">
+                      <span className="text-[9px] uppercase tracking-wider text-[#74777F] block">
+                        Deposits (NDTL)
                       </span>
+                      <strong className="text-[#2A2012] text-xs">
+                        <CentralBankMaskedValue
+                          value={`${formatMinorToArth(bank.ndtlMinor)} ARTH`}
+                        />
+                      </strong>
+                    </div>
+
+                    <div className="p-2.5 rounded-xl bg-[#F6F8F7] border border-[#946726]/10">
+                      <span className="text-[9px] uppercase tracking-wider text-[#74777F] block">
+                        CRR Maintained
+                      </span>
+                      <strong className="text-[#2A2012] text-xs">
+                        <CentralBankMaskedValue
+                          value={`${formatMinorToArth(bank.crrMaintainedMinor)} ARTH`}
+                        />
+                      </strong>
+                    </div>
+
+                    <div className="p-2.5 rounded-xl bg-[#F6F8F7] border border-[#946726]/10">
+                      <span className="text-[9px] uppercase tracking-wider text-[#74777F] block">
+                        CRR / SLR Ratios
+                      </span>
+                      <strong className="text-[#2A2012] text-xs">
+                        {(bank.crrRatioPercent ?? 12.0).toFixed(1)}% / {(bank.slrRatioPercent ?? 18.0).toFixed(1)}%
+                      </strong>
+                    </div>
+
+                    <div className="p-2.5 rounded-xl bg-[#F6F8F7] border border-[#946726]/10">
+                      <span className="text-[9px] uppercase tracking-wider text-[#74777F] block">
+                        Capital Adequacy (CAR)
+                      </span>
+                      <strong className="text-[#2A2012] text-xs">
+                        {(bank.carRatioPercent ?? 16.0).toFixed(1)}% CAR
+                      </strong>
                     </div>
                   </div>
+                </div>
 
-                  <span
-                    className={`px-2 py-0.5 rounded-full text-[10px] font-mono font-bold border ${
-                      bank.status === 'Active'
-                        ? 'bg-emerald-100 text-emerald-800 border-emerald-300'
-                        : bank.status === 'Suspended'
-                        ? 'bg-red-100 text-[#B5482E] border-red-300'
-                        : 'bg-amber-100 text-amber-800 border-amber-300'
-                    }`}
+                {/* Action Buttons Footer */}
+                <div className="pt-4 mt-4 border-t border-[#946726]/10 flex items-center justify-between gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedBank(bank)}
+                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-[#946726] hover:bg-[#2A2012] text-white text-xs font-bold transition cursor-pointer"
                   >
-                    {bank.status}
-                  </span>
-                </div>
-
-                {/* Key Metrics Breakdown */}
-                <div className="grid grid-cols-2 gap-2 font-mono text-xs pt-1">
-                  <div className="p-2.5 rounded-xl bg-[#F6F8F7] border border-[#946726]/10">
-                    <span className="text-[9px] uppercase tracking-wider text-[#74777F] block">
-                      Deposits
-                    </span>
-                    <strong className="text-[#2A2012] text-xs">
-                      <CentralBankMaskedValue value={bank.totalDeposits} suffix=" ARTH" />
-                    </strong>
-                  </div>
-
-                  <div className="p-2.5 rounded-xl bg-[#F6F8F7] border border-[#946726]/10">
-                    <span className="text-[9px] uppercase tracking-wider text-[#74777F] block">
-                      24h Volume
-                    </span>
-                    <strong className="text-[#2A2012] text-xs">
-                      <CentralBankMaskedValue value={bank.dailyTxVolume} suffix=" ARTH" />
-                    </strong>
-                  </div>
-
-                  <div className="p-2.5 rounded-xl bg-[#F6F8F7] border border-[#946726]/10">
-                    <span className="text-[9px] uppercase tracking-wider text-[#74777F] block">
-                      CRR / SLR [Demo]
-                    </span>
-                    <strong className="text-[#2A2012] text-xs">
-                      {bank.crrRatio.toFixed(1)}% / {bank.slrRatio.toFixed(1)}%
-                    </strong>
-                  </div>
-
-                  <div className="p-2.5 rounded-xl bg-[#F6F8F7] border border-[#946726]/10">
-                    <span className="text-[9px] uppercase tracking-wider text-[#74777F] block">
-                      Accounts / Customers
-                    </span>
-                    <strong className="text-[#2A2012] text-xs">
-                      {bank.accountCount.toLocaleString('en-US')} / {bank.customerCount.toLocaleString('en-US')}
-                    </strong>
-                  </div>
-                </div>
-
-                {/* Warning note if present */}
-                {bank.recentAuditFlag && (
-                  <div className="p-2.5 rounded-xl bg-amber-50 border border-amber-200 text-[11px] text-amber-900 leading-snug">
-                    <strong className="font-semibold block text-amber-800">Prudential Flag:</strong>
-                    {bank.recentAuditFlag}
-                  </div>
-                )}
-              </div>
-
-              {/* Action Buttons Footer */}
-              <div className="pt-4 mt-4 border-t border-[#946726]/10 flex items-center justify-between gap-2">
-                <button
-                  type="button"
-                  onClick={() => setSelectedBank(bank)}
-                  className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-[#946726] hover:bg-[#2A2012] text-white text-xs font-bold transition cursor-pointer"
-                >
-                  <Eye className="w-3.5 h-3.5" />
-                  <span>Inspect Dossier</span>
-                </button>
-
-                <div className="flex items-center gap-1 text-[11px] font-mono">
-                  {bank.status === 'Active' ? (
-                    <button
-                      type="button"
-                      onClick={() => handleBankAction(bank.id, 'Suspended', 'Emergency Supervisory Suspension')}
-                      className="px-2 py-1 rounded-lg text-[#B5482E] hover:bg-red-50 border border-red-200 transition font-bold cursor-pointer"
-                    >
-                      Suspend
-                    </button>
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={() => handleBankAction(bank.id, 'Active', 'Supervisory Reinstatement')}
-                      className="px-2 py-1 rounded-lg text-emerald-700 hover:bg-emerald-50 border border-emerald-200 transition font-bold cursor-pointer"
-                    >
-                      Reactivate
-                    </button>
-                  )}
+                    <Eye className="w-3.5 h-3.5" />
+                    <span>Inspect Dossier</span>
+                  </button>
                 </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })
+        )}
       </div>
 
-      {/* Bank Dossier Inspection Modal */}
+      {/* Modal for Selected Bank */}
       {selectedBank && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
-          <div className="relative w-full max-w-2xl bg-white rounded-3xl border border-[#946726]/20 shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
-            
-            {/* Modal Header */}
-            <div className="p-6 bg-[#946726] text-white flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-xl bg-white p-1 flex items-center justify-center shrink-0">
-                  <Image
-                    src={selectedBank.logo}
-                    alt={selectedBank.name}
-                    width={36}
-                    height={36}
-                    className="object-contain"
-                  />
-                </div>
-                <div>
-                  <span className="font-mono text-[10px] uppercase tracking-wider text-white/70 block">
-                    SOVEREIGN CHARTER FILE: {selectedBank.licenseNumber}
-                  </span>
-                  <h3 className="font-serif font-bold text-xl text-white">
-                    {selectedBank.name}
-                  </h3>
-                </div>
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs animate-in fade-in duration-200"
+          onClick={() => setSelectedBank(null)}
+        >
+          <div
+            className="relative w-full max-w-xl bg-white rounded-3xl border border-[#D8C7A5] shadow-2xl overflow-hidden max-h-[90vh] flex flex-col animate-in zoom-in-95 duration-200"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="p-5 bg-gradient-to-br from-[#946726] via-[#B88B38] to-[#7A5217] text-white flex items-center justify-between">
+              <div>
+                <h3 className="font-serif font-bold text-lg">{selectedBank.bankName}</h3>
+                <span className="text-[11px] font-mono text-[#F5E1B2]">
+                  NODE ID: {selectedBank.bankId.toUpperCase()}
+                </span>
               </div>
               <button
                 type="button"
                 onClick={() => setSelectedBank(null)}
-                className="p-1 rounded-full text-white/70 hover:text-white hover:bg-white/10 transition cursor-pointer"
+                className="p-1 rounded-full text-white/80 hover:text-white hover:bg-white/20 transition cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
-
-            {/* Modal Body (Scrollable) */}
-            <div className="p-6 space-y-5 overflow-y-auto font-sans text-xs bg-[#FDFBF7]">
-              
-              {/* Ownership & Leadership */}
-              <div className="p-4 bg-white rounded-2xl border border-[#946726]/15 space-y-2 shadow-xs">
-                <h4 className="font-serif font-bold text-sm text-[#2A2012]">
-                  Ownership &amp; Authority
-                </h4>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-[#5C574F]">
-                  <div>
-                    <span className="text-[10px] uppercase font-mono text-[#74777F] block">
-                      Governing Director
-                    </span>
-                    <strong className="text-[#2A2012] text-xs font-sans">
-                      {selectedBank.governingDirector}
-                    </strong>
-                  </div>
-                  <div>
-                    <span className="text-[10px] uppercase font-mono text-[#74777F] block">
-                      Chartered Since
-                    </span>
-                    <strong className="text-[#2A2012] text-xs font-mono">
-                      {selectedBank.establishedDate}
-                    </strong>
-                  </div>
-                  <div className="sm:col-span-2">
-                    <span className="text-[10px] uppercase font-mono text-[#74777F] block">
-                      Beneficial Ownership
-                    </span>
-                    <strong className="text-[#2A2012] text-xs font-sans">
-                      {selectedBank.ownership}
-                    </strong>
-                  </div>
-                </div>
-              </div>
-
-              {/* Prudential Metrics */}
-              <div className="p-4 bg-white rounded-2xl border border-[#946726]/15 space-y-3 shadow-xs">
-                <div className="flex items-center justify-between">
-                  <h4 className="font-serif font-bold text-sm text-[#2A2012]">
-                    Prudential Ratios &amp; Reserves
-                  </h4>
-                  <span className="text-[10px] text-[#A8742A] font-mono">
-                    [Provisional Demo Values]
-                  </span>
-                </div>
-
-                <div className="grid grid-cols-3 gap-3 font-mono text-center">
-                  <div className="p-2.5 rounded-xl bg-[#F6F8F7] border border-[#946726]/10">
-                    <span className="text-[9px] uppercase text-[#74777F] block">Cash Reserve (CRR)</span>
-                    <strong className="text-sm text-[#2A2012] font-bold">{selectedBank.crrRatio}%</strong>
-                    <span className="text-[9px] text-emerald-700 block">Min 12.0%</span>
-                  </div>
-                  <div className="p-2.5 rounded-xl bg-[#F6F8F7] border border-[#946726]/10">
-                    <span className="text-[9px] uppercase text-[#74777F] block">Statutory Liquidity (SLR)</span>
-                    <strong className="text-sm text-[#2A2012] font-bold">{selectedBank.slrRatio}%</strong>
-                    <span className="text-[9px] text-emerald-700 block">Min 18.0%</span>
-                  </div>
-                  <div className="p-2.5 rounded-xl bg-[#F6F8F7] border border-[#946726]/10">
-                    <span className="text-[9px] uppercase text-[#74777F] block">Capital Adequacy (CAR)</span>
-                    <strong className="text-sm text-[#2A2012] font-bold">{selectedBank.carRatio}%</strong>
-                    <span className="text-[9px] text-emerald-700 block">Min 14.0%</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Licensed Products */}
-              <div className="p-4 bg-white rounded-2xl border border-[#946726]/15 space-y-2 shadow-xs">
-                <h4 className="font-serif font-bold text-sm text-[#2A2012]">
-                  Approved Sovereign Financial Products
-                </h4>
-                <div className="flex flex-wrap gap-2">
-                  {selectedBank.licensedProducts.map((p) => (
-                    <span
-                      key={p}
-                      className="px-2.5 py-1 rounded-lg bg-[#946726]/8 text-[#946726] font-mono text-[11px] font-medium border border-[#946726]/15"
-                    >
-                      {p}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Supervisory Actions Bar */}
-              <div className="pt-2 flex flex-wrap items-center justify-between gap-3">
-                <span className="text-[11px] text-[#74777F] font-mono">
-                  Last Exam Date: <strong>{selectedBank.lastExamDate}</strong>
+            <div className="p-5 space-y-3 font-mono text-xs bg-[#FAF7EE]">
+              <div className="p-3 bg-white rounded-xl border border-[#D8C7A5] flex justify-between">
+                <span className="text-[#74777F]">Net Demand & Time Liabilities (NDTL):</span>
+                <span className="font-bold text-[#2A2012]">
+                  {formatMinorToArth(selectedBank.ndtlMinor)} ARTH
                 </span>
-
-                <div className="flex items-center gap-2">
-                  {selectedBank.status === 'Active' ? (
-                    <button
-                      type="button"
-                      onClick={() => handleBankAction(selectedBank.id, 'Suspended', 'Administrative Halt')}
-                      className="px-3.5 py-2 rounded-xl bg-[#B5482E] hover:bg-[#9B3C25] text-white text-xs font-bold shadow-xs transition cursor-pointer"
-                    >
-                      Suspend Charter
-                    </button>
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={() => handleBankAction(selectedBank.id, 'Active', 'Administrative Restoration')}
-                      className="px-3.5 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold shadow-xs transition cursor-pointer"
-                    >
-                      Reactivate Charter
-                    </button>
-                  )}
-                  <button
-                    type="button"
-                    onClick={() => setSelectedBank(null)}
-                    className="px-4 py-2 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 text-[#5C574F] text-xs font-semibold cursor-pointer"
-                  >
-                    Close Dossier
-                  </button>
-                </div>
               </div>
-
+              <div className="p-3 bg-white rounded-xl border border-[#D8C7A5] flex justify-between">
+                <span className="text-[#74777F]">Statutory CRR Required (12%):</span>
+                <span className="font-bold text-[#2A2012]">
+                  {formatMinorToArth(selectedBank.crrRequiredMinor)} ARTH
+                </span>
+              </div>
+              <div className="p-3 bg-white rounded-xl border border-[#D8C7A5] flex justify-between">
+                <span className="text-[#74777F]">Cash Reserves Maintained:</span>
+                <span className="font-bold text-emerald-700">
+                  {formatMinorToArth(selectedBank.crrMaintainedMinor)} ARTH
+                </span>
+              </div>
+              <div className="p-3 bg-white rounded-xl border border-[#D8C7A5] flex justify-between">
+                <span className="text-[#74777F]">Surplus / Deficit:</span>
+                <span className="font-bold text-emerald-700">
+                  {formatMinorToArth((BigInt(selectedBank.crrMaintainedMinor || '0') - BigInt(selectedBank.crrRequiredMinor || '0')).toString())} ARTH
+                </span>
+              </div>
             </div>
-
+            <div className="p-4 bg-white border-t border-[#D8C7A5] flex justify-end">
+              <button
+                type="button"
+                onClick={() => setSelectedBank(null)}
+                className="px-4 py-2 rounded-xl bg-[#946726] text-white text-xs font-bold hover:bg-[#2A2012] transition"
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
       )}
-
     </div>
   );
 }

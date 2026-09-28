@@ -30,12 +30,11 @@ import {
 import { ZodValidationPipe } from '../common/pipes/zod-validation.pipe';
 
 @Controller('banks')
-@UseGuards(JwtAuthGuard)
 export class BankingController {
   constructor(private readonly bankingService: BankingService) {}
 
   // ===========================================================================
-  // 1. PUBLIC / CITIZEN BANK DISCOVERY
+  // 1. PUBLIC / CITIZEN BANK DISCOVERY (Unauthenticated)
   // ===========================================================================
 
   @Get()
@@ -54,10 +53,11 @@ export class BankingController {
   }
 
   // ===========================================================================
-  // 2. CITIZEN BANK RELATIONSHIPS & ACCOUNTS
+  // 2. CITIZEN BANK RELATIONSHIPS & ACCOUNTS (Authenticated User)
   // ===========================================================================
 
   @Post(':bankId/join')
+  @UseGuards(JwtAuthGuard)
   async joinBank(
     @CurrentUser('sub') userId: string,
     @Param('bankId') bankId: string,
@@ -66,6 +66,7 @@ export class BankingController {
   }
 
   @Post('accounts')
+  @UseGuards(JwtAuthGuard)
   @UsePipes(new ZodValidationPipe(OpenAccountSchema))
   async openAccount(
     @CurrentUser('sub') userId: string,
@@ -75,6 +76,7 @@ export class BankingController {
   }
 
   @Get('user/accounts')
+  @UseGuards(JwtAuthGuard)
   async listUserAccounts(
     @CurrentUser('sub') userId: string,
     @Query('bankId') bankId?: string,
@@ -83,6 +85,7 @@ export class BankingController {
   }
 
   @Get('accounts/:id')
+  @UseGuards(JwtAuthGuard)
   async getAccountDetails(
     @CurrentUser('sub') userId: string,
     @Param('id') accountId: string,
@@ -91,6 +94,7 @@ export class BankingController {
   }
 
   @Get('accounts/:id/transactions')
+  @UseGuards(JwtAuthGuard)
   async getAccountTransactions(
     @CurrentUser('sub') userId: string,
     @Param('id') accountId: string,
@@ -103,6 +107,7 @@ export class BankingController {
   // ===========================================================================
 
   @Post('transfers')
+  @UseGuards(JwtAuthGuard)
   @UsePipes(new ZodValidationPipe(TransferRequestSchema))
   async executeTransfer(
     @CurrentUser('sub') userId: string,
@@ -122,19 +127,19 @@ export class BankingController {
   // ===========================================================================
 
   @Get('admin/overview')
-  @UseGuards(BankScopeGuard)
+  @UseGuards(JwtAuthGuard, BankScopeGuard)
   async getBankAdminOverview(@CurrentUser('bankId') assignedBankId: string) {
     return this.bankingService.getBankAdminOverview(assignedBankId);
   }
 
   @Get('admin/customers')
-  @UseGuards(BankScopeGuard)
+  @UseGuards(JwtAuthGuard, BankScopeGuard)
   async listBankAdminCustomers(@CurrentUser('bankId') assignedBankId: string) {
     return this.bankingService.listBankAdminCustomers(assignedBankId);
   }
 
   @Get('admin/customers/:id')
-  @UseGuards(BankScopeGuard)
+  @UseGuards(JwtAuthGuard, BankScopeGuard)
   async getBankAdminCustomer(
     @CurrentUser('bankId') assignedBankId: string,
     @Param('id') customerId: string,
@@ -143,7 +148,7 @@ export class BankingController {
   }
 
   @Patch('admin/customers/:id/status')
-  @UseGuards(BankScopeGuard)
+  @UseGuards(JwtAuthGuard, BankScopeGuard)
   @UsePipes(new ZodValidationPipe(UpdateCustomerStatusSchema))
   async updateCustomerStatus(
     @CurrentUser('bankId') assignedBankId: string,
@@ -154,13 +159,13 @@ export class BankingController {
   }
 
   @Get('admin/accounts')
-  @UseGuards(BankScopeGuard)
+  @UseGuards(JwtAuthGuard, BankScopeGuard)
   async listBankAdminAccounts(@CurrentUser('bankId') assignedBankId: string) {
     return this.bankingService.listBankAdminAccounts(assignedBankId);
   }
 
   @Patch('admin/accounts/:id/status')
-  @UseGuards(BankScopeGuard)
+  @UseGuards(JwtAuthGuard, BankScopeGuard)
   @UsePipes(new ZodValidationPipe(UpdateAccountStatusSchema))
   async updateBankAccountStatus(
     @CurrentUser('bankId') assignedBankId: string,
@@ -171,7 +176,7 @@ export class BankingController {
   }
 
   @Patch('admin/accounts/:id/limits')
-  @UseGuards(BankScopeGuard)
+  @UseGuards(JwtAuthGuard, BankScopeGuard)
   @UsePipes(new ZodValidationPipe(UpdateAccountLimitsSchema))
   async updateBankAccountLimits(
     @CurrentUser('bankId') assignedBankId: string,
@@ -182,7 +187,7 @@ export class BankingController {
   }
 
   @Get('admin/transactions')
-  @UseGuards(BankScopeGuard)
+  @UseGuards(JwtAuthGuard, BankScopeGuard)
   async listBankAdminTransactions(@CurrentUser('bankId') assignedBankId: string) {
     return this.bankingService.listBankAdminTransactions(assignedBankId);
   }

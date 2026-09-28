@@ -90,6 +90,18 @@ const SUITES: SuiteDefinition[] = [
   },
   {
     phase: 'Phase 13',
+    name: 'Authentication & Identity Onboarding E2E',
+    specPath: 'src/e2e/onboarding-journey.e2e.spec.ts',
+    description: '11-stage sovereign onboarding acceptance journey from GOV Portal to User Portal & logout',
+  },
+  {
+    phase: 'Phase 13',
+    name: 'Portal Integration & Authorization E2E',
+    specPath: 'src/e2e/portal-authorization-and-data.e2e.spec.ts',
+    description: 'Cross-portal role boundaries, real backend data, dual-password isolation, ledger funding',
+  },
+  {
+    phase: 'Phase 13',
     name: 'Concurrency & Race Conditions',
     specPath: 'src/concurrency/concurrency.spec.ts',
     description: 'Overdraft races, order-matching races, short-selling guards, lien races, idempotency burst',
@@ -117,7 +129,7 @@ const SUITES: SuiteDefinition[] = [
 async function main() {
   console.log('╔═════════════════════════════════════════════════════════════════════════════════════════════╗');
   console.log('║                     ARTHAX SOVEREIGN FINANCIAL ECOSYSTEM MASTER TEST RUNNER                 ║');
-  console.log('║                            Executing All 17 Invariant Suites Across Monorepo (664 Tests)    ║');
+  console.log('║                            Executing All Suites Across Monorepo                             ║');
   console.log('╚═════════════════════════════════════════════════════════════════════════════════════════════╝\n');
 
   const workspaceRoot = fs.existsSync(path.resolve(process.cwd(), 'apps/api'))

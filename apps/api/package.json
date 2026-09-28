@@ -6,7 +6,7 @@
     "dev": "nest start --watch",
     "start": "nest start",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/main",
+    "start:prod": "node dist/apps/api/src/main",
     "build": "nest build",
     "typecheck": "tsc --noEmit",
     "prisma:generate": "prisma generate --schema=../../config/database/schema.prisma",

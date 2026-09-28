@@ -2,37 +2,35 @@
 
 import React, { useState, useCallback } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { GovHeader } from '@/components/gov/GovHeader';
 import { GovLanding } from '@/components/gov/GovLanding';
 import { GovEmailStep } from '@/components/gov/GovEmailStep';
 import { GovOtpStep } from '@/components/gov/GovOtpStep';
-import { GovPasswordStep } from '@/components/gov/GovPasswordStep';
-import { GovFinancialPasswordStep } from '@/components/gov/GovFinancialPasswordStep';
+import { GovDetailsStep, CitizenDetailsFormData } from '@/components/gov/GovDetailsStep';
 import { GovResultStep } from '@/components/gov/GovResultStep';
 import { GovLoginStep } from '@/components/gov/GovLoginStep';
 import { GovPassportPreviewCard } from '@/components/gov/GovPassportPreviewCard';
-import { GovInvariantSection } from '@/components/gov/GovInvariantSection';
-import { GovDualPasswordSection } from '@/components/gov/GovDualPasswordSection';
-import { GovEcosystemSection } from '@/components/gov/GovEcosystemSection';
-import { GovFaqSection } from '@/components/gov/GovFaqSection';
 import { GovFooter } from '@/components/gov/GovFooter';
-import { ShieldCheck, Sparkles, Fingerprint } from 'lucide-react';
+import { ShieldCheck } from 'lucide-react';
 import {
   apiSendEmailOtp,
   apiVerifyEmailOtp,
   apiCreateGovId,
-  apiSetFinancialPassword,
 } from '@/lib/api';
 
-export type GovStep = 'landing' | 'email' | 'otp' | 'password' | 'financial-password' | 'result' | 'login';
+export type GovStep = 'landing' | 'email' | 'otp' | 'details' | 'result' | 'login';
 
 export default function GovPage() {
+  const router = useRouter();
   const [step, setStep] = useState<GovStep>('landing');
   const [email, setEmail] = useState('');
   const [devCode, setDevCode] = useState<string | undefined>(undefined);
   const [verifiedOtpCode, setVerifiedOtpCode] = useState('');
   const [govId, setGovId] = useState('');
-  const [setupToken, setSetupToken] = useState('');
+  const [citizenName, setCitizenName] = useState('');
+  const [profession, setProfession] = useState('');
+  const [registrationTicket, setRegistrationTicket] = useState('');
 
   // Creation flow handlers
   const handleCreateGovId = useCallback(() => {
@@ -48,28 +46,45 @@ export default function GovPage() {
     setStep('otp');
   }, []);
 
-  const handleOtpVerified = useCallback(async (code: string) => {
-    await apiVerifyEmailOtp(email, code);
-    setVerifiedOtpCode(code);
-    setStep('password');
+  const handleResendOtp = useCallback(async () => {
+    if (!email) return;
+    const res = await apiSendEmailOtp(email);
+    if (res.code) {
+      setDevCode(res.code);
+    }
   }, [email]);
 
-  const handlePasswordCreated = useCallback(
-    async (govPassword: string) => {
-      const res = await apiCreateGovId(email, verifiedOtpCode, govPassword);
-      setGovId(res.govIdNumber);
-      setSetupToken(res.setupToken);
-      setStep('financial-password');
-    },
-    [email, verifiedOtpCode]
-  );
+  const handleOtpVerified = useCallback(async (code: string) => {
+    const res = await apiVerifyEmailOtp(email, code);
+    setVerifiedOtpCode(code);
+    if (res.registrationTicket) {
+      setRegistrationTicket(res.registrationTicket);
+    }
+    setStep('details');
+  }, [email]);
 
-  const handleFinancialPasswordCreated = useCallback(
-    async (finPassword: string, displayName?: string) => {
-      await apiSetFinancialPassword(setupToken, finPassword, displayName);
+  const handleDetailsSubmitted = useCallback(
+    async (formData: CitizenDetailsFormData) => {
+      const res = await apiCreateGovId(
+        email,
+        verifiedOtpCode,
+        formData.govPassword,
+        registrationTicket,
+        {
+          displayName: formData.fullName,
+          profession: formData.profession,
+          primaryPurpose: formData.primaryPurpose,
+          preferredBankId: formData.preferredBankId,
+          financialPassword: formData.financialPassword,
+        },
+      );
+
+      setGovId(res.govIdNumber);
+      setCitizenName(formData.fullName);
+      setProfession(formData.profession);
       setStep('result');
     },
-    [setupToken]
+    [email, verifiedOtpCode, registrationTicket],
   );
 
   // Login flow handler
@@ -81,9 +96,9 @@ export default function GovPage() {
     (loginGovId: string, loginEmail: string) => {
       setGovId(loginGovId);
       setEmail(loginEmail);
-      setStep('result');
+      router.push('/user');
     },
-    []
+    [router],
   );
 
   // Back handlers
@@ -97,10 +112,6 @@ export default function GovPage() {
 
   const handleBackToOtp = useCallback(() => {
     setStep('otp');
-  }, []);
-
-  const handleBackToPassword = useCallback(() => {
-    setStep('password');
   }, []);
 
   return (
@@ -135,7 +146,7 @@ export default function GovPage() {
             </h1>
 
             <p className="text-sm sm:text-base text-[#5C574F] leading-relaxed max-w-2xl mx-auto">
-              The cryptographic root authority for all ARTHAX sovereign citizens. Verify your email, receive your immutable GOV&nbsp;ID, and unlock unified cross-portal ledger access.
+              The cryptographic root authority for all ARTHAX sovereign citizens. Verify your email, enter citizen details, claim your founding 5,000&nbsp;ARTH grant, and unlock cross-portal ledger access.
             </p>
           </div>
 
@@ -179,27 +190,27 @@ export default function GovPage() {
                     email={email}
                     devCode={devCode}
                     onVerify={handleOtpVerified}
+                    onResendOtp={handleResendOtp}
                     onBack={handleBackToEmail}
                   />
                 )}
 
-                {step === 'password' && (
-                  <GovPasswordStep
-                    onCreatePassword={handlePasswordCreated}
+                {step === 'details' && (
+                  <GovDetailsStep
+                    email={email}
+                    onSubmit={handleDetailsSubmitted}
                     onBack={handleBackToOtp}
                   />
                 )}
 
-                {step === 'financial-password' && (
-                  <GovFinancialPasswordStep
-                    onSubmit={handleFinancialPasswordCreated}
-                    onBack={handleBackToPassword}
-                    defaultDisplayName={email.split('@')[0]}
-                  />
-                )}
-
                 {step === 'result' && (
-                  <GovResultStep govId={govId} email={email} />
+                  <GovResultStep
+                    govId={govId}
+                    email={email}
+                    citizenName={citizenName}
+                    profession={profession}
+                    onSignIn={handleSignIn}
+                  />
                 )}
 
                 {step === 'login' && (
@@ -223,23 +234,9 @@ export default function GovPage() {
           </div>
         </div>
 
-        {/* 4. The 1:1:1 Invariant Architecture Section */}
-        <div className="mt-20">
-          <GovInvariantSection />
-        </div>
-
-        {/* 5. Dual-Password Isolation Protocol Section */}
-        <GovDualPasswordSection />
-
-        {/* 6. Unlocked Portal Nodes Ecosystem Section */}
-        <GovEcosystemSection />
-
-        {/* 7. Frequently Asked Inquiries Section */}
-        <GovFaqSection />
-
       </main>
 
-      {/* 8. Global Institutional Footer */}
+      {/* Global Institutional Footer */}
       <GovFooter />
 
     </div>

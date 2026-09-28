@@ -27,13 +27,12 @@ import { ZodValidationPipe } from '../common/pipes/zod-validation.pipe';
 import { FdStatus } from '@arthax/types';
 
 @Controller('fixed-deposits')
-@UseGuards(JwtAuthGuard)
 export class FixedDepositsController {
   constructor(private readonly fdService: FixedDepositsService) {}
 
   /**
    * Discovers active Fixed Deposit schemes offered across the 5 sovereign banks.
-   * Optional bankId query filter.
+   * Public discovery endpoint.
    */
   @Get('schemes')
   async listSchemes(@Query('bankId') bankId?: string) {
@@ -42,6 +41,7 @@ export class FixedDepositsController {
 
   /**
    * Retrieves single FD scheme details including lock-in, APY tiers, and deposit limits.
+   * Public discovery endpoint.
    */
   @Get('schemes/:id')
   async getSchemeById(@Param('id') id: string) {
@@ -66,6 +66,7 @@ export class FixedDepositsController {
    * Requires step-up Financial Password.
    */
   @Post('book')
+  @UseGuards(JwtAuthGuard)
   @UsePipes(new ZodValidationPipe(BookFdSchema))
   async bookFd(
     @CurrentUser('sub') userId: string,
@@ -80,6 +81,7 @@ export class FixedDepositsController {
    * Strict tenant isolation: returns only caller's certificates with real-time accrued interest.
    */
   @Get('my-fds')
+  @UseGuards(JwtAuthGuard)
   async listMyFds(
     @CurrentUser('sub') userId: string,
     @Query('bankId') bankId?: string,
@@ -92,6 +94,7 @@ export class FixedDepositsController {
    * Retrieves single FD certificate details with real-time interest evaluation.
    */
   @Get('my-fds/:id')
+  @UseGuards(JwtAuthGuard)
   async getMyFdById(
     @CurrentUser('sub') userId: string,
     @Param('id') id: string,
@@ -106,6 +109,7 @@ export class FixedDepositsController {
    * Requires step-up Financial Password.
    */
   @Post('my-fds/:id/break')
+  @UseGuards(JwtAuthGuard)
   @UsePipes(new ZodValidationPipe(BreakFdSchema))
   async breakFd(
     @CurrentUser('sub') userId: string,
@@ -119,6 +123,7 @@ export class FixedDepositsController {
    * Updates auto-renew toggle and rollover instructions.
    */
   @Patch('my-fds/:id/auto-renew')
+  @UseGuards(JwtAuthGuard)
   @UsePipes(new ZodValidationPipe(ToggleFdAutoRenewSchema))
   async toggleAutoRenew(
     @CurrentUser('sub') userId: string,
@@ -132,6 +137,7 @@ export class FixedDepositsController {
    * Retrieves interest payout logs for audit reconciliation.
    */
   @Get('my-fds/:id/payout-logs')
+  @UseGuards(JwtAuthGuard)
   async getPayoutLogs(
     @CurrentUser('sub') userId: string,
     @Param('id') id: string,

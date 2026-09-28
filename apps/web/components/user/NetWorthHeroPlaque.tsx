@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import Image from 'next/image';
 import { 
   Building2, 
@@ -19,6 +19,12 @@ import {
 } from 'lucide-react';
 import { AnimatedMaskedValue } from './AnimatedMaskedValue';
 import { AnimatedProgressBar } from './AnimatedProgressBar';
+import { 
+  apiFetchUserAccounts, 
+  apiFetchUserFds, 
+  apiFetchUserPortfolio, 
+  subscribePortalDataInvalidation 
+} from '@/lib/api';
 
 interface NetWorthHeroPlaqueProps {
   isMasked: boolean;
@@ -26,6 +32,95 @@ interface NetWorthHeroPlaqueProps {
 }
 
 export const NetWorthHeroPlaque: React.FC<NetWorthHeroPlaqueProps> = ({ isMasked, onToggleMask }) => {
+  const [liquidMinor, setLiquidMinor] = useState<bigint>(0n);
+  const [fdMinor, setFdMinor] = useState<bigint>(0n);
+  const [equityMinor, setEquityMinor] = useState<bigint>(0n);
+  const [relicsMinor, setRelicsMinor] = useState<bigint>(0n);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  const loadBalances = useCallback(async () => {
+    try {
+      const [accounts, fds, portfolio] = await Promise.allSettled([
+        apiFetchUserAccounts(),
+        apiFetchUserFds(),
+        apiFetchUserPortfolio(),
+      ]);
+
+      if (accounts.status === 'fulfilled' && Array.isArray(accounts.value)) {
+        const total = accounts.value.reduce(
+          (sum, acct) => sum + BigInt(acct.balanceMinor || '0'),
+          0n
+        );
+        setLiquidMinor(total);
+      } else {
+        setLiquidMinor(0n);
+      }
+
+      if (fds.status === 'fulfilled' && Array.isArray(fds.value)) {
+        const activeFds = fds.value.filter((f) => f.status === 'ACTIVE');
+        const total = activeFds.reduce(
+          (sum, f) => sum + BigInt(f.principalMinor || 0),
+          0n
+        );
+        setFdMinor(total);
+      } else {
+        setFdMinor(0n);
+      }
+
+      if (portfolio.status === 'fulfilled' && portfolio.value) {
+        setEquityMinor(BigInt(portfolio.value.currentValueMinor || '0'));
+      } else {
+        setEquityMinor(0n);
+      }
+    } catch {
+      // Invariant: Failures result in real 0 values, never fake mocks
+      setLiquidMinor(0n);
+      setFdMinor(0n);
+      setEquityMinor(0n);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadBalances();
+    const unsub = subscribePortalDataInvalidation(loadBalances);
+    return () => unsub();
+  }, [loadBalances]);
+
+  const totalMinor = liquidMinor + fdMinor + equityMinor + relicsMinor;
+  const totalArth = Number(totalMinor) / 100;
+  const liquidArth = Number(liquidMinor) / 100;
+  const fdArth = Number(fdMinor) / 100;
+  const equityArth = Number(equityMinor) / 100;
+  const relicsArth = Number(relicsMinor) / 100;
+
+  const totalArthStr = totalArth.toLocaleString('en-US', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+  const liquidArthStr = liquidArth.toLocaleString('en-US', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+  const fdArthStr = fdArth.toLocaleString('en-US', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+  const equityArthStr = equityArth.toLocaleString('en-US', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+  const relicsArthStr = relicsArth.toLocaleString('en-US', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+
+  const liquidPct = totalMinor > 0n ? Math.round(Number((liquidMinor * 1000n) / totalMinor)) / 10 : (totalMinor === 0n ? 100 : 0);
+  const fdPct = totalMinor > 0n ? Math.round(Number((fdMinor * 1000n) / totalMinor)) / 10 : 0;
+  const equityPct = totalMinor > 0n ? Math.round(Number((equityMinor * 1000n) / totalMinor)) / 10 : 0;
+  const relicsPct = totalMinor > 0n ? Math.round(Number((relicsMinor * 1000n) / totalMinor)) / 10 : 0;
+
   return (
     <section className="relative overflow-hidden rounded-3xl bg-white border border-[#74777F]/20 p-6 md:p-8 lg:p-10 shadow-sm">
       {/* Subtle Atmospheric Gradients */}
@@ -92,7 +187,7 @@ export const NetWorthHeroPlaque: React.FC<NetWorthHeroPlaqueProps> = ({ isMasked
                   <div className="inline-flex items-baseline min-w-[240px] sm:min-w-[320px] md:min-w-[380px]">
                     <span className="font-serif text-4xl sm:text-5xl md:text-6xl font-normal text-[#022448] tracking-tight">
                       <AnimatedMaskedValue 
-                        value="842,520.45" 
+                        value={totalArthStr} 
                         isMasked={isMasked} 
                         maskString="••••••••"
                       />
@@ -124,7 +219,7 @@ export const NetWorthHeroPlaque: React.FC<NetWorthHeroPlaqueProps> = ({ isMasked
                 <div className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-[#EEF4FF] text-[#43474E] text-xs font-mono">
                   <span>≈ </span>
                   <AnimatedMaskedValue 
-                    value="$842,520.45" 
+                    value={`$${totalArthStr}`} 
                     isMasked={isMasked} 
                     maskString="••••••••"
                   />
@@ -137,19 +232,19 @@ export const NetWorthHeroPlaque: React.FC<NetWorthHeroPlaqueProps> = ({ isMasked
                 <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#A8F5BF]/70 text-[#002110] font-semibold">
                   <TrendingUp className="w-3.5 h-3.5 text-[#10B981]" />
                   <AnimatedMaskedValue 
-                    value="+124.80 ARTH" 
+                    value="+0.00 ARTH" 
                     isMasked={isMasked} 
                     maskString="••••••"
                   />
-                  <span> (+0.015% 24h)</span>
+                  <span> (24h Activity)</span>
                 </div>
                 <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#E5EFFF] text-[#121C28] font-medium">
                   <Sparkles className="w-3.5 h-3.5 text-[#A8742A]" />
-                  <span>+5.42% Net APY Yield</span>
+                  <span>Sovereign Reserve System</span>
                 </div>
                 <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#DBE1FF]/70 text-[#031847]">
                   <Shield className="w-3.5 h-3.5 text-[#1E3A5F]" />
-                  <span>104.28% Parity</span>
+                  <span>100% Reserve Ratio</span>
                 </div>
               </div>
             </div>
@@ -204,38 +299,38 @@ export const NetWorthHeroPlaque: React.FC<NetWorthHeroPlaqueProps> = ({ isMasked
                     {
                       id: 'liquid',
                       label: 'Liquid Balances',
-                      value: 40.9,
+                      value: liquidPct,
                       gradient: 'bg-gradient-to-r from-[#022448] via-[#1E3A5F] to-[#3368A0]',
-                      tooltip: 'Liquid Balances: 40.9%',
+                      tooltip: `Liquid Balances: ${liquidPct}%`,
                     },
                     {
                       id: 'vault',
                       label: 'Fixed Term',
-                      value: 33.3,
+                      value: fdPct,
                       gradient: 'bg-gradient-to-r from-[#6080B8] via-[#85A7E2] to-[#ADC8F5]',
-                      tooltip: 'Fixed Term: 33.3%',
+                      tooltip: `Fixed Term: ${fdPct}%`,
                     },
                     {
                       id: 'markets',
                       label: 'Capital Markets',
-                      value: 22.1,
+                      value: equityPct,
                       gradient: 'bg-gradient-to-r from-[#2B4366] via-[#455F87] to-[#66A3BF]',
-                      tooltip: 'Capital Markets: 22.1%',
+                      tooltip: `Capital Markets: ${equityPct}%`,
                     },
                     {
                       id: 'relics',
                       label: 'Shop & Relics',
-                      value: 3.7,
+                      value: relicsPct,
                       gradient: 'bg-gradient-to-r from-[#C27A23] via-[#E8A548] to-[#F9BB6A]',
-                      tooltip: 'Shop & Relics: 3.7%',
+                      tooltip: `Shop & Relics: ${relicsPct}%`,
                     },
                   ]}
                 />
                 <div className="flex justify-between items-center text-[10px] text-[#43474E] font-mono">
-                  <span>Liquid: 40.9%</span>
-                  <span>FD Vaults: 33.3%</span>
-                  <span>Stocks: 22.1%</span>
-                  <span>Relics: 3.7%</span>
+                  <span>Liquid: {liquidPct}%</span>
+                  <span>FD Vaults: {fdPct}%</span>
+                  <span>Stocks: {equityPct}%</span>
+                  <span>Relics: {relicsPct}%</span>
                 </div>
               </div>
             </div>
@@ -247,11 +342,11 @@ export const NetWorthHeroPlaque: React.FC<NetWorthHeroPlaqueProps> = ({ isMasked
                   <span className="flex items-center gap-1.5 font-sans">
                     <span className="w-2 h-2 rounded-full bg-[#022448]"></span>Liquid
                   </span>
-                  <span className="font-mono font-medium text-[#1E3A5F] text-[11px]">40.9%</span>
+                  <span className="font-mono font-medium text-[#1E3A5F] text-[11px]">{liquidPct}%</span>
                 </div>
                 <div className="font-mono font-bold text-xs sm:text-sm text-[#121C28] flex items-baseline gap-1">
                   <AnimatedMaskedValue 
-                    value="345,120.00" 
+                    value={liquidArthStr} 
                     isMasked={isMasked} 
                     maskString="••••••••"
                   />
@@ -264,11 +359,11 @@ export const NetWorthHeroPlaque: React.FC<NetWorthHeroPlaqueProps> = ({ isMasked
                   <span className="flex items-center gap-1.5 font-sans">
                     <span className="w-2 h-2 rounded-full bg-[#ADC8F5]"></span>Term Vault
                   </span>
-                  <span className="font-mono font-medium text-[#4C5D8E] text-[11px]">33.3%</span>
+                  <span className="font-mono font-medium text-[#4C5D8E] text-[11px]">{fdPct}%</span>
                 </div>
                 <div className="font-mono font-bold text-xs sm:text-sm text-[#121C28] flex items-baseline gap-1">
                   <AnimatedMaskedValue 
-                    value="280,520.45" 
+                    value={fdArthStr} 
                     isMasked={isMasked} 
                     maskString="••••••••"
                   />
@@ -281,11 +376,11 @@ export const NetWorthHeroPlaque: React.FC<NetWorthHeroPlaqueProps> = ({ isMasked
                   <span className="flex items-center gap-1.5 font-sans">
                     <span className="w-2 h-2 rounded-full bg-[#455F87]"></span>Equities
                   </span>
-                  <span className="font-mono font-medium text-[#10B981] text-[11px]">+14.45%</span>
+                  <span className="font-mono font-medium text-[#10B981] text-[11px]">{equityPct}%</span>
                 </div>
                 <div className="font-mono font-bold text-xs sm:text-sm text-[#121C28] flex items-baseline gap-1">
                   <AnimatedMaskedValue 
-                    value="185,880.00" 
+                    value={equityArthStr} 
                     isMasked={isMasked} 
                     maskString="••••••••"
                   />
@@ -298,11 +393,11 @@ export const NetWorthHeroPlaque: React.FC<NetWorthHeroPlaqueProps> = ({ isMasked
                   <span className="flex items-center gap-1.5 font-sans">
                     <span className="w-2 h-2 rounded-full bg-[#F9BB6A]"></span>Relics &amp; Vault
                   </span>
-                  <span className="font-mono font-medium text-[#A8742A] text-[11px]">+0.85% APY</span>
+                  <span className="font-mono font-medium text-[#A8742A] text-[11px]">{relicsPct}%</span>
                 </div>
                 <div className="font-mono font-bold text-xs sm:text-sm text-[#121C28] flex items-baseline gap-1">
                   <AnimatedMaskedValue 
-                    value="31,000.00" 
+                    value={relicsArthStr} 
                     isMasked={isMasked} 
                     maskString="••••••••"
                   />

@@ -19,11 +19,17 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
     let status = HttpStatus.INTERNAL_SERVER_ERROR;
     let message: string | object = 'Internal sovereign server error';
+    let errors: any = undefined;
 
     if (exception instanceof HttpException) {
       status = exception.getStatus();
       const res = exception.getResponse();
-      message = typeof res === 'string' ? res : (res as any).message || res;
+      if (typeof res === 'string') {
+        message = res;
+      } else if (typeof res === 'object' && res !== null) {
+        message = (res as any).message || res;
+        errors = (res as any).errors;
+      }
     } else if (exception instanceof Error) {
       message = exception.message;
       this.logger.error(`Unhandled Exception: ${exception.message}`, exception.stack);
@@ -35,6 +41,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
       timestamp: new Date().toISOString(),
       path: request.url,
       message,
+      ...(errors ? { errors } : {}),
     });
   }
 }

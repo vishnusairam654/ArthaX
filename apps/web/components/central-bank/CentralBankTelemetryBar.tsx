@@ -11,15 +11,28 @@ import {
   Clock,
   ExternalLink,
 } from 'lucide-react';
-import { MOCK_CENTRAL_BANK_STATS } from './CentralBankMockData';
 import { EmergencyCircuitBreakerModal } from './EmergencyCircuitBreakerModal';
 import { CentralBankMaskedValue } from './CentralBankMaskedValue';
+import { apiFetchMonetarySupply, subscribePortalDataInvalidation } from '@/lib/api';
+import { MonetarySupplyDto } from '@arthax/types';
 
 export const CentralBankTelemetryBar: React.FC = () => {
-  const [epoch, setEpoch] = useState(MOCK_CENTRAL_BANK_STATS.currentEpoch);
+  const [supply, setSupply] = useState<MonetarySupplyDto | null>(null);
+  const [epoch, setEpoch] = useState<number>(4821);
   const [isBreakerActive, setIsBreakerActive] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [liveUtc, setLiveUtc] = useState<string>('');
+
+  useEffect(() => {
+    const loadSupply = () => {
+      apiFetchMonetarySupply()
+        .then((data) => setSupply(data))
+        .catch(() => {});
+    };
+    loadSupply();
+    const unsub = subscribePortalDataInvalidation(loadSupply);
+    return () => unsub();
+  }, []);
 
   // Live ticking UTC time and simulated epoch progression
   useEffect(() => {
@@ -146,9 +159,15 @@ export const CentralBankTelemetryBar: React.FC = () => {
               <span className="text-[9px] uppercase tracking-wider text-[#7A6237] font-semibold mb-0.5">
                 M0 Monetary Base
               </span>
-              <div className="flex items-center gap-1 text-xs text-[#0E3844] font-bold">
                 <CentralBankMaskedValue
-                  value={MOCK_CENTRAL_BANK_STATS.totalCirculation}
+                  value={
+                    supply?.m0SupplyMinor
+                      ? (Number(BigInt(supply.m0SupplyMinor)) / 100).toLocaleString('en-US', {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })
+                      : '150,000,000.00'
+                  }
                   suffix=" ARTH"
                   className="text-[#0E3844]"
                 />
@@ -156,8 +175,6 @@ export const CentralBankTelemetryBar: React.FC = () => {
             </div>
 
           </div>
-
-        </div>
 
         {/* ====================================================================
             LEVEL 2: OPERATIONAL COMMAND, GOVERNANCE & EMERGENCY CONTROLS
@@ -177,7 +194,7 @@ export const CentralBankTelemetryBar: React.FC = () => {
             {/* Technical Epoch */}
             <div className="flex items-center gap-1">
               <span className="text-[#7A6237] font-semibold">EPOCH</span>
-              <span className="font-bold text-[#0E3844]">#{epoch}</span>
+              <span className="font-bold text-[#0E3844]">#{supply?.activeEpoch || epoch}</span>
             </div>
 
             <span className="text-[#D8C7A5] hidden sm:inline">·</span>

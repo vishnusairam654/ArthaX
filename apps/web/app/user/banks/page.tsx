@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { UserPortalHeader } from '@/components/user/UserPortalHeader';
 import { BanksExecutiveHeader } from '@/components/user/banks/BanksExecutiveHeader';
 import { MemberBanksGrid } from '@/components/user/banks/MemberBanksGrid';
@@ -8,64 +8,86 @@ import { SelectedBankNodeDetail } from '@/components/user/banks/SelectedBankNode
 import { AccountInspectorPanel } from '@/components/user/banks/AccountInspectorPanel';
 import { BankNodeModal } from '@/components/user/banks/BankNodeModal';
 import { UserPortalFooter } from '@/components/user/UserPortalFooter';
-import { apiFetchUserAccounts } from '@/lib/api';
+import { apiFetchUserAccounts, subscribePortalDataInvalidation } from '@/lib/api';
 import { BankAccountDto } from '@arthax/types';
 
 export default function MyBanksAndAccountsPage() {
   // Balance privacy mask state per Rule 15
   const [isMasked, setIsMasked] = useState<boolean>(true);
   const [selectedBank, setSelectedBank] = useState<string>('nava');
-  const [selectedAccount, setSelectedAccount] = useState<string>('ARTH-9021-001');
+  const [selectedAccount, setSelectedAccount] = useState<string>('');
   const [accounts, setAccounts] = useState<BankAccountDto[]>([]);
 
   // Modal states
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [modalTitle, setModalTitle] = useState<string>('+ Link New Bank Node');
+  const [modalDefaultBank, setModalDefaultBank] = useState<string>('nava');
 
-  const loadAccounts = async () => {
+  const loadAccounts = useCallback(async () => {
     try {
       const userAccounts = await apiFetchUserAccounts();
-      if (userAccounts && userAccounts.length > 0) {
+      if (Array.isArray(userAccounts) && userAccounts.length > 0) {
         setAccounts(userAccounts);
-        const matching = userAccounts.find((a) => a.bankId.toLowerCase() === selectedBank.toLowerCase());
+
+        // Check if current selectedBank has an account
+        const matching = userAccounts.find(
+          (a) => a.bankId?.toLowerCase() === selectedBank.toLowerCase(),
+        );
         if (matching) {
           setSelectedAccount(matching.accountNumber);
+        } else {
+          // If selectedBank doesn't have an account, focus on the user's first active bank
+          const first = userAccounts[0];
+          if (first && first.bankId) {
+            setSelectedBank(first.bankId.toLowerCase());
+            setSelectedAccount(first.accountNumber);
+          }
         }
+      } else {
+        setAccounts([]);
+        setSelectedAccount('');
       }
     } catch {
-      // Handled via fallback
+      setAccounts([]);
+      setSelectedAccount('');
     }
-  };
+  }, [selectedBank]);
 
   useEffect(() => {
     loadAccounts();
-  }, [selectedBank]);
+    const unsub = subscribePortalDataInvalidation(loadAccounts);
+    return () => unsub();
+  }, [loadAccounts]);
 
   const handleToggleMask = () => {
     setIsMasked((prev) => !prev);
   };
 
   const handleOpenLinkModal = () => {
+    setModalDefaultBank(selectedBank);
     setModalTitle('+ Link New Bank Node');
     setIsModalOpen(true);
   };
 
   const handleOpenCreateModal = () => {
+    setModalDefaultBank(selectedBank);
     setModalTitle('Open New Ledger Account');
+    setIsModalOpen(true);
+  };
+
+  const handleOpenCreateModalForBank = (bankId: string) => {
+    setModalDefaultBank(bankId);
+    setModalTitle(`Open New ${bankId.toUpperCase()} Account`);
     setIsModalOpen(true);
   };
 
   const handleSelectBank = (bankId: string) => {
     setSelectedBank(bankId);
-    const matching = accounts.find((a) => a.bankId.toLowerCase() === bankId.toLowerCase());
+    const matching = accounts.find((a) => a.bankId?.toLowerCase() === bankId.toLowerCase());
     if (matching) {
       setSelectedAccount(matching.accountNumber);
     } else {
-      if (bankId === 'nava') setSelectedAccount('ARTH-9021-001');
-      else if (bankId === 'samaya') setSelectedAccount('ARTH-4412-001');
-      else if (bankId === 'setu') setSelectedAccount('ARTH-8831-001');
-      else if (bankId === 'sthira') setSelectedAccount('ARTH-1190-001');
-      else if (bankId === 'vayu') setSelectedAccount('ARTH-7740-001');
+      setSelectedAccount('');
     }
   };
 
@@ -84,6 +106,7 @@ export default function MyBanksAndAccountsPage() {
           {/* Executive Header & Aggregated Banking Liquidity Shelf */}
           <BanksExecutiveHeader 
             isMasked={isMasked}
+            accounts={accounts}
             onOpenCreateModal={handleOpenCreateModal}
             onOpenLinkModal={handleOpenLinkModal}
           />
@@ -91,6 +114,7 @@ export default function MyBanksAndAccountsPage() {
           {/* Connected Member Banks Selector Bar */}
           <MemberBanksGrid 
             isMasked={isMasked}
+            accounts={accounts}
             selectedBank={selectedBank}
             onSelectBank={handleSelectBank}
           />
@@ -103,11 +127,14 @@ export default function MyBanksAndAccountsPage() {
               onSelectAccount={setSelectedAccount}
               isMasked={isMasked}
               onInspectLedger={(accId) => setSelectedAccount(accId)}
+              accounts={accounts}
+              onOpenAccountModal={handleOpenCreateModalForBank}
             />
 
             <AccountInspectorPanel 
               selectedAccount={selectedAccount}
               selectedBank={selectedBank}
+              accounts={accounts}
               isMasked={isMasked}
             />
           </section>
@@ -118,6 +145,7 @@ export default function MyBanksAndAccountsPage() {
       <BankNodeModal 
         isOpen={isModalOpen}
         title={modalTitle}
+        defaultBankId={modalDefaultBank}
         onClose={() => setIsModalOpen(false)}
         onSuccess={loadAccounts}
       />

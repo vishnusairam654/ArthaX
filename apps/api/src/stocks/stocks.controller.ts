@@ -21,12 +21,12 @@ import {
 import { ZodValidationPipe } from '../common/pipes/zod-validation.pipe';
 
 @Controller('stocks')
-@UseGuards(JwtAuthGuard)
 export class StocksController {
   constructor(private readonly stocksService: StocksService) {}
 
   /**
    * Retrieves all 10 canonical sovereign stock companies with institutional pricing.
+   * Public market discovery endpoint.
    */
   @Get('companies')
   async listCompanies() {
@@ -35,6 +35,7 @@ export class StocksController {
 
   /**
    * Retrieves specific company details by ticker symbol.
+   * Public market discovery endpoint.
    */
   @Get('companies/:symbol')
   async getCompany(@Param('symbol') symbol: string) {
@@ -43,6 +44,7 @@ export class StocksController {
 
   /**
    * Retrieves live Order Book depth (top bids and asks ladder) for a stock.
+   * Public market discovery endpoint.
    */
   @Get('order-book/:symbol')
   async getOrderBookDepth(@Param('symbol') symbol: string) {
@@ -54,6 +56,7 @@ export class StocksController {
    * Supports Idempotency-Key header for duplicate protection.
    */
   @Post('orders')
+  @UseGuards(JwtAuthGuard)
   @UsePipes(new ZodValidationPipe(PlaceStockOrderSchema))
   async placeOrder(
     @CurrentUser('sub') userId: string,
@@ -69,6 +72,7 @@ export class StocksController {
    * Cancels an open or partially filled order and releases reservations.
    */
   @Post('orders/:id/cancel')
+  @UseGuards(JwtAuthGuard)
   async cancelOrder(
     @CurrentUser('sub') userId: string,
     @Param('id') orderId: string,
@@ -80,6 +84,7 @@ export class StocksController {
    * Retrieves user's blotter orders.
    */
   @Get('orders')
+  @UseGuards(JwtAuthGuard)
   async listOrders(
     @CurrentUser('sub') userId: string,
     @Query('symbol') symbol?: string,
@@ -91,6 +96,7 @@ export class StocksController {
    * Retrieves single order by ID.
    */
   @Get('orders/:id')
+  @UseGuards(JwtAuthGuard)
   async getOrder(@Param('id') orderId: string) {
     return this.stocksService.getOrder(orderId);
   }
@@ -99,6 +105,7 @@ export class StocksController {
    * Retrieves user's live portfolio summary with mark-to-market valuation.
    */
   @Get('portfolio')
+  @UseGuards(JwtAuthGuard)
   async getUserPortfolio(@CurrentUser('sub') userId: string) {
     return this.stocksService.getUserPortfolio(userId);
   }
@@ -107,6 +114,7 @@ export class StocksController {
    * Retrieves user's holding for a specific company.
    */
   @Get('portfolio/:symbol')
+  @UseGuards(JwtAuthGuard)
   async getHolding(
     @CurrentUser('sub') userId: string,
     @Param('symbol') symbol: string,
@@ -118,6 +126,7 @@ export class StocksController {
    * Retrieves citizen's capital gains tax report with carried loss offsets.
    */
   @Get('tax-report')
+  @UseGuards(JwtAuthGuard)
   async getTaxReport(@CurrentUser('sub') userId: string) {
     return this.stocksService.getTaxReport(userId);
   }

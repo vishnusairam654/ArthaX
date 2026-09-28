@@ -33,3 +33,8 @@ Thumbs.db
 *.ntvs*
 *.njsproj
 *.sln
+.aider-desk/
+
+# Database dumps
+dump.rdb
+

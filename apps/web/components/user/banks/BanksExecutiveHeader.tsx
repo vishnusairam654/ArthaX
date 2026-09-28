@@ -15,17 +15,29 @@ import {
 import { AnimatedMaskedValue } from '../AnimatedMaskedValue';
 import { AnimatedProgressBar } from '../AnimatedProgressBar';
 
+import { BankAccountDto } from '@arthax/types';
+
 interface BanksExecutiveHeaderProps {
   isMasked: boolean;
+  accounts?: BankAccountDto[];
   onOpenCreateModal: () => void;
   onOpenLinkModal: () => void;
 }
 
 export const BanksExecutiveHeader: React.FC<BanksExecutiveHeaderProps> = ({
   isMasked,
+  accounts = [],
   onOpenCreateModal,
   onOpenLinkModal,
 }) => {
+  const totalLiquidMinor = accounts.reduce((sum, a) => sum + BigInt(a.balanceMinor || '0'), 0n);
+  const totalLiquidArth = (Number(totalLiquidMinor) / 100).toLocaleString('en-US', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+
+  const connectedChartersCount = new Set(accounts.map((a) => a.bankId?.toLowerCase())).size;
+  const accountsCount = accounts.length;
   return (
     <section className="flex flex-col gap-6 mb-8">
       {/* Top Title & CTAs */}
@@ -74,7 +86,7 @@ export const BanksExecutiveHeader: React.FC<BanksExecutiveHeaderProps> = ({
 
           <div className="my-3">
             <div className="font-serif text-2xl font-semibold text-[#022448] tracking-tight flex items-baseline gap-1">
-              <AnimatedMaskedValue value="520,720.00" isMasked={isMasked} maskString="••••••••" />{' '}
+              <AnimatedMaskedValue value={totalLiquidArth} isMasked={isMasked} maskString="••••••••" />{' '}
               <span className="font-sans text-xs font-semibold text-[#A8742A]">ARTH</span>
             </div>
             <span className="font-mono text-xs text-[#10B981] flex items-center gap-1 mt-1 font-medium">
@@ -83,7 +95,7 @@ export const BanksExecutiveHeader: React.FC<BanksExecutiveHeaderProps> = ({
           </div>
 
           <div className="py-0.5">
-            <AnimatedProgressBar value={82} variant="primary" height="sm" title="System Reserve Utilization: 82%" />
+            <AnimatedProgressBar value={totalLiquidMinor > 0n ? 100 : 0} variant="primary" height="sm" title="System Reserve Utilization: 100%" />
           </div>
         </div>
 
@@ -96,11 +108,11 @@ export const BanksExecutiveHeader: React.FC<BanksExecutiveHeaderProps> = ({
 
           <div className="my-3">
             <div className="font-serif text-2xl font-semibold text-[#121C28] tracking-tight">
-              5 <span className="font-sans text-sm text-[#74777F] font-normal">of 5 Active</span>
+              {connectedChartersCount} <span className="font-sans text-sm text-[#74777F] font-normal">of 5 Active</span>
             </div>
             <span className="font-mono text-xs text-[#43474E] flex items-center gap-1.5 mt-1">
-              <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse"></span>
-              All Nodes Real-Time Syncing
+              <span className={`w-2 h-2 rounded-full ${connectedChartersCount > 0 ? 'bg-[#10B981] animate-pulse' : 'bg-[#74777F]'}`}></span>
+              {connectedChartersCount === 5 ? 'All Nodes Real-Time Syncing' : connectedChartersCount > 0 ? `${connectedChartersCount} Node${connectedChartersCount > 1 ? 's' : ''} Synced` : 'No Nodes Connected'}
             </span>
           </div>
 
@@ -116,10 +128,10 @@ export const BanksExecutiveHeader: React.FC<BanksExecutiveHeaderProps> = ({
 
           <div className="my-3">
             <div className="font-serif text-2xl font-semibold text-[#121C28] tracking-tight">
-              7 <span className="font-sans text-sm text-[#74777F] font-normal">Accounts</span>
+              {accountsCount} <span className="font-sans text-sm text-[#74777F] font-normal">Account{accountsCount === 1 ? '' : 's'}</span>
             </div>
-            <span className="font-mono text-xs text-[#43474E] mt-1 block">
-              2 Payroll • 3 Treasury • 2 Transit
+            <span className="font-mono text-xs text-[#43474E] mt-1 block truncate">
+              {accountsCount === 0 ? 'No accounts opened yet' : accounts.map((a) => a.bankId.toUpperCase()).join(' • ')}
             </span>
           </div>
 
@@ -135,7 +147,7 @@ export const BanksExecutiveHeader: React.FC<BanksExecutiveHeaderProps> = ({
 
           <div className="my-3">
             <div className="font-serif text-2xl font-semibold text-[#022448] tracking-tight">
-              {isMasked ? '••••••' : '48,250.00'}{' '}
+              {isMasked ? '••••••' : '0.00'}{' '}
               <span className="font-sans text-xs font-semibold text-[#A8742A]">ARTH</span>
             </div>
             <span className="font-mono text-xs text-[#10B981] flex items-center gap-1 mt-1 font-semibold">

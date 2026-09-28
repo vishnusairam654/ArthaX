@@ -11,6 +11,9 @@ import { DepositQrDrawer } from '@/components/user/banks/details/DepositQrDrawer
 import { SendTransferModal } from '@/components/user/banks/details/SendTransferModal';
 import { Landmark, RotateCw, ShieldCheck, Cpu, Database } from 'lucide-react';
 
+import { apiFetchUserAccounts } from '@/lib/api';
+import { BankAccountDto } from '@arthax/types';
+
 interface PageProps {
   params?: { accountId?: string };
 }
@@ -23,6 +26,20 @@ export default function AccountDetailPage({ params }: PageProps) {
   const [isQrOpen, setIsQrOpen] = useState(false);
   const [isTransferOpen, setIsTransferOpen] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
+  const [account, setAccount] = useState<BankAccountDto | undefined>(undefined);
+
+  React.useEffect(() => {
+    apiFetchUserAccounts()
+      .then((accounts) => {
+        if (Array.isArray(accounts)) {
+          const found = accounts.find(
+            (a) => a.accountNumber.toLowerCase() === accountId.toLowerCase() || a.id === accountId,
+          );
+          if (found) setAccount(found);
+        }
+      })
+      .catch(() => {});
+  }, [accountId]);
 
   const handleSync = () => {
     setIsSyncing(true);
@@ -47,10 +64,10 @@ export default function AccountDetailPage({ params }: PageProps) {
                 <span>My Banks &amp; Accounts</span>
               </Link>
               <span>/</span>
-              <span className="text-[#121C28] font-semibold">NAVA Bank</span>
+              <span className="text-[#121C28] font-semibold">{account?.bankId ? `${account.bankId.toUpperCase()} Bank` : 'Chartered Bank'}</span>
               <span>/</span>
               <span className="px-2.5 py-0.5 rounded-full bg-[#E5EFFF] text-[#022448] font-mono text-[11px] font-bold">
-                NAVA Sovereign Payroll (#{accountId.toUpperCase()})
+                {account?.purpose || 'Operating Account'} (#{accountId.toUpperCase()})
               </span>
             </div>
 
@@ -75,6 +92,7 @@ export default function AccountDetailPage({ params }: PageProps) {
           {/* Primary Account Hero Banner / Visual Anchor */}
           <AccountHeroBanner
             accountId={accountId}
+            account={account}
             isMasked={isMasked}
             onOpenTransfer={() => setIsTransferOpen(true)}
             onOpenQr={() => setIsQrOpen(true)}

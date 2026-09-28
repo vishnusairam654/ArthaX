@@ -15,6 +15,7 @@ import { apiJoinBank, apiOpenAccount } from '@/lib/api';
 interface BankNodeModalProps {
   isOpen: boolean;
   title: string;
+  defaultBankId?: string;
   onClose: () => void;
   onSuccess?: () => void;
 }
@@ -22,15 +23,22 @@ interface BankNodeModalProps {
 export const BankNodeModal: React.FC<BankNodeModalProps> = ({
   isOpen,
   title,
+  defaultBankId = 'nava',
   onClose,
   onSuccess,
 }) => {
-  const [selectedTarget, setSelectedTarget] = useState<string>('nava');
+  const [selectedTarget, setSelectedTarget] = useState<string>(defaultBankId);
   const [mandate, setMandate] = useState<string>('Direct Treasury Float • General Liquidity');
   const [financialPassword, setFinancialPassword] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [isDone, setIsDone] = useState<boolean>(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  React.useEffect(() => {
+    if (defaultBankId) {
+      setSelectedTarget(defaultBankId);
+    }
+  }, [defaultBankId, isOpen]);
 
   if (!isOpen) return null;
 

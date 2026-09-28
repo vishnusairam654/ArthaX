@@ -1,9 +1,26 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Zap, Shield, Key } from 'lucide-react';
+import { apiGetMe, apiGetActivePersona } from '@/lib/api';
 
 export const ResidentBanner: React.FC = () => {
+  const [govId, setGovId] = useState<string>('');
+
+  useEffect(() => {
+    const persona = apiGetActivePersona();
+    if (persona && persona.govIdNumber) {
+      setGovId(persona.govIdNumber);
+    }
+    apiGetMe()
+      .then((claims) => {
+        if (claims && claims.govId) {
+          setGovId(claims.govId);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   return (
     <div className="flex flex-wrap items-center justify-between gap-3 bg-[#EEF4FF] border border-[#74777F]/20 px-5 py-3 rounded-2xl shadow-xs">
       <div className="flex items-center gap-3 font-sans text-xs">
@@ -12,7 +29,7 @@ export const ResidentBanner: React.FC = () => {
         <span className="text-[#74777F]/40">•</span>
         <span className="font-mono text-[#43474E] text-[11px] flex items-center gap-1">
           <Key className="w-3 h-3 text-[#1E3A5F]" />
-          ENCLAVE SEC-KEY: 0x9DF2...B831
+          {govId ? `CITIZEN: ${govId}` : 'ENCLAVE ACTIVE'}
         </span>
       </div>
 
@@ -28,3 +45,4 @@ export const ResidentBanner: React.FC = () => {
     </div>
   );
 };
+

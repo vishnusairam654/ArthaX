@@ -7,6 +7,7 @@
     "dev": "pnpm --filter web dev",
     "dev:web": "pnpm --filter web dev",
     "dev:api": "pnpm --filter @arthax/api dev",
+    "dev:all": "pnpm --parallel --filter web --filter @arthax/api dev",
     "build": "pnpm --filter web build",
     "build:api": "pnpm --filter @arthax/api build",
     "docker:up": "docker compose -f config/docker/docker-compose.yml up -d",

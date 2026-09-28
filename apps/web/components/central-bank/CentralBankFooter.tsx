@@ -4,7 +4,6 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ShieldCheck, Scale, FileText, ExternalLink } from 'lucide-react';
-import { DEMO_POLICY_NOTICE } from './CentralBankMockData';
 
 export const CentralBankFooter: React.FC = () => {
   return (

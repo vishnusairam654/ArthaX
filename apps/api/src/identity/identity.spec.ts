@@ -95,6 +95,52 @@ async function runIdentityTests() {
     const consumedToken = await prisma.mfaToken.findUnique({ where: { id: mfaRecord!.id } });
     assert('MfaToken marked consumed in PostgreSQL after verification', consumedToken?.consumed === true);
 
+    // Replay of consumed OTP must be rejected
+    let replayRejected = false;
+    try {
+      await identityService.verifyEmailOtp({
+        email: testEmail,
+        code: sendRes.code!,
+      });
+    } catch {
+      replayRejected = true;
+    }
+    assert('Replaying consumed OTP token rejected', replayRejected);
+
+    // Expired OTP token must be rejected
+    const expiredEmail = `test.expired.${Date.now()}@arthax.gov`;
+    const expiredCodeHash = await argon2.hash('888999');
+    await prisma.mfaToken.create({
+      data: {
+        email: expiredEmail,
+        codeHash: expiredCodeHash,
+        purpose: 'EMAIL_VERIFY',
+        expiresAt: new Date(Date.now() - 1000), // Expired in past
+        consumed: false,
+      },
+    });
+    let expiredRejected = false;
+    try {
+      await identityService.verifyEmailOtp({ email: expiredEmail, code: '888999' });
+    } catch {
+      expiredRejected = true;
+    }
+    assert('Expired OTP token rejected with exception', expiredRejected);
+    await prisma.mfaToken.deleteMany({ where: { email: expiredEmail } });
+
+    // Unverified email blocked from creating GOV ID
+    let unverifiedRejected = false;
+    try {
+      await identityService.createGovId({
+        email: `unverified.${Date.now()}@arthax.gov`,
+        otpCode: '123456',
+        govPassword: testGovPassword,
+      });
+    } catch {
+      unverifiedRejected = true;
+    }
+    assert('Unverified email blocked from creating GOV ID', unverifiedRejected);
+
     // ---------------------------------------------------------------------------
     // TEST GROUP 3: GOV ID Creation & Argon2id Password Storage
     // ---------------------------------------------------------------------------
@@ -131,6 +177,50 @@ async function runIdentityTests() {
       duplicateRejected = true;
     }
     assert('Duplicate GOV ID creation for same email rejected', duplicateRejected);
+
+    // Duplicate email in sendEmailOtp rejected
+    let duplicateOtpSendRejected = false;
+    try {
+      await identityService.sendEmailOtp({ email: testEmail });
+    } catch {
+      duplicateOtpSendRejected = true;
+    }
+    assert('sendEmailOtp rejects email already registered to GOV ID', duplicateOtpSendRejected);
+
+    // Concurrent GOV ID generation (atomic sequence produces distinct IDs)
+    const cEmail1 = `concurrent.cit1.${Date.now()}@arthax.gov`;
+    const cEmail2 = `concurrent.cit2.${Date.now()}@arthax.gov`;
+    const s1 = await identityService.sendEmailOtp({ email: cEmail1 });
+    const s2 = await identityService.sendEmailOtp({ email: cEmail2 });
+    await identityService.verifyEmailOtp({ email: cEmail1, code: s1.code! });
+    await identityService.verifyEmailOtp({ email: cEmail2, code: s2.code! });
+
+    const [cGov1, cGov2] = await Promise.all([
+      identityService.createGovId({ email: cEmail1, govPassword: testGovPassword }),
+      identityService.createGovId({ email: cEmail2, govPassword: testGovPassword }),
+    ]);
+
+    assert('Concurrent GOV ID generation produces distinct IDs', cGov1.govIdNumber !== cGov2.govIdNumber);
+    assert('Concurrent GOV ID 1 matches sequential pattern', /^GOV-\d{4}-\d{4}$/.test(cGov1.govIdNumber));
+    assert('Concurrent GOV ID 2 matches sequential pattern', /^GOV-\d{4}-\d{4}$/.test(cGov2.govIdNumber));
+
+    // Cleanup concurrent test records
+    await prisma.govId.deleteMany({ where: { email: { in: [cEmail1, cEmail2] } } });
+
+    // Concurrent duplicate registration attempt for the exact same email
+    const cDupEmail = `concurrent.dup.${Date.now()}@arthax.gov`;
+    const sDup = await identityService.sendEmailOtp({ email: cDupEmail });
+    await identityService.verifyEmailOtp({ email: cDupEmail, code: sDup.code! });
+
+    const settledDup = await Promise.allSettled([
+      identityService.createGovId({ email: cDupEmail, govPassword: testGovPassword }),
+      identityService.createGovId({ email: cDupEmail, govPassword: testGovPassword }),
+    ]);
+
+    const successCount = settledDup.filter((s) => s.status === 'fulfilled').length;
+    const failureCount = settledDup.filter((s) => s.status === 'rejected').length;
+    assert('Concurrent duplicate registration allows exactly one success', successCount === 1 && failureCount === 1);
+    await prisma.govId.deleteMany({ where: { email: cDupEmail } });
 
     // ---------------------------------------------------------------------------
     // TEST GROUP 4: Financial Password Isolation & User Provisioning
@@ -205,6 +295,44 @@ async function runIdentityTests() {
     }
     assert('Login fails with incorrect password', wrongPwFailed);
 
+    const lockoutEmail = `lockout.test.${Date.now()}@arthax.gov`;
+    const sLock = await identityService.sendEmailOtp({ email: lockoutEmail });
+    await identityService.verifyEmailOtp({ email: lockoutEmail, code: sLock.code! });
+    const gLock = await identityService.createGovId({ email: lockoutEmail, govPassword: testGovPassword });
+    const authLock = await identityService.setFinancialPassword(gLock.id, { financialPassword: testFinancialPassword });
+
+    for (let i = 0; i < 5; i++) {
+      try {
+        await identityService.login({ govIdOrEmail: lockoutEmail, govPassword: 'BadPassword!' });
+      } catch {
+        // Expected failed login
+      }
+    }
+
+    let lockoutDetected = false;
+    try {
+      await identityService.login({ govIdOrEmail: lockoutEmail, govPassword: testGovPassword });
+    } catch (err: any) {
+      if (err.message?.includes('locked') || err.message?.includes('15 minutes')) {
+        lockoutDetected = true;
+      }
+    }
+    assert('Account locked for 15 minutes after 5 consecutive failed login challenges', lockoutDetected);
+
+    // Cleanup lockout test user
+    const lockUserId = authLock.user.id;
+    const lockAccts = await prisma.bankAccount.findMany({ where: { userId: lockUserId } });
+    for (const ba of lockAccts) {
+      await prisma.ledgerAccount.deleteMany({ where: { bankAccountId: ba.id } });
+    }
+    await prisma.session.deleteMany({ where: { userId: lockUserId } });
+    await prisma.bankAccount.deleteMany({ where: { userId: lockUserId } });
+    await prisma.bankCustomer.deleteMany({ where: { userId: lockUserId } });
+    await prisma.userLoadout.deleteMany({ where: { userId: lockUserId } });
+    await prisma.user.deleteMany({ where: { id: lockUserId } });
+    await prisma.mfaToken.deleteMany({ where: { email: lockoutEmail } });
+    await prisma.govId.deleteMany({ where: { id: gLock.id } });
+
     // ---------------------------------------------------------------------------
     // TEST GROUP 6: Step-Up Auth
     // ---------------------------------------------------------------------------
@@ -250,6 +378,42 @@ async function runIdentityTests() {
     });
     assert('Emergency killswitch invalidates all user sessions in PostgreSQL', remainingActive.length === 0);
 
+    // Session revocation via logout and re-login verification
+    const logoutLogin = await identityService.login({
+      govIdOrEmail: testEmail,
+      govPassword: testGovPassword,
+    });
+    assert('Session established prior to logout challenge', !!logoutLogin.token);
+
+    const decodedSession: any = jwtService.decode(logoutLogin.token);
+    const activeSessionId = decodedSession.jti;
+    await identityService.revokeSession(createdUserId, activeSessionId);
+
+    const isSessionRevokedAfterLogout = await sessionStore.isSessionRevoked(activeSessionId);
+    assert('Logout revokes session in Redis/PostgreSQL storage', isSessionRevokedAfterLogout === true);
+
+    // Re-login after logout succeeds with fresh session
+    const reLogin = await identityService.login({
+      govIdOrEmail: createdGovIdNumber,
+      govPassword: testGovPassword,
+    });
+    assert('Re-login succeeds after previous session logout', !!reLogin.token);
+    const reLoginDecoded: any = jwtService.decode(reLogin.token);
+    assert('Re-login issues fresh active session distinct from revoked session', reLoginDecoded.jti !== activeSessionId);
+
+    // Fail-closed session check when DB & Redis are offline
+    const disconnectedPrisma = { isConnected: false } as any;
+    const failClosedStore = new SessionStoreService(disconnectedPrisma);
+    (failClosedStore as any).isRedisConnected = false;
+    (failClosedStore as any).redis = null;
+    let failClosedObserved = false;
+    try {
+      await failClosedStore.isSessionRevoked('sess_arbitrary_unauthenticated');
+    } catch {
+      failClosedObserved = true;
+    }
+    assert('Session store fails closed when storage layers are unavailable', failClosedObserved);
+
     // ---------------------------------------------------------------------------
     // TEST GROUP 8: Seed Citizen Authentication
     // ---------------------------------------------------------------------------
@@ -272,6 +436,10 @@ async function runIdentityTests() {
     // Cleanup created test records
     try {
       if (createdUserId) {
+        const testAccts = await prisma.bankAccount.findMany({ where: { userId: createdUserId } });
+        for (const ba of testAccts) {
+          await prisma.ledgerAccount.deleteMany({ where: { bankAccountId: ba.id } });
+        }
         await prisma.session.deleteMany({ where: { userId: createdUserId } });
         await prisma.bankAccount.deleteMany({ where: { userId: createdUserId } });
         await prisma.bankCustomer.deleteMany({ where: { userId: createdUserId } });

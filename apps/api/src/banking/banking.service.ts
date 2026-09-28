@@ -390,7 +390,7 @@ export class BankingService {
     }
 
     // Customer relation check
-    const customer = await this.prisma.bankCustomer.findUnique({
+    let customer = await this.prisma.bankCustomer.findUnique({
       where: {
         userId_bankId: {
           userId,
@@ -400,9 +400,14 @@ export class BankingService {
     });
 
     if (!customer) {
-      throw new BadRequestException(
-        `You must establish a customer relationship with ${bank.name} before opening accounts.`,
-      );
+      customer = await this.prisma.bankCustomer.create({
+        data: {
+          userId,
+          bankId: bank.id,
+          customerNumber: `CUST-${bank.id.toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`,
+          status: 'ACTIVE',
+        },
+      });
     }
 
     if (customer.status === 'SUSPENDED') {

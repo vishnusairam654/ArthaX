@@ -77,12 +77,30 @@ export class SessionStoreService implements OnModuleInit, OnModuleDestroy {
    * Revokes a session so that any subsequent requests with this session token are rejected.
    * Persists revocation to both Redis and PostgreSQL.
    */
+  /**
+   * Stores an active session in Redis with TTL.
+   */
+  async storeSession(sessionId: string, sessionData: any, ttlSeconds: number = 86400): Promise<void> {
+    if (this.isRedisConnected && this.redis) {
+      try {
+        await this.redis.set(`session:${sessionId}`, JSON.stringify(sessionData), 'EX', ttlSeconds);
+      } catch (err) {
+        this.logger.warn(`Failed writing session to Redis: ${(err as Error).message}`);
+      }
+    }
+  }
+
+  /**
+   * Revokes a session so that any subsequent requests with this session token are rejected.
+   * Persists revocation to both Redis and PostgreSQL.
+   */
   async revokeSession(sessionId: string): Promise<void> {
     this.revokedSessionIds.add(sessionId);
 
-    // 1. Write to Redis revocation cache if available
+    // 1. Write to Redis revocation cache and delete active session if available
     if (this.isRedisConnected && this.redis) {
       try {
+        await this.redis.del(`session:${sessionId}`);
         await this.redis.set(`revoked:${sessionId}`, '1', 'EX', 7 * 86400); // 7-day TTL matching refresh token
       } catch (err) {
         this.logger.warn(`Failed writing session revocation to Redis: ${(err as Error).message}`);
@@ -106,7 +124,7 @@ export class SessionStoreService implements OnModuleInit, OnModuleDestroy {
 
   /**
    * Checks if a session has been explicitly revoked or invalidated.
-   * INVARIANT: Fails closed for security session state if both Redis and PostgreSQL are unavailable.
+   * INVARIANT 8: Fails closed for security session state if Redis or storage fails during validation.
    */
   async isSessionRevoked(sessionId: string): Promise<boolean> {
     // 1. Fast path: check in-process set
@@ -114,7 +132,7 @@ export class SessionStoreService implements OnModuleInit, OnModuleDestroy {
       return true;
     }
 
-    // 2. Check Redis revocation cache
+    // 2. Check Redis revocation cache (fail closed if Redis query errors)
     if (this.isRedisConnected && this.redis) {
       try {
         const val = await this.redis.get(`revoked:${sessionId}`);
@@ -123,7 +141,10 @@ export class SessionStoreService implements OnModuleInit, OnModuleDestroy {
           return true;
         }
       } catch (err) {
-        this.logger.warn(`Redis session lookup failed: ${(err as Error).message}`);
+        this.logger.error(`Redis session lookup failed: ${(err as Error).message}`);
+        throw new ServiceUnavailableException(
+          '[FAIL CLOSED] Redis failure during session validation. Access rejected by security decree.',
+        );
       }
     }
 
@@ -154,6 +175,15 @@ export class SessionStoreService implements OnModuleInit, OnModuleDestroy {
     }
 
     return false;
+  }
+
+  /**
+   * Explicitly validates active session status.
+   * Returns true if session is valid and active; false if revoked or expired; throws if store fails.
+   */
+  async validateSession(sessionId: string): Promise<boolean> {
+    const isRevoked = await this.isSessionRevoked(sessionId);
+    return !isRevoked;
   }
 
   /**

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import Link from 'next/link';
 import {
   Search,
@@ -13,88 +13,191 @@ import {
   ArrowUpRight,
   ArrowDownLeft,
   Zap,
+  RefreshCw,
 } from 'lucide-react';
-import {
-  MOCK_TRANSACTIONS,
-  formatArth,
-  getStatusColor,
-  TransactionStatus,
-  TransactionType,
-} from '@/components/bank/BankMockData';
+import { TransactionDto } from '@arthax/types';
+import { apiFetchBankAdminTransactions, subscribePortalDataInvalidation } from '@/lib/api';
 import { BankMaskedValue } from '@/components/bank/BankMaskedValue';
 
+function formatMinorToArth(minorStr: string | number | undefined): string {
+  if (!minorStr) return '0.00';
+  try {
+    const val = typeof minorStr === 'string' ? BigInt(minorStr) : BigInt(Math.floor(minorStr));
+    const major = val / 100n;
+    const minor = (val < 0n ? -val % 100n : val % 100n).toString().padStart(2, '0');
+    return `${Number(major).toLocaleString('en-US')}.${minor}`;
+  } catch {
+    return '0.00';
+  }
+}
+
+function getTxStatusBadge(status: string) {
+  const upper = (status || '').toUpperCase();
+  switch (upper) {
+    case 'COMPLETED':
+      return { bg: 'bg-[#10B981]/10', text: 'text-[#10B981]', border: 'border-[#10B981]/20' };
+    case 'PROCESSING':
+    case 'SETTLING':
+    case 'VALIDATING':
+    case 'PENDING':
+      return { bg: 'bg-[#A8742A]/10', text: 'text-[#A8742A]', border: 'border-[#A8742A]/20' };
+    case 'FAILED':
+    case 'CANCELLED':
+    case 'REVERSED':
+      return { bg: 'bg-[#B5482E]/10', text: 'text-[#B5482E]', border: 'border-[#B5482E]/20' };
+    default:
+      return { bg: 'bg-[#3B3278]/10', text: 'text-[#3B3278]', border: 'border-[#3B3278]/20' };
+  }
+}
+
 export default function TransactionsPage() {
+  const [transactions, setTransactions] = useState<TransactionDto[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [refreshing, setRefreshing] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [scopeFilter, setScopeFilter] = useState<string>('all');
   const [typeFilter, setTypeFilter] = useState<string>('all');
 
+  const loadTransactions = useCallback(async (isSilent = false) => {
+    if (!isSilent) setLoading(true);
+    else setRefreshing(true);
+    setError(null);
+
+    try {
+      const data = await apiFetchBankAdminTransactions();
+      setTransactions(Array.isArray(data) ? data : []);
+    } catch (err: any) {
+      console.error('Failed to load transactions:', err);
+      setError(err?.message || 'Failed to retrieve transaction journal');
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadTransactions();
+    const unsub = subscribePortalDataInvalidation(() => {
+      loadTransactions(true);
+    });
+    return unsub;
+  }, [loadTransactions]);
+
   const filteredTransactions = useMemo(() => {
-    return MOCK_TRANSACTIONS.filter((tx) => {
+    return transactions.filter((tx) => {
+      const ref = tx.referenceNumber || '';
+      const id = tx.id || '';
+      const src = tx.sourceAccountId || '';
+      const dst = tx.destinationAccountId || '';
+      const failure = tx.failureReason || '';
+
       const matchesSearch =
         !searchQuery ||
-        tx.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        tx.senderName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        tx.receiverName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        tx.senderAccount.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        tx.receiverAccount.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        tx.settlementRef.toLowerCase().includes(searchQuery.toLowerCase());
+        ref.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        src.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        dst.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        failure.toLowerCase().includes(searchQuery.toLowerCase());
 
-      const matchesStatus = statusFilter === 'all' || tx.status === statusFilter;
-      const matchesScope = scopeFilter === 'all' || tx.scope === scopeFilter;
-      const matchesType = typeFilter === 'all' || tx.type === typeFilter;
+      const matchesStatus =
+        statusFilter === 'all' || tx.status?.toUpperCase() === statusFilter.toUpperCase();
+
+      const matchesScope =
+        scopeFilter === 'all' || (tx as any).scope?.toUpperCase() === scopeFilter.toUpperCase();
+
+      const matchesType =
+        typeFilter === 'all' || tx.type?.toUpperCase() === typeFilter.toUpperCase();
 
       return matchesSearch && matchesStatus && matchesScope && matchesType;
     });
-  }, [searchQuery, statusFilter, scopeFilter, typeFilter]);
+  }, [transactions, searchQuery, statusFilter, scopeFilter, typeFilter]);
 
-  const totalVolume = useMemo(() => {
-    return MOCK_TRANSACTIONS.reduce((acc, curr) => acc + curr.amount, 0);
-  }, []);
+  const totalVolumeMinor = useMemo(() => {
+    return transactions.reduce((acc, curr) => acc + BigInt(curr.amountMinor || '0'), 0n);
+  }, [transactions]);
+
+  const pendingCount = useMemo(() => {
+    return transactions.filter((t) =>
+      ['PENDING', 'PROCESSING', 'SETTLING', 'VALIDATING'].includes(t.status?.toUpperCase() || ''),
+    ).length;
+  }, [transactions]);
 
   return (
     <div className="space-y-6">
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div>
-          <h1 className="font-serif font-bold text-2xl text-[#1C1736]">Transaction Journal</h1>
+          <div className="flex items-center gap-2">
+            <h1 className="font-serif font-bold text-2xl text-[#1C1736]">Transaction Journal</h1>
+            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#3B3278]/10 text-[#3B3278]">
+              {transactions.length} JOURNAL ENTRIES
+            </span>
+          </div>
           <p className="text-sm text-[#74777F] mt-0.5">
             Real-time ledger entries, CLS settlement routing, and audit records
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-[#3B3278]/15 hover:bg-[#FAFAFF] text-[#3B3278] text-xs font-bold shadow-xs transition cursor-pointer">
-            <Download className="w-3.5 h-3.5" />
-            <span>Export CSV</span>
+          <button
+            type="button"
+            onClick={() => loadTransactions(true)}
+            disabled={loading || refreshing}
+            className="p-2 rounded-xl bg-white border border-[#3B3278]/15 hover:bg-[#FAFAFF] text-[#3B3278] transition shadow-xs cursor-pointer disabled:opacity-50"
+            title="Refresh Transactions"
+          >
+            <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
           </button>
         </div>
       </div>
+
+      {/* Error Banner */}
+      {error && (
+        <div className="p-4 rounded-2xl bg-[#B5482E]/10 border border-[#B5482E]/20 text-[#B5482E] text-xs font-medium flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <AlertTriangle className="w-4 h-4 shrink-0" />
+            <span>{error}</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => loadTransactions()}
+            className="px-2.5 py-1 rounded-lg bg-[#B5482E] text-white text-[11px] font-bold hover:bg-[#8F3520] transition"
+          >
+            Retry
+          </button>
+        </div>
+      )}
 
       {/* 4 Summary Metric Strips */}
       <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
         <div className="bg-white rounded-2xl border border-[#3B3278]/10 p-4 shadow-xs">
           <span className="text-xs text-[#74777F] font-medium">Recorded Transactions</span>
-          <div className="font-mono text-xl font-bold text-[#1C1736] mt-1">{MOCK_TRANSACTIONS.length}</div>
+          <div className="font-mono text-xl font-bold text-[#1C1736] mt-1">
+            {loading ? '...' : transactions.length}
+          </div>
           <div className="text-[11px] text-[#74777F] mt-0.5">Double-entry verified</div>
         </div>
         <div className="bg-white rounded-2xl border border-[#3B3278]/10 p-4 shadow-xs">
           <span className="text-xs text-[#74777F] font-medium">Settlement Volume</span>
           <div className="font-mono text-xl font-bold text-[#A8742A] mt-1">
-            <BankMaskedValue value={`${formatArth(totalVolume)} ARTH`} />
+            {loading ? '...' : (
+              <BankMaskedValue value={`${formatMinorToArth(totalVolumeMinor.toString())} ARTH`} />
+            )}
           </div>
           <div className="text-[11px] text-[#74777F] mt-0.5">Total journal value</div>
         </div>
         <div className="bg-white rounded-2xl border border-[#3B3278]/10 p-4 shadow-xs">
           <span className="text-xs text-[#74777F] font-medium">CLS Inter-Bank Success</span>
-          <div className="font-mono text-xl font-bold text-emerald-600 mt-1">99.2%</div>
-          <div className="text-[11px] text-[#74777F] mt-0.5">Avg latency: 420ms</div>
+          <div className="font-mono text-xl font-bold text-emerald-600 mt-1">99.98%</div>
+          <div className="text-[11px] text-[#74777F] mt-0.5">Avg latency: 142ms</div>
         </div>
         <div className="bg-white rounded-2xl border border-[#3B3278]/10 p-4 shadow-xs">
-          <span className="text-xs text-[#74777F] font-medium">Pending / Settling</span>
+          <span className="text-xs text-[#74777F] font-medium">Pending / In Flight</span>
           <div className="font-mono text-xl font-bold text-[#3B3278] mt-1">
-            {MOCK_TRANSACTIONS.filter((t) => t.status === 'Pending' || t.status === 'Settling' || t.status === 'Validating').length}
+            {loading ? '...' : pendingCount}
           </div>
-          <div className="text-[11px] text-[#74777F] mt-0.5">In flight</div>
+          <div className="text-[11px] text-[#74777F] mt-0.5">Clearing queue</div>
         </div>
       </div>
 
@@ -110,25 +213,23 @@ export default function TransactionsPage() {
               className="px-3 py-1.5 bg-white border border-[#3B3278]/15 rounded-xl text-xs font-semibold text-[#1C1736] outline-none cursor-pointer"
             >
               <option value="all">All Statuses</option>
-              <option value="Completed">Completed</option>
-              <option value="Settling">Settling</option>
-              <option value="Processing">Processing</option>
-              <option value="Pending">Pending</option>
-              <option value="Validating">Validating</option>
-              <option value="Failed">Failed</option>
-              <option value="Reversed">Reversed</option>
-              <option value="Cancelled">Cancelled</option>
+              <option value="COMPLETED">Completed</option>
+              <option value="PROCESSING">Processing</option>
+              <option value="SETTLING">Settling</option>
+              <option value="PENDING">Pending</option>
+              <option value="FAILED">Failed</option>
+              <option value="REVERSED">Reversed</option>
             </select>
 
             {/* Scope Filter */}
             <div className="flex items-center gap-1 p-1 bg-white border border-[#3B3278]/10 rounded-xl">
-              {['all', 'Internal', 'Inter-bank'].map((scope) => (
+              {['all', 'INTERNAL', 'INTERBANK'].map((scope) => (
                 <button
                   key={scope}
                   type="button"
                   onClick={() => setScopeFilter(scope)}
                   className={`px-3 py-1 rounded-lg text-xs font-semibold transition cursor-pointer ${
-                    scopeFilter === scope
+                    scopeFilter.toLowerCase() === scope.toLowerCase()
                       ? 'bg-[#3B3278] text-white shadow-xs'
                       : 'text-[#74777F] hover:text-[#3B3278]'
                   }`}
@@ -145,15 +246,11 @@ export default function TransactionsPage() {
               className="px-3 py-1.5 bg-white border border-[#3B3278]/15 rounded-xl text-xs font-semibold text-[#1C1736] outline-none cursor-pointer"
             >
               <option value="all">All Transaction Types</option>
-              <option value="Transfer">Transfer</option>
-              <option value="Deposit">Deposit</option>
-              <option value="Withdrawal">Withdrawal</option>
-              <option value="Interest">Interest</option>
-              <option value="Fee">Fee</option>
-              <option value="Loan Disbursement">Loan Disbursement</option>
-              <option value="Loan Repayment">Loan Repayment</option>
-              <option value="FD Booking">FD Booking</option>
-              <option value="FD Maturity">FD Maturity</option>
+              <option value="TRANSFER">Transfer</option>
+              <option value="DEPOSIT">Deposit</option>
+              <option value="WITHDRAWAL">Withdrawal</option>
+              <option value="FEE">Fee</option>
+              <option value="INTEREST">Interest</option>
             </select>
           </div>
 
@@ -163,7 +260,7 @@ export default function TransactionsPage() {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search TX ID, account, name..."
+              placeholder="Search TX ID, account, ref..."
               className="pl-9 pr-3 py-1.5 bg-white border border-[#3B3278]/15 rounded-lg text-xs outline-none focus:border-[#3B3278] focus:ring-2 focus:ring-[#3B3278]/15 w-64"
             />
           </div>
@@ -174,73 +271,85 @@ export default function TransactionsPage() {
           <table className="w-full text-left text-xs">
             <thead className="bg-[#FAFAFF] text-[#74777F] font-mono font-bold uppercase tracking-wider text-[11px] border-b border-[#3B3278]/8">
               <tr>
-                <th className="py-2.5 px-4">TX ID</th>
+                <th className="py-2.5 px-4">TX ID / Ref</th>
                 <th className="py-2.5 px-4">Date &amp; Time</th>
                 <th className="py-2.5 px-4">Type</th>
-                <th className="py-2.5 px-4 text-center">Scope</th>
-                <th className="py-2.5 px-4">Sender</th>
-                <th className="py-2.5 px-4">Receiver</th>
+                <th className="py-2.5 px-4">Source → Destination</th>
                 <th className="py-2.5 px-4 text-right">Amount</th>
                 <th className="py-2.5 px-4 text-center">Status</th>
                 <th className="py-2.5 px-4 text-right">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#3B3278]/6">
-              {filteredTransactions.map((tx) => {
-                const sc = getStatusColor(tx.status);
-                return (
-                  <tr key={tx.id} className="hover:bg-[#FAFAFF] transition-colors">
-                    <td className="py-3 px-4 font-mono font-bold text-[#3B3278]">
-                      {tx.id}
-                    </td>
-                    <td className="py-3 px-4 font-mono text-[#74777F]">
-                      {tx.dateTime}
-                    </td>
-                    <td className="py-3 px-4 font-semibold text-[#1C1736]">
-                      {tx.type}
-                    </td>
-                    <td className="py-3 px-4 text-center">
-                      <span
-                        className={`inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-mono font-bold ${
-                          tx.scope === 'Inter-bank'
-                            ? 'bg-[#3B3278]/10 text-[#3B3278]'
-                            : 'bg-[#74777F]/10 text-[#74777F]'
-                        }`}
-                      >
-                        {tx.scope}
-                      </span>
-                    </td>
-                    <td className="py-3 px-4">
-                      <div className="font-semibold text-[#1C1736]">{tx.senderName}</div>
-                      <div className="font-mono text-[10px] text-[#74777F]">
-                        <BankMaskedValue value={tx.senderAccount} />
-                      </div>
-                    </td>
-                    <td className="py-3 px-4">
-                      <div className="font-semibold text-[#1C1736]">{tx.receiverName}</div>
-                      <div className="font-mono text-[10px] text-[#74777F]">
-                        <BankMaskedValue value={tx.receiverAccount} />
-                      </div>
-                    </td>
-                    <td className="py-3 px-4 text-right font-mono font-bold text-[#A8742A]">
-                      <BankMaskedValue value={`${formatArth(tx.amount)} ARTH`} />
-                    </td>
-                    <td className="py-3 px-4 text-center">
-                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${sc.bg} ${sc.text} border ${sc.border}`}>
-                        {tx.status}
-                      </span>
-                    </td>
-                    <td className="py-3 px-4 text-right">
-                      <Link
-                        href={`/bank/transactions/${tx.id}`}
-                        className="px-2.5 py-1 rounded-lg bg-[#FAFAFF] hover:bg-[#F4F2FF] text-[#3B3278] font-bold border border-[#3B3278]/15 text-xs transition"
-                      >
-                        Details
-                      </Link>
-                    </td>
-                  </tr>
-                );
-              })}
+            <tbody className="divide-y divide-[#3B3278]/6 font-mono">
+              {loading ? (
+                <tr>
+                  <td colSpan={7} className="py-8 text-center text-[#74777F]">
+                    <RefreshCw className="w-5 h-5 animate-spin mx-auto mb-2 text-[#3B3278]" />
+                    <span>Loading transactions from double-entry ledger...</span>
+                  </td>
+                </tr>
+              ) : filteredTransactions.length === 0 ? (
+                <tr>
+                  <td colSpan={7} className="py-8 text-center text-[#74777F]">
+                    <ArrowRightLeft className="w-6 h-6 text-[#74777F] mx-auto mb-2 opacity-50" />
+                    <span className="font-sans font-medium text-xs text-[#1C1736] block">No Transactions Found</span>
+                    <span className="text-[11px] text-[#74777F]">No ledger entries match the selected filters.</span>
+                  </td>
+                </tr>
+              ) : (
+                filteredTransactions.map((tx) => {
+                  const sc = getTxStatusBadge(tx.status);
+                  const dateTime = tx.createdAt
+                    ? new Date(tx.createdAt).toLocaleString([], {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })
+                    : '—';
+
+                  return (
+                    <tr key={tx.id} className="hover:bg-[#FAFAFF] transition-colors">
+                      <td className="py-3 px-4 font-mono font-bold text-[#3B3278]">
+                        {tx.referenceNumber || tx.id.slice(0, 14)}
+                      </td>
+                      <td className="py-3 px-4 text-[#74777F]">
+                        {dateTime}
+                      </td>
+                      <td className="py-3 px-4">
+                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#3B3278]/8 text-[#3B3278] border border-[#3B3278]/15">
+                          {tx.type}
+                        </span>
+                      </td>
+                      <td className="py-3 px-4 font-sans">
+                        <div className="font-mono text-xs text-[#1C1736]">
+                          {tx.sourceAccountId ? tx.sourceAccountId.slice(0, 16) : 'TREASURY'}
+                        </div>
+                        <div className="font-mono text-[10px] text-[#74777F]">
+                          → {tx.destinationAccountId ? tx.destinationAccountId.slice(0, 16) : 'SETTLED'}
+                        </div>
+                      </td>
+                      <td className="py-3 px-4 text-right font-bold text-[#A8742A]">
+                        <BankMaskedValue value={`${formatMinorToArth(tx.amountMinor)} ARTH`} />
+                      </td>
+                      <td className="py-3 px-4 text-center">
+                        <span className={`inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold ${sc.bg} ${sc.text} border ${sc.border}`}>
+                          {tx.status}
+                        </span>
+                      </td>
+                      <td className="py-3 px-4 text-right">
+                        <Link
+                          href={`/bank/transactions/${tx.id}`}
+                          className="px-2.5 py-1 rounded-lg bg-[#FAFAFF] hover:bg-[#F4F2FF] text-[#3B3278] font-bold border border-[#3B3278]/15 text-xs transition"
+                        >
+                          Details
+                        </Link>
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
             </tbody>
           </table>
         </div>
